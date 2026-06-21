@@ -35,10 +35,11 @@ app/
   graphql/       customer-account/ operations
   styles/        tailwind.css + minimal globals
 *.generated.d.ts storefront / customer-account types (GENERATED — never edit)
+docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```
 
-`~/*` is the path alias for `app/*`.
+`~/*` is the path alias for `app/*`. As a feature grows it can be promoted to a self-contained `app/modules/<feature>/` (public `index.ts` + components/lib/content) — see [docs/architecture.md](docs/architecture.md#the-module-pattern-how-features-grow).
 
 ## Conventions (the rules are the source of truth)
 
@@ -66,4 +67,9 @@ The 9 live products are **separate Shopify products per color**, not variants. C
 
 If a change makes any doc here wrong, fixing the doc is part of the task — treat stale docs as a defect, the same as a failing test. When unsure where something belongs, leave a clear note in the PR description.
 
-> Note: a fuller `README.md` and `docs/` (setup, architecture, decision records) arrive in GD-7. Until then, this file is the entry point for both humans and agents.
+## Further reading
+
+- [README.md](README.md) — setup, dev, deploy (fresh clone → `pnpm dev`).
+- [docs/](docs/README.md) — doc index + an "if working on X, read Y" lookup table.
+- [docs/architecture.md](docs/architecture.md) — request/data flow, code organization, module pattern, deployment.
+- [docs/decisions/](docs/decisions/README.md) — ADRs: the _why_ behind settled choices.
