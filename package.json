@@ -20,7 +20,6 @@
   "dependencies": {
     "@shopify/hydrogen": "*2026.1.1",
     "graphql": "^16.10.0",
-    "graphql-tag": "^2.12.6",
     "isbot": "^5.1.22",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -54,7 +53,6 @@
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
