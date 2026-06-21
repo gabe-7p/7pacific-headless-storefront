@@ -24,7 +24,7 @@ type SearchFormProps = Omit<FormProps, 'children'> & {
  *  )}
  *  </SearchForm>
  */
-export function SearchForm({ children, ...props }: SearchFormProps) {
+export const SearchForm = ({ children, ...props }: SearchFormProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useFocusOnCmdK(inputRef);
@@ -38,7 +38,7 @@ export function SearchForm({ children, ...props }: SearchFormProps) {
       {children({ inputRef })}
     </Form>
   );
-}
+};
 
 /**
  * Focuses the input when cmd+k is pressed

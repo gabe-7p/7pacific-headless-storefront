@@ -17,14 +17,14 @@ interface PageLayoutProps {
   children?: React.ReactNode;
 }
 
-export function PageLayout({
+export const PageLayout = ({
   cart,
   children = null,
   footer,
   header,
   isLoggedIn,
   publicStoreDomain,
-}: PageLayoutProps) {
+}: PageLayoutProps) => {
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
@@ -42,9 +42,9 @@ export function PageLayout({
       <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
     </Aside.Provider>
   );
-}
+};
 
-function CartAside({ cart }: { cart: PageLayoutProps['cart'] }) {
+const CartAside = ({ cart }: { cart: PageLayoutProps['cart'] }) => {
   return (
     <Aside type="cart" heading="CART">
       <Suspense fallback={<p>Loading cart ...</p>}>
@@ -56,9 +56,9 @@ function CartAside({ cart }: { cart: PageLayoutProps['cart'] }) {
       </Suspense>
     </Aside>
   );
-}
+};
 
-function SearchAside() {
+const SearchAside = () => {
   const queriesDatalistId = useId();
   return (
     <Aside type="search" heading="SEARCH">
@@ -135,15 +135,15 @@ function SearchAside() {
       </div>
     </Aside>
   );
-}
+};
 
-function MobileMenuAside({
+const MobileMenuAside = ({
   header,
   publicStoreDomain,
 }: {
   header: PageLayoutProps['header'];
   publicStoreDomain: PageLayoutProps['publicStoreDomain'];
-}) {
+}) => {
   return (
     header.menu &&
     header.shop.primaryDomain?.url && (
@@ -157,4 +157,4 @@ function MobileMenuAside({
       </Aside>
     )
   );
-}
+};

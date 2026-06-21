@@ -28,7 +28,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   );
 }
 
-export default function AccountLayout() {
+const AccountLayout = () => {
   const { customer } = useLoaderData<typeof loader>();
 
   const heading = customer
@@ -47,9 +47,9 @@ export default function AccountLayout() {
       <Outlet context={{ customer }} />
     </div>
   );
-}
+};
 
-function AccountMenu() {
+const AccountMenu = () => {
   function isActiveStyle({ isActive, isPending }: { isActive: boolean; isPending: boolean }) {
     return {
       fontWeight: isActive ? 'bold' : undefined,
@@ -74,12 +74,14 @@ function AccountMenu() {
       <Logout />
     </nav>
   );
-}
+};
 
-function Logout() {
+const Logout = () => {
   return (
     <Form className="account-logout" method="POST" action="/account/logout">
       &nbsp;<button type="submit">Sign out</button>
     </Form>
   );
-}
+};
+
+export default AccountLayout;

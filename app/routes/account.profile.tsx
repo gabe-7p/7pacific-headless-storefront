@@ -70,7 +70,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 }
 
-export default function AccountProfile() {
+const AccountProfile = () => {
   const account = useOutletContext<{ customer: CustomerFragment }>();
   const { state } = useNavigation();
   const action = useActionData<ActionResponse>();
@@ -121,4 +121,6 @@ export default function AccountProfile() {
       </Form>
     </div>
   );
-}
+};
+
+export default AccountProfile;

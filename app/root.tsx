@@ -138,7 +138,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   };
 }
 
-export function Layout({ children }: { children?: React.ReactNode }) {
+export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const nonce = useNonce();
 
   return (
@@ -159,9 +159,9 @@ export function Layout({ children }: { children?: React.ReactNode }) {
       </body>
     </html>
   );
-}
+};
 
-export default function App() {
+const App = () => {
   const data = useRouteLoaderData<RootLoader>('root');
 
   if (!data) {
@@ -175,9 +175,9 @@ export default function App() {
       </PageLayout>
     </Analytics.Provider>
   );
-}
+};
 
-export function ErrorBoundary() {
+export const ErrorBoundary = () => {
   const error = useRouteError();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
@@ -200,4 +200,6 @@ export function ErrorBoundary() {
       )}
     </div>
   );
-}
+};
+
+export default App;

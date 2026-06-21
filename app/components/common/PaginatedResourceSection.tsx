@@ -4,7 +4,7 @@ import { Pagination } from '@shopify/hydrogen';
 /**
  * <PaginatedResourceSection > is a component that encapsulate how the previous and next behaviors throughout your application.
  */
-export function PaginatedResourceSection<NodesType>({
+export const PaginatedResourceSection = <NodesType,>({
   connection,
   children,
   resourcesClassName,
@@ -12,7 +12,7 @@ export function PaginatedResourceSection<NodesType>({
   connection: React.ComponentProps<typeof Pagination<NodesType>>['connection'];
   children: React.FunctionComponent<{ node: NodesType; index: number }>;
   resourcesClassName?: string;
-}) {
+}) => {
   return (
     <Pagination connection={connection}>
       {({ nodes, isLoading, PreviousLink, NextLink }) => {
@@ -32,4 +32,4 @@ export function PaginatedResourceSection<NodesType>({
       }}
     </Pagination>
   );
-}
+};

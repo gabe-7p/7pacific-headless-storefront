@@ -97,7 +97,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   return await cart.get();
 }
 
-export default function Cart() {
+const Cart = () => {
   const cart = useLoaderData<typeof loader>();
 
   return (
@@ -106,4 +106,6 @@ export default function Cart() {
       <CartMain layout="page" cart={cart} />
     </div>
   );
-}
+};
+
+export default Cart;

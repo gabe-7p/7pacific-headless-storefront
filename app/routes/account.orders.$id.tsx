@@ -63,7 +63,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   };
 }
 
-export default function OrderRoute() {
+const OrderRoute = () => {
   const { order, lineItems, discountValue, discountPercentage, fulfillmentStatus } =
     useLoaderData<typeof loader>();
   return (
@@ -170,9 +170,9 @@ export default function OrderRoute() {
       </p>
     </div>
   );
-}
+};
 
-function OrderLineRow({ lineItem }: { lineItem: OrderLineItemFullFragment }) {
+const OrderLineRow = ({ lineItem }: { lineItem: OrderLineItemFullFragment }) => {
   return (
     <tr key={lineItem.id}>
       <td>
@@ -197,4 +197,6 @@ function OrderLineRow({ lineItem }: { lineItem: OrderLineItemFullFragment }) {
       </td>
     </tr>
   );
-}
+};
+
+export default OrderRoute;

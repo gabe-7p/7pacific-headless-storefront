@@ -242,7 +242,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 }
 
-export default function Addresses() {
+const Addresses = () => {
   const { customer } = useOutletContext<{ customer: CustomerFragment }>();
   const { defaultAddress, addresses } = customer;
 
@@ -266,9 +266,9 @@ export default function Addresses() {
       </div>
     </div>
   );
-}
+};
 
-function NewAddressForm() {
+const NewAddressForm = () => {
   const newAddress = {
     address1: '',
     address2: '',
@@ -294,12 +294,12 @@ function NewAddressForm() {
       )}
     </AddressForm>
   );
-}
+};
 
-function ExistingAddresses({
+const ExistingAddresses = ({
   addresses,
   defaultAddress,
-}: Pick<CustomerFragment, 'addresses' | 'defaultAddress'>) {
+}: Pick<CustomerFragment, 'addresses' | 'defaultAddress'>) => {
   return (
     <div>
       <legend>Existing addresses</legend>
@@ -328,9 +328,9 @@ function ExistingAddresses({
       ))}
     </div>
   );
-}
+};
 
-export function AddressForm({
+export const AddressForm = ({
   addressId,
   address,
   defaultAddress,
@@ -342,7 +342,7 @@ export function AddressForm({
   children: (props: {
     stateForMethod: (method: 'PUT' | 'POST' | 'DELETE') => Fetcher['state'];
   }) => React.ReactNode;
-}) {
+}) => {
   const { state, formMethod } = useNavigation();
   const action = useActionData<ActionResponse>();
   const error = action?.error?.[addressId];
@@ -484,4 +484,6 @@ export function AddressForm({
       </fieldset>
     </Form>
   );
-}
+};
+
+export default Addresses;

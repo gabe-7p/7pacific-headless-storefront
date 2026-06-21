@@ -32,7 +32,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 /**
  * Renders the /search route
  */
-export default function SearchPage() {
+const SearchPage = () => {
   const { type, term, result, error } = useLoaderData<typeof loader>();
   if (type === 'predictive') return null;
 
@@ -71,7 +71,7 @@ export default function SearchPage() {
       <Analytics.SearchView data={{ searchTerm: term, searchResults: result }} />
     </div>
   );
-}
+};
 
 /**
  * Regular search query and fragments
@@ -413,3 +413,5 @@ async function predictiveSearch({
 
   return { type, term, result: { items, total } };
 }
+
+export default SearchPage;

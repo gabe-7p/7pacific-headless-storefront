@@ -53,7 +53,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   };
 }
 
-export default function Homepage() {
+const Homepage = () => {
   const data = useLoaderData<typeof loader>();
   return (
     <div className="home">
@@ -61,9 +61,9 @@ export default function Homepage() {
       <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
-}
+};
 
-function FeaturedCollection({ collection }: { collection: FeaturedCollectionFragment }) {
+const FeaturedCollection = ({ collection }: { collection: FeaturedCollectionFragment }) => {
   if (!collection) return null;
   const image = collection?.image;
   return (
@@ -76,9 +76,13 @@ function FeaturedCollection({ collection }: { collection: FeaturedCollectionFrag
       <h1>{collection.title}</h1>
     </Link>
   );
-}
+};
 
-function RecommendedProducts({ products }: { products: Promise<RecommendedProductsQuery | null> }) {
+const RecommendedProducts = ({
+  products,
+}: {
+  products: Promise<RecommendedProductsQuery | null>;
+}) => {
   return (
     <div className="recommended-products">
       <h2>Recommended Products</h2>
@@ -98,7 +102,7 @@ function RecommendedProducts({ products }: { products: Promise<RecommendedProduc
       <br />
     </div>
   );
-}
+};
 
 const FEATURED_COLLECTION_QUERY = `#graphql
   fragment FeaturedCollection on Collection {
@@ -151,3 +155,5 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Homepage;

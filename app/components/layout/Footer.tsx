@@ -8,7 +8,7 @@ interface FooterProps {
   publicStoreDomain: string;
 }
 
-export function Footer({ footer: footerPromise, header, publicStoreDomain }: FooterProps) {
+export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: FooterProps) => {
   return (
     <Suspense>
       <Await resolve={footerPromise}>
@@ -26,9 +26,9 @@ export function Footer({ footer: footerPromise, header, publicStoreDomain }: Foo
       </Await>
     </Suspense>
   );
-}
+};
 
-function FooterMenu({
+const FooterMenu = ({
   menu,
   primaryDomainUrl,
   publicStoreDomain,
@@ -36,7 +36,7 @@ function FooterMenu({
   menu: FooterQuery['menu'];
   primaryDomainUrl: FooterProps['header']['shop']['primaryDomain']['url'];
   publicStoreDomain: string;
-}) {
+}) => {
   return (
     <nav className="footer-menu" role="navigation">
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
@@ -61,7 +61,7 @@ function FooterMenu({
       })}
     </nav>
   );
-}
+};
 
 const FALLBACK_FOOTER_MENU = {
   id: 'gid://shopify/Menu/199655620664',

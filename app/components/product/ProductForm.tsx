@@ -5,13 +5,13 @@ import { AddToCartButton } from '~/components/cart/AddToCartButton';
 import { useAside } from '~/components/layout/Aside';
 import type { ProductFragment } from 'storefrontapi.generated';
 
-export function ProductForm({
+export const ProductForm = ({
   productOptions,
   selectedVariant,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
-}) {
+}) => {
   const navigate = useNavigate();
   const { open } = useAside();
   return (
@@ -113,15 +113,15 @@ export function ProductForm({
       </AddToCartButton>
     </div>
   );
-}
+};
 
-function ProductOptionSwatch({
+const ProductOptionSwatch = ({
   swatch,
   name,
 }: {
   swatch?: Maybe<ProductOptionValueSwatch> | undefined;
   name: string;
-}) {
+}) => {
   const image = swatch?.image?.previewImage?.url;
   const color = swatch?.color;
 
@@ -138,4 +138,4 @@ function ProductOptionSwatch({
       {!!image && <img src={image} alt={name} />}
     </div>
   );
-}
+};

@@ -6,22 +6,15 @@ import type * as CustomerAccountAPI from '@shopify/hydrogen/customer-account-api
 export type CustomerAddressUpdateMutationVariables = CustomerAccountAPI.Exact<{
   address: CustomerAccountAPI.CustomerAddressInput;
   addressId: CustomerAccountAPI.Scalars['ID']['input'];
-  defaultAddress?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['Boolean']['input']
-  >;
+  defaultAddress?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['Boolean']['input']>;
   language?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.LanguageCode>;
 }>;
 
 export type CustomerAddressUpdateMutation = {
   customerAddressUpdate?: CustomerAccountAPI.Maybe<{
-    customerAddress?: CustomerAccountAPI.Maybe<
-      Pick<CustomerAccountAPI.CustomerAddress, 'id'>
-    >;
+    customerAddress?: CustomerAccountAPI.Maybe<Pick<CustomerAccountAPI.CustomerAddress, 'id'>>;
     userErrors: Array<
-      Pick<
-        CustomerAccountAPI.UserErrorsCustomerAddressUserErrors,
-        'code' | 'field' | 'message'
-      >
+      Pick<CustomerAccountAPI.UserErrorsCustomerAddressUserErrors, 'code' | 'field' | 'message'>
     >;
   }>;
 };
@@ -33,15 +26,9 @@ export type CustomerAddressDeleteMutationVariables = CustomerAccountAPI.Exact<{
 
 export type CustomerAddressDeleteMutation = {
   customerAddressDelete?: CustomerAccountAPI.Maybe<
-    Pick<
-      CustomerAccountAPI.CustomerAddressDeletePayload,
-      'deletedAddressId'
-    > & {
+    Pick<CustomerAccountAPI.CustomerAddressDeletePayload, 'deletedAddressId'> & {
       userErrors: Array<
-        Pick<
-          CustomerAccountAPI.UserErrorsCustomerAddressUserErrors,
-          'code' | 'field' | 'message'
-        >
+        Pick<CustomerAccountAPI.UserErrorsCustomerAddressUserErrors, 'code' | 'field' | 'message'>
       >;
     }
   >;
@@ -49,22 +36,15 @@ export type CustomerAddressDeleteMutation = {
 
 export type CustomerAddressCreateMutationVariables = CustomerAccountAPI.Exact<{
   address: CustomerAccountAPI.CustomerAddressInput;
-  defaultAddress?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['Boolean']['input']
-  >;
+  defaultAddress?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['Boolean']['input']>;
   language?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.LanguageCode>;
 }>;
 
 export type CustomerAddressCreateMutation = {
   customerAddressCreate?: CustomerAccountAPI.Maybe<{
-    customerAddress?: CustomerAccountAPI.Maybe<
-      Pick<CustomerAccountAPI.CustomerAddress, 'id'>
-    >;
+    customerAddress?: CustomerAccountAPI.Maybe<Pick<CustomerAccountAPI.CustomerAddress, 'id'>>;
     userErrors: Array<
-      Pick<
-        CustomerAccountAPI.UserErrorsCustomerAddressUserErrors,
-        'code' | 'field' | 'message'
-      >
+      Pick<CustomerAccountAPI.UserErrorsCustomerAddressUserErrors, 'code' | 'field' | 'message'>
     >;
   }>;
 };
@@ -132,10 +112,7 @@ export type CustomerDetailsQueryVariables = CustomerAccountAPI.Exact<{
 }>;
 
 export type CustomerDetailsQuery = {
-  customer: Pick<
-    CustomerAccountAPI.Customer,
-    'id' | 'firstName' | 'lastName'
-  > & {
+  customer: Pick<CustomerAccountAPI.Customer, 'id' | 'firstName' | 'lastName'> & {
     defaultAddress?: CustomerAccountAPI.Maybe<
       Pick<
         CustomerAccountAPI.CustomerAddress,
@@ -175,18 +152,12 @@ export type CustomerDetailsQuery = {
   };
 };
 
-export type OrderMoneyFragment = Pick<
-  CustomerAccountAPI.MoneyV2,
-  'amount' | 'currencyCode'
->;
+export type OrderMoneyFragment = Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
 
 export type DiscountApplicationFragment = {
   value:
-    | ({__typename: 'MoneyV2'} & Pick<
-        CustomerAccountAPI.MoneyV2,
-        'amount' | 'currencyCode'
-      >)
-    | ({__typename: 'PricingPercentageValue'} & Pick<
+    | ({ __typename: 'MoneyV2' } & Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>)
+    | ({ __typename: 'PricingPercentageValue' } & Pick<
         CustomerAccountAPI.PricingPercentageValue,
         'percentage'
       >);
@@ -196,21 +167,13 @@ export type OrderLineItemFullFragment = Pick<
   CustomerAccountAPI.LineItem,
   'id' | 'title' | 'quantity' | 'variantTitle'
 > & {
-  price?: CustomerAccountAPI.Maybe<
-    Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
-  >;
+  price?: CustomerAccountAPI.Maybe<Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>>;
   discountAllocations: Array<{
-    allocatedAmount: Pick<
-      CustomerAccountAPI.MoneyV2,
-      'amount' | 'currencyCode'
-    >;
+    allocatedAmount: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
     discountApplication: {
       value:
-        | ({__typename: 'MoneyV2'} & Pick<
-            CustomerAccountAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >)
-        | ({__typename: 'PricingPercentageValue'} & Pick<
+        | ({ __typename: 'MoneyV2' } & Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>)
+        | ({ __typename: 'PricingPercentageValue' } & Pick<
             CustomerAccountAPI.PricingPercentageValue,
             'percentage'
           >);
@@ -218,44 +181,26 @@ export type OrderLineItemFullFragment = Pick<
   }>;
   totalDiscount: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
   image?: CustomerAccountAPI.Maybe<
-    Pick<
-      CustomerAccountAPI.Image,
-      'altText' | 'height' | 'url' | 'id' | 'width'
-    >
+    Pick<CustomerAccountAPI.Image, 'altText' | 'height' | 'url' | 'id' | 'width'>
   >;
 };
 
 export type OrderFragment = Pick<
   CustomerAccountAPI.Order,
-  | 'id'
-  | 'name'
-  | 'confirmationNumber'
-  | 'statusPageUrl'
-  | 'fulfillmentStatus'
-  | 'processedAt'
+  'id' | 'name' | 'confirmationNumber' | 'statusPageUrl' | 'fulfillmentStatus' | 'processedAt'
 > & {
-  fulfillments: {nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>>};
-  totalTax?: CustomerAccountAPI.Maybe<
-    Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
-  >;
+  fulfillments: { nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>> };
+  totalTax?: CustomerAccountAPI.Maybe<Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>>;
   totalPrice: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
-  subtotal?: CustomerAccountAPI.Maybe<
-    Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
-  >;
+  subtotal?: CustomerAccountAPI.Maybe<Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>>;
   shippingAddress?: CustomerAccountAPI.Maybe<
-    Pick<
-      CustomerAccountAPI.CustomerAddress,
-      'name' | 'formatted' | 'formattedArea'
-    >
+    Pick<CustomerAccountAPI.CustomerAddress, 'name' | 'formatted' | 'formattedArea'>
   >;
   discountApplications: {
     nodes: Array<{
       value:
-        | ({__typename: 'MoneyV2'} & Pick<
-            CustomerAccountAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >)
-        | ({__typename: 'PricingPercentageValue'} & Pick<
+        | ({ __typename: 'MoneyV2' } & Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>)
+        | ({ __typename: 'PricingPercentageValue' } & Pick<
             CustomerAccountAPI.PricingPercentageValue,
             'percentage'
           >);
@@ -263,39 +208,27 @@ export type OrderFragment = Pick<
   };
   lineItems: {
     nodes: Array<
-      Pick<
-        CustomerAccountAPI.LineItem,
-        'id' | 'title' | 'quantity' | 'variantTitle'
-      > & {
+      Pick<CustomerAccountAPI.LineItem, 'id' | 'title' | 'quantity' | 'variantTitle'> & {
         price?: CustomerAccountAPI.Maybe<
           Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
         >;
         discountAllocations: Array<{
-          allocatedAmount: Pick<
-            CustomerAccountAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >;
+          allocatedAmount: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
           discountApplication: {
             value:
-              | ({__typename: 'MoneyV2'} & Pick<
+              | ({ __typename: 'MoneyV2' } & Pick<
                   CustomerAccountAPI.MoneyV2,
                   'amount' | 'currencyCode'
                 >)
-              | ({__typename: 'PricingPercentageValue'} & Pick<
+              | ({ __typename: 'PricingPercentageValue' } & Pick<
                   CustomerAccountAPI.PricingPercentageValue,
                   'percentage'
                 >);
           };
         }>;
-        totalDiscount: Pick<
-          CustomerAccountAPI.MoneyV2,
-          'amount' | 'currencyCode'
-        >;
+        totalDiscount: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
         image?: CustomerAccountAPI.Maybe<
-          Pick<
-            CustomerAccountAPI.Image,
-            'altText' | 'height' | 'url' | 'id' | 'width'
-          >
+          Pick<CustomerAccountAPI.Image, 'altText' | 'height' | 'url' | 'id' | 'width'>
         >;
       }
     >;
@@ -311,16 +244,9 @@ export type OrderQuery = {
   order?: CustomerAccountAPI.Maybe<
     Pick<
       CustomerAccountAPI.Order,
-      | 'id'
-      | 'name'
-      | 'confirmationNumber'
-      | 'statusPageUrl'
-      | 'fulfillmentStatus'
-      | 'processedAt'
+      'id' | 'name' | 'confirmationNumber' | 'statusPageUrl' | 'fulfillmentStatus' | 'processedAt'
     > & {
-      fulfillments: {
-        nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>>;
-      };
+      fulfillments: { nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>> };
       totalTax?: CustomerAccountAPI.Maybe<
         Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
       >;
@@ -329,19 +255,16 @@ export type OrderQuery = {
         Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
       >;
       shippingAddress?: CustomerAccountAPI.Maybe<
-        Pick<
-          CustomerAccountAPI.CustomerAddress,
-          'name' | 'formatted' | 'formattedArea'
-        >
+        Pick<CustomerAccountAPI.CustomerAddress, 'name' | 'formatted' | 'formattedArea'>
       >;
       discountApplications: {
         nodes: Array<{
           value:
-            | ({__typename: 'MoneyV2'} & Pick<
+            | ({ __typename: 'MoneyV2' } & Pick<
                 CustomerAccountAPI.MoneyV2,
                 'amount' | 'currencyCode'
               >)
-            | ({__typename: 'PricingPercentageValue'} & Pick<
+            | ({ __typename: 'PricingPercentageValue' } & Pick<
                 CustomerAccountAPI.PricingPercentageValue,
                 'percentage'
               >);
@@ -349,39 +272,27 @@ export type OrderQuery = {
       };
       lineItems: {
         nodes: Array<
-          Pick<
-            CustomerAccountAPI.LineItem,
-            'id' | 'title' | 'quantity' | 'variantTitle'
-          > & {
+          Pick<CustomerAccountAPI.LineItem, 'id' | 'title' | 'quantity' | 'variantTitle'> & {
             price?: CustomerAccountAPI.Maybe<
               Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>
             >;
             discountAllocations: Array<{
-              allocatedAmount: Pick<
-                CustomerAccountAPI.MoneyV2,
-                'amount' | 'currencyCode'
-              >;
+              allocatedAmount: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
               discountApplication: {
                 value:
-                  | ({__typename: 'MoneyV2'} & Pick<
+                  | ({ __typename: 'MoneyV2' } & Pick<
                       CustomerAccountAPI.MoneyV2,
                       'amount' | 'currencyCode'
                     >)
-                  | ({__typename: 'PricingPercentageValue'} & Pick<
+                  | ({ __typename: 'PricingPercentageValue' } & Pick<
                       CustomerAccountAPI.PricingPercentageValue,
                       'percentage'
                     >);
               };
             }>;
-            totalDiscount: Pick<
-              CustomerAccountAPI.MoneyV2,
-              'amount' | 'currencyCode'
-            >;
+            totalDiscount: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
             image?: CustomerAccountAPI.Maybe<
-              Pick<
-                CustomerAccountAPI.Image,
-                'altText' | 'height' | 'url' | 'id' | 'width'
-              >
+              Pick<CustomerAccountAPI.Image, 'altText' | 'height' | 'url' | 'id' | 'width'>
             >;
           }
         >;
@@ -392,15 +303,10 @@ export type OrderQuery = {
 
 export type OrderItemFragment = Pick<
   CustomerAccountAPI.Order,
-  | 'financialStatus'
-  | 'fulfillmentStatus'
-  | 'id'
-  | 'number'
-  | 'confirmationNumber'
-  | 'processedAt'
+  'financialStatus' | 'fulfillmentStatus' | 'id' | 'number' | 'confirmationNumber' | 'processedAt'
 > & {
   totalPrice: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
-  fulfillments: {nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>>};
+  fulfillments: { nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>> };
 };
 
 export type CustomerOrdersFragment = {
@@ -416,9 +322,7 @@ export type CustomerOrdersFragment = {
         | 'processedAt'
       > & {
         totalPrice: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
-        fulfillments: {
-          nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>>;
-        };
+        fulfillments: { nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>> };
       }
     >;
     pageInfo: Pick<
@@ -429,21 +333,11 @@ export type CustomerOrdersFragment = {
 };
 
 export type CustomerOrdersQueryVariables = CustomerAccountAPI.Exact<{
-  endCursor?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['String']['input']
-  >;
-  first?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['Int']['input']
-  >;
-  last?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['Int']['input']
-  >;
-  startCursor?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['String']['input']
-  >;
-  query?: CustomerAccountAPI.InputMaybe<
-    CustomerAccountAPI.Scalars['String']['input']
-  >;
+  endCursor?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['String']['input']>;
+  first?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['Int']['input']>;
+  last?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['Int']['input']>;
+  startCursor?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['String']['input']>;
+  query?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.Scalars['String']['input']>;
   language?: CustomerAccountAPI.InputMaybe<CustomerAccountAPI.LanguageCode>;
 }>;
 
@@ -460,13 +354,8 @@ export type CustomerOrdersQuery = {
           | 'confirmationNumber'
           | 'processedAt'
         > & {
-          totalPrice: Pick<
-            CustomerAccountAPI.MoneyV2,
-            'amount' | 'currencyCode'
-          >;
-          fulfillments: {
-            nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>>;
-          };
+          totalPrice: Pick<CustomerAccountAPI.MoneyV2, 'amount' | 'currencyCode'>;
+          fulfillments: { nodes: Array<Pick<CustomerAccountAPI.Fulfillment, 'status'>> };
         }
       >;
       pageInfo: Pick<
@@ -495,10 +384,7 @@ export type CustomerUpdateMutation = {
       }
     >;
     userErrors: Array<
-      Pick<
-        CustomerAccountAPI.UserErrorsCustomerUserErrors,
-        'code' | 'field' | 'message'
-      >
+      Pick<CustomerAccountAPI.UserErrorsCustomerUserErrors, 'code' | 'field' | 'message'>
     >;
   }>;
 };

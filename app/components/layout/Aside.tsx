@@ -17,7 +17,7 @@ type AsideContextValue = {
  * </Aside>
  * ```
  */
-export function Aside({
+export const Aside = ({
   children,
   heading,
   type,
@@ -25,7 +25,7 @@ export function Aside({
   children?: React.ReactNode;
   type: AsideType;
   heading: React.ReactNode;
-}) {
+}) => {
   const { type: activeType, close } = useAside();
   const expanded = type === activeType;
 
@@ -60,11 +60,11 @@ export function Aside({
       </aside>
     </div>
   );
-}
+};
 
 const AsideContext = createContext<AsideContextValue | null>(null);
 
-Aside.Provider = function AsideProvider({ children }: { children: ReactNode }) {
+const AsideProvider = ({ children }: { children: ReactNode }) => {
   const [type, setType] = useState<AsideType>('closed');
 
   return (
@@ -79,6 +79,8 @@ Aside.Provider = function AsideProvider({ children }: { children: ReactNode }) {
     </AsideContext.Provider>
   );
 };
+
+Aside.Provider = AsideProvider;
 
 export function useAside() {
   const aside = useContext(AsideContext);

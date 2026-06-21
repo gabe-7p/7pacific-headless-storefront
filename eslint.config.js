@@ -132,6 +132,11 @@ export default [
       'react/no-array-index-key': 'warn',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
+      // brooklyn standard: components are `const` arrow functions, never the `function` keyword.
+      'react/function-component-definition': [
+        'error',
+        { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' },
+      ],
     },
   },
   ...fixupConfigRules(

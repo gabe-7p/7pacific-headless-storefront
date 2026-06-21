@@ -46,7 +46,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { customer: data.customer, filters };
 }
 
-export default function Orders() {
+const Orders = () => {
   const { customer, filters } = useLoaderData<OrdersLoaderData>();
   const { orders } = customer;
 
@@ -56,15 +56,15 @@ export default function Orders() {
       <OrdersTable orders={orders} filters={filters} />
     </div>
   );
-}
+};
 
-function OrdersTable({
+const OrdersTable = ({
   orders,
   filters,
 }: {
   orders: CustomerOrdersFragment['orders'];
   filters: OrderFilterParams;
-}) {
+}) => {
   const hasFilters = !!(filters.name || filters.confirmationNumber);
 
   return (
@@ -78,9 +78,9 @@ function OrdersTable({
       )}
     </div>
   );
-}
+};
 
-function EmptyOrders({ hasFilters = false }: { hasFilters?: boolean }) {
+const EmptyOrders = ({ hasFilters = false }: { hasFilters?: boolean }) => {
   return (
     <div>
       {hasFilters ? (
@@ -102,9 +102,9 @@ function EmptyOrders({ hasFilters = false }: { hasFilters?: boolean }) {
       )}
     </div>
   );
-}
+};
 
-function OrderSearchForm({ currentFilters }: { currentFilters: OrderFilterParams }) {
+const OrderSearchForm = ({ currentFilters }: { currentFilters: OrderFilterParams }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
   const isSearching =
@@ -179,9 +179,9 @@ function OrderSearchForm({ currentFilters }: { currentFilters: OrderFilterParams
       </fieldset>
     </form>
   );
-}
+};
 
-function OrderItem({ order }: { order: OrderItemFragment }) {
+const OrderItem = ({ order }: { order: OrderItemFragment }) => {
   const fulfillmentStatus = flattenConnection(order.fulfillments)[0]?.status;
   return (
     <>
@@ -199,4 +199,6 @@ function OrderItem({ order }: { order: OrderItemFragment }) {
       <br />
     </>
   );
-}
+};
+
+export default Orders;

@@ -76,7 +76,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Product() {
+const Product = () => {
   const { product } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
@@ -134,7 +134,7 @@ export default function Product() {
       />
     </div>
   );
-}
+};
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariant on ProductVariant {
@@ -227,3 +227,5 @@ const PRODUCT_QUERY = `#graphql
   }
   ${PRODUCT_FRAGMENT}
 ` as const;
+
+export default Product;

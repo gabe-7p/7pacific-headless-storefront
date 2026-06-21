@@ -65,7 +65,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Article() {
+const Article = () => {
   const { article } = useLoaderData<typeof loader>();
   const { title, image, contentHtml, author } = article;
 
@@ -89,7 +89,7 @@ export default function Article() {
       <div dangerouslySetInnerHTML={{ __html: contentHtml }} className="article" />
     </div>
   );
-}
+};
 
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog#field-blog-articlebyhandle
 const ARTICLE_QUERY = `#graphql
@@ -124,3 +124,5 @@ const ARTICLE_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Article;

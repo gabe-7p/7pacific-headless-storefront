@@ -40,7 +40,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return { policy };
 }
 
-export default function Policy() {
+const Policy = () => {
   const { policy } = useLoaderData<typeof loader>();
 
   return (
@@ -55,7 +55,7 @@ export default function Policy() {
       <div dangerouslySetInnerHTML={{ __html: policy.body }} />
     </div>
   );
-}
+};
 
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/Shop
 const POLICY_CONTENT_QUERY = `#graphql
@@ -90,3 +90,5 @@ const POLICY_CONTENT_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Policy;

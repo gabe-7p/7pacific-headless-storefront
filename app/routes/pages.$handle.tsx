@@ -54,7 +54,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Page() {
+const Page = () => {
   const { page } = useLoaderData<typeof loader>();
 
   return (
@@ -65,7 +65,7 @@ export default function Page() {
       <main dangerouslySetInnerHTML={{ __html: page.body }} />
     </div>
   );
-}
+};
 
 const PAGE_QUERY = `#graphql
   query Page(
@@ -86,3 +86,5 @@ const PAGE_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Page;

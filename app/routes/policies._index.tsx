@@ -21,7 +21,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { policies };
 }
 
-export default function Policies() {
+const Policies = () => {
   const { policies } = useLoaderData<typeof loader>();
 
   return (
@@ -36,7 +36,7 @@ export default function Policies() {
       </div>
     </div>
   );
-}
+};
 
 const POLICIES_QUERY = `#graphql
   fragment PolicyItem on ShopPolicy {
@@ -67,3 +67,5 @@ const POLICIES_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Policies;

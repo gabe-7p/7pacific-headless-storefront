@@ -50,7 +50,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Blogs() {
+const Blogs = () => {
   const { blogs } = useLoaderData<typeof loader>();
 
   return (
@@ -67,7 +67,7 @@ export default function Blogs() {
       </div>
     </div>
   );
-}
+};
 
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog
 const BLOGS_QUERY = `#graphql
@@ -102,3 +102,5 @@ const BLOGS_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Blogs;

@@ -7,13 +7,13 @@ import type {
 } from 'storefrontapi.generated';
 import { useVariantUrl } from '~/lib/variants';
 
-export function ProductItem({
+export const ProductItem = ({
   product,
   loading,
 }: {
   product: CollectionItemFragment | ProductItemFragment | RecommendedProductFragment;
   loading?: 'eager' | 'lazy';
-}) {
+}) => {
   const variantUrl = useVariantUrl(product.handle);
   const image = product.featuredImage;
   return (
@@ -33,4 +33,4 @@ export function ProductItem({
       </small>
     </Link>
   );
-}
+};

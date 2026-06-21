@@ -42,7 +42,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Collections() {
+const Collections = () => {
   const { collections } = useLoaderData<typeof loader>();
 
   return (
@@ -58,9 +58,15 @@ export default function Collections() {
       </PaginatedResourceSection>
     </div>
   );
-}
+};
 
-function CollectionItem({ collection, index }: { collection: CollectionFragment; index: number }) {
+const CollectionItem = ({
+  collection,
+  index,
+}: {
+  collection: CollectionFragment;
+  index: number;
+}) => {
   return (
     <Link
       className="collection-item"
@@ -80,7 +86,7 @@ function CollectionItem({ collection, index }: { collection: CollectionFragment;
       <h5>{collection.title}</h5>
     </Link>
   );
-}
+};
 
 const COLLECTIONS_QUERY = `#graphql
   fragment Collection on Collection {
@@ -121,3 +127,5 @@ const COLLECTIONS_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Collections;

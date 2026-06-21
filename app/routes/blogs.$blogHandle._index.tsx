@@ -60,7 +60,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Blog() {
+const Blog = () => {
   const { blog } = useLoaderData<typeof loader>();
   const { articles } = blog;
 
@@ -80,15 +80,15 @@ export default function Blog() {
       </div>
     </div>
   );
-}
+};
 
-function ArticleItem({
+const ArticleItem = ({
   article,
   loading,
 }: {
   article: ArticleItemFragment;
   loading?: HTMLImageElement['loading'];
-}) {
+}) => {
   const publishedAt = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
@@ -113,7 +113,7 @@ function ArticleItem({
       </Link>
     </div>
   );
-}
+};
 
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog
 const BLOGS_QUERY = `#graphql
@@ -173,3 +173,5 @@ const BLOGS_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Blog;

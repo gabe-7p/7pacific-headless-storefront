@@ -15,7 +15,7 @@ export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
  * If the line is a parent line that has child components (like warranties or gift wrapping), they are
  * rendered nested below the parent line.
  */
-export function CartLineItem({
+export const CartLineItem = ({
   layout,
   line,
   childrenMap,
@@ -23,7 +23,7 @@ export function CartLineItem({
   layout: CartLayout;
   line: CartLine;
   childrenMap: LineItemChildrenMap;
-}) {
+}) => {
   const { id, merchandise } = line;
   const { product, title, image, selectedOptions } = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
@@ -92,14 +92,14 @@ export function CartLineItem({
       ) : null}
     </li>
   );
-}
+};
 
 /**
  * Provides the controls to update the quantity of a line item in the cart.
  * These controls are disabled when the line item is new, and the server
  * hasn't yet responded that it was successfully added to the cart.
  */
-function CartLineQuantity({ line }: { line: CartLine }) {
+const CartLineQuantity = ({ line }: { line: CartLine }) => {
   if (!line || typeof line?.quantity === 'undefined') return null;
   const { id: lineId, quantity, isOptimistic } = line;
   const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
@@ -133,14 +133,14 @@ function CartLineQuantity({ line }: { line: CartLine }) {
       <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
     </div>
   );
-}
+};
 
 /**
  * A button that removes a line item from the cart. It is disabled
  * when the line item is new, and the server hasn't yet responded
  * that it was successfully added to the cart.
  */
-function CartLineRemoveButton({ lineIds, disabled }: { lineIds: string[]; disabled: boolean }) {
+const CartLineRemoveButton = ({ lineIds, disabled }: { lineIds: string[]; disabled: boolean }) => {
   return (
     <CartForm
       fetcherKey={getUpdateKey(lineIds)}
@@ -153,15 +153,15 @@ function CartLineRemoveButton({ lineIds, disabled }: { lineIds: string[]; disabl
       </button>
     </CartForm>
   );
-}
+};
 
-function CartLineUpdateButton({
+const CartLineUpdateButton = ({
   children,
   lines,
 }: {
   children: React.ReactNode;
   lines: CartLineUpdateInput[];
-}) {
+}) => {
   const lineIds = lines.map((line) => line.id);
 
   return (
@@ -174,7 +174,7 @@ function CartLineUpdateButton({
       {children}
     </CartForm>
   );
-}
+};
 
 /**
  * Returns a unique key for the update action. This is used to make sure actions modifying the same line

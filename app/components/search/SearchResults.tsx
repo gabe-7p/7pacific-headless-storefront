@@ -10,24 +10,19 @@ type SearchResultsProps = RegularSearchReturn & {
   children: (args: SearchItems & { term: string }) => React.ReactNode;
 };
 
-export function SearchResults({
+export const SearchResults = ({
   term,
   result,
   children,
-}: Omit<SearchResultsProps, 'error' | 'type'>) {
+}: Omit<SearchResultsProps, 'error' | 'type'>) => {
   if (!result?.total) {
     return null;
   }
 
   return children({ ...result.items, term });
-}
+};
 
-SearchResults.Articles = SearchResultsArticles;
-SearchResults.Pages = SearchResultsPages;
-SearchResults.Products = SearchResultsProducts;
-SearchResults.Empty = SearchResultsEmpty;
-
-function SearchResultsArticles({ term, articles }: PartialSearchResult<'articles'>) {
+const SearchResultsArticles = ({ term, articles }: PartialSearchResult<'articles'>) => {
   if (!articles?.nodes.length) {
     return null;
   }
@@ -55,9 +50,9 @@ function SearchResultsArticles({ term, articles }: PartialSearchResult<'articles
       <br />
     </div>
   );
-}
+};
 
-function SearchResultsPages({ term, pages }: PartialSearchResult<'pages'>) {
+const SearchResultsPages = ({ term, pages }: PartialSearchResult<'pages'>) => {
   if (!pages?.nodes.length) {
     return null;
   }
@@ -85,9 +80,9 @@ function SearchResultsPages({ term, pages }: PartialSearchResult<'pages'>) {
       <br />
     </div>
   );
-}
+};
 
-function SearchResultsProducts({ term, products }: PartialSearchResult<'products'>) {
+const SearchResultsProducts = ({ term, products }: PartialSearchResult<'products'>) => {
   if (!products?.nodes.length) {
     return null;
   }
@@ -141,8 +136,13 @@ function SearchResultsProducts({ term, products }: PartialSearchResult<'products
       <br />
     </div>
   );
-}
+};
 
-function SearchResultsEmpty() {
+const SearchResultsEmpty = () => {
   return <p>No results, try a different search.</p>;
-}
+};
+
+SearchResults.Articles = SearchResultsArticles;
+SearchResults.Pages = SearchResultsPages;
+SearchResults.Products = SearchResultsProducts;
+SearchResults.Empty = SearchResultsEmpty;

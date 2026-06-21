@@ -38,7 +38,7 @@ type SearchResultsPredictiveProps = {
 /**
  * Component that renders predictive search results
  */
-export function SearchResultsPredictive({ children }: SearchResultsPredictiveProps) {
+export const SearchResultsPredictive = ({ children }: SearchResultsPredictiveProps) => {
   const aside = useAside();
   const { term, inputRef, fetcher, total, items } = usePredictiveSearch();
 
@@ -68,20 +68,13 @@ export function SearchResultsPredictive({ children }: SearchResultsPredictivePro
     term,
     total,
   });
-}
+};
 
-SearchResultsPredictive.Articles = SearchResultsPredictiveArticles;
-SearchResultsPredictive.Collections = SearchResultsPredictiveCollections;
-SearchResultsPredictive.Pages = SearchResultsPredictivePages;
-SearchResultsPredictive.Products = SearchResultsPredictiveProducts;
-SearchResultsPredictive.Queries = SearchResultsPredictiveQueries;
-SearchResultsPredictive.Empty = SearchResultsPredictiveEmpty;
-
-function SearchResultsPredictiveArticles({
+const SearchResultsPredictiveArticles = ({
   term,
   articles,
   closeSearch,
-}: PartialPredictiveSearchResult<'articles'>) {
+}: PartialPredictiveSearchResult<'articles'>) => {
   if (!articles.length) return null;
 
   return (
@@ -116,13 +109,13 @@ function SearchResultsPredictiveArticles({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictiveCollections({
+const SearchResultsPredictiveCollections = ({
   term,
   collections,
   closeSearch,
-}: PartialPredictiveSearchResult<'collections'>) {
+}: PartialPredictiveSearchResult<'collections'>) => {
   if (!collections.length) return null;
 
   return (
@@ -157,13 +150,13 @@ function SearchResultsPredictiveCollections({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictivePages({
+const SearchResultsPredictivePages = ({
   term,
   pages,
   closeSearch,
-}: PartialPredictiveSearchResult<'pages'>) {
+}: PartialPredictiveSearchResult<'pages'>) => {
   if (!pages.length) return null;
 
   return (
@@ -190,13 +183,13 @@ function SearchResultsPredictivePages({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictiveProducts({
+const SearchResultsPredictiveProducts = ({
   term,
   products,
   closeSearch,
-}: PartialPredictiveSearchResult<'products'>) {
+}: PartialPredictiveSearchResult<'products'>) => {
   if (!products.length) return null;
 
   return (
@@ -229,14 +222,14 @@ function SearchResultsPredictiveProducts({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictiveQueries({
+const SearchResultsPredictiveQueries = ({
   queries,
   queriesDatalistId,
 }: PartialPredictiveSearchResult<'queries', never> & {
   queriesDatalistId: string;
-}) {
+}) => {
   if (!queries.length) return null;
 
   return (
@@ -248,9 +241,9 @@ function SearchResultsPredictiveQueries({
       })}
     </datalist>
   );
-}
+};
 
-function SearchResultsPredictiveEmpty({ term }: { term: React.MutableRefObject<string> }) {
+const SearchResultsPredictiveEmpty = ({ term }: { term: React.MutableRefObject<string> }) => {
   if (!term.current) {
     return null;
   }
@@ -260,7 +253,7 @@ function SearchResultsPredictiveEmpty({ term }: { term: React.MutableRefObject<s
       No results found for <q>{term.current}</q>
     </p>
   );
-}
+};
 
 /**
  * Hook that returns the predictive search results and fetcher and input ref.
@@ -289,3 +282,10 @@ function usePredictiveSearch(): UsePredictiveSearchReturn {
 
   return { items, total, inputRef, term, fetcher };
 }
+
+SearchResultsPredictive.Articles = SearchResultsPredictiveArticles;
+SearchResultsPredictive.Collections = SearchResultsPredictiveCollections;
+SearchResultsPredictive.Pages = SearchResultsPredictivePages;
+SearchResultsPredictive.Products = SearchResultsPredictiveProducts;
+SearchResultsPredictive.Queries = SearchResultsPredictiveQueries;
+SearchResultsPredictive.Empty = SearchResultsPredictiveEmpty;

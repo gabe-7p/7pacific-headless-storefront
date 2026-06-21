@@ -65,7 +65,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Collection() {
+const Collection = () => {
   const { collection } = useLoaderData<typeof loader>();
 
   return (
@@ -94,7 +94,7 @@ export default function Collection() {
       />
     </div>
   );
-}
+};
 
 const PRODUCT_ITEM_FRAGMENT = `#graphql
   fragment MoneyProductItem on MoneyV2 {
@@ -159,3 +159,5 @@ const COLLECTION_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Collection;

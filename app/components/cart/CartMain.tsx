@@ -36,7 +36,7 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
  * The main cart component that displays the cart items and summary.
  * It is used by both the /cart route and the cart aside dialog.
  */
-export function CartMain({ layout, cart: originalCart }: CartMainProps) {
+export const CartMain = ({ layout, cart: originalCart }: CartMainProps) => {
   // The useOptimisticCart hook applies pending actions to the cart
   // so the user immediately sees feedback when they modify the cart.
   const cart = useOptimisticCart(originalCart);
@@ -72,9 +72,9 @@ export function CartMain({ layout, cart: originalCart }: CartMainProps) {
       </div>
     </div>
   );
-}
+};
 
-function CartEmpty({ hidden = false }: { hidden: boolean; layout?: CartMainProps['layout'] }) {
+const CartEmpty = ({ hidden = false }: { hidden: boolean; layout?: CartMainProps['layout'] }) => {
   const { close } = useAside();
   return (
     <div hidden={hidden}>
@@ -86,4 +86,4 @@ function CartEmpty({ hidden = false }: { hidden: boolean; layout?: CartMainProps
       </Link>
     </div>
   );
-}
+};

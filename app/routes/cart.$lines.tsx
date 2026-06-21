@@ -65,6 +65,8 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   }
 }
 
-export default function Component() {
+const Component = () => {
   return null;
-}
+};
+
+export default Component;

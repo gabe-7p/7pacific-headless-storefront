@@ -13,7 +13,7 @@ interface HeaderProps {
 
 type Viewport = 'desktop' | 'mobile';
 
-export function Header({ header, isLoggedIn, cart, publicStoreDomain }: HeaderProps) {
+export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderProps) => {
   const { shop, menu } = header;
   return (
     <header className="header">
@@ -29,9 +29,9 @@ export function Header({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
-}
+};
 
-export function HeaderMenu({
+export const HeaderMenu = ({
   menu,
   primaryDomainUrl,
   viewport,
@@ -41,7 +41,7 @@ export function HeaderMenu({
   primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
   viewport: Viewport;
   publicStoreDomain: HeaderProps['publicStoreDomain'];
-}) {
+}) => {
   const className = `header-menu-${viewport}`;
   const { close } = useAside();
 
@@ -78,9 +78,9 @@ export function HeaderMenu({
       })}
     </nav>
   );
-}
+};
 
-function HeaderCtas({ isLoggedIn, cart }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
+const HeaderCtas = ({ isLoggedIn, cart }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) => {
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
@@ -95,27 +95,27 @@ function HeaderCtas({ isLoggedIn, cart }: Pick<HeaderProps, 'isLoggedIn' | 'cart
       <CartToggle cart={cart} />
     </nav>
   );
-}
+};
 
-function HeaderMenuMobileToggle() {
+const HeaderMenuMobileToggle = () => {
   const { open } = useAside();
   return (
     <button className="header-menu-mobile-toggle reset" onClick={() => open('mobile')}>
       <h3>☰</h3>
     </button>
   );
-}
+};
 
-function SearchToggle() {
+const SearchToggle = () => {
   const { open } = useAside();
   return (
     <button className="reset" onClick={() => open('search')}>
       Search
     </button>
   );
-}
+};
 
-function CartBadge({ count }: { count: number | null }) {
+const CartBadge = ({ count }: { count: number | null }) => {
   const { open } = useAside();
   const { publish, shop, cart, prevCart } = useAnalytics();
 
@@ -136,9 +136,9 @@ function CartBadge({ count }: { count: number | null }) {
       Cart {count === null ? <span>&nbsp;</span> : count}
     </a>
   );
-}
+};
 
-function CartToggle({ cart }: Pick<HeaderProps, 'cart'>) {
+const CartToggle = ({ cart }: Pick<HeaderProps, 'cart'>) => {
   return (
     <Suspense fallback={<CartBadge count={null} />}>
       <Await resolve={cart}>
@@ -146,13 +146,13 @@ function CartToggle({ cart }: Pick<HeaderProps, 'cart'>) {
       </Await>
     </Suspense>
   );
-}
+};
 
-function CartBanner() {
+const CartBanner = () => {
   const originalCart = useAsyncValue() as CartApiQueryFragment | null;
   const cart = useOptimisticCart(originalCart);
   return <CartBadge count={cart?.totalQuantity ?? 0} />;
-}
+};
 
 const FALLBACK_HEADER_MENU = {
   id: 'gid://shopify/Menu/199655587896',

@@ -9,7 +9,7 @@ type CartSummaryProps = {
   layout: CartLayout;
 };
 
-export function CartSummary({ cart, layout }: CartSummaryProps) {
+export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
   const className = layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
   return (
@@ -26,9 +26,9 @@ export function CartSummary({ cart, layout }: CartSummaryProps) {
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
     </div>
   );
-}
+};
 
-function CartCheckoutActions({ checkoutUrl }: { checkoutUrl?: string }) {
+const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
   if (!checkoutUrl) return null;
 
   return (
@@ -39,13 +39,13 @@ function CartCheckoutActions({ checkoutUrl }: { checkoutUrl?: string }) {
       <br />
     </div>
   );
-}
+};
 
-function CartDiscounts({
+const CartDiscounts = ({
   discountCodes,
 }: {
   discountCodes?: CartApiQueryFragment['discountCodes'];
-}) {
+}) => {
   const codes: string[] =
     discountCodes?.filter((discount) => discount.applicable)?.map(({ code }) => code) || [];
 
@@ -87,15 +87,15 @@ function CartDiscounts({
       </UpdateDiscountForm>
     </div>
   );
-}
+};
 
-function UpdateDiscountForm({
+const UpdateDiscountForm = ({
   discountCodes,
   children,
 }: {
   discountCodes?: string[];
   children: React.ReactNode;
-}) {
+}) => {
   return (
     <CartForm
       route="/cart"
@@ -107,13 +107,13 @@ function UpdateDiscountForm({
       {children}
     </CartForm>
   );
-}
+};
 
-function CartGiftCard({
+const CartGiftCard = ({
   giftCardCodes,
 }: {
   giftCardCodes: CartApiQueryFragment['appliedGiftCards'] | undefined;
-}) {
+}) => {
   const giftCardCodeInput = useRef<HTMLInputElement>(null);
   const giftCardAddFetcher = useFetcher({ key: 'gift-card-add' });
 
@@ -158,29 +158,29 @@ function CartGiftCard({
       </AddGiftCardForm>
     </div>
   );
-}
+};
 
-function AddGiftCardForm({
+const AddGiftCardForm = ({
   fetcherKey,
   children,
 }: {
   fetcherKey?: string;
   children: React.ReactNode;
-}) {
+}) => {
   return (
     <CartForm fetcherKey={fetcherKey} route="/cart" action={CartForm.ACTIONS.GiftCardCodesAdd}>
       {children}
     </CartForm>
   );
-}
+};
 
-function RemoveGiftCardForm({
+const RemoveGiftCardForm = ({
   giftCardId,
   children,
 }: {
   giftCardId: string;
   children: React.ReactNode;
-}) {
+}) => {
   return (
     <CartForm
       route="/cart"
@@ -192,4 +192,4 @@ function RemoveGiftCardForm({
       {children}
     </CartForm>
   );
-}
+};
