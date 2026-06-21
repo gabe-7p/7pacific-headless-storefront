@@ -7,6 +7,7 @@ import type { CartApiQueryFragment, HeaderQuery } from 'storefrontapi.generated'
 import { Container } from '~/components/common/Container';
 import { Logo } from '~/components/common/Logo';
 import { useAside } from '~/components/layout/Aside';
+import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
 
 type HeaderProps = {
@@ -47,13 +48,13 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
     <>
       <header
         className={cn(
-          'fixed inset-x-0 top-0 z-40 transition-colors duration-300',
+          'fixed inset-x-0 top-0 z-40 transition-colors duration-300 ease-(--ease-brand)',
           overlay
             ? 'bg-linear-to-b from-black/30 to-transparent text-white'
             : 'bg-nav text-nav-text shadow-sm'
         )}
       >
-        <Container className="grid h-16 grid-cols-[1fr_auto_1fr] items-center">
+        <Container className="grid h-(--header-h) grid-cols-[1fr_auto_1fr] items-center">
           <div className="flex items-center gap-6">
             <HeaderMenuMobileToggle />
             <HeaderMenu
@@ -79,7 +80,7 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
       </header>
       {/* Spacer so content isn't hidden under the fixed header (skipped on the
           homepage, where the hero sits beneath the transparent overlay). */}
-      {!isHome && <div aria-hidden className="h-16" />}
+      {!isHome && <div aria-hidden className="h-(--header-h)" />}
     </>
   );
 };
@@ -228,35 +229,16 @@ const CartBanner = () => {
   return <CartBadge count={cart?.totalQuantity ?? 0} />;
 };
 
+// Used only if the Storefront `main-menu` is empty; links come from BRAND.
 const FALLBACK_HEADER_MENU = {
   id: 'gid://shopify/Menu/7pacific-fallback',
-  items: [
-    {
-      id: 'gid://shopify/MenuItem/shop',
-      resourceId: null,
-      tags: [],
-      title: 'Shop',
-      type: 'HTTP',
-      url: '/collections',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/our-story',
-      resourceId: null,
-      tags: [],
-      title: 'Our Story',
-      type: 'HTTP',
-      url: '/pages/our-story',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/contact',
-      resourceId: null,
-      tags: [],
-      title: 'Contact Us',
-      type: 'HTTP',
-      url: '/pages/contact-us',
-      items: [],
-    },
-  ],
+  items: BRAND.headerLinks.map((link) => ({
+    id: link.url,
+    resourceId: null,
+    tags: [],
+    title: link.title,
+    type: 'HTTP',
+    url: link.url,
+    items: [],
+  })),
 };

@@ -104,3 +104,19 @@
   --color-cart-dot: #ff4f33; /* cart count bubble */
   --color-border-subtle: #e8e8e1;
 }
+
+/**
+ * Brand layout & motion constants — the single source of truth for page width,
+ * the fixed top-bar heights, and the signature easing. Consumed via Tailwind
+ * arbitrary values, e.g. `max-w-[var(--page-max)]`, `h-[var(--header-h)]`,
+ * `top-[var(--announcement-h)]`, `ease-[var(--ease-brand)]`. Change a value here
+ * and every consumer follows — including the header/announcement/spacer coupling
+ * (`--topbar-h` is derived, so the spacer always matches).
+ */
+:root {
+  --page-max: 1400px;
+  --header-h: 4rem; /* 64px */
+  --announcement-h: 2rem; /* 32px */
+  --topbar-h: calc(var(--header-h) + var(--announcement-h));
+  --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
