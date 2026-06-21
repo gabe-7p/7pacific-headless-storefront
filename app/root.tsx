@@ -109,6 +109,13 @@ async function loadCriticalData({ context }: Route.LoaderArgs) {
     // Add other queries here, so that they are loaded in parallel
   ]);
 
+  // Confirms the typed Storefront client is wired and returning live data.
+  // Dev-only — `header.shop.name` is a typed `shop { name }` result from HEADER_QUERY.
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console -- intentional dev-only connectivity check (GD-4)
+    console.log(`[storefront] Connected to "${header.shop.name}"`);
+  }
+
   return { header };
 }
 
