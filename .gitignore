@@ -5,6 +5,7 @@ node_modules
 /public/build
 /.mf
 /.react-router
+*.tsbuildinfo
 .env
 .env.*
 !.env.example
