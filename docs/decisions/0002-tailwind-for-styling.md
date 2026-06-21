@@ -1,6 +1,6 @@
 # 0002. Tailwind CSS for styling (no UI kit)
 
-- **Status**: Accepted
+- **Status**: Accepted — refined by [0006](0006-shadcn-ui-for-headless-primitives.md) (shadcn/ui supplies the `components/ui/` primitives)
 - **Date**: 2026-06-17
 
 ## Context

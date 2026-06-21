@@ -4,15 +4,15 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 
 ## The stack
 
-| Layer     | Choice                                                        |
-| --------- | ------------------------------------------------------------- |
-| Framework | Hydrogen 2026.1 on **React Router 7** (not Remix), Vite 6     |
-| Runtime   | Oxygen (Shopify's edge worker hosting)                        |
-| UI        | React 18 + **Tailwind CSS v4**                                |
-| Data      | Shopify **Storefront API** + **Customer Account API**         |
-| Types     | `@shopify/hydrogen-codegen` → `*.generated.d.ts`              |
-| Language  | TypeScript (strict, `noUncheckedIndexedAccess`)               |
-| Tooling   | pnpm, ESLint (flat), Prettier, commitlint, dependency-cruiser |
+| Layer     | Choice                                                                        |
+| --------- | ----------------------------------------------------------------------------- |
+| Framework | Hydrogen 2026.1 on **React Router 7** (not Remix), Vite 6                     |
+| Runtime   | Oxygen (Shopify's edge worker hosting)                                        |
+| UI        | React 18 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives |
+| Data      | Shopify **Storefront API** + **Customer Account API**                         |
+| Types     | `@shopify/hydrogen-codegen` → `*.generated.d.ts`                              |
+| Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                               |
+| Tooling   | pnpm, ESLint (flat), Prettier, commitlint, dependency-cruiser                 |
 
 ## Request & data flow
 
@@ -28,7 +28,7 @@ Browser ── request ──▶ Oxygen worker
               typed data returned to the route
                          │
                          ▼
-              React components render (Tailwind)  ──▶  HTML streamed to browser
+              React components render (Tailwind + shadcn/ui primitives)  ──▶  HTML streamed to browser
 ```
 
 - **`context`** (built in [app/lib/context.ts](../app/lib/context.ts)) exposes `storefront`, `customerAccount`, `cart`, `session`, and `env` to every loader/action.

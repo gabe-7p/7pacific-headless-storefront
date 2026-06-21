@@ -9,7 +9,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 - **Framework**: Hydrogen 2026.1.1 on React Router 7 (loaders/actions, server-first), React 18, Vite 6
 - **Hosting**: Oxygen (deploys from GitHub — preview per PR, production on `main`)
 - **Data**: Shopify Storefront API + Customer Account API, typed via `@shopify/hydrogen-codegen`
-- **Styling**: Tailwind v4 (no CSS-in-JS, no UI kit)
+- **Styling**: Tailwind v4 (no CSS-in-JS, no runtime UI kit) + **shadcn/ui** for headless primitives — Radix behavior, vendored into `app/components/ui/` and styled with Tailwind
 - **Language**: TypeScript (strict, `noUncheckedIndexedAccess`); package manager **pnpm**; Node 22
 
 ## Commands
@@ -23,6 +23,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 | Format                    | `pnpm prettier` / check: `pnpm prettier:check` |
 | Regenerate GraphQL types  | `pnpm graphql:generate`                        |
 | Dependency-boundary check | `pnpm depcruise`                               |
+| Add a shadcn/ui primitive | `pnpm dlx shadcn@latest add <name>`            |
 | Full pre-PR gate          | the `/check` command (mirrors CI)              |
 
 ## Repo map
@@ -30,7 +31,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 ```
 app/
   routes/        one file per route (React Router flat convention); loader/action live here
-  components/    presentational only — layout/ cart/ product/ search/ common/
+  components/    presentational only — layout/ cart/ product/ search/ common/ ui/ (generated shadcn primitives)
   lib/           fragments.ts, context.ts, session.ts, cross-cutting utils (+ colorMap.ts, future)
   graphql/       customer-account/ operations
   styles/        tailwind.css + minimal globals
@@ -49,8 +50,9 @@ Full detail in [.claude/rules/](.claude/rules/) — read the relevant file befor
 - [graphql-fragments.md](.claude/rules/graphql-fragments.md) — co-located `#graphql` strings `as const` + codegen; import generated types, never hand-write.
 - [naming-conventions.md](.claude/rules/naming-conventions.md) — `const` arrow components, `getX`/`getXOrThrow`, fragment/query naming.
 - [common-pitfalls.md](.claude/rules/common-pitfalls.md) — nullable Storefront fields, no waterfalls, never expose `PRIVATE_*`, no `any`.
+- [ui-components.md](.claude/rules/ui-components.md) — when to reach for a shadcn/ui primitive vs. hand-build, how to add/restyle one, the `components/ui/` lint exemption.
 
-The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind only.** ESLint, dependency-cruiser, and `/check` enforce these.
+The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
 ## Domain note: color = separate product
 

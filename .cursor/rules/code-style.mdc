@@ -5,7 +5,7 @@ alwaysApply: true
 ---
 Code conventions for the 7Pacific Hydrogen storefront. Always follow these in code changes. The full rationale for each lives in `.claude/rules/` — read those when a change touches the relevant area.
 
-1. **Components are `const` arrow functions** — never the `function` keyword. One component per file, PascalCase, named after the file. (Enforced by ESLint `react/function-component-definition`.)
+1. **Components are `const` arrow functions** — never the `function` keyword. One component per file, PascalCase, named after the file. (Enforced by ESLint `react/function-component-definition`.) Exception: generated shadcn/ui primitives in `app/components/ui/` use the `function` keyword and are ESLint-exempt — don't rewrite them. See `.claude/rules/ui-components.md`.
 
 2. **No `any`.** Use `unknown` + narrowing, generics, or generated GraphQL types. The `no-explicit-any` warning is treated as a defect.
 
@@ -13,7 +13,7 @@ Code conventions for the 7Pacific Hydrogen storefront. Always follow these in co
 
 4. **GraphQL is co-located ``#graphql`` template strings ending in `as const`**; shared shapes are fragments in `app/lib/fragments.ts`. Import generated types from `storefrontapi.generated` — never hand-write response types. See `.claude/rules/graphql-fragments.md`.
 
-5. **Tailwind utility classes only — no inline `style={{}}` objects.** Use `clsx`/variants for conditional classes.
+5. **Tailwind utility classes only — no inline `style={{}}` objects.** Use `clsx`/variants for conditional classes. For behaviorally-hard interactive widgets (modal/drawer, dropdown, select, accordion, tooltip) use a shadcn/ui primitive from `app/components/ui/` (Radix behavior, Tailwind-styled, no runtime kit); hand-build everything visual/brand. See `.claude/rules/ui-components.md`.
 
 6. **Handle nullable Storefront fields** with optional chaining/guards (`noUncheckedIndexedAccess` is on).
 

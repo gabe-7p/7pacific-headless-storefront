@@ -31,10 +31,11 @@ What this makes easy, what it costs, what we're explicitly not doing.
 
 ## Index
 
-| ADR                                       | Decision                                             |
-| ----------------------------------------- | ---------------------------------------------------- |
-| [0001](0001-hydrogen-over-liquid.md)      | Migrate from Liquid (Impulse) to Hydrogen + Oxygen   |
-| [0002](0002-tailwind-for-styling.md)      | Tailwind CSS for styling (no UI kit)                 |
-| [0003](0003-lean-tooling.md)              | Lean tooling — drop Playwright/Storybook/Sentry/etc. |
-| [0004](0004-native-graphql-pattern.md)    | Hydrogen-native GraphQL pattern (no Apollo)          |
-| [0005](0005-color-as-separate-product.md) | Keep "color = separate product" data model for v1    |
+| ADR                                               | Decision                                             |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| [0001](0001-hydrogen-over-liquid.md)              | Migrate from Liquid (Impulse) to Hydrogen + Oxygen   |
+| [0002](0002-tailwind-for-styling.md)              | Tailwind CSS for styling (no UI kit)                 |
+| [0003](0003-lean-tooling.md)                      | Lean tooling — drop Playwright/Storybook/Sentry/etc. |
+| [0004](0004-native-graphql-pattern.md)            | Hydrogen-native GraphQL pattern (no Apollo)          |
+| [0005](0005-color-as-separate-product.md)         | Keep "color = separate product" data model for v1    |
+| [0006](0006-shadcn-ui-for-headless-primitives.md) | shadcn/ui for headless primitives (refines 0002)     |
