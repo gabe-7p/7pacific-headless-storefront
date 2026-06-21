@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(node -e 'let d=\"\";process.stdin.on(\"data\",c=>d+=c);process.stdin.on(\"end\",()=>{try{process.stdout.write(JSON.parse(d).tool_input?.file_path||\"\")}catch{}})'); case \"$f\" in *.ts|*.tsx) [ -f \"$f\" ] && pnpm exec eslint --fix \"$f\" >/dev/null 2>&1;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "files=$(git diff --name-only --diff-filter=ACMR HEAD -- '*.ts' '*.tsx' 2>/dev/null); [ -n \"$files\" ] && pnpm exec prettier --write $files >/dev/null 2>&1; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
