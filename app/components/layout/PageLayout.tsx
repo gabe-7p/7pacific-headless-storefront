@@ -1,19 +1,12 @@
-import {Await, Link} from 'react-router';
-import {Suspense, useId} from 'react';
-import type {
-  CartApiQueryFragment,
-  FooterQuery,
-  HeaderQuery,
-} from 'storefrontapi.generated';
-import {Aside} from '~/components/layout/Aside';
-import {Footer} from '~/components/layout/Footer';
-import {Header, HeaderMenu} from '~/components/layout/Header';
-import {CartMain} from '~/components/cart/CartMain';
-import {
-  SEARCH_ENDPOINT,
-  SearchFormPredictive,
-} from '~/components/search/SearchFormPredictive';
-import {SearchResultsPredictive} from '~/components/search/SearchResultsPredictive';
+import { Await, Link } from 'react-router';
+import { Suspense, useId } from 'react';
+import type { CartApiQueryFragment, FooterQuery, HeaderQuery } from 'storefrontapi.generated';
+import { Aside } from '~/components/layout/Aside';
+import { Footer } from '~/components/layout/Footer';
+import { Header, HeaderMenu } from '~/components/layout/Header';
+import { CartMain } from '~/components/cart/CartMain';
+import { SEARCH_ENDPOINT, SearchFormPredictive } from '~/components/search/SearchFormPredictive';
+import { SearchResultsPredictive } from '~/components/search/SearchResultsPredictive';
 
 interface PageLayoutProps {
   cart: Promise<CartApiQueryFragment | null>;
@@ -46,16 +39,12 @@ export function PageLayout({
         />
       )}
       <main>{children}</main>
-      <Footer
-        footer={footer}
-        header={header}
-        publicStoreDomain={publicStoreDomain}
-      />
+      <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
     </Aside.Provider>
   );
 }
 
-function CartAside({cart}: {cart: PageLayoutProps['cart']}) {
+function CartAside({ cart }: { cart: PageLayoutProps['cart'] }) {
   return (
     <Aside type="cart" heading="CART">
       <Suspense fallback={<p>Loading cart ...</p>}>
@@ -76,7 +65,7 @@ function SearchAside() {
       <div className="predictive-search">
         <br />
         <SearchFormPredictive>
-          {({fetchResults, goToSearch, inputRef}) => (
+          {({ fetchResults, goToSearch, inputRef }) => (
             <>
               <input
                 name="q"
@@ -94,8 +83,8 @@ function SearchAside() {
         </SearchFormPredictive>
 
         <SearchResultsPredictive>
-          {({items, total, term, state, closeSearch}) => {
-            const {articles, collections, pages, products, queries} = items;
+          {({ items, total, term, state, closeSearch }) => {
+            const { articles, collections, pages, products, queries } = items;
 
             if (state === 'loading' && term.current) {
               return <div>Loading...</div>;
@@ -132,10 +121,7 @@ function SearchAside() {
                   term={term}
                 />
                 {term.current && total ? (
-                  <Link
-                    onClick={closeSearch}
-                    to={`${SEARCH_ENDPOINT}?q=${term.current}`}
-                  >
+                  <Link onClick={closeSearch} to={`${SEARCH_ENDPOINT}?q=${term.current}`}>
                     <p>
                       View all results for <q>{term.current}</q>
                       &nbsp; →

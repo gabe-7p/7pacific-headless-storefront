@@ -1,10 +1,4 @@
-import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -32,7 +26,7 @@ export function Aside({
   type: AsideType;
   heading: React.ReactNode;
 }) {
-  const {type: activeType, close} = useAside();
+  const { type: activeType, close } = useAside();
   const expanded = type === activeType;
 
   useEffect(() => {
@@ -46,18 +40,14 @@ export function Aside({
             close();
           }
         },
-        {signal: abortController.signal},
+        { signal: abortController.signal }
       );
     }
     return () => abortController.abort();
   }, [close, expanded]);
 
   return (
-    <div
-      aria-modal
-      className={`overlay ${expanded ? 'expanded' : ''}`}
-      role="dialog"
-    >
+    <div aria-modal className={`overlay ${expanded ? 'expanded' : ''}`} role="dialog">
       <button className="close-outside" onClick={close} />
       <aside>
         <header>
@@ -74,7 +64,7 @@ export function Aside({
 
 const AsideContext = createContext<AsideContextValue | null>(null);
 
-Aside.Provider = function AsideProvider({children}: {children: ReactNode}) {
+Aside.Provider = function AsideProvider({ children }: { children: ReactNode }) {
   const [type, setType] = useState<AsideType>('closed');
 
   return (

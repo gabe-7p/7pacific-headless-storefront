@@ -1,12 +1,7 @@
-import {
-  useFetcher,
-  useNavigate,
-  type FormProps,
-  type Fetcher,
-} from 'react-router';
-import React, {useRef, useEffect} from 'react';
-import type {PredictiveSearchReturn} from '~/lib/search';
-import {useAside} from '~/components/layout/Aside';
+import { useFetcher, useNavigate, type FormProps, type Fetcher } from 'react-router';
+import React, { useRef, useEffect } from 'react';
+import type { PredictiveSearchReturn } from '~/lib/search';
+import { useAside } from '~/components/layout/Aside';
 
 type SearchFormPredictiveChildren = (args: {
   fetchResults: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,7 +24,7 @@ export function SearchFormPredictive({
   className = 'predictive-search-form',
   ...props
 }: SearchFormPredictiveProps) {
-  const fetcher = useFetcher<PredictiveSearchReturn>({key: 'search'});
+  const fetcher = useFetcher<PredictiveSearchReturn>({ key: 'search' });
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const aside = useAside();
@@ -53,8 +48,8 @@ export function SearchFormPredictive({
   /** Fetch search results based on the input value */
   function fetchResults(event: React.ChangeEvent<HTMLInputElement>) {
     void fetcher.submit(
-      {q: event.target.value || '', limit: 5, predictive: true},
-      {method: 'GET', action: SEARCH_ENDPOINT},
+      { q: event.target.value || '', limit: 5, predictive: true },
+      { method: 'GET', action: SEARCH_ENDPOINT }
     );
   }
 
@@ -70,7 +65,7 @@ export function SearchFormPredictive({
 
   return (
     <fetcher.Form {...props} className={className} onSubmit={resetInput}>
-      {children({inputRef, fetcher, fetchResults, goToSearch})}
+      {children({ inputRef, fetcher, fetchResults, goToSearch })}
     </fetcher.Form>
   );
 }

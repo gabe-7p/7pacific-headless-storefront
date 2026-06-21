@@ -1,17 +1,16 @@
-import type {CartApiQueryFragment} from 'storefrontapi.generated';
-import type {CartLayout} from '~/components/cart/CartMain';
-import {CartForm, Money, type OptimisticCart} from '@shopify/hydrogen';
-import {useEffect, useRef} from 'react';
-import {useFetcher} from 'react-router';
+import type { CartApiQueryFragment } from 'storefrontapi.generated';
+import type { CartLayout } from '~/components/cart/CartMain';
+import { CartForm, Money, type OptimisticCart } from '@shopify/hydrogen';
+import { useEffect, useRef } from 'react';
+import { useFetcher } from 'react-router';
 
 type CartSummaryProps = {
   cart: OptimisticCart<CartApiQueryFragment | null>;
   layout: CartLayout;
 };
 
-export function CartSummary({cart, layout}: CartSummaryProps) {
-  const className =
-    layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
+export function CartSummary({ cart, layout }: CartSummaryProps) {
+  const className = layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
   return (
     <div aria-labelledby="cart-summary" className={className}>
@@ -19,11 +18,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
       <dl className="cart-subtotal">
         <dt>Subtotal</dt>
         <dd>
-          {cart?.cost?.subtotalAmount?.amount ? (
-            <Money data={cart?.cost?.subtotalAmount} />
-          ) : (
-            '-'
-          )}
+          {cart?.cost?.subtotalAmount?.amount ? <Money data={cart?.cost?.subtotalAmount} /> : '-'}
         </dd>
       </dl>
       <CartDiscounts discountCodes={cart?.discountCodes} />
@@ -33,7 +28,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
   );
 }
 
-function CartCheckoutActions({checkoutUrl}: {checkoutUrl?: string}) {
+function CartCheckoutActions({ checkoutUrl }: { checkoutUrl?: string }) {
   if (!checkoutUrl) return null;
 
   return (
@@ -52,9 +47,7 @@ function CartDiscounts({
   discountCodes?: CartApiQueryFragment['discountCodes'];
 }) {
   const codes: string[] =
-    discountCodes
-      ?.filter((discount) => discount.applicable)
-      ?.map(({code}) => code) || [];
+    discountCodes?.filter((discount) => discount.applicable)?.map(({ code }) => code) || [];
 
   return (
     <div>
@@ -122,7 +115,7 @@ function CartGiftCard({
   giftCardCodes: CartApiQueryFragment['appliedGiftCards'] | undefined;
 }) {
   const giftCardCodeInput = useRef<HTMLInputElement>(null);
-  const giftCardAddFetcher = useFetcher({key: 'gift-card-add'});
+  const giftCardAddFetcher = useFetcher({ key: 'gift-card-add' });
 
   useEffect(() => {
     if (giftCardAddFetcher.data) {
@@ -175,11 +168,7 @@ function AddGiftCardForm({
   children: React.ReactNode;
 }) {
   return (
-    <CartForm
-      fetcherKey={fetcherKey}
-      route="/cart"
-      action={CartForm.ACTIONS.GiftCardCodesAdd}
-    >
+    <CartForm fetcherKey={fetcherKey} route="/cart" action={CartForm.ACTIONS.GiftCardCodesAdd}>
       {children}
     </CartForm>
   );

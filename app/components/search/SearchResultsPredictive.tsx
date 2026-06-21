@@ -1,12 +1,12 @@
-import {Link, useFetcher, type Fetcher} from 'react-router';
-import {Image, Money} from '@shopify/hydrogen';
-import React, {useRef, useEffect} from 'react';
+import { Link, useFetcher, type Fetcher } from 'react-router';
+import { Image, Money } from '@shopify/hydrogen';
+import React, { useRef, useEffect } from 'react';
 import {
   getEmptyPredictiveSearchResult,
   urlWithTrackingParams,
   type PredictiveSearchReturn,
 } from '~/lib/search';
-import {useAside} from '~/components/layout/Aside';
+import { useAside } from '~/components/layout/Aside';
 
 type PredictiveSearchItems = PredictiveSearchReturn['result']['items'];
 
@@ -29,8 +29,7 @@ type SearchResultsPredictiveArgs = Pick<
 type PartialPredictiveSearchResult<
   ItemType extends keyof PredictiveSearchItems,
   ExtraProps extends keyof SearchResultsPredictiveArgs = 'term' | 'closeSearch',
-> = Pick<PredictiveSearchItems, ItemType> &
-  Pick<SearchResultsPredictiveArgs, ExtraProps>;
+> = Pick<PredictiveSearchItems, ItemType> & Pick<SearchResultsPredictiveArgs, ExtraProps>;
 
 type SearchResultsPredictiveProps = {
   children: (args: SearchResultsPredictiveArgs) => React.ReactNode;
@@ -39,11 +38,9 @@ type SearchResultsPredictiveProps = {
 /**
  * Component that renders predictive search results
  */
-export function SearchResultsPredictive({
-  children,
-}: SearchResultsPredictiveProps) {
+export function SearchResultsPredictive({ children }: SearchResultsPredictiveProps) {
   const aside = useAside();
-  const {term, inputRef, fetcher, total, items} = usePredictiveSearch();
+  const { term, inputRef, fetcher, total, items } = usePredictiveSearch();
 
   /*
    * Utility that resets the search input
@@ -219,12 +216,7 @@ function SearchResultsPredictiveProducts({
             <li className="predictive-search-result-item" key={product.id}>
               <Link to={productUrl} onClick={closeSearch}>
                 {image && (
-                  <Image
-                    alt={image.altText ?? ''}
-                    src={image.url}
-                    width={50}
-                    height={50}
-                  />
+                  <Image alt={image.altText ?? ''} src={image.url} width={50} height={50} />
                 )}
                 <div>
                   <p>{product.title}</p>
@@ -258,11 +250,7 @@ function SearchResultsPredictiveQueries({
   );
 }
 
-function SearchResultsPredictiveEmpty({
-  term,
-}: {
-  term: React.MutableRefObject<string>;
-}) {
+function SearchResultsPredictiveEmpty({ term }: { term: React.MutableRefObject<string> }) {
   if (!term.current) {
     return null;
   }
@@ -282,7 +270,7 @@ function SearchResultsPredictiveEmpty({
  * '''
  **/
 function usePredictiveSearch(): UsePredictiveSearchReturn {
-  const fetcher = useFetcher<PredictiveSearchReturn>({key: 'search'});
+  const fetcher = useFetcher<PredictiveSearchReturn>({ key: 'search' });
   const term = useRef<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -297,8 +285,7 @@ function usePredictiveSearch(): UsePredictiveSearchReturn {
     }
   }, []);
 
-  const {items, total} =
-    fetcher?.data?.result ?? getEmptyPredictiveSearchResult();
+  const { items, total } = fetcher?.data?.result ?? getEmptyPredictiveSearchResult();
 
-  return {items, total, inputRef, term, fetcher};
+  return { items, total, inputRef, term, fetcher };
 }
