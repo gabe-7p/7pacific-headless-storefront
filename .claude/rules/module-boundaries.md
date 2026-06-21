@@ -49,6 +49,6 @@ export const ProductCard = ({ product }: { product: ProductCardFragment }) => {
 
 ## Why
 
-- **Testable**: presentational components render from mock props with no network; loaders are tested separately.
+- **Reusable & isolated**: a presentational component renders from plain props, so it drops into any page (and any preview) without dragging data-fetching along.
 - **Predictable**: a reader knows fetching is in loaders, rendering is in components — no hunting.
 - **Cacheable & fast**: Hydrogen caches at the loader/query layer; scattering fetches into components defeats that and creates waterfalls.

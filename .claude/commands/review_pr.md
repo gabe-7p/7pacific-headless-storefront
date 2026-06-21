@@ -7,92 +7,46 @@ arguments:
 
 # 7Pacific PR Review
 
-Review PR `$ARGUMENTS.pr` against our engineering standards for the Hydrogen storefront.
+Review PR `$ARGUMENTS.pr` against our standards for the Hydrogen storefront.
 
 ## Steps
 
-1. **Fetch PR details**: `gh pr view` and `gh pr diff` to get the content.
-2. **Check CI status**: `gh pr checks`.
-3. **Read the standards**: the files in [.claude/rules/](../rules/) are the source of truth — read the ones relevant to the diff (module boundaries, naming, GraphQL fragments, common pitfalls, testing).
+1. **Fetch the PR**: `gh pr view` and `gh pr diff`.
+2. **Check CI**: `gh pr checks`.
+3. **Read the standards**: the files in [.claude/rules/](../rules/) are the source of truth — read the ones the diff touches (module boundaries, naming, GraphQL fragments, common pitfalls).
 4. **Analyze the diff** against the dimensions below.
-5. **Output the structured review** in the format below.
+5. **Output the review** in the format below.
 
 ## Review Dimensions
 
-### 1. Architecture & module boundaries
-
-- Data fetching only in route loaders/actions and `lib/` — never in UI components (see [module-boundaries.md](../rules/module-boundaries.md)).
-- Files in the right place (feature modules, `components/layout`, `components/ui`); no dumping into generic locations.
-- No circular or orphan deps (dependency-cruiser passes).
-- DRY — shared logic extracted, copy lives in `content/` not inline in JSX.
-
-### 2. Type safety
-
-- No `any` (the `no-explicit-any` warning is treated as a defect).
-- Generated GraphQL types imported from `storefrontapi.generated` / `customer-accountapi.generated`, never hand-written.
-- Nullable Storefront fields handled (optional chaining / guards); honors `noUncheckedIndexedAccess`.
-- `import type` for type-only imports.
-
-### 3. GraphQL & data fetching
-
-- Queries are co-located `#graphql` template `const`s ending in `as const`; shared shapes are fragments in `app/lib/fragments.ts` (see [graphql-fragments.md](../rules/graphql-fragments.md)).
-- Parallel fetches use `Promise.all` (no request waterfalls); below-the-fold data is deferred and `.catch`-guarded.
-- Sensible caching (`CacheLong`/`CacheShort`) on storefront queries.
-- `PRIVATE_*` tokens never reach client code.
-
-### 4. Accessibility (a11y)
-
-- Semantic elements; images have `alt`; interactive controls are real buttons/links and keyboard-reachable.
-- Form inputs have labels; focus states preserved; color is not the only signal.
-
-### 5. Performance
-
-- Hydrogen `<Image>` with `sizes` for responsive images; no unbounded queries (pagination where lists can grow).
-- No heavy client JS where a server-rendered loader would do; defer below-the-fold work.
-
-### 6. SEO
-
-- Route `meta` set (title/description); canonical + OG where relevant; structured data (JSON-LD) on product pages.
-- Legacy URLs preserved or 301-redirected.
-
-### 7. Testing
-
-- Behavior covered by colocated `*.test.tsx` (once the Vitest harness exists); pure logic (e.g. `colorMap`) has unit tests (see [testing-conventions.md](../rules/testing-conventions.md)).
-- Until then, the PR describes the manual verification done against the live store / preview deploy.
-
-### 8. Code style
-
-- Components are `const` arrow functions (never the `function` keyword) — enforced by ESLint.
-- Tailwind utility classes, no inline `style={{}}` objects.
-- Self-documenting names; comments explain _why_, not _what_.
+1. **Architecture & boundaries** — fetching only in loaders/actions and `lib/`, never in components ([module-boundaries.md](../rules/module-boundaries.md)); files in the right place; no circular/orphan deps; copy in `content/` not JSX; DRY.
+2. **Type safety** — no `any`; generated GraphQL types imported (never hand-written); nullable Storefront fields guarded (`noUncheckedIndexedAccess`); `import type` for type-only imports.
+3. **GraphQL & data fetching** — co-located `#graphql` `const`s ending `as const`, shared shapes as fragments ([graphql-fragments.md](../rules/graphql-fragments.md)); `Promise.all` (no waterfalls); deferred below-the-fold data `.catch`-guarded; sensible caching; `PRIVATE_*` tokens never client-side.
+4. **Accessibility** — semantic elements; `alt` on images; real, keyboard-reachable controls; labeled inputs; color isn't the only signal.
+5. **Performance** — Hydrogen `<Image>` with `sizes`; pagination on growable lists; defer below-the-fold work; no needless client JS.
+6. **SEO** — route `meta` (title/description), canonical + OG where relevant, product JSON-LD; legacy URLs preserved or 301'd.
+7. **Code style** — `const` arrow components (never `function`); Tailwind utilities, no inline `style={{}}`; self-documenting names; comments explain _why_; **docs updated alongside the change** (see CLAUDE.md → Documentation discipline).
 
 ## Output Format
 
-### Quick Summary
+### Summary
 
-- PR size, scope, risk level (Low/Medium/High).
+PR size, scope, risk (Low/Medium/High).
 
-### What's Good
+### What's good
 
-- Patterns that follow the standards.
+Patterns that follow the standards.
 
-### Issues Found
+### Issues
 
-**Blockers (Must Fix)** — issues blocking approval.
-**Warnings (Should Fix)** — architecture concerns, missing error/null handling, missing a11y.
-**Suggestions (Consider)** — style, refactors.
+- **Blockers (must fix)** — block approval.
+- **Warnings (should fix)** — boundary/null/a11y gaps, missing doc updates.
+- **Suggestions (consider)** — style, refactors.
 
-### Metrics
+### CI status
 
-- Type Safety | Architecture Alignment | a11y | Test Coverage (each 1–5).
+If checks fail, diagnose the root cause and suggest a fix.
 
-### CI/CD Status
+### Recommendation
 
-If any checks fail, diagnose the root cause and suggest a fix.
-
-### Final Recommendation
-
-- **Ship it!** — ready to merge
-- **Minor changes needed** — quick fixes then merge
-- **Needs work** — significant changes required
-- **Consider splitting** — PR too large/complex
+**Ship it** · **Minor changes** · **Needs work** · **Consider splitting**.

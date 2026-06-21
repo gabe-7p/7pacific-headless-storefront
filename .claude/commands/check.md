@@ -12,8 +12,6 @@ Run these checks in sequence — the same gate CI enforces ([.github/workflows/c
 5. **Dependency rules**: `pnpm depcruise`
 6. **Build**: `pnpm build`
 
-> Unit tests (`pnpm test`) join this list once the Vitest harness lands (GD-5). Until then, verify behavior with `pnpm dev` against the live store.
-
 After all checks complete (or one fails), print a summary:
 
 ```

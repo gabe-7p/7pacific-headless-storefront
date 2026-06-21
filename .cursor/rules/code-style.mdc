@@ -28,3 +28,5 @@ Code conventions for the 7Pacific Hydrogen storefront. Always follow these in co
 11. **Never edit generated files** (`*.generated.d.ts`, `.react-router/types/*`) — change the source and regenerate with `pnpm graphql:generate`.
 
 12. **Never expose `PRIVATE_*` / secret env vars to the browser** — they are server-only (loaders/actions).
+
+13. **Update docs in the same change as the code.** If you change a convention, script, env var, or directory, update `CLAUDE.md` / `.claude/rules/*` / `.env.example` accordingly. Stale docs are a defect. See `CLAUDE.md` → Documentation discipline.
