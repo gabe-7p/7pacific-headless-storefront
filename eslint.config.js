@@ -8,7 +8,6 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import eslintComments from 'eslint-plugin-eslint-comments';
 import _import from 'eslint-plugin-import';
-import jest from 'eslint-plugin-jest';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -236,22 +235,6 @@ export default [
     languageOptions: {
       globals: {
         ...globals.node,
-      },
-    },
-  },
-  ...compat.extends('plugin:jest/recommended').map((config) => ({
-    ...config,
-    files: ['**/*.test.*'],
-  })),
-  {
-    files: ['**/*.test.*'],
-    plugins: {
-      jest,
-    },
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
       },
     },
   },
