@@ -1,0 +1,3 @@
+# Let Codex fall back to CLAUDE.md as the project doc when no AGENTS.md is present,
+# so the same conventions drive Codex, Cursor, and Claude Code.
+project_doc_fallback_filenames = ["CLAUDE.md"]
