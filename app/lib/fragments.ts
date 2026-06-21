@@ -240,3 +240,61 @@ export const FOOTER_QUERY = `#graphql
   }
   ${MENU_FRAGMENT}
 ` as const;
+
+// ---------------------------------------------------------------------------
+// Base building-block fragments.
+//
+// These are the shared, reusable shapes that feature queries compose with the
+// spread operator (e.g. `...ProductCard`). Keep them lean — only the fields
+// every consumer needs. Feature-specific extras (PDP galleries, tech-stack
+// metafields, etc.) belong in the query that needs them, not here.
+//
+// Codegen emits a `<Name>Fragment` type for each (e.g. `ProductCardFragment`),
+// importable from 'storefrontapi.generated'.
+// ---------------------------------------------------------------------------
+
+/**
+ * The minimal product shape for grids, carousels, and recommendation rows.
+ * Spread into a query alongside `${PRODUCT_CARD_FRAGMENT}`.
+ */
+export const PRODUCT_CARD_FRAGMENT = `#graphql
+  fragment ProductCard on Product {
+    id
+    handle
+    title
+    vendor
+    featuredImage {
+      id
+      url
+      altText
+      width
+      height
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+  }
+` as const;
+
+/**
+ * The minimal collection shape for collection lists and links.
+ * Spread into a query alongside `${COLLECTION_CARD_FRAGMENT}`.
+ */
+export const COLLECTION_CARD_FRAGMENT = `#graphql
+  fragment CollectionCard on Collection {
+    id
+    handle
+    title
+    description
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+` as const;

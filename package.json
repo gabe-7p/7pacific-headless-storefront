@@ -11,7 +11,7 @@
     "preview": "shopify hydrogen preview --build",
     "lint": "eslint --no-error-on-unmatched-pattern .",
     "type-check": "react-router typegen && tsc --noEmit",
-    "codegen": "shopify hydrogen codegen && react-router typegen",
+    "graphql:generate": "shopify hydrogen codegen && react-router typegen",
     "prettier": "prettier --write .",
     "prettier:check": "prettier --check .",
     "depcruise": "depcruise app",
