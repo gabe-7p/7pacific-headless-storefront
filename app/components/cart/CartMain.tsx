@@ -4,6 +4,7 @@ import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import { type CartLine, CartLineItem } from '~/components/cart/CartLineItem';
 import { useAside } from '~/components/layout/Aside';
+import { Button } from '~/components/ui/button';
 
 import { CartSummary } from './CartSummary';
 
@@ -15,6 +16,7 @@ export type CartMainProps = {
 };
 
 export type LineItemChildrenMap = { [parentId: string]: CartLine[] };
+
 /** Returns a map of all line items and their children. */
 function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
   const children: LineItemChildrenMap = {};
@@ -25,8 +27,8 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
       children[parentId].push(line);
     }
     if ('lineComponents' in line) {
-      const children = getLineItemChildrenMap(line.lineComponents);
-      for (const [parentId, childIds] of Object.entries(children)) {
+      const nested = getLineItemChildrenMap(line.lineComponents);
+      for (const [parentId, childIds] of Object.entries(nested)) {
         if (!children[parentId]) children[parentId] = [];
         children[parentId].push(...childIds);
       }
@@ -34,58 +36,52 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
   }
   return children;
 }
+
 /**
- * The main cart component that displays the cart items and summary.
- * It is used by both the /cart route and the cart aside dialog.
+ * The cart contents, shared by the /cart route (`page`) and the drawer (`aside`).
  */
 export const CartMain = ({ layout, cart: originalCart }: CartMainProps) => {
-  // The useOptimisticCart hook applies pending actions to the cart
-  // so the user immediately sees feedback when they modify the cart.
+  // useOptimisticCart applies pending actions so the UI updates immediately.
   const cart = useOptimisticCart(originalCart);
-
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
-  const withDiscount =
-    cart && Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
-  const cartHasItems = cart?.totalQuantity ? cart.totalQuantity > 0 : false;
+  const cartHasItems = (cart?.totalQuantity ?? 0) > 0;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
 
+  if (!linesCount) return <CartEmpty layout={layout} />;
+
+  const lines = (
+    <ul aria-labelledby="cart-lines" className="divide-border-subtle divide-y">
+      {(cart?.lines?.nodes ?? []).map((line) => {
+        // root cart only renders parent lines; children render nested
+        if ('parentRelationship' in line && line.parentRelationship?.parent) return null;
+        return <CartLineItem key={line.id} line={line} layout={layout} childrenMap={childrenMap} />;
+      })}
+    </ul>
+  );
+
   return (
-    <div className={className}>
-      <CartEmpty hidden={linesCount} layout={layout} />
-      <div className="cart-details">
-        <p id="cart-lines" className="sr-only">
-          Line items
-        </p>
-        <div>
-          <ul aria-labelledby="cart-lines">
-            {(cart?.lines?.nodes ?? []).map((line) => {
-              // we do not render non-parent lines at the root of the cart
-              if ('parentRelationship' in line && line.parentRelationship?.parent) {
-                return null;
-              }
-              return (
-                <CartLineItem key={line.id} line={line} layout={layout} childrenMap={childrenMap} />
-              );
-            })}
-          </ul>
-        </div>
-        {cartHasItems && <CartSummary cart={cart} layout={layout} />}
-      </div>
+    <div className={layout === 'page' ? 'md:flex md:items-start md:gap-12' : 'flex flex-col'}>
+      <p id="cart-lines" className="sr-only">
+        Line items
+      </p>
+      <div className={layout === 'page' ? 'flex-1' : 'px-5'}>{lines}</div>
+      {cartHasItems && <CartSummary cart={cart} layout={layout} />}
     </div>
   );
 };
 
-const CartEmpty = ({ hidden = false }: { hidden: boolean; layout?: CartMainProps['layout'] }) => {
+const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
   const { close } = useAside();
   return (
-    <div hidden={hidden}>
-      <br />
-      <p>Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you started!</p>
-      <br />
-      <Link to="/collections" onClick={close} prefetch="viewport">
-        Continue shopping →
-      </Link>
+    <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
+      <p className="text-sm text-neutral-600">
+        Looks like you haven&rsquo;t added anything yet — let&rsquo;s get you started.
+      </p>
+      <Button asChild variant="brand" size="lg" className="mt-5 tracking-wide uppercase">
+        <Link to="/collections" onClick={close} prefetch="viewport">
+          Continue shopping
+        </Link>
+      </Button>
     </div>
   );
 };
