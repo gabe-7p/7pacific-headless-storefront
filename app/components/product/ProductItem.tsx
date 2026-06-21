@@ -1,6 +1,6 @@
 import { Image, Money } from '@shopify/hydrogen';
 import { Link } from 'react-router';
-import type { ProductItemFragment, RecommendedProductFragment } from 'storefrontapi.generated';
+import type { RecommendedProductFragment } from 'storefrontapi.generated';
 
 import { useVariantUrl } from '~/lib/variants';
 
@@ -8,7 +8,7 @@ export const ProductItem = ({
   product,
   loading,
 }: {
-  product: ProductItemFragment | RecommendedProductFragment;
+  product: RecommendedProductFragment;
   loading?: 'eager' | 'lazy';
 }) => {
   const variantUrl = useVariantUrl(product.handle);
