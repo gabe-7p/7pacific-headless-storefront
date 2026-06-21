@@ -1,21 +1,22 @@
-import { Await, Link } from 'react-router';
 import { Suspense, useId } from 'react';
+import { Await, Link } from 'react-router';
 import type { CartApiQueryFragment, FooterQuery, HeaderQuery } from 'storefrontapi.generated';
+
+import { CartMain } from '~/components/cart/CartMain';
 import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
 import { Header, HeaderMenu } from '~/components/layout/Header';
-import { CartMain } from '~/components/cart/CartMain';
 import { SEARCH_ENDPOINT, SearchFormPredictive } from '~/components/search/SearchFormPredictive';
 import { SearchResultsPredictive } from '~/components/search/SearchResultsPredictive';
 
-interface PageLayoutProps {
+type PageLayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
   footer: Promise<FooterQuery | null>;
   header: HeaderQuery;
   isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
   children?: React.ReactNode;
-}
+};
 
 export const PageLayout = ({
   cart,

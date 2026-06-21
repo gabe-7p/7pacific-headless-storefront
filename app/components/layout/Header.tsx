@@ -1,15 +1,16 @@
+import { type CartViewPayload, useAnalytics, useOptimisticCart } from '@shopify/hydrogen';
 import { Suspense } from 'react';
 import { Await, NavLink, useAsyncValue } from 'react-router';
-import { type CartViewPayload, useAnalytics, useOptimisticCart } from '@shopify/hydrogen';
-import type { HeaderQuery, CartApiQueryFragment } from 'storefrontapi.generated';
+import type { CartApiQueryFragment, HeaderQuery } from 'storefrontapi.generated';
+
 import { useAside } from '~/components/layout/Aside';
 
-interface HeaderProps {
+type HeaderProps = {
   header: HeaderQuery;
   cart: Promise<CartApiQueryFragment | null>;
   isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
-}
+};
 
 type Viewport = 'desktop' | 'mobile';
 

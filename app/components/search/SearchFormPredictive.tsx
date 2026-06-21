@@ -1,7 +1,9 @@
-import { useFetcher, useNavigate, type FormProps, type Fetcher } from 'react-router';
-import React, { useRef, useEffect } from 'react';
-import type { PredictiveSearchReturn } from '~/lib/search';
+import type React from 'react';
+import { useEffect, useRef } from 'react';
+import { type Fetcher, type FormProps, useFetcher, useNavigate } from 'react-router';
+
 import { useAside } from '~/components/layout/Aside';
+import type { PredictiveSearchReturn } from '~/lib/search';
 
 type SearchFormPredictiveChildren = (args: {
   fetchResults: (event: React.ChangeEvent<HTMLInputElement>) => void;

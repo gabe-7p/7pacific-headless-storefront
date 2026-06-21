@@ -29,7 +29,7 @@ export function getEmptyPredictiveSearchResult(): PredictiveSearchReturn['result
   };
 }
 
-interface UrlWithTrackingParams {
+type UrlWithTrackingParams = {
   /** The base URL to which the tracking parameters will be appended. */
   baseUrl: string;
   /** The trackingParams returned by the Storefront API. */
@@ -38,7 +38,7 @@ interface UrlWithTrackingParams {
   params?: Record<string, string>;
   /** The search term to be appended to the URL. */
   term: string;
-}
+};
 
 /**
  * A utility function that appends tracking parameters to a URL. Tracking parameters are

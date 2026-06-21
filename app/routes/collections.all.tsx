@@ -1,9 +1,11 @@
-import type { Route } from './+types/collections.all';
-import { useLoaderData } from 'react-router';
 import { getPaginationVariables, Image, Money } from '@shopify/hydrogen';
+import { useLoaderData } from 'react-router';
+import type { CollectionItemFragment } from 'storefrontapi.generated';
+
 import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
 import { ProductItem } from '~/components/product/ProductItem';
-import type { CollectionItemFragment } from 'storefrontapi.generated';
+
+import type { Route } from './+types/collections.all';
 
 export const meta: Route.MetaFunction = () => {
   return [{ title: `Hydrogen | Products` }];

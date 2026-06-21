@@ -1,6 +1,8 @@
 import { data as remixData, Form, NavLink, Outlet, useLoaderData } from 'react-router';
-import type { Route } from './+types/account';
+
 import { CUSTOMER_DETAILS_QUERY } from '~/graphql/customer-account/CustomerDetailsQuery';
+
+import type { Route } from './+types/account';
 
 export function shouldRevalidate() {
   return true;

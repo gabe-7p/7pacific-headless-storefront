@@ -1,7 +1,9 @@
-import type { CustomerFragment } from 'customer-accountapi.generated';
 import type { CustomerUpdateInput } from '@shopify/hydrogen/customer-account-api-types';
-import { CUSTOMER_UPDATE_MUTATION } from '~/graphql/customer-account/CustomerUpdateMutation';
+import type { CustomerFragment } from 'customer-accountapi.generated';
 import { data, Form, useActionData, useNavigation, useOutletContext } from 'react-router';
+
+import { CUSTOMER_UPDATE_MUTATION } from '~/graphql/customer-account/CustomerUpdateMutation';
+
 import type { Route } from './+types/account.profile';
 
 export type ActionResponse = {
@@ -32,7 +34,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     const customer: CustomerUpdateInput = {};
     const validInputKeys = ['firstName', 'lastName'] as const;
     for (const [key, value] of form.entries()) {
-      if (!validInputKeys.includes(key as any)) {
+      if (!validInputKeys.includes(key as (typeof validInputKeys)[number])) {
         continue;
       }
       if (typeof value === 'string' && value.length) {
@@ -49,7 +51,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     });
 
     if (errors?.length) {
-      throw new Error(errors[0].message);
+      throw new Error(errors[0]?.message);
     }
 
     if (!data?.customerUpdate?.customer) {
@@ -60,9 +62,12 @@ export async function action({ request, context }: Route.ActionArgs) {
       error: null,
       customer: data?.customerUpdate?.customer,
     };
-  } catch (error: any) {
+  } catch (error) {
     return data(
-      { error: error.message, customer: null },
+      {
+        error: error instanceof Error ? error.message : 'Profile update failed.',
+        customer: null,
+      },
       {
         status: 400,
       }

@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 import { Await, NavLink } from 'react-router';
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
-interface FooterProps {
+type FooterProps = {
   footer: Promise<FooterQuery | null>;
   header: HeaderQuery;
   publicStoreDomain: string;
-}
+};
 
 export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: FooterProps) => {
   return (

@@ -1,8 +1,10 @@
-import { useOptimisticCart, type OptimisticCartLine } from '@shopify/hydrogen';
+import { type OptimisticCartLine, useOptimisticCart } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
+
+import { type CartLine, CartLineItem } from '~/components/cart/CartLineItem';
 import { useAside } from '~/components/layout/Aside';
-import { CartLineItem, type CartLine } from '~/components/cart/CartLineItem';
+
 import { CartSummary } from './CartSummary';
 
 export type CartLayout = 'page' | 'aside';
