@@ -1,17 +1,19 @@
-import { redirect, useLoaderData } from 'react-router';
-import type { Route } from './+types/products.$handle';
 import {
-  getSelectedProductOptions,
   Analytics,
-  useOptimisticVariant,
-  getProductOptions,
   getAdjacentAndFirstAvailableVariants,
+  getProductOptions,
+  getSelectedProductOptions,
+  useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import { ProductPrice } from '~/components/product/ProductPrice';
-import { ProductImage } from '~/components/product/ProductImage';
+import { redirect, useLoaderData } from 'react-router';
+
 import { ProductForm } from '~/components/product/ProductForm';
+import { ProductImage } from '~/components/product/ProductImage';
+import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+
+import type { Route } from './+types/products.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
   return [

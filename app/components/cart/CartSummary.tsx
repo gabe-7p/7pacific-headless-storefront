@@ -1,8 +1,9 @@
-import type { CartApiQueryFragment } from 'storefrontapi.generated';
-import type { CartLayout } from '~/components/cart/CartMain';
 import { CartForm, Money, type OptimisticCart } from '@shopify/hydrogen';
 import { useEffect, useRef } from 'react';
 import { useFetcher } from 'react-router';
+import type { CartApiQueryFragment } from 'storefrontapi.generated';
+
+import type { CartLayout } from '~/components/cart/CartMain';
 
 type CartSummaryProps = {
   cart: OptimisticCart<CartApiQueryFragment | null>;

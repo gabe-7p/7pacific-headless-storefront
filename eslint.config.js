@@ -1,17 +1,19 @@
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import eslintComments from 'eslint-plugin-eslint-comments';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import jsxA11Y from 'eslint-plugin-jsx-a11y';
-import globals from 'globals';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import _import from 'eslint-plugin-import';
-import tsParser from '@typescript-eslint/parser';
-import jest from 'eslint-plugin-jest';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
+
+import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import eslintComments from 'eslint-plugin-eslint-comments';
+import _import from 'eslint-plugin-import';
+import jest from 'eslint-plugin-jest';
+import jsxA11Y from 'eslint-plugin-jsx-a11y';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -87,6 +89,8 @@ export default [
       ],
       'no-useless-escape': 'off',
       'no-case-declarations': 'off',
+      // Stale-closure bugs are nasty — make missing hook deps an error, not a warning.
+      'react-hooks/exhaustive-deps': 'error',
     },
   },
   ...fixupConfigRules(
@@ -209,7 +213,15 @@ export default [
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
+      // `any` defeats the type system — flag it (warn: shows in the IDE + lint, doesn't hard-block).
+      '@typescript-eslint/no-explicit-any': 'warn',
+      // Enforce `import type {...}` for type-only imports (pairs with verbatimModuleSyntax).
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
+      ],
+      // Prefer `type` over `interface` (brooklyn convention).
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
@@ -241,6 +253,14 @@ export default [
         ...globals.node,
         ...globals.jest,
       },
+    },
+  },
+  {
+    files: ['**/*.{js,jsx,ts,tsx,cjs,mjs}'],
+    plugins: { 'simple-import-sort': simpleImportSort },
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
   {

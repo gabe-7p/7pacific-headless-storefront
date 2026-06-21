@@ -1,16 +1,18 @@
-import { Link, useLoaderData, useNavigation, useSearchParams } from 'react-router';
-import type { Route } from './+types/account.orders._index';
+import { flattenConnection, getPaginationVariables, Money } from '@shopify/hydrogen';
+import type { CustomerOrdersFragment, OrderItemFragment } from 'customer-accountapi.generated';
 import { useRef } from 'react';
-import { Money, getPaginationVariables, flattenConnection } from '@shopify/hydrogen';
+import { Link, useLoaderData, useNavigation, useSearchParams } from 'react-router';
+
+import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
+import { CUSTOMER_ORDERS_QUERY } from '~/graphql/customer-account/CustomerOrdersQuery';
 import {
   buildOrderSearchQuery,
-  parseOrderFilters,
   ORDER_FILTER_FIELDS,
   type OrderFilterParams,
+  parseOrderFilters,
 } from '~/lib/orderFilters';
-import { CUSTOMER_ORDERS_QUERY } from '~/graphql/customer-account/CustomerOrdersQuery';
-import type { CustomerOrdersFragment, OrderItemFragment } from 'customer-accountapi.generated';
-import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
+
+import type { Route } from './+types/account.orders._index';
 
 type OrdersLoaderData = {
   customer: CustomerOrdersFragment;

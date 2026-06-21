@@ -9,12 +9,12 @@ export const ORDER_FILTER_FIELDS = {
 /**
  * Parameters for filtering customer orders, see: https://shopify.dev/docs/api/customer/latest/queries/customer#returns-Customer.fields.orders.arguments.query
  */
-export interface OrderFilterParams {
+export type OrderFilterParams = {
   /** Order name or number (e.g., "#1001" or "1001") */
   name?: string;
   /** Order confirmation number */
   confirmationNumber?: string;
-}
+};
 
 /**
  * Sanitizes a filter value to prevent injection attacks or malformed queries.

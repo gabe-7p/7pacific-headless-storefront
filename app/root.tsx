@@ -1,22 +1,24 @@
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen';
 import {
-  Outlet,
-  useRouteError,
   isRouteErrorResponse,
-  type ShouldRevalidateFunction,
   Links,
   Meta,
+  Outlet,
   Scripts,
   ScrollRestoration,
+  type ShouldRevalidateFunction,
+  useRouteError,
   useRouteLoaderData,
 } from 'react-router';
-import type { Route } from './+types/root';
+
 import favicon from '~/assets/favicon.svg';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
-import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
-import tailwindCss from './styles/tailwind.css?url';
+import resetStyles from '~/styles/reset.css?url';
+
+import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
+import tailwindCss from './styles/tailwind.css?url';
 
 export type RootLoader = typeof loader;
 

@@ -1,6 +1,7 @@
 import { createHydrogenContext } from '@shopify/hydrogen';
-import { AppSession } from '~/lib/session';
+
 import { CART_QUERY_FRAGMENT } from '~/lib/fragments';
+import { AppSession } from '~/lib/session';
 
 // Define the additional context object
 const additionalContext = {
@@ -15,6 +16,8 @@ const additionalContext = {
 type AdditionalContextType = typeof additionalContext;
 
 declare global {
+  // Global augmentation must use `interface` — type aliases can't be merged into the global scope.
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HydrogenAdditionalContext extends AdditionalContextType {}
 }
 

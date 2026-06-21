@@ -1,9 +1,11 @@
-import { Await, useLoaderData, Link } from 'react-router';
-import type { Route } from './+types/_index';
-import { Suspense } from 'react';
 import { Image } from '@shopify/hydrogen';
+import { Suspense } from 'react';
+import { Await, Link, useLoaderData } from 'react-router';
 import type { FeaturedCollectionFragment, RecommendedProductsQuery } from 'storefrontapi.generated';
+
 import { ProductItem } from '~/components/product/ProductItem';
+
+import type { Route } from './+types/_index';
 
 export const meta: Route.MetaFunction = () => {
   return [{ title: 'Hydrogen | Home' }];
@@ -63,7 +65,7 @@ const Homepage = () => {
   );
 };
 
-const FeaturedCollection = ({ collection }: { collection: FeaturedCollectionFragment }) => {
+const FeaturedCollection = ({ collection }: { collection?: FeaturedCollectionFragment }) => {
   if (!collection) return null;
   const image = collection?.image;
   return (

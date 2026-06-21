@@ -2,18 +2,20 @@ import type { CustomerAddressInput } from '@shopify/hydrogen/customer-account-ap
 import type { AddressFragment, CustomerFragment } from 'customer-accountapi.generated';
 import {
   data,
+  type Fetcher,
   Form,
   useActionData,
   useNavigation,
   useOutletContext,
-  type Fetcher,
 } from 'react-router';
-import type { Route } from './+types/account.addresses';
+
 import {
-  UPDATE_ADDRESS_MUTATION,
-  DELETE_ADDRESS_MUTATION,
   CREATE_ADDRESS_MUTATION,
+  DELETE_ADDRESS_MUTATION,
+  UPDATE_ADDRESS_MUTATION,
 } from '~/graphql/customer-account/CustomerAddressMutations';
+
+import type { Route } from './+types/account.addresses';
 
 export type ActionResponse = {
   addressId?: string | null;
@@ -93,11 +95,11 @@ export async function action({ request, context }: Route.ActionArgs) {
           });
 
           if (errors?.length) {
-            throw new Error(errors[0].message);
+            throw new Error(errors[0]?.message);
           }
 
           if (data?.customerAddressCreate?.userErrors?.length) {
-            throw new Error(data?.customerAddressCreate?.userErrors[0].message);
+            throw new Error(data?.customerAddressCreate?.userErrors[0]?.message);
           }
 
           if (!data?.customerAddressCreate?.customerAddress) {
@@ -140,11 +142,11 @@ export async function action({ request, context }: Route.ActionArgs) {
           });
 
           if (errors?.length) {
-            throw new Error(errors[0].message);
+            throw new Error(errors[0]?.message);
           }
 
           if (data?.customerAddressUpdate?.userErrors?.length) {
-            throw new Error(data?.customerAddressUpdate?.userErrors[0].message);
+            throw new Error(data?.customerAddressUpdate?.userErrors[0]?.message);
           }
 
           if (!data?.customerAddressUpdate?.customerAddress) {
@@ -185,11 +187,11 @@ export async function action({ request, context }: Route.ActionArgs) {
           });
 
           if (errors?.length) {
-            throw new Error(errors[0].message);
+            throw new Error(errors[0]?.message);
           }
 
           if (data?.customerAddressDelete?.userErrors?.length) {
-            throw new Error(data?.customerAddressDelete?.userErrors[0].message);
+            throw new Error(data?.customerAddressDelete?.userErrors[0]?.message);
           }
 
           if (!data?.customerAddressDelete?.deletedAddressId) {

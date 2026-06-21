@@ -1,5 +1,5 @@
-import type { ProductVariantFragment } from 'storefrontapi.generated';
 import { Image } from '@shopify/hydrogen';
+import type { ProductVariantFragment } from 'storefrontapi.generated';
 
 export const ProductImage = ({ image }: { image: ProductVariantFragment['image'] }) => {
   if (!image) {

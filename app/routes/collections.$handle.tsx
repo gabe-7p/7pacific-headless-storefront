@@ -1,10 +1,12 @@
+import { Analytics, getPaginationVariables } from '@shopify/hydrogen';
 import { redirect, useLoaderData } from 'react-router';
-import type { Route } from './+types/collections.$handle';
-import { getPaginationVariables, Analytics } from '@shopify/hydrogen';
-import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
-import { redirectIfHandleIsLocalized } from '~/lib/redirect';
-import { ProductItem } from '~/components/product/ProductItem';
 import type { ProductItemFragment } from 'storefrontapi.generated';
+
+import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
+import { ProductItem } from '~/components/product/ProductItem';
+import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+
+import type { Route } from './+types/collections.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
   return [{ title: `Hydrogen | ${data?.collection.title ?? ''} Collection` }];

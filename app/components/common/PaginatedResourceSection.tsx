@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { Pagination } from '@shopify/hydrogen';
+import type * as React from 'react';
 
 /**
  * <PaginatedResourceSection > is a component that encapsulate how the previous and next behaviors throughout your application.

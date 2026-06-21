@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Form, type FormProps } from 'react-router';
 
 type SearchFormProps = Omit<FormProps, 'children'> & {
