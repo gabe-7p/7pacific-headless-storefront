@@ -1,4 +1,6 @@
-import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, type ReactNode, useContext, useState } from 'react';
+
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '~/components/ui/sheet';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -8,57 +10,42 @@ type AsideContextValue = {
 };
 
 /**
- * A side bar component with Overlay
- * @example
- * ```jsx
- * <Aside type="search" heading="SEARCH">
- *  <input type="search" />
- *  ...
- * </Aside>
- * ```
+ * A right-side slide-in drawer. Built on the shadcn/ui `Sheet` (Radix Dialog),
+ * so focus trap, scroll lock, return-focus, Esc-to-close, and ARIA come for
+ * free. Open state is shared via {@link useAside}.
  */
 export const Aside = ({
   children,
   heading,
   type,
 }: {
-  children?: React.ReactNode;
+  children?: ReactNode;
   type: AsideType;
-  heading: React.ReactNode;
+  heading: ReactNode;
 }) => {
   const { type: activeType, close } = useAside();
-  const expanded = type === activeType;
-
-  useEffect(() => {
-    const abortController = new AbortController();
-
-    if (expanded) {
-      document.addEventListener(
-        'keydown',
-        function handler(event: KeyboardEvent) {
-          if (event.key === 'Escape') {
-            close();
-          }
-        },
-        { signal: abortController.signal }
-      );
-    }
-    return () => abortController.abort();
-  }, [close, expanded]);
+  const open = type === activeType;
 
   return (
-    <div aria-modal className={`overlay ${expanded ? 'expanded' : ''}`} role="dialog">
-      <button className="close-outside" onClick={close} />
-      <aside>
-        <header>
-          <h3>{heading}</h3>
-          <button className="close reset" onClick={close} aria-label="Close">
-            &times;
-          </button>
-        </header>
-        <main>{children}</main>
-      </aside>
-    </div>
+    <Sheet
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) close();
+      }}
+    >
+      <SheetContent
+        side="right"
+        className="w-[350px] gap-0 p-0 sm:w-[450px] sm:max-w-none"
+        aria-describedby={undefined}
+      >
+        <SheetHeader className="border-border-subtle h-16 justify-center border-b px-5">
+          <SheetTitle className="text-sm font-semibold tracking-[0.18em] uppercase">
+            {heading}
+          </SheetTitle>
+        </SheetHeader>
+        <div className="flex-1 overflow-y-auto">{children}</div>
+      </SheetContent>
+    </Sheet>
   );
 };
 

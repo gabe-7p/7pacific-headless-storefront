@@ -60,6 +60,12 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+    {
+      rel: 'stylesheet',
+      href: 'https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap',
+    },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
   ];
 }
@@ -161,7 +167,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="font-sans text-nav-text antialiased">
         {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
