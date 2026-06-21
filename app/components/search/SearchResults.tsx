@@ -1,39 +1,28 @@
-import {Link} from 'react-router';
-import {Image, Money, Pagination} from '@shopify/hydrogen';
-import {urlWithTrackingParams, type RegularSearchReturn} from '~/lib/search';
+import { Link } from 'react-router';
+import { Image, Money, Pagination } from '@shopify/hydrogen';
+import { urlWithTrackingParams, type RegularSearchReturn } from '~/lib/search';
 
 type SearchItems = RegularSearchReturn['result']['items'];
-type PartialSearchResult<ItemType extends keyof SearchItems> = Pick<
-  SearchItems,
-  ItemType
-> &
+type PartialSearchResult<ItemType extends keyof SearchItems> = Pick<SearchItems, ItemType> &
   Pick<RegularSearchReturn, 'term'>;
 
 type SearchResultsProps = RegularSearchReturn & {
-  children: (args: SearchItems & {term: string}) => React.ReactNode;
+  children: (args: SearchItems & { term: string }) => React.ReactNode;
 };
 
-export function SearchResults({
+export const SearchResults = ({
   term,
   result,
   children,
-}: Omit<SearchResultsProps, 'error' | 'type'>) {
+}: Omit<SearchResultsProps, 'error' | 'type'>) => {
   if (!result?.total) {
     return null;
   }
 
-  return children({...result.items, term});
-}
+  return children({ ...result.items, term });
+};
 
-SearchResults.Articles = SearchResultsArticles;
-SearchResults.Pages = SearchResultsPages;
-SearchResults.Products = SearchResultsProducts;
-SearchResults.Empty = SearchResultsEmpty;
-
-function SearchResultsArticles({
-  term,
-  articles,
-}: PartialSearchResult<'articles'>) {
+const SearchResultsArticles = ({ term, articles }: PartialSearchResult<'articles'>) => {
   if (!articles?.nodes.length) {
     return null;
   }
@@ -61,9 +50,9 @@ function SearchResultsArticles({
       <br />
     </div>
   );
-}
+};
 
-function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
+const SearchResultsPages = ({ term, pages }: PartialSearchResult<'pages'>) => {
   if (!pages?.nodes.length) {
     return null;
   }
@@ -91,12 +80,9 @@ function SearchResultsPages({term, pages}: PartialSearchResult<'pages'>) {
       <br />
     </div>
   );
-}
+};
 
-function SearchResultsProducts({
-  term,
-  products,
-}: PartialSearchResult<'products'>) {
+const SearchResultsProducts = ({ term, products }: PartialSearchResult<'products'>) => {
   if (!products?.nodes.length) {
     return null;
   }
@@ -105,7 +91,7 @@ function SearchResultsProducts({
     <div className="search-result">
       <h2>Products</h2>
       <Pagination connection={products}>
-        {({nodes, isLoading, NextLink, PreviousLink}) => {
+        {({ nodes, isLoading, NextLink, PreviousLink }) => {
           const ItemsMarkup = nodes.map((product) => {
             const productUrl = urlWithTrackingParams({
               baseUrl: `/products/${product.handle}`,
@@ -119,9 +105,7 @@ function SearchResultsProducts({
             return (
               <div className="search-results-item" key={product.id}>
                 <Link prefetch="intent" to={productUrl}>
-                  {image && (
-                    <Image data={image} alt={product.title} width={50} />
-                  )}
+                  {image && <Image data={image} alt={product.title} width={50} />}
                   <div>
                     <p>{product.title}</p>
                     <small>{price && <Money data={price} />}</small>
@@ -143,9 +127,7 @@ function SearchResultsProducts({
                 <br />
               </div>
               <div>
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
+                <NextLink>{isLoading ? 'Loading...' : <span>Load more ↓</span>}</NextLink>
               </div>
             </div>
           );
@@ -154,8 +136,13 @@ function SearchResultsProducts({
       <br />
     </div>
   );
-}
+};
 
-function SearchResultsEmpty() {
+const SearchResultsEmpty = () => {
   return <p>No results, try a different search.</p>;
-}
+};
+
+SearchResults.Articles = SearchResultsArticles;
+SearchResults.Pages = SearchResultsPages;
+SearchResults.Products = SearchResultsProducts;
+SearchResults.Empty = SearchResultsEmpty;

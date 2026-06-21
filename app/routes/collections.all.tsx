@@ -1,12 +1,12 @@
-import type {Route} from './+types/collections.all';
-import {useLoaderData} from 'react-router';
-import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
-import {PaginatedResourceSection} from '~/components/common/PaginatedResourceSection';
-import {ProductItem} from '~/components/product/ProductItem';
-import type {CollectionItemFragment} from 'storefrontapi.generated';
+import type { Route } from './+types/collections.all';
+import { useLoaderData } from 'react-router';
+import { getPaginationVariables, Image, Money } from '@shopify/hydrogen';
+import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
+import { ProductItem } from '~/components/product/ProductItem';
+import type { CollectionItemFragment } from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Products`}];
+  return [{ title: `Hydrogen | Products` }];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -16,26 +16,26 @@ export async function loader(args: Route.LoaderArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+  return { ...deferredData, ...criticalData };
 }
 
 /**
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
-async function loadCriticalData({context, request}: Route.LoaderArgs) {
-  const {storefront} = context;
+async function loadCriticalData({ context, request }: Route.LoaderArgs) {
+  const { storefront } = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
   });
 
-  const [{products}] = await Promise.all([
+  const [{ products }] = await Promise.all([
     storefront.query(CATALOG_QUERY, {
-      variables: {...paginationVariables},
+      variables: { ...paginationVariables },
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
-  return {products};
+  return { products };
 }
 
 /**
@@ -43,12 +43,12 @@ async function loadCriticalData({context, request}: Route.LoaderArgs) {
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({context}: Route.LoaderArgs) {
+function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Collection() {
-  const {products} = useLoaderData<typeof loader>();
+const Collection = () => {
+  const { products } = useLoaderData<typeof loader>();
 
   return (
     <div className="collection">
@@ -57,7 +57,7 @@ export default function Collection() {
         connection={products}
         resourcesClassName="products-grid"
       >
-        {({node: product, index}) => (
+        {({ node: product, index }) => (
           <ProductItem
             key={product.id}
             product={product}
@@ -67,7 +67,7 @@ export default function Collection() {
       </PaginatedResourceSection>
     </div>
   );
-}
+};
 
 const COLLECTION_ITEM_FRAGMENT = `#graphql
   fragment MoneyCollectionItem on MoneyV2 {
@@ -120,3 +120,5 @@ const CATALOG_QUERY = `#graphql
   }
   ${COLLECTION_ITEM_FRAGMENT}
 ` as const;
+
+export default Collection;

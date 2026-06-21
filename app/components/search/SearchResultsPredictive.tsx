@@ -1,12 +1,12 @@
-import {Link, useFetcher, type Fetcher} from 'react-router';
-import {Image, Money} from '@shopify/hydrogen';
-import React, {useRef, useEffect} from 'react';
+import { Link, useFetcher, type Fetcher } from 'react-router';
+import { Image, Money } from '@shopify/hydrogen';
+import React, { useRef, useEffect } from 'react';
 import {
   getEmptyPredictiveSearchResult,
   urlWithTrackingParams,
   type PredictiveSearchReturn,
 } from '~/lib/search';
-import {useAside} from '~/components/layout/Aside';
+import { useAside } from '~/components/layout/Aside';
 
 type PredictiveSearchItems = PredictiveSearchReturn['result']['items'];
 
@@ -29,8 +29,7 @@ type SearchResultsPredictiveArgs = Pick<
 type PartialPredictiveSearchResult<
   ItemType extends keyof PredictiveSearchItems,
   ExtraProps extends keyof SearchResultsPredictiveArgs = 'term' | 'closeSearch',
-> = Pick<PredictiveSearchItems, ItemType> &
-  Pick<SearchResultsPredictiveArgs, ExtraProps>;
+> = Pick<PredictiveSearchItems, ItemType> & Pick<SearchResultsPredictiveArgs, ExtraProps>;
 
 type SearchResultsPredictiveProps = {
   children: (args: SearchResultsPredictiveArgs) => React.ReactNode;
@@ -39,11 +38,9 @@ type SearchResultsPredictiveProps = {
 /**
  * Component that renders predictive search results
  */
-export function SearchResultsPredictive({
-  children,
-}: SearchResultsPredictiveProps) {
+export const SearchResultsPredictive = ({ children }: SearchResultsPredictiveProps) => {
   const aside = useAside();
-  const {term, inputRef, fetcher, total, items} = usePredictiveSearch();
+  const { term, inputRef, fetcher, total, items } = usePredictiveSearch();
 
   /*
    * Utility that resets the search input
@@ -71,20 +68,13 @@ export function SearchResultsPredictive({
     term,
     total,
   });
-}
+};
 
-SearchResultsPredictive.Articles = SearchResultsPredictiveArticles;
-SearchResultsPredictive.Collections = SearchResultsPredictiveCollections;
-SearchResultsPredictive.Pages = SearchResultsPredictivePages;
-SearchResultsPredictive.Products = SearchResultsPredictiveProducts;
-SearchResultsPredictive.Queries = SearchResultsPredictiveQueries;
-SearchResultsPredictive.Empty = SearchResultsPredictiveEmpty;
-
-function SearchResultsPredictiveArticles({
+const SearchResultsPredictiveArticles = ({
   term,
   articles,
   closeSearch,
-}: PartialPredictiveSearchResult<'articles'>) {
+}: PartialPredictiveSearchResult<'articles'>) => {
   if (!articles.length) return null;
 
   return (
@@ -119,13 +109,13 @@ function SearchResultsPredictiveArticles({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictiveCollections({
+const SearchResultsPredictiveCollections = ({
   term,
   collections,
   closeSearch,
-}: PartialPredictiveSearchResult<'collections'>) {
+}: PartialPredictiveSearchResult<'collections'>) => {
   if (!collections.length) return null;
 
   return (
@@ -160,13 +150,13 @@ function SearchResultsPredictiveCollections({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictivePages({
+const SearchResultsPredictivePages = ({
   term,
   pages,
   closeSearch,
-}: PartialPredictiveSearchResult<'pages'>) {
+}: PartialPredictiveSearchResult<'pages'>) => {
   if (!pages.length) return null;
 
   return (
@@ -193,13 +183,13 @@ function SearchResultsPredictivePages({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictiveProducts({
+const SearchResultsPredictiveProducts = ({
   term,
   products,
   closeSearch,
-}: PartialPredictiveSearchResult<'products'>) {
+}: PartialPredictiveSearchResult<'products'>) => {
   if (!products.length) return null;
 
   return (
@@ -219,12 +209,7 @@ function SearchResultsPredictiveProducts({
             <li className="predictive-search-result-item" key={product.id}>
               <Link to={productUrl} onClick={closeSearch}>
                 {image && (
-                  <Image
-                    alt={image.altText ?? ''}
-                    src={image.url}
-                    width={50}
-                    height={50}
-                  />
+                  <Image alt={image.altText ?? ''} src={image.url} width={50} height={50} />
                 )}
                 <div>
                   <p>{product.title}</p>
@@ -237,14 +222,14 @@ function SearchResultsPredictiveProducts({
       </ul>
     </div>
   );
-}
+};
 
-function SearchResultsPredictiveQueries({
+const SearchResultsPredictiveQueries = ({
   queries,
   queriesDatalistId,
 }: PartialPredictiveSearchResult<'queries', never> & {
   queriesDatalistId: string;
-}) {
+}) => {
   if (!queries.length) return null;
 
   return (
@@ -256,13 +241,9 @@ function SearchResultsPredictiveQueries({
       })}
     </datalist>
   );
-}
+};
 
-function SearchResultsPredictiveEmpty({
-  term,
-}: {
-  term: React.MutableRefObject<string>;
-}) {
+const SearchResultsPredictiveEmpty = ({ term }: { term: React.MutableRefObject<string> }) => {
   if (!term.current) {
     return null;
   }
@@ -272,7 +253,7 @@ function SearchResultsPredictiveEmpty({
       No results found for <q>{term.current}</q>
     </p>
   );
-}
+};
 
 /**
  * Hook that returns the predictive search results and fetcher and input ref.
@@ -282,7 +263,7 @@ function SearchResultsPredictiveEmpty({
  * '''
  **/
 function usePredictiveSearch(): UsePredictiveSearchReturn {
-  const fetcher = useFetcher<PredictiveSearchReturn>({key: 'search'});
+  const fetcher = useFetcher<PredictiveSearchReturn>({ key: 'search' });
   const term = useRef<string>('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -297,8 +278,14 @@ function usePredictiveSearch(): UsePredictiveSearchReturn {
     }
   }, []);
 
-  const {items, total} =
-    fetcher?.data?.result ?? getEmptyPredictiveSearchResult();
+  const { items, total } = fetcher?.data?.result ?? getEmptyPredictiveSearchResult();
 
-  return {items, total, inputRef, term, fetcher};
+  return { items, total, inputRef, term, fetcher };
 }
+
+SearchResultsPredictive.Articles = SearchResultsPredictiveArticles;
+SearchResultsPredictive.Collections = SearchResultsPredictiveCollections;
+SearchResultsPredictive.Pages = SearchResultsPredictivePages;
+SearchResultsPredictive.Products = SearchResultsPredictiveProducts;
+SearchResultsPredictive.Queries = SearchResultsPredictiveQueries;
+SearchResultsPredictive.Empty = SearchResultsPredictiveEmpty;

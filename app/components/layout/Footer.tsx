@@ -1,6 +1,6 @@
-import {Suspense} from 'react';
-import {Await, NavLink} from 'react-router';
-import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
+import { Suspense } from 'react';
+import { Await, NavLink } from 'react-router';
+import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
 interface FooterProps {
   footer: Promise<FooterQuery | null>;
@@ -8,11 +8,7 @@ interface FooterProps {
   publicStoreDomain: string;
 }
 
-export function Footer({
-  footer: footerPromise,
-  header,
-  publicStoreDomain,
-}: FooterProps) {
+export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: FooterProps) => {
   return (
     <Suspense>
       <Await resolve={footerPromise}>
@@ -30,9 +26,9 @@ export function Footer({
       </Await>
     </Suspense>
   );
-}
+};
 
-function FooterMenu({
+const FooterMenu = ({
   menu,
   primaryDomainUrl,
   publicStoreDomain,
@@ -40,7 +36,7 @@ function FooterMenu({
   menu: FooterQuery['menu'];
   primaryDomainUrl: FooterProps['header']['shop']['primaryDomain']['url'];
   publicStoreDomain: string;
-}) {
+}) => {
   return (
     <nav className="footer-menu" role="navigation">
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
@@ -58,20 +54,14 @@ function FooterMenu({
             {item.title}
           </a>
         ) : (
-          <NavLink
-            end
-            key={item.id}
-            prefetch="intent"
-            style={activeLinkStyle}
-            to={url}
-          >
+          <NavLink end key={item.id} prefetch="intent" style={activeLinkStyle} to={url}>
             {item.title}
           </NavLink>
         );
       })}
     </nav>
   );
-}
+};
 
 const FALLBACK_FOOTER_MENU = {
   id: 'gid://shopify/Menu/199655620664',
@@ -115,13 +105,7 @@ const FALLBACK_FOOTER_MENU = {
   ],
 };
 
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
+function activeLinkStyle({ isActive, isPending }: { isActive: boolean; isPending: boolean }) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
     color: isPending ? 'grey' : 'white',

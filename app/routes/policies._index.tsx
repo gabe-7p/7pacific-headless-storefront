@@ -1,8 +1,8 @@
-import {useLoaderData, Link} from 'react-router';
-import type {Route} from './+types/policies._index';
-import type {PoliciesQuery, PolicyItemFragment} from 'storefrontapi.generated';
+import { useLoaderData, Link } from 'react-router';
+import type { Route } from './+types/policies._index';
+import type { PoliciesQuery, PolicyItemFragment } from 'storefrontapi.generated';
 
-export async function loader({context}: Route.LoaderArgs) {
+export async function loader({ context }: Route.LoaderArgs) {
   const data: PoliciesQuery = await context.storefront.query(POLICIES_QUERY);
 
   const shopPolicies = data.shop;
@@ -15,14 +15,14 @@ export async function loader({context}: Route.LoaderArgs) {
   ].filter((policy): policy is PolicyItemFragment => policy != null);
 
   if (!policies.length) {
-    throw new Response('No policies found', {status: 404});
+    throw new Response('No policies found', { status: 404 });
   }
 
-  return {policies};
+  return { policies };
 }
 
-export default function Policies() {
-  const {policies} = useLoaderData<typeof loader>();
+const Policies = () => {
+  const { policies } = useLoaderData<typeof loader>();
 
   return (
     <div className="policies">
@@ -36,7 +36,7 @@ export default function Policies() {
       </div>
     </div>
   );
-}
+};
 
 const POLICIES_QUERY = `#graphql
   fragment PolicyItem on ShopPolicy {
@@ -67,3 +67,5 @@ const POLICIES_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Policies;

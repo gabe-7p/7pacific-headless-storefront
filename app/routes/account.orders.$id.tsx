@@ -1,24 +1,21 @@
-import {redirect, useLoaderData} from 'react-router';
-import type {Route} from './+types/account.orders.$id';
-import {Money, Image} from '@shopify/hydrogen';
-import type {
-  OrderLineItemFullFragment,
-  OrderQuery,
-} from 'customer-accountapi.generated';
-import {CUSTOMER_ORDER_QUERY} from '~/graphql/customer-account/CustomerOrderQuery';
+import { redirect, useLoaderData } from 'react-router';
+import type { Route } from './+types/account.orders.$id';
+import { Money, Image } from '@shopify/hydrogen';
+import type { OrderLineItemFullFragment, OrderQuery } from 'customer-accountapi.generated';
+import { CUSTOMER_ORDER_QUERY } from '~/graphql/customer-account/CustomerOrderQuery';
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Order ${data?.order?.name}`}];
+export const meta: Route.MetaFunction = ({ data }) => {
+  return [{ title: `Order ${data?.order?.name}` }];
 };
 
-export async function loader({params, context}: Route.LoaderArgs) {
-  const {customerAccount} = context;
+export async function loader({ params, context }: Route.LoaderArgs) {
+  const { customerAccount } = context;
   if (!params.id) {
     return redirect('/account/orders');
   }
 
   const orderId = atob(params.id);
-  const {data, errors}: {data: OrderQuery; errors?: Array<{message: string}>} =
+  const { data, errors }: { data: OrderQuery; errors?: Array<{ message: string }> } =
     await customerAccount.query(CUSTOMER_ORDER_QUERY, {
       variables: {
         orderId,
@@ -30,7 +27,7 @@ export async function loader({params, context}: Route.LoaderArgs) {
     throw new Error('Order not found');
   }
 
-  const {order} = data;
+  const { order } = data;
 
   // Extract line items directly from nodes array
   const lineItems = order.lineItems.nodes;
@@ -47,21 +44,14 @@ export async function loader({params, context}: Route.LoaderArgs) {
   // Type guard for MoneyV2 discount
   const discountValue =
     firstDiscount?.__typename === 'MoneyV2'
-      ? (firstDiscount as Extract<
-          typeof firstDiscount,
-          {__typename: 'MoneyV2'}
-        >)
+      ? (firstDiscount as Extract<typeof firstDiscount, { __typename: 'MoneyV2' }>)
       : null;
 
   // Type guard for percentage discount
   const discountPercentage =
     firstDiscount?.__typename === 'PricingPercentageValue'
-      ? (
-          firstDiscount as Extract<
-            typeof firstDiscount,
-            {__typename: 'PricingPercentageValue'}
-          >
-        ).percentage
+      ? (firstDiscount as Extract<typeof firstDiscount, { __typename: 'PricingPercentageValue' }>)
+          .percentage
       : null;
 
   return {
@@ -73,21 +63,14 @@ export async function loader({params, context}: Route.LoaderArgs) {
   };
 }
 
-export default function OrderRoute() {
-  const {
-    order,
-    lineItems,
-    discountValue,
-    discountPercentage,
-    fulfillmentStatus,
-  } = useLoaderData<typeof loader>();
+const OrderRoute = () => {
+  const { order, lineItems, discountValue, discountPercentage, fulfillmentStatus } =
+    useLoaderData<typeof loader>();
   return (
     <div className="account-order">
       <h2>Order {order.name}</h2>
       <p>Placed on {new Date(order.processedAt!).toDateString()}</p>
-      {order.confirmationNumber && (
-        <p>Confirmation: {order.confirmationNumber}</p>
-      )}
+      {order.confirmationNumber && <p>Confirmation: {order.confirmationNumber}</p>}
       <br />
       <div>
         <table>
@@ -106,8 +89,7 @@ export default function OrderRoute() {
             ))}
           </tbody>
           <tfoot>
-            {((discountValue && discountValue.amount) ||
-              discountPercentage) && (
+            {((discountValue && discountValue.amount) || discountPercentage) && (
               <tr>
                 <th scope="row" colSpan={3}>
                   <p>Discounts</p>
@@ -164,11 +146,7 @@ export default function OrderRoute() {
           {order?.shippingAddress ? (
             <address>
               <p>{order.shippingAddress.name}</p>
-              {order.shippingAddress.formatted ? (
-                <p>{order.shippingAddress.formatted}</p>
-              ) : (
-                ''
-              )}
+              {order.shippingAddress.formatted ? <p>{order.shippingAddress.formatted}</p> : ''}
               {order.shippingAddress.formattedArea ? (
                 <p>{order.shippingAddress.formattedArea}</p>
               ) : (
@@ -192,9 +170,9 @@ export default function OrderRoute() {
       </p>
     </div>
   );
-}
+};
 
-function OrderLineRow({lineItem}: {lineItem: OrderLineItemFullFragment}) {
+const OrderLineRow = ({ lineItem }: { lineItem: OrderLineItemFullFragment }) => {
   return (
     <tr key={lineItem.id}>
       <td>
@@ -219,4 +197,6 @@ function OrderLineRow({lineItem}: {lineItem: OrderLineItemFullFragment}) {
       </td>
     </tr>
   );
-}
+};
+
+export default OrderRoute;

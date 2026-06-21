@@ -1,20 +1,14 @@
-import {
-  data as remixData,
-  Form,
-  NavLink,
-  Outlet,
-  useLoaderData,
-} from 'react-router';
-import type {Route} from './+types/account';
-import {CUSTOMER_DETAILS_QUERY} from '~/graphql/customer-account/CustomerDetailsQuery';
+import { data as remixData, Form, NavLink, Outlet, useLoaderData } from 'react-router';
+import type { Route } from './+types/account';
+import { CUSTOMER_DETAILS_QUERY } from '~/graphql/customer-account/CustomerDetailsQuery';
 
 export function shouldRevalidate() {
   return true;
 }
 
-export async function loader({context}: Route.LoaderArgs) {
-  const {customerAccount} = context;
-  const {data, errors} = await customerAccount.query(CUSTOMER_DETAILS_QUERY, {
+export async function loader({ context }: Route.LoaderArgs) {
+  const { customerAccount } = context;
+  const { data, errors } = await customerAccount.query(CUSTOMER_DETAILS_QUERY, {
     variables: {
       language: customerAccount.i18n.language,
     },
@@ -25,17 +19,17 @@ export async function loader({context}: Route.LoaderArgs) {
   }
 
   return remixData(
-    {customer: data.customer},
+    { customer: data.customer },
     {
       headers: {
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
-    },
+    }
   );
 }
 
-export default function AccountLayout() {
-  const {customer} = useLoaderData<typeof loader>();
+const AccountLayout = () => {
+  const { customer } = useLoaderData<typeof loader>();
 
   const heading = customer
     ? customer.firstName
@@ -50,19 +44,13 @@ export default function AccountLayout() {
       <AccountMenu />
       <br />
       <br />
-      <Outlet context={{customer}} />
+      <Outlet context={{ customer }} />
     </div>
   );
-}
+};
 
-function AccountMenu() {
-  function isActiveStyle({
-    isActive,
-    isPending,
-  }: {
-    isActive: boolean;
-    isPending: boolean;
-  }) {
+const AccountMenu = () => {
+  function isActiveStyle({ isActive, isPending }: { isActive: boolean; isPending: boolean }) {
     return {
       fontWeight: isActive ? 'bold' : undefined,
       color: isPending ? 'grey' : 'black',
@@ -86,12 +74,14 @@ function AccountMenu() {
       <Logout />
     </nav>
   );
-}
+};
 
-function Logout() {
+const Logout = () => {
   return (
     <Form className="account-logout" method="POST" action="/account/logout">
       &nbsp;<button type="submit">Sign out</button>
     </Form>
   );
-}
+};
+
+export default AccountLayout;

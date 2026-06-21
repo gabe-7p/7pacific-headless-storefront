@@ -1,12 +1,8 @@
-import {Suspense} from 'react';
-import {Await, NavLink, useAsyncValue} from 'react-router';
-import {
-  type CartViewPayload,
-  useAnalytics,
-  useOptimisticCart,
-} from '@shopify/hydrogen';
-import type {HeaderQuery, CartApiQueryFragment} from 'storefrontapi.generated';
-import {useAside} from '~/components/layout/Aside';
+import { Suspense } from 'react';
+import { Await, NavLink, useAsyncValue } from 'react-router';
+import { type CartViewPayload, useAnalytics, useOptimisticCart } from '@shopify/hydrogen';
+import type { HeaderQuery, CartApiQueryFragment } from 'storefrontapi.generated';
+import { useAside } from '~/components/layout/Aside';
 
 interface HeaderProps {
   header: HeaderQuery;
@@ -17,13 +13,8 @@ interface HeaderProps {
 
 type Viewport = 'desktop' | 'mobile';
 
-export function Header({
-  header,
-  isLoggedIn,
-  cart,
-  publicStoreDomain,
-}: HeaderProps) {
-  const {shop, menu} = header;
+export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderProps) => {
+  const { shop, menu } = header;
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
@@ -38,9 +29,9 @@ export function Header({
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
-}
+};
 
-export function HeaderMenu({
+export const HeaderMenu = ({
   menu,
   primaryDomainUrl,
   viewport,
@@ -50,20 +41,14 @@ export function HeaderMenu({
   primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
   viewport: Viewport;
   publicStoreDomain: HeaderProps['publicStoreDomain'];
-}) {
+}) => {
   const className = `header-menu-${viewport}`;
-  const {close} = useAside();
+  const { close } = useAside();
 
   return (
     <nav className={className} role="navigation">
       {viewport === 'mobile' && (
-        <NavLink
-          end
-          onClick={close}
-          prefetch="intent"
-          style={activeLinkStyle}
-          to="/"
-        >
+        <NavLink end onClick={close} prefetch="intent" style={activeLinkStyle} to="/">
           Home
         </NavLink>
       )}
@@ -93,12 +78,9 @@ export function HeaderMenu({
       })}
     </nav>
   );
-}
+};
 
-function HeaderCtas({
-  isLoggedIn,
-  cart,
-}: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
+const HeaderCtas = ({ isLoggedIn, cart }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) => {
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
@@ -113,32 +95,29 @@ function HeaderCtas({
       <CartToggle cart={cart} />
     </nav>
   );
-}
+};
 
-function HeaderMenuMobileToggle() {
-  const {open} = useAside();
+const HeaderMenuMobileToggle = () => {
+  const { open } = useAside();
   return (
-    <button
-      className="header-menu-mobile-toggle reset"
-      onClick={() => open('mobile')}
-    >
+    <button className="header-menu-mobile-toggle reset" onClick={() => open('mobile')}>
       <h3>☰</h3>
     </button>
   );
-}
+};
 
-function SearchToggle() {
-  const {open} = useAside();
+const SearchToggle = () => {
+  const { open } = useAside();
   return (
     <button className="reset" onClick={() => open('search')}>
       Search
     </button>
   );
-}
+};
 
-function CartBadge({count}: {count: number | null}) {
-  const {open} = useAside();
-  const {publish, shop, cart, prevCart} = useAnalytics();
+const CartBadge = ({ count }: { count: number | null }) => {
+  const { open } = useAside();
+  const { publish, shop, cart, prevCart } = useAnalytics();
 
   return (
     <a
@@ -157,9 +136,9 @@ function CartBadge({count}: {count: number | null}) {
       Cart {count === null ? <span>&nbsp;</span> : count}
     </a>
   );
-}
+};
 
-function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
+const CartToggle = ({ cart }: Pick<HeaderProps, 'cart'>) => {
   return (
     <Suspense fallback={<CartBadge count={null} />}>
       <Await resolve={cart}>
@@ -167,13 +146,13 @@ function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
       </Await>
     </Suspense>
   );
-}
+};
 
-function CartBanner() {
+const CartBanner = () => {
   const originalCart = useAsyncValue() as CartApiQueryFragment | null;
   const cart = useOptimisticCart(originalCart);
   return <CartBadge count={cart?.totalQuantity ?? 0} />;
-}
+};
 
 const FALLBACK_HEADER_MENU = {
   id: 'gid://shopify/Menu/199655587896',
@@ -217,13 +196,7 @@ const FALLBACK_HEADER_MENU = {
   ],
 };
 
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
+function activeLinkStyle({ isActive, isPending }: { isActive: boolean; isPending: boolean }) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
     color: isPending ? 'grey' : 'black',

@@ -36,9 +36,7 @@ function sanitizeFilterValue(value: string): string {
  * buildOrderSearchQuery(\{ name: '1001' \}) // returns "name:1001"
  * buildOrderSearchQuery(\{ name: '1001', confirmationNumber: 'ABC123' \}) // returns "name:1001 AND confirmation_number:ABC123"
  */
-export function buildOrderSearchQuery(
-  filters: OrderFilterParams,
-): string | undefined {
+export function buildOrderSearchQuery(filters: OrderFilterParams): string | undefined {
   const queryParts: string[] = [];
 
   if (filters.name) {
@@ -69,9 +67,7 @@ export function buildOrderSearchQuery(
  * const url = new URL('https://example.com/orders?name=1001&confirmation_number=ABC123');
  * parseOrderFilters(url.searchParams) // returns \{ name: '1001', confirmationNumber: 'ABC123' \}
  */
-export function parseOrderFilters(
-  searchParams: URLSearchParams,
-): OrderFilterParams {
+export function parseOrderFilters(searchParams: URLSearchParams): OrderFilterParams {
   const filters: OrderFilterParams = {};
 
   const name = searchParams.get(ORDER_FILTER_FIELDS.NAME);
@@ -79,9 +75,7 @@ export function parseOrderFilters(
     filters.name = name;
   }
 
-  const confirmationNumber = searchParams.get(
-    ORDER_FILTER_FIELDS.CONFIRMATION_NUMBER,
-  );
+  const confirmationNumber = searchParams.get(ORDER_FILTER_FIELDS.CONFIRMATION_NUMBER);
   if (confirmationNumber) {
     filters.confirmationNumber = confirmationNumber;
   }

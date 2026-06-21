@@ -1,22 +1,19 @@
-import {Link, useNavigate} from 'react-router';
-import {type MappedProductOptions} from '@shopify/hydrogen';
-import type {
-  Maybe,
-  ProductOptionValueSwatch,
-} from '@shopify/hydrogen/storefront-api-types';
-import {AddToCartButton} from '~/components/cart/AddToCartButton';
-import {useAside} from '~/components/layout/Aside';
-import type {ProductFragment} from 'storefrontapi.generated';
+import { Link, useNavigate } from 'react-router';
+import { type MappedProductOptions } from '@shopify/hydrogen';
+import type { Maybe, ProductOptionValueSwatch } from '@shopify/hydrogen/storefront-api-types';
+import { AddToCartButton } from '~/components/cart/AddToCartButton';
+import { useAside } from '~/components/layout/Aside';
+import type { ProductFragment } from 'storefrontapi.generated';
 
-export function ProductForm({
+export const ProductForm = ({
   productOptions,
   selectedVariant,
 }: {
   productOptions: MappedProductOptions[];
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
-}) {
+}) => {
   const navigate = useNavigate();
-  const {open} = useAside();
+  const { open } = useAside();
   return (
     <div className="product-form">
       {productOptions.map((option) => {
@@ -53,9 +50,7 @@ export function ProductForm({
                       replace
                       to={`/products/${handle}?${variantUriQuery}`}
                       style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                        border: selected ? '1px solid black' : '1px solid transparent',
                         opacity: available ? 1 : 0.3,
                       }}
                     >
@@ -71,14 +66,10 @@ export function ProductForm({
                   return (
                     <button
                       type="button"
-                      className={`product-options-item${
-                        exists && !selected ? ' link' : ''
-                      }`}
+                      className={`product-options-item${exists && !selected ? ' link' : ''}`}
                       key={option.name + name}
                       style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                        border: selected ? '1px solid black' : '1px solid transparent',
                         opacity: available ? 1 : 0.3,
                       }}
                       disabled={!exists}
@@ -122,15 +113,15 @@ export function ProductForm({
       </AddToCartButton>
     </div>
   );
-}
+};
 
-function ProductOptionSwatch({
+const ProductOptionSwatch = ({
   swatch,
   name,
 }: {
   swatch?: Maybe<ProductOptionValueSwatch> | undefined;
   name: string;
-}) {
+}) => {
   const image = swatch?.image?.previewImage?.url;
   const color = swatch?.color;
 
@@ -147,4 +138,4 @@ function ProductOptionSwatch({
       {!!image && <img src={image} alt={name} />}
     </div>
   );
-}
+};

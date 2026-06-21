@@ -1,10 +1,10 @@
-import {useLoaderData} from 'react-router';
-import type {Route} from './+types/blogs.$blogHandle.$articleHandle';
-import {Image} from '@shopify/hydrogen';
-import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import { useLoaderData } from 'react-router';
+import type { Route } from './+types/blogs.$blogHandle.$articleHandle';
+import { Image } from '@shopify/hydrogen';
+import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.article.title ?? ''} article`}];
+export const meta: Route.MetaFunction = ({ data }) => {
+  return [{ title: `Hydrogen | ${data?.article.title ?? ''} article` }];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -14,29 +14,29 @@ export async function loader(args: Route.LoaderArgs) {
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  return {...deferredData, ...criticalData};
+  return { ...deferredData, ...criticalData };
 }
 
 /**
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
-async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
-  const {blogHandle, articleHandle} = params;
+async function loadCriticalData({ context, request, params }: Route.LoaderArgs) {
+  const { blogHandle, articleHandle } = params;
 
   if (!articleHandle || !blogHandle) {
-    throw new Response('Not found', {status: 404});
+    throw new Response('Not found', { status: 404 });
   }
 
-  const [{blog}] = await Promise.all([
+  const [{ blog }] = await Promise.all([
     context.storefront.query(ARTICLE_QUERY, {
-      variables: {blogHandle, articleHandle},
+      variables: { blogHandle, articleHandle },
     }),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
   if (!blog?.articleByHandle) {
-    throw new Response(null, {status: 404});
+    throw new Response(null, { status: 404 });
   }
 
   redirectIfHandleIsLocalized(
@@ -48,12 +48,12 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
     {
       handle: blogHandle,
       data: blog,
-    },
+    }
   );
 
   const article = blog.articleByHandle;
 
-  return {article};
+  return { article };
 }
 
 /**
@@ -61,13 +61,13 @@ async function loadCriticalData({context, request, params}: Route.LoaderArgs) {
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({context}: Route.LoaderArgs) {
+function loadDeferredData({ context }: Route.LoaderArgs) {
   return {};
 }
 
-export default function Article() {
-  const {article} = useLoaderData<typeof loader>();
-  const {title, image, contentHtml, author} = article;
+const Article = () => {
+  const { article } = useLoaderData<typeof loader>();
+  const { title, image, contentHtml, author } = article;
 
   const publishedDate = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -86,13 +86,10 @@ export default function Article() {
       </h1>
 
       {image && <Image data={image} sizes="90vw" loading="eager" />}
-      <div
-        dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="article"
-      />
+      <div dangerouslySetInnerHTML={{ __html: contentHtml }} className="article" />
     </div>
   );
-}
+};
 
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog#field-blog-articlebyhandle
 const ARTICLE_QUERY = `#graphql
@@ -127,3 +124,5 @@ const ARTICLE_QUERY = `#graphql
     }
   }
 ` as const;
+
+export default Article;
