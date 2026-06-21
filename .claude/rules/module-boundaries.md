@@ -6,11 +6,11 @@ Data fetching and GraphQL live in **route loaders/actions** and **`app/lib/`** (
 
 ## Layer responsibilities
 
-| Layer                     | Location                                           | Does                                                                                                                       | Does NOT                                                                             |
-| ------------------------- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| **Route** (loader/action) | `app/routes/*`                                     | Read params, call `context.storefront`/`context.customerAccount`/`context.cart`, shape the data the page needs, set `meta` | Render complex UI inline, hold business logic that belongs in `lib/`                 |
-| **Lib**                   | `app/lib/`, `app/modules/<m>/lib/`                 | GraphQL fragments, query helpers, pure logic (e.g. `colorMap`), cross-component utilities                                  | Render JSX, import React components                                                  |
-| **Component**             | `app/components/*`, `app/modules/<m>/components/*` | Render typed props with Tailwind, local UI state, accessibility                                                            | Call `context.storefront`, define/run GraphQL, reach into another module's internals |
+| Layer                     | Location                                                                                                       | Does                                                                                                                       | Does NOT                                                                             |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| **Route** (loader/action) | `app/routes/*`                                                                                                 | Read params, call `context.storefront`/`context.customerAccount`/`context.cart`, shape the data the page needs, set `meta` | Render complex UI inline, hold business logic that belongs in `lib/`                 |
+| **Lib**                   | `app/lib/`, `app/modules/<m>/lib/`                                                                             | GraphQL fragments, query helpers, pure logic (e.g. `colorMap`), cross-component utilities                                  | Render JSX, import React components                                                  |
+| **Component**             | `app/components/*` (incl. generated shadcn primitives in `app/components/ui/`), `app/modules/<m>/components/*` | Render typed props with Tailwind, local UI state, accessibility                                                            | Call `context.storefront`, define/run GraphQL, reach into another module's internals |
 
 ## Examples
 
@@ -41,7 +41,8 @@ export const ProductCard = ({ product }: { product: ProductCardFragment }) => {
 - **GraphQL strings never live in a component file.** Co-locate them in the loader that runs them, or — if shared — in `app/lib/fragments.ts`. See [graphql-fragments.md](graphql-fragments.md).
 - **Modules don't reach into each other's internals.** Import a module through its public entry, not deep paths into its `components/`/`lib/`.
 - **Copy lives in `content/`, not JSX.** Marketing/product copy goes in typed `content/*.ts` constants, imported by the component.
-- **Tailwind only — no inline `style={{}}` objects.** Use utility classes (and `clsx`/variants for conditional styling).
+- **Tailwind only — no inline `style={{}}` objects.** Use utility classes (and `clsx`/variants for conditional styling). This applies to the shadcn/ui primitives too: they're styled with Tailwind/`cn()`, not a runtime kit.
+- **Reach for a shadcn/ui primitive only for behaviorally-hard widgets** (modal/drawer, dropdown, select, accordion, tooltip); hand-build visual/brand components. See [ui-components.md](ui-components.md).
 
 ## Enforcement
 

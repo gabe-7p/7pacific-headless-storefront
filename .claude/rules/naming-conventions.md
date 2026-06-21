@@ -4,6 +4,7 @@
 
 - **`const` arrow functions, PascalCase**, one component per file, file named after the component (`ProductCard.tsx` → `export const ProductCard = ...`). Never the `function` keyword — enforced by `react/function-component-definition`.
 - Props type is `type` (not `interface`), named `<Component>Props` when it needs a name, or inlined for tiny components.
+- **Exception: `app/components/ui/`** holds generated shadcn/ui primitives. They use the `function` keyword and shadcn's own naming (`DialogContent`, `SelectTrigger`, …) and are ESLint-exempt — don't rewrite them to match this convention. See [ui-components.md](ui-components.md).
 
 ## Data helpers: `getX` vs `getXOrThrow`
 
