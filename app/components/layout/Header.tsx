@@ -73,7 +73,7 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
             className="justify-self-center"
             aria-label={shop.name}
           >
-            <Logo tone={overlay ? 'light' : 'dark'} />
+            <Logo tone={overlay ? 'light' : 'dark'} className="h-8 md:h-12" />
           </NavLink>
 
           <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
@@ -134,8 +134,8 @@ export const HeaderMenu = ({
             to={toInternalPath(item.url)}
             className={({ isActive }) =>
               cn(
-                'tracking-wide uppercase transition-opacity hover:opacity-70',
-                isMobile ? 'py-3 text-lg font-medium' : 'text-xs font-medium',
+                'tracking-wide transition-opacity hover:opacity-70',
+                isMobile ? 'py-3 text-lg font-medium' : 'text-xs font-normal',
                 isActive && 'underline underline-offset-4'
               )
             }
@@ -151,7 +151,13 @@ export const HeaderMenu = ({
 const HeaderCtas = ({ isLoggedIn, cart }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) => {
   return (
     <nav className="flex items-center justify-end gap-4" role="navigation">
-      <NavLink prefetch="intent" to="/account" className="transition-opacity hover:opacity-70">
+      {/* Account icon is desktop-only — live mobile header shows just menu + logo + cart,
+          with account access living inside the mobile drawer. */}
+      <NavLink
+        prefetch="intent"
+        to="/account"
+        className="hidden transition-opacity hover:opacity-70 md:block"
+      >
         <Suspense fallback={<AccountIcon label="Sign in" />}>
           <Await resolve={isLoggedIn} errorElement={<AccountIcon label="Sign in" />}>
             {(loggedIn) => <AccountIcon label={loggedIn ? 'Account' : 'Sign in'} />}
