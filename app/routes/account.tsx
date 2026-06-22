@@ -1,6 +1,9 @@
 import { data as remixData, Form, NavLink, Outlet, useLoaderData } from 'react-router';
 
+import { Container } from '~/components/common/Container';
+import { Heading } from '~/components/common/Heading';
 import { CUSTOMER_DETAILS_QUERY } from '~/graphql/customer-account/CustomerDetailsQuery';
+import { cn } from '~/lib/cn';
 
 import type { Route } from './+types/account';
 
@@ -40,39 +43,39 @@ const AccountLayout = () => {
     : 'Account Details';
 
   return (
-    <div className="account">
-      <h1>{heading}</h1>
-      <br />
+    <Container className="py-10 md:py-14">
+      <Heading as="h1" size="lg" className="mb-6">
+        {heading}
+      </Heading>
       <AccountMenu />
-      <br />
-      <br />
-      <Outlet context={{ customer }} />
-    </div>
+      <div className="mt-10">
+        <Outlet context={{ customer }} />
+      </div>
+    </Container>
   );
 };
 
-const AccountMenu = () => {
-  function isActiveStyle({ isActive, isPending }: { isActive: boolean; isPending: boolean }) {
-    return {
-      fontWeight: isActive ? 'bold' : undefined,
-      color: isPending ? 'grey' : 'black',
-    };
-  }
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  cn(
+    'text-xs font-medium tracking-[0.12em] uppercase transition-opacity hover:opacity-70',
+    isActive ? 'underline underline-offset-4' : 'text-neutral-500'
+  );
 
+const AccountMenu = () => {
   return (
-    <nav role="navigation">
-      <NavLink to="/account/orders" style={isActiveStyle}>
-        Orders &nbsp;
+    <nav
+      role="navigation"
+      className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-neutral-200 pb-4"
+    >
+      <NavLink to="/account/orders" className={navLinkClass}>
+        Orders
       </NavLink>
-      &nbsp;|&nbsp;
-      <NavLink to="/account/profile" style={isActiveStyle}>
-        &nbsp; Profile &nbsp;
+      <NavLink to="/account/profile" className={navLinkClass}>
+        Profile
       </NavLink>
-      &nbsp;|&nbsp;
-      <NavLink to="/account/addresses" style={isActiveStyle}>
-        &nbsp; Addresses &nbsp;
+      <NavLink to="/account/addresses" className={navLinkClass}>
+        Addresses
       </NavLink>
-      &nbsp;|&nbsp;
       <Logout />
     </nav>
   );
@@ -80,8 +83,13 @@ const AccountMenu = () => {
 
 const Logout = () => {
   return (
-    <Form className="account-logout" method="POST" action="/account/logout">
-      &nbsp;<button type="submit">Sign out</button>
+    <Form method="POST" action="/account/logout" className="ml-auto">
+      <button
+        type="submit"
+        className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase transition-opacity hover:opacity-70"
+      >
+        Sign out
+      </button>
     </Form>
   );
 };
