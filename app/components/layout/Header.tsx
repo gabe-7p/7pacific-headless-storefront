@@ -48,7 +48,8 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
     <>
       <header
         className={cn(
-          'fixed inset-x-0 top-0 z-40 transition-colors duration-300 ease-(--ease-brand)',
+          // sits directly below the fixed announcement bar
+          'fixed inset-x-0 top-(--announcement-h) z-40 transition-colors duration-300 ease-(--ease-brand)',
           overlay
             ? 'bg-linear-to-b from-black/30 to-transparent text-white'
             : 'bg-nav text-nav-text shadow-sm'
@@ -80,7 +81,7 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
       </header>
       {/* Spacer so content isn't hidden under the fixed header (skipped on the
           homepage, where the hero sits beneath the transparent overlay). */}
-      {!isHome && <div aria-hidden className="h-(--header-h)" />}
+      {!isHome && <div aria-hidden className="h-(--topbar-h)" />}
     </>
   );
 };

@@ -3,6 +3,7 @@ import { Await, Link } from 'react-router';
 import type { CartApiQueryFragment, FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
 import { CartMain } from '~/components/cart/CartMain';
+import { Announcement } from '~/components/layout/Announcement';
 import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
 import { Header, HeaderMenu } from '~/components/layout/Header';
@@ -31,6 +32,7 @@ export const PageLayout = ({
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
+      <Announcement />
       {header && (
         <Header
           header={header}
