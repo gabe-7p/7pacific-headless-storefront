@@ -2,18 +2,22 @@ import { Analytics, getPaginationVariables } from '@shopify/hydrogen';
 import { useLoaderData } from 'react-router';
 import type { PredictiveSearchQuery, RegularSearchQuery } from 'storefrontapi.generated';
 
+import { Container } from '~/components/common/Container';
+import { Heading } from '~/components/common/Heading';
 import { SearchForm } from '~/components/search/SearchForm';
 import { SearchResults } from '~/components/search/SearchResults';
+import { Button } from '~/components/ui/button';
 import {
   getEmptyPredictiveSearchResult,
   type PredictiveSearchReturn,
   type RegularSearchReturn,
 } from '~/lib/search';
+import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/search';
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: `Hydrogen | Search` }];
+  return [{ title: pageTitle('Search') }];
 };
 
 export async function loader({ request, context }: Route.LoaderArgs) {
@@ -39,24 +43,28 @@ const SearchPage = () => {
   if (type === 'predictive') return null;
 
   return (
-    <div className="search">
-      <h1>Search</h1>
+    <Container className="py-10 md:py-14">
+      <Heading as="h1" size="lg" className="mb-6">
+        Search
+      </Heading>
       <SearchForm>
         {({ inputRef }) => (
-          <>
+          <div className="mb-8 flex max-w-xl gap-2">
             <input
               defaultValue={term}
               name="q"
               placeholder="Search…"
               ref={inputRef}
               type="search"
+              className="border-border-subtle w-full border bg-white px-4 py-3 text-sm focus:border-black focus:outline-none"
             />
-            &nbsp;
-            <button type="submit">Search</button>
-          </>
+            <Button type="submit" variant="brand">
+              Search
+            </Button>
+          </div>
         )}
       </SearchForm>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
       {!term || !result?.total ? (
         <SearchResults.Empty />
       ) : (
@@ -71,7 +79,7 @@ const SearchPage = () => {
         </SearchResults>
       )}
       <Analytics.SearchView data={{ searchTerm: term, searchResults: result }} />
-    </div>
+    </Container>
   );
 };
 
