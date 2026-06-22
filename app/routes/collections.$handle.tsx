@@ -1,137 +1,319 @@
 import { Analytics, getPaginationVariables } from '@shopify/hydrogen';
-import { redirect, useLoaderData } from 'react-router';
-import type { ProductItemFragment } from 'storefrontapi.generated';
+import type {
+  ProductCollectionSortKeys,
+  ProductFilter,
+} from '@shopify/hydrogen/storefront-api-types';
+import { X } from 'lucide-react';
+import { useState } from 'react';
+import { Link, redirect, useLoaderData, useSearchParams } from 'react-router';
+import type { CollectionQuery } from 'storefrontapi.generated';
 
+import { ProductCard } from '~/components/collection/ProductCard';
+import { Container } from '~/components/common/Container';
+import { Heading } from '~/components/common/Heading';
 import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
-import { ProductItem } from '~/components/product/ProductItem';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '~/components/ui/accordion';
+import { Button } from '~/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select';
+import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/collections.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
-  return [{ title: `Hydrogen | ${data?.collection.title ?? ''} Collection` }];
+  return [{ title: pageTitle(data?.collection.title) }];
 };
 
+type SortOption = {
+  value: string;
+  label: string;
+  sortKey: ProductCollectionSortKeys;
+  reverse: boolean;
+};
+
+const SORT_OPTIONS: ReadonlyArray<SortOption> = [
+  { value: 'featured', label: 'Featured', sortKey: 'COLLECTION_DEFAULT', reverse: false },
+  { value: 'best-selling', label: 'Best selling', sortKey: 'BEST_SELLING', reverse: false },
+  { value: 'price-asc', label: 'Price: Low to High', sortKey: 'PRICE', reverse: false },
+  { value: 'price-desc', label: 'Price: High to Low', sortKey: 'PRICE', reverse: true },
+  { value: 'newest', label: 'Newest', sortKey: 'CREATED', reverse: true },
+  { value: 'title-asc', label: 'A–Z', sortKey: 'TITLE', reverse: false },
+];
+
+const sortFromParam = (value: string | null): SortOption =>
+  SORT_OPTIONS.find((option) => option.value === value) ?? SORT_OPTIONS[0]!;
+
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   return { ...deferredData, ...criticalData };
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
 async function loadCriticalData({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
   const { storefront } = context;
-  const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
-  });
+  const paginationVariables = getPaginationVariables(request, { pageBy: 24 });
 
-  if (!handle) {
-    throw redirect('/collections');
-  }
+  if (!handle) throw redirect('/collections');
+
+  const url = new URL(request.url);
+  const sort = sortFromParam(url.searchParams.get('sort'));
+  // Each applied filter is a `filter` search param whose value is the JSON
+  // `input` the Storefront API gave us for that facet value.
+  const filters = url.searchParams.getAll('filter').reduce<ProductFilter[]>((acc, raw) => {
+    try {
+      acc.push(JSON.parse(raw) as ProductFilter);
+    } catch {
+      // ignore malformed filter params
+    }
+    return acc;
+  }, []);
 
   const [{ collection }] = await Promise.all([
     storefront.query(COLLECTION_QUERY, {
-      variables: { handle, ...paginationVariables },
-      // Add other queries here, so that they are loaded in parallel
+      variables: {
+        handle,
+        filters,
+        sortKey: sort.sortKey,
+        reverse: sort.reverse,
+        ...paginationVariables,
+      },
     }),
   ]);
 
   if (!collection) {
-    throw new Response(`Collection ${handle} not found`, {
-      status: 404,
-    });
+    throw new Response(`Collection ${handle} not found`, { status: 404 });
   }
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, { handle, data: collection });
 
-  return {
-    collection,
-  };
+  return { collection };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
-function loadDeferredData({ context }: Route.LoaderArgs) {
+function loadDeferredData(_args: Route.LoaderArgs) {
   return {};
 }
 
 const Collection = () => {
   const { collection } = useLoaderData<typeof loader>();
+  const [searchParams] = useSearchParams();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const appliedFilters = searchParams.getAll('filter');
+  const facets = collection.products.filters ?? [];
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <PaginatedResourceSection<ProductItemFragment>
-        connection={collection.products}
-        resourcesClassName="products-grid"
-      >
-        {({ node: product, index }) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
+    <Container className="py-10">
+      <header className="mb-8">
+        <Heading as="h1" size="lg">
+          {collection.title}
+        </Heading>
+        {collection.description && (
+          <p className="mt-2 max-w-2xl text-sm text-neutral-600">{collection.description}</p>
         )}
-      </PaginatedResourceSection>
+      </header>
+
+      <div className="mb-6 flex items-center justify-between gap-4 border-y border-neutral-200 py-3">
+        {facets.length > 0 ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setFiltersOpen((open) => !open)}
+            className="tracking-[0.15em] uppercase md:hidden"
+          >
+            {filtersOpen ? 'Hide filters' : 'Filters'}
+          </Button>
+        ) : (
+          <span />
+        )}
+        <SortSelect />
+      </div>
+
+      {appliedFilters.length > 0 && <AppliedFilters facets={facets} />}
+
+      <div className="md:flex md:gap-10">
+        {facets.length > 0 && (
+          <aside
+            className={
+              filtersOpen ? 'block md:w-56 md:flex-none' : 'hidden md:block md:w-56 md:flex-none'
+            }
+          >
+            <FilterGroups facets={facets} />
+          </aside>
+        )}
+
+        <div className="flex-1">
+          <PaginatedResourceSection
+            connection={collection.products}
+            resourcesClassName="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3"
+          >
+            {({ node: product }) => (
+              <ProductCard key={product.id} product={product} label={product.label?.value} />
+            )}
+          </PaginatedResourceSection>
+        </div>
+      </div>
+
       <Analytics.CollectionView
-        data={{
-          collection: {
-            id: collection.id,
-            handle: collection.handle,
-          },
-        }}
+        data={{ collection: { id: collection.id, handle: collection.handle } }}
       />
+    </Container>
+  );
+};
+
+const SortSelect = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const active = sortFromParam(searchParams.get('sort'));
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-xs tracking-wide text-neutral-500 uppercase">Sort</span>
+      <Select
+        value={active.value}
+        onValueChange={(value) => {
+          const next = new URLSearchParams(searchParams);
+          next.set('sort', value);
+          setSearchParams(next, { preventScrollReset: true });
+        }}
+      >
+        <SelectTrigger size="sm" className="w-44 text-xs">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {SORT_OPTIONS.map((option) => (
+            <SelectItem key={option.value} value={option.value} className="text-xs">
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 };
 
-const PRODUCT_ITEM_FRAGMENT = `#graphql
-  fragment MoneyProductItem on MoneyV2 {
-    amount
-    currencyCode
-  }
-  fragment ProductItem on Product {
-    id
-    handle
-    title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
-    }
-    priceRange {
-      minVariantPrice {
-        ...MoneyProductItem
-      }
-      maxVariantPrice {
-        ...MoneyProductItem
-      }
-    }
-  }
-` as const;
+type Facet = NonNullable<NonNullable<CollectionQuery['collection']>['products']['filters']>[number];
 
-// NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection
+const FilterGroups = ({ facets }: { facets: ReadonlyArray<Facet> }) => {
+  const [searchParams] = useSearchParams();
+  const applied = new Set(searchParams.getAll('filter'));
+
+  const buildHref = (input: string, isApplied: boolean) => {
+    const next = new URLSearchParams(searchParams);
+    next.delete('filter');
+    const values = new Set(applied);
+    if (isApplied) values.delete(input);
+    else values.add(input);
+    values.forEach((value) => next.append('filter', value));
+    return `?${next.toString()}`;
+  };
+
+  return (
+    <Accordion type="multiple" defaultValue={facets.map((facet) => facet.id)}>
+      {facets.map((facet) => (
+        <AccordionItem key={facet.id} value={facet.id}>
+          <AccordionTrigger className="text-xs font-semibold tracking-[0.15em] uppercase">
+            {facet.label}
+          </AccordionTrigger>
+          <AccordionContent>
+            <ul className="space-y-1.5">
+              {facet.values.map((value) => {
+                const isApplied = applied.has(value.input as string);
+                return (
+                  <li key={value.id}>
+                    <Link
+                      to={buildHref(value.input as string, isApplied)}
+                      prefetch="intent"
+                      preventScrollReset
+                      className={
+                        isApplied
+                          ? 'flex items-center gap-2 text-sm font-medium text-black'
+                          : 'flex items-center gap-2 text-sm text-neutral-600 transition-colors hover:text-black'
+                      }
+                    >
+                      <span
+                        className={
+                          isApplied
+                            ? 'flex size-4 items-center justify-center border border-black bg-black text-[10px] text-white'
+                            : 'flex size-4 items-center justify-center border border-neutral-400'
+                        }
+                        aria-hidden
+                      >
+                        {isApplied && '✓'}
+                      </span>
+                      {value.label}
+                      {typeof value.count === 'number' && (
+                        <span className="text-neutral-400">({value.count})</span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  );
+};
+
+const AppliedFilters = ({ facets }: { facets: ReadonlyArray<Facet> }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const applied = searchParams.getAll('filter');
+
+  const labelFor = (input: string) => {
+    for (const facet of facets) {
+      const match = facet.values.find((value) => value.input === input);
+      if (match) return match.label;
+    }
+    return 'Filter';
+  };
+
+  const removeFilter = (input: string) => {
+    const next = new URLSearchParams(searchParams);
+    const remaining = applied.filter((value) => value !== input);
+    next.delete('filter');
+    remaining.forEach((value) => next.append('filter', value));
+    setSearchParams(next, { preventScrollReset: true });
+  };
+
+  return (
+    <div className="mb-6 flex flex-wrap items-center gap-2">
+      {applied.map((input) => (
+        <button
+          key={input}
+          type="button"
+          onClick={() => removeFilter(input)}
+          className="inline-flex items-center gap-1.5 border border-neutral-300 px-2.5 py-1 text-xs tracking-wide uppercase transition-colors hover:border-black"
+        >
+          {labelFor(input)}
+          <X className="size-3" />
+          <span className="sr-only">Remove filter</span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/collection
 const COLLECTION_QUERY = `#graphql
-  ${PRODUCT_ITEM_FRAGMENT}
+  ${PRODUCT_CARD_FRAGMENT}
   query Collection(
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
+    $filters: [ProductFilter!]
+    $sortKey: ProductCollectionSortKeys!
+    $reverse: Boolean
     $first: Int
     $last: Int
     $startCursor: String
@@ -143,13 +325,30 @@ const COLLECTION_QUERY = `#graphql
       title
       description
       products(
-        first: $first,
-        last: $last,
-        before: $startCursor,
+        first: $first
+        last: $last
+        before: $startCursor
         after: $endCursor
+        filters: $filters
+        sortKey: $sortKey
+        reverse: $reverse
       ) {
         nodes {
-          ...ProductItem
+          ...ProductCard
+          label: metafield(namespace: "theme", key: "label") {
+            value
+          }
+        }
+        filters {
+          id
+          label
+          type
+          values {
+            id
+            label
+            count
+            input
+          }
         }
         pageInfo {
           hasPreviousPage

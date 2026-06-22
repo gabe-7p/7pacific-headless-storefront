@@ -54,6 +54,16 @@ Full detail in [.claude/rules/](.claude/rules/) — read the relevant file befor
 
 The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
+## Brand single-sources (change once, applies everywhere)
+
+Never hardcode brand values inline — edit the one source and every consumer follows:
+
+- **Colors & font** → `app/styles/tailwind.css` `@theme` (used via `bg-nav`, `text-brand`, `bg-footer`, …).
+- **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; `--topbar-h` is derived).
+- **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
+- **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`).
+- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`) and brand `Button` variant.
+
 ## Domain note: color = separate product
 
 The 9 live products are **separate Shopify products per color**, not variants. Color switching navigates between sibling handles via `lib/colorMap.ts` — don't model color as a `ProductVariant` selectedOption.
