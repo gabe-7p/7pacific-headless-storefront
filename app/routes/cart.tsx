@@ -3,11 +3,13 @@ import { CartForm } from '@shopify/hydrogen';
 import { data, type HeadersFunction, useLoaderData } from 'react-router';
 
 import { CartMain } from '~/components/cart/CartMain';
+import { Heading } from '~/components/common/Heading';
+import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/cart';
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: `Hydrogen | Cart` }];
+  return [{ title: pageTitle('Cart') }];
 };
 
 export const headers: HeadersFunction = ({ actionHeaders }) => actionHeaders;
@@ -103,8 +105,10 @@ const Cart = () => {
   const cart = useLoaderData<typeof loader>();
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
+    <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">
+      <Heading as="h1" className="mb-8">
+        Cart
+      </Heading>
       <CartMain layout="page" cart={cart} />
     </div>
   );

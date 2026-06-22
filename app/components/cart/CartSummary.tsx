@@ -4,6 +4,8 @@ import { useFetcher } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout } from '~/components/cart/CartMain';
+import { Button } from '~/components/ui/button';
+import { cn } from '~/lib/cn';
 
 type CartSummaryProps = {
   cart: OptimisticCart<CartApiQueryFragment | null>;
@@ -11,19 +13,32 @@ type CartSummaryProps = {
 };
 
 export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
-  const className = layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
-
   return (
-    <div aria-labelledby="cart-summary" className={className}>
-      <h4>Totals</h4>
-      <dl className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
+    <div
+      aria-labelledby="cart-summary"
+      className={cn(
+        'px-5 py-5',
+        layout === 'aside'
+          ? 'border-border-subtle border-t'
+          : 'border-border-subtle md:w-80 md:flex-none md:border md:p-6'
+      )}
+    >
+      <div className="flex items-baseline justify-between">
+        <span className="text-sm font-semibold tracking-wide uppercase">Subtotal</span>
+        <span className="text-sm font-medium">
           {cart?.cost?.subtotalAmount?.amount ? <Money data={cart?.cost?.subtotalAmount} /> : '-'}
-        </dd>
-      </dl>
-      <CartDiscounts discountCodes={cart?.discountCodes} />
-      <CartGiftCard giftCardCodes={cart?.appliedGiftCards} />
+        </span>
+      </div>
+      <p className="mt-1 text-xs text-neutral-500">Shipping &amp; taxes calculated at checkout.</p>
+
+      {/* Discount / gift-card entry only on the full cart page (cleaner drawer) */}
+      {layout === 'page' && (
+        <div className="mt-4 space-y-3 text-sm">
+          <CartDiscounts discountCodes={cart?.discountCodes} />
+          <CartGiftCard giftCardCodes={cart?.appliedGiftCards} />
+        </div>
+      )}
+
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
     </div>
   );
@@ -31,14 +46,12 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
 
 const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
   if (!checkoutUrl) return null;
-
   return (
-    <div>
+    <Button asChild variant="brand" size="lg" className="mt-5 w-full tracking-wide uppercase">
       <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+        Checkout &rarr;
       </a>
-      <br />
-    </div>
+    </Button>
   );
 };
 
@@ -52,25 +65,20 @@ const CartDiscounts = ({
 
   return (
     <div>
-      {/* Have existing discount, display it with a remove option */}
-      <dl hidden={!codes.length}>
-        <div>
-          <dt>Discount(s)</dt>
-          <UpdateDiscountForm>
-            <div className="cart-discount">
-              <code>{codes?.join(', ')}</code>
-              &nbsp;
-              <button type="submit" aria-label="Remove discount">
-                Remove
-              </button>
-            </div>
-          </UpdateDiscountForm>
-        </div>
+      <dl hidden={!codes.length} className="flex items-center justify-between">
+        <dt className="text-neutral-500">Discount(s)</dt>
+        <UpdateDiscountForm>
+          <div className="flex items-center gap-2">
+            <code>{codes?.join(', ')}</code>
+            <button type="submit" className="underline" aria-label="Remove discount">
+              Remove
+            </button>
+          </div>
+        </UpdateDiscountForm>
       </dl>
 
-      {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
+        <div className="flex gap-2">
           <label htmlFor="discount-code-input" className="sr-only">
             Discount code
           </label>
@@ -79,11 +87,11 @@ const CartDiscounts = ({
             type="text"
             name="discountCode"
             placeholder="Discount code"
+            className="border-border-subtle flex-1 border px-2 py-1.5"
           />
-          &nbsp;
-          <button type="submit" aria-label="Apply discount code">
+          <Button type="submit" variant="outline" size="sm" aria-label="Apply discount code">
             Apply
-          </button>
+          </Button>
         </div>
       </UpdateDiscountForm>
     </div>
@@ -101,9 +109,7 @@ const UpdateDiscountForm = ({
     <CartForm
       route="/cart"
       action={CartForm.ACTIONS.DiscountCodesUpdate}
-      inputs={{
-        discountCodes: discountCodes || [],
-      }}
+      inputs={{ discountCodes: discountCodes || [] }}
     >
       {children}
     </CartForm>
@@ -127,16 +133,16 @@ const CartGiftCard = ({
   return (
     <div>
       {giftCardCodes && giftCardCodes.length > 0 && (
-        <dl>
-          <dt>Applied Gift Card(s)</dt>
+        <dl className="space-y-1">
+          <dt className="text-neutral-500">Applied Gift Card(s)</dt>
           {giftCardCodes.map((giftCard) => (
             <RemoveGiftCardForm key={giftCard.id} giftCardId={giftCard.id}>
-              <div className="cart-discount">
+              <div className="flex items-center gap-2">
                 <code>***{giftCard.lastCharacters}</code>
-                &nbsp;
                 <Money data={giftCard.amountUsed} />
-                &nbsp;
-                <button type="submit">Remove</button>
+                <button type="submit" className="underline">
+                  Remove
+                </button>
               </div>
             </RemoveGiftCardForm>
           ))}
@@ -144,17 +150,22 @@ const CartGiftCard = ({
       )}
 
       <AddGiftCardForm fetcherKey="gift-card-add">
-        <div>
+        <div className="flex gap-2">
           <input
             type="text"
             name="giftCardCode"
             placeholder="Gift card code"
             ref={giftCardCodeInput}
+            className="border-border-subtle flex-1 border px-2 py-1.5"
           />
-          &nbsp;
-          <button type="submit" disabled={giftCardAddFetcher.state !== 'idle'}>
+          <Button
+            type="submit"
+            variant="outline"
+            size="sm"
+            disabled={giftCardAddFetcher.state !== 'idle'}
+          >
             Apply
-          </button>
+          </Button>
         </div>
       </AddGiftCardForm>
     </div>
@@ -186,9 +197,7 @@ const RemoveGiftCardForm = ({
     <CartForm
       route="/cart"
       action={CartForm.ACTIONS.GiftCardCodesRemove}
-      inputs={{
-        giftCardCodes: [giftCardId],
-      }}
+      inputs={{ giftCardCodes: [giftCardId] }}
     >
       {children}
     </CartForm>
