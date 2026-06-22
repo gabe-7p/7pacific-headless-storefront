@@ -1,6 +1,13 @@
+import { ArrowRight } from 'lucide-react';
 import { Suspense } from 'react';
-import { Await, NavLink } from 'react-router';
+import { Await, NavLink, useFetcher } from 'react-router';
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
+
+import { Container } from '~/components/common/Container';
+import { Heading } from '~/components/common/Heading';
+import { Logo } from '~/components/common/Logo';
+import { BRAND } from '~/lib/brand';
+import type { NewsletterResponse } from '~/routes/api.newsletter';
 
 type FooterProps = {
   footer: Promise<FooterQuery | null>;
@@ -13,14 +20,29 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer">
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-              />
-            )}
+          <footer className="bg-footer text-footer-text">
+            <Container className="grid gap-10 py-14 md:grid-cols-2">
+              <div className="flex flex-col gap-6">
+                <NavLink to="/" prefetch="intent" aria-label={header.shop.name}>
+                  <Logo tone="light" className="h-8" />
+                </NavLink>
+                <SocialIcons />
+              </div>
+              <Newsletter />
+            </Container>
+
+            <div className="border-t border-white/15">
+              <Container className="flex flex-col gap-4 py-6 text-xs tracking-wide uppercase md:flex-row md:items-center md:justify-between">
+                <FooterMenu
+                  menu={footer?.menu}
+                  primaryDomainUrl={header.shop.primaryDomain.url}
+                  publicStoreDomain={publicStoreDomain}
+                />
+                <p className="text-white/60">
+                  © {new Date().getFullYear()} {header.shop.name}
+                </p>
+              </Container>
+            </div>
           </footer>
         )}
       </Await>
@@ -28,33 +50,126 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
   );
 };
 
+const Newsletter = () => {
+  const fetcher = useFetcher<NewsletterResponse>();
+  const submitting = fetcher.state !== 'idle';
+  const succeeded = fetcher.data?.ok === true;
+  const { heading, body, placeholder, submitLabel, successMessage } = BRAND.newsletter;
+
+  return (
+    <div className="md:max-w-md md:justify-self-end">
+      <Heading as="h3" size="sm">
+        {heading}
+      </Heading>
+      <p className="mt-3 text-sm text-white/80">{body}</p>
+
+      {succeeded ? (
+        <p className="mt-5 text-sm font-medium">{successMessage}</p>
+      ) : (
+        <fetcher.Form method="post" action="/api/newsletter" className="mt-5">
+          <div className="relative max-w-sm">
+            <label htmlFor="newsletter-email" className="sr-only">
+              {placeholder}
+            </label>
+            <input
+              id="newsletter-email"
+              type="email"
+              name="email"
+              required
+              autoCorrect="off"
+              autoCapitalize="off"
+              placeholder={placeholder}
+              className="w-full border-b-2 border-white bg-transparent py-2 pr-10 text-white placeholder:text-white/60 focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={submitting}
+              aria-label={submitLabel}
+              className="absolute top-1/2 right-0 -translate-y-1/2 transition-opacity hover:opacity-70 disabled:opacity-40"
+            >
+              <ArrowRight className="size-5" />
+            </button>
+          </div>
+          {fetcher.data?.error && (
+            <p className="mt-2 text-sm text-white/80">{fetcher.data.error}</p>
+          )}
+        </fetcher.Form>
+      )}
+    </div>
+  );
+};
+
+const SocialIcons = () => (
+  <ul className="flex gap-4">
+    {BRAND.social.map((social) => (
+      <li key={social.platform}>
+        <a
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={social.platform}
+          className="inline-flex transition-opacity hover:opacity-70"
+        >
+          {social.platform === 'Instagram' && <InstagramIcon />}
+          <span className="sr-only">{social.platform}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+);
+
+// lucide-react v1 dropped brand/logo icons, so the one social glyph is inline.
+const InstagramIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+  </svg>
+);
+
 const FooterMenu = ({
   menu,
   primaryDomainUrl,
   publicStoreDomain,
 }: {
-  menu: FooterQuery['menu'];
+  menu: FooterQuery['menu'] | undefined;
   primaryDomainUrl: FooterProps['header']['shop']['primaryDomain']['url'];
   publicStoreDomain: string;
 }) => {
+  const items =
+    menu?.items?.map((item) => ({ id: item.id, title: item.title, url: item.url ?? '' })) ??
+    BRAND.footerLinks.map((link) => ({ id: link.url, title: link.title, url: link.url }));
+
+  const toInternalPath = (itemUrl: string) =>
+    itemUrl.includes('myshopify.com') ||
+    itemUrl.includes(publicStoreDomain) ||
+    itemUrl.includes(primaryDomainUrl)
+      ? new URL(itemUrl).pathname
+      : itemUrl;
+
   return (
-    <nav className="footer-menu" role="navigation">
-      {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
+    <nav className="flex flex-wrap gap-x-6 gap-y-2" role="navigation">
+      {items.map((item) => {
         if (!item.url) return null;
-        // if the url is internal, we strip the domain
-        const url =
-          item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
-          item.url.includes(primaryDomainUrl)
-            ? new URL(item.url).pathname
-            : item.url;
+        const url = toInternalPath(item.url);
         const isExternal = !url.startsWith('/');
         return isExternal ? (
-          <a href={url} key={item.id} rel="noopener noreferrer" target="_blank">
+          <a
+            key={item.id}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/70 transition-colors hover:text-white"
+          >
             {item.title}
           </a>
         ) : (
-          <NavLink end key={item.id} prefetch="intent" style={activeLinkStyle} to={url}>
+          <NavLink
+            key={item.id}
+            to={url}
+            prefetch="intent"
+            className="text-white/70 transition-colors hover:text-white"
+          >
             {item.title}
           </NavLink>
         );
@@ -62,52 +177,3 @@ const FooterMenu = ({
     </nav>
   );
 };
-
-const FALLBACK_FOOTER_MENU = {
-  id: 'gid://shopify/Menu/199655620664',
-  items: [
-    {
-      id: 'gid://shopify/MenuItem/461633060920',
-      resourceId: 'gid://shopify/ShopPolicy/23358046264',
-      tags: [],
-      title: 'Privacy Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/privacy-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633093688',
-      resourceId: 'gid://shopify/ShopPolicy/23358013496',
-      tags: [],
-      title: 'Refund Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/refund-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633126456',
-      resourceId: 'gid://shopify/ShopPolicy/23358111800',
-      tags: [],
-      title: 'Shipping Policy',
-      type: 'SHOP_POLICY',
-      url: '/policies/shipping-policy',
-      items: [],
-    },
-    {
-      id: 'gid://shopify/MenuItem/461633159224',
-      resourceId: 'gid://shopify/ShopPolicy/23358079032',
-      tags: [],
-      title: 'Terms of Service',
-      type: 'SHOP_POLICY',
-      url: '/policies/terms-of-service',
-      items: [],
-    },
-  ],
-};
-
-function activeLinkStyle({ isActive, isPending }: { isActive: boolean; isPending: boolean }) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
-  };
-}
