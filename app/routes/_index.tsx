@@ -1,158 +1,53 @@
-import { Image } from '@shopify/hydrogen';
-import { Suspense } from 'react';
-import { Await, Link, useLoaderData } from 'react-router';
-import type { FeaturedCollectionFragment, RecommendedProductsQuery } from 'storefrontapi.generated';
+import { useLoaderData } from 'react-router';
 
-import { ProductItem } from '~/components/product/ProductItem';
+import { CoreValues } from '~/components/home/CoreValues';
+import { FirstDrop } from '~/components/home/FirstDrop';
+import { Hero } from '~/components/home/Hero';
+import { TestedInTraining } from '~/components/home/TestedInTraining';
+import { HOME_FIRST_DROP } from '~/content/home';
+import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import { DEFAULT_DESCRIPTION } from '~/lib/seo';
 
 import type { Route } from './+types/_index';
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: 'Hydrogen | Home' }];
+  return [
+    { title: '7Pacific — Lightweight and Breathable Training Gear' },
+    { name: 'description', content: DEFAULT_DESCRIPTION },
+  ];
 };
 
-export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
+export async function loader({ context }: Route.LoaderArgs) {
+  const { collection } = await context.storefront.query(HOME_COLLECTION_QUERY, {
+    variables: { handle: HOME_FIRST_DROP.collectionHandle },
+    cache: context.storefront.CacheLong(),
+  });
 
-  // Await the critical data required to render initial state of the page
-  const criticalData = await loadCriticalData(args);
-
-  return { ...deferredData, ...criticalData };
-}
-
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
-async function loadCriticalData({ context }: Route.LoaderArgs) {
-  const [{ collections }] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
-
-  return {
-    featuredCollection: collections.nodes[0],
-  };
-}
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
-function loadDeferredData({ context }: Route.LoaderArgs) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error: Error) => {
-      // Log query errors, but don't throw them so the page can still render
-      console.error(error);
-      return null;
-    });
-
-  return {
-    recommendedProducts,
-  };
+  return { products: collection?.products.nodes ?? [] };
 }
 
 const Homepage = () => {
-  const data = useLoaderData<typeof loader>();
+  const { products } = useLoaderData<typeof loader>();
   return (
-    <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
-    </div>
+    <>
+      <Hero />
+      <FirstDrop products={products} />
+      <CoreValues />
+      <TestedInTraining />
+    </>
   );
 };
 
-const FeaturedCollection = ({ collection }: { collection?: FeaturedCollectionFragment }) => {
-  if (!collection) return null;
-  const image = collection?.image;
-  return (
-    <Link className="featured-collection" to={`/collections/${collection.handle}`}>
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
-        </div>
-      )}
-      <h1>{collection.title}</h1>
-    </Link>
-  );
-};
-
-const RecommendedProducts = ({
-  products,
-}: {
-  products: Promise<RecommendedProductsQuery | null>;
-}) => {
-  return (
-    <div className="recommended-products">
-      <h2>Recommended Products</h2>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => (
-            <div className="recommended-products-grid">
-              {response
-                ? response.products.nodes.map((product) => (
-                    <ProductItem key={product.id} product={product} />
-                  ))
-                : null}
-            </div>
-          )}
-        </Await>
-      </Suspense>
-      <br />
-    </div>
-  );
-};
-
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
-    id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
+const HOME_COLLECTION_QUERY = `#graphql
+  ${PRODUCT_CARD_FRAGMENT}
+  query HomeCollection($handle: String!, $country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
-      }
-    }
-  }
-` as const;
-
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
-    title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-    featuredImage {
+    collection(handle: $handle) {
       id
-      url
-      altText
-      width
-      height
-    }
-  }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...RecommendedProduct
+      products(first: 12) {
+        nodes {
+          ...ProductCard
+        }
       }
     }
   }
