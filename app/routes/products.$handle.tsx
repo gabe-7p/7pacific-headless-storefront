@@ -3,21 +3,23 @@ import {
   getAdjacentAndFirstAvailableVariants,
   getProductOptions,
   getSelectedProductOptions,
+  Image,
   useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
 import { redirect, useLoaderData } from 'react-router';
 
+import { Container } from '~/components/common/Container';
 import { ProductForm } from '~/components/product/ProductForm';
-import { ProductImage } from '~/components/product/ProductImage';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/products.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
   return [
-    { title: `Hydrogen | ${data?.product.title ?? ''}` },
+    { title: pageTitle(data?.product.title) },
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -97,28 +99,39 @@ const Product = () => {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const { title, descriptionHtml } = product;
+  const { title, description } = product;
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
-        <br />
-      </div>
+    <>
+      <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-neutral-900 text-white">
+        {selectedVariant?.image && (
+          <Image
+            data={selectedVariant.image}
+            sizes="100vw"
+            className="absolute inset-0 size-full object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
+        <Container className="relative z-10">
+          <div className="max-w-md bg-black/70 p-8 backdrop-blur-sm md:p-10">
+            <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
+            <div className="mt-3 text-lg">
+              <ProductPrice
+                price={selectedVariant?.price}
+                compareAtPrice={selectedVariant?.compareAtPrice}
+              />
+            </div>
+            {description && (
+              <p className="mt-4 line-clamp-8 text-sm leading-relaxed text-white/75">
+                {description}
+              </p>
+            )}
+            <div className="mt-6">
+              <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
+            </div>
+          </div>
+        </Container>
+      </section>
       <Analytics.ProductView
         data={{
           products: [
@@ -134,7 +147,7 @@ const Product = () => {
           ],
         }}
       />
-    </div>
+    </>
   );
 };
 
