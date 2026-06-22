@@ -3,25 +3,52 @@ import {
   getAdjacentAndFirstAvailableVariants,
   getProductOptions,
   getSelectedProductOptions,
+  Image,
   useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
 import { redirect, useLoaderData } from 'react-router';
 
+import { Container } from '~/components/common/Container';
+import { BottomPhotography } from '~/components/product/BottomPhotography';
 import { ProductForm } from '~/components/product/ProductForm';
-import { ProductImage } from '~/components/product/ProductImage';
 import { ProductPrice } from '~/components/product/ProductPrice';
+import { RelatedProducts } from '~/components/product/RelatedProducts';
+import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+import { pageTitle, productJsonLd, socialMeta } from '~/lib/seo';
+import { ColorSwatches, FeatureCarousel, TechStack } from '~/modules/product';
 
 import type { Route } from './+types/products.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
+  const product = data?.product;
+  if (!product) return [{ title: pageTitle() }];
+
+  const variant = product.selectedOrFirstAvailableVariant;
+  const image = variant?.image?.url;
+  const url = `/products/${product.handle}`;
+  const title = pageTitle(product.title);
+
   return [
-    { title: `Hydrogen | ${data?.product.title ?? ''}` },
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
+    { title },
+    { rel: 'canonical', href: url },
+    ...socialMeta({
+      title,
+      description: product.seo?.description || product.description,
+      image,
+      url,
+      type: 'product',
+    }),
+    productJsonLd({
+      title: product.title,
+      description: product.seo?.description || product.description,
+      image,
+      url,
+      price: variant?.price?.amount,
+      currency: variant?.price?.currencyCode,
+      available: variant?.availableForSale,
+    }),
   ];
 };
 
@@ -71,15 +98,23 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({ context, params }: Route.LoaderArgs) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
+function loadDeferredData({ context }: Route.LoaderArgs) {
+  // Related products (below the fold) — deferred and guarded so a failure can't
+  // 500 the page. Config-driven from the summer-25 collection for now.
+  const relatedProducts = context.storefront
+    .query(RELATED_PRODUCTS_QUERY, {
+      cache: context.storefront.CacheLong(),
+    })
+    .catch((error: Error) => {
+      console.error(error);
+      return null;
+    });
 
-  return {};
+  return { relatedProducts };
 }
 
 const Product = () => {
-  const { product } = useLoaderData<typeof loader>();
+  const { product, relatedProducts } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -97,28 +132,51 @@ const Product = () => {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const { title, descriptionHtml } = product;
+  const { title, description } = product;
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
-        <br />
-      </div>
+    <>
+      <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-neutral-900 text-white">
+        {selectedVariant?.image && (
+          <Image
+            data={selectedVariant.image}
+            sizes="100vw"
+            className="absolute inset-0 size-full object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
+        <Container className="relative z-10">
+          <div className="max-w-md bg-black/70 p-8 backdrop-blur-sm md:p-10">
+            <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
+            <div className="mt-3 text-lg">
+              <ProductPrice
+                price={selectedVariant?.price}
+                compareAtPrice={selectedVariant?.compareAtPrice}
+              />
+            </div>
+            {description && (
+              <p className="mt-4 line-clamp-8 text-sm leading-relaxed text-white/75">
+                {description}
+              </p>
+            )}
+            <div className="mt-6">
+              <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-white/70 uppercase">
+                Color
+              </p>
+              <ColorSwatches handle={product.handle} size="lg" tone="light" />
+            </div>
+            <div className="mt-6">
+              <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <FeatureCarousel handle={product.handle} />
+      <TechStack handle={product.handle} />
+      <BottomPhotography />
+      <RelatedProducts products={relatedProducts} currentHandle={product.handle} />
+
       <Analytics.ProductView
         data={{
           products: [
@@ -134,7 +192,7 @@ const Product = () => {
           ],
         }}
       />
-    </div>
+    </>
   );
 };
 
@@ -214,6 +272,18 @@ const PRODUCT_FRAGMENT = `#graphql
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
+` as const;
+
+const RELATED_PRODUCTS_QUERY = `#graphql
+  ${PRODUCT_CARD_FRAGMENT}
+  query RelatedProducts($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    products(first: 10, sortKey: BEST_SELLING) {
+      nodes {
+        ...ProductCard
+      }
+    }
+  }
 ` as const;
 
 const PRODUCT_QUERY = `#graphql
