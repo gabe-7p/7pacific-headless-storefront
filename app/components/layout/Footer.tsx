@@ -24,7 +24,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
             <Container className="grid gap-10 py-14 md:grid-cols-2">
               <div className="flex flex-col gap-6">
                 <NavLink to="/" prefetch="intent" aria-label={header.shop.name}>
-                  <Logo className="text-2xl" />
+                  <Logo tone="light" className="h-8" />
                 </NavLink>
                 <SocialIcons />
               </div>
