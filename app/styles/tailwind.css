@@ -82,3 +82,41 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 }
+
+/**
+ * Brand design tokens — the single source of truth for 7Pacific's colors and
+ * font, ported from the live Liquid theme (verified against the live DOM).
+ * Used everywhere via Tailwind utilities (bg-nav, text-brand, bg-footer, …) so
+ * values are never repeated inline. Coexists with the shadcn tokens above.
+ */
+@theme {
+  --font-sans: 'Barlow', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --color-announcement: #000000;
+  --color-announcement-text: #ffffff;
+  --color-nav: #f5f5f5; /* solid header background */
+  --color-nav-text: #000000;
+  --color-footer: #474842; /* dark gray-green footer */
+  --color-footer-text: #ffffff;
+  --color-brand: #cb5c28; /* primary CTA / accent (orange-rust) */
+  --color-brand-text: #ffffff;
+  --color-savings: #ff4e4e; /* sale / savings text */
+  --color-cart-dot: #ff4f33; /* cart count bubble */
+  --color-border-subtle: #e8e8e1;
+}
+
+/**
+ * Brand layout & motion constants — the single source of truth for page width,
+ * the fixed top-bar heights, and the signature easing. Consumed via Tailwind
+ * arbitrary values, e.g. `max-w-[var(--page-max)]`, `h-[var(--header-h)]`,
+ * `top-[var(--announcement-h)]`, `ease-[var(--ease-brand)]`. Change a value here
+ * and every consumer follows — including the header/announcement/spacer coupling
+ * (`--topbar-h` is derived, so the spacer always matches).
+ */
+:root {
+  --page-max: 1400px;
+  --header-h: 4rem; /* 64px */
+  --announcement-h: 2rem; /* 32px */
+  --topbar-h: calc(var(--header-h) + var(--announcement-h));
+  --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
