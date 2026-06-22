@@ -10,6 +10,7 @@ import {
 import { redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { BottomPhotography } from '~/components/product/BottomPhotography';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
@@ -142,6 +143,7 @@ const Product = () => {
 
       <FeatureCarousel handle={product.handle} />
       <TechStack handle={product.handle} />
+      <BottomPhotography />
 
       <Analytics.ProductView
         data={{
