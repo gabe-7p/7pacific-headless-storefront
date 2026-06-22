@@ -72,7 +72,7 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
             className="justify-self-center"
             aria-label={shop.name}
           >
-            <Logo className="text-xl" />
+            <Logo tone={overlay ? 'light' : 'dark'} />
           </NavLink>
 
           <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
