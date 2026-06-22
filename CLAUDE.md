@@ -60,9 +60,10 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 
 - **Colors & font** → `app/styles/tailwind.css` `@theme` (used via `bg-nav`, `text-brand`, `bg-footer`, …).
 - **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; `--topbar-h` is derived).
-- **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
-- **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`).
-- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`) and brand `Button` variant.
+- **Content & links** (name, wordmark, announcement, social, newsletter, `membershipCta`, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
+- **SEO** (title format, default meta, OG/Twitter, product JSON-LD) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`, `socialMeta()`, `productJsonLd()`).
+- **Shopify Files assets** (the store's CDN base for hero/video/photography URLs) → [app/lib/shopify.ts](app/lib/shopify.ts) (`fileUrl()`). Product/collection images still come from the API via `<Image>`.
+- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `SectionHeading`, `ProductGrid`) and the brand `Button` variant (uppercase CTA — used everywhere incl. add-to-cart via `buttonVariants`).
 
 ## Domain note: color = separate product
 
