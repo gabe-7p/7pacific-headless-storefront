@@ -1,11 +1,14 @@
 import { useLoaderData } from 'react-router';
 
+import { Container } from '~/components/common/Container';
+import { Heading } from '~/components/common/Heading';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/pages.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
-  return [{ title: `Hydrogen | ${data?.page.title ?? ''}` }];
+  return [{ title: pageTitle(data?.page.title) }];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -60,12 +63,15 @@ const Page = () => {
   const { page } = useLoaderData<typeof loader>();
 
   return (
-    <div className="page">
-      <header>
-        <h1>{page.title}</h1>
-      </header>
-      <main dangerouslySetInnerHTML={{ __html: page.body }} />
-    </div>
+    <Container className="max-w-3xl py-12 md:py-16">
+      <Heading as="h1" size="lg" className="mb-8">
+        {page.title}
+      </Heading>
+      <div
+        className="prose prose-neutral max-w-none text-sm leading-relaxed text-neutral-700 [&_a]:underline [&_h2]:mt-8 [&_h2]:mb-3 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:uppercase [&_p]:mb-4"
+        dangerouslySetInnerHTML={{ __html: page.body }}
+      />
+    </Container>
   );
 };
 
