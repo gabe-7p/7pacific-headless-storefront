@@ -4,12 +4,12 @@
  * Files/CDN imagery as live. Rendered by app/components/content/OurStory.tsx.
  */
 
-const CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
+import { fileUrl } from '~/lib/shopify';
 
 export const OUR_STORY = {
   hero: {
     title: 'About Us',
-    backgroundImage: `${CDN}/our_story_hero_image.jpg`,
+    backgroundImage: fileUrl('our_story_hero_image.jpg'),
     ctas: [
       { label: 'Join The Movement', href: '#newsletter', variant: 'brand' as const },
       {
@@ -24,7 +24,7 @@ export const OUR_STORY = {
     statement:
       'Create the most lightweight and breathable training gear, while building a community that pushes you further.',
     heading: "Fitness is more than movement, it's momentum",
-    image: `${CDN}/our_mission2.jpg`,
+    image: fileUrl('our_mission2.jpg'),
     body: [
       'The most growth happens when you sweat together. We exist to inspire each other through training, mindset, and the power of community. Every product, every session, and every rep is designed to fuel progress together.',
       "We found a lot of brands out there try to be many things to many people. Clothes that are designed to do everything okay, but nothing great. We're not that brand.",
@@ -33,7 +33,7 @@ export const OUR_STORY = {
   },
   story: {
     eyebrow: 'Our Story',
-    image: `${CDN}/our_founder.jpg`,
+    image: fileUrl('our_founder.jpg'),
     founder: { name: 'Gabriel Dalessandro', role: 'Founder & CEO' },
     body: [
       'Fitness opens doors. Fitness shows us that there’s more out there, more to see, more to chase, more to become.',

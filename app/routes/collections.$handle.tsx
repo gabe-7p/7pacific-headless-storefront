@@ -12,6 +12,7 @@ import { ProductCard } from '~/components/collection/ProductCard';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
+import { PRODUCT_GRID_CLASS } from '~/components/common/ProductGrid';
 import {
   Accordion,
   AccordionContent,
@@ -156,7 +157,7 @@ const Collection = () => {
         <div className="flex-1">
           <PaginatedResourceSection
             connection={collection.products}
-            resourcesClassName="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3"
+            resourcesClassName={PRODUCT_GRID_CLASS}
           >
             {({ node: product }) => (
               <ProductCard key={product.id} product={product} label={product.label?.value} />

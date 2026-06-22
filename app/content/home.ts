@@ -6,7 +6,8 @@
  * the core-values photography) — change a value here, the homepage follows.
  */
 
-const CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
+import { BRAND } from '~/lib/brand';
+import { fileUrl } from '~/lib/shopify';
 
 export const HOME_HERO = {
   eyebrow: 'Introducing',
@@ -14,7 +15,7 @@ export const HOME_HERO = {
   wordmark: 'PACIFIC',
   subtitle: 'Discipline Looks Good Now',
   cta: { label: 'Own The Start', href: '/collections/summer-25' },
-  backgroundImage: `${CDN}/24_121_7pacific_03806.jpg`,
+  backgroundImage: fileUrl('24_121_7pacific_03806.jpg'),
 } as const;
 
 export const HOME_FIRST_DROP = {
@@ -35,9 +36,9 @@ export const HOME_CORE_VALUES = {
     "Our core tenets that guide our mission. It's what we strive to do as a company, and what we hope to inspire in our community.",
   video: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
   images: {
-    socialSharing: `${CDN}/social_sharing.jpg`,
-    paulScreaming: `${CDN}/paul_screaming.jpg`,
-    digitalMap: `${CDN}/digital_map.png`,
+    socialSharing: fileUrl('social_sharing.jpg'),
+    paulScreaming: fileUrl('paul_screaming.jpg'),
+    digitalMap: fileUrl('digital_map.png'),
   },
   values: [
     {
@@ -48,7 +49,7 @@ export const HOME_CORE_VALUES = {
     {
       title: 'No Losses, Only Lessons',
       body: "When something doesn't work out, we figure out why and come back more experienced.",
-      cta: { label: 'Join The Membership', href: '#newsletter' },
+      cta: BRAND.membershipCta,
     },
     {
       title: 'Play The Long Game',
@@ -69,7 +70,7 @@ export const HOME_CORE_VALUES = {
 export const HOME_TESTED = {
   headingLines: ['Tested In Training.', 'Refined By Community.'],
   body: 'We think everyone builds a stronger version of themselves and of their community when you sweat together.',
-  cta: { label: 'Join The Membership', href: '#newsletter' },
+  cta: BRAND.membershipCta,
   video: 'https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4',
-  image: `${CDN}/two_walking_to_workout_cropped.png`,
+  image: fileUrl('two_walking_to_workout_cropped.png'),
 } as const;

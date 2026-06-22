@@ -4,6 +4,7 @@ import type { ProductFragment } from 'storefrontapi.generated';
 
 import { AddToCartButton } from '~/components/cart/AddToCartButton';
 import { useAside } from '~/components/layout/Aside';
+import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
 
 /** Map Shopify's verbose size values to the short labels the live PDP shows. */
@@ -82,7 +83,7 @@ export const ProductForm = ({
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => open('cart')}
-        className="bg-brand text-brand-text mt-2 w-full px-6 py-4 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+        className={cn(buttonVariants({ variant: 'brand' }), 'mt-2 h-auto w-full py-4')}
         lines={
           selectedVariant
             ? [{ merchandiseId: selectedVariant.id, quantity: 1, selectedVariant }]

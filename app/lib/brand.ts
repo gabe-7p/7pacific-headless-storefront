@@ -35,6 +35,10 @@ export const BRAND = {
     successMessage: 'Thanks for subscribing.',
   },
 
+  /** Membership call-to-action reused across marketing sections; `#newsletter`
+   * anchors to the footer signup. */
+  membershipCta: { label: 'Join The Membership', href: '#newsletter' },
+
   /** Fallback footer links, used only if the Storefront `footer` menu is empty. */
   footerLinks: [
     { title: 'Terms of Service', url: '/pages/terms-of-service' },
