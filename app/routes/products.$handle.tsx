@@ -13,6 +13,8 @@ import { Container } from '~/components/common/Container';
 import { BottomPhotography } from '~/components/product/BottomPhotography';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
+import { RelatedProducts } from '~/components/product/RelatedProducts';
+import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
 import { ColorSwatches, FeatureCarousel, TechStack } from '~/modules/product';
@@ -75,15 +77,23 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
  * fetched after the initial page load. If it's unavailable, the page should still 200.
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
-function loadDeferredData({ context, params }: Route.LoaderArgs) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
+function loadDeferredData({ context }: Route.LoaderArgs) {
+  // Related products (below the fold) — deferred and guarded so a failure can't
+  // 500 the page. Config-driven from the summer-25 collection for now.
+  const relatedProducts = context.storefront
+    .query(RELATED_PRODUCTS_QUERY, {
+      cache: context.storefront.CacheLong(),
+    })
+    .catch((error: Error) => {
+      console.error(error);
+      return null;
+    });
 
-  return {};
+  return { relatedProducts };
 }
 
 const Product = () => {
-  const { product } = useLoaderData<typeof loader>();
+  const { product, relatedProducts } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -144,6 +154,7 @@ const Product = () => {
       <FeatureCarousel handle={product.handle} />
       <TechStack handle={product.handle} />
       <BottomPhotography />
+      <RelatedProducts products={relatedProducts} currentHandle={product.handle} />
 
       <Analytics.ProductView
         data={{
@@ -240,6 +251,18 @@ const PRODUCT_FRAGMENT = `#graphql
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
+` as const;
+
+const RELATED_PRODUCTS_QUERY = `#graphql
+  ${PRODUCT_CARD_FRAGMENT}
+  query RelatedProducts($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    products(first: 10, sortKey: BEST_SELLING) {
+      nodes {
+        ...ProductCard
+      }
+    }
+  }
 ` as const;
 
 const PRODUCT_QUERY = `#graphql
