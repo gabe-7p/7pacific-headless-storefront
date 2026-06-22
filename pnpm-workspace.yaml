@@ -1,6 +1,9 @@
-# Allow these native dependencies to run their install/build scripts.
-# (pnpm blocks build scripts by default; these binaries are required by Hydrogen/Oxygen.)
-allowBuilds:
-  esbuild: true
-  unrs-resolver: true
-  workerd: true
+# Single-package repo: this file exists only to hold pnpm settings (the new home
+# for them in pnpm v10+). No `packages:` list — this is not a monorepo.
+#
+# Allow these native dependencies to run their install/build scripts. pnpm blocks
+# build scripts by default; these binaries are required by Hydrogen/Oxygen/Vite.
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver
+  - workerd
