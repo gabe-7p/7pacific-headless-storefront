@@ -204,14 +204,29 @@ export const ErrorBoundary = () => {
     errorMessage = error.message;
   }
 
+  const isNotFound = errorStatus === 404;
+
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
+    <div className="mx-auto flex min-h-[60vh] max-w-(--page-max) flex-col items-center justify-center px-4 py-20 text-center">
+      <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
+      <h1 className="mt-3 text-3xl font-bold tracking-wide uppercase md:text-4xl">
+        {isNotFound ? 'Page not found' : 'Something went wrong'}
+      </h1>
+      <p className="mt-4 max-w-md text-sm text-neutral-600">
+        {isNotFound
+          ? "The page you're looking for doesn't exist or has moved."
+          : 'An unexpected error occurred. Please try again.'}
+      </p>
+      <a
+        href="/"
+        className="bg-brand text-brand-text mt-8 inline-block px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90"
+      >
+        Back to shopping
+      </a>
+      {!isNotFound && errorMessage && (
+        <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-neutral-400">
+          {errorMessage}
+        </pre>
       )}
     </div>
   );
