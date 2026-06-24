@@ -75,7 +75,7 @@ On boot you should see `[storefront] Connected to "<your shop>"` — confirmatio
 
 ## Quality gate
 
-Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): type-check, lint, format check, dependency rules, and build. Locally, a commit triggers the same checks on staged files via husky + lint-staged, and commit messages must follow [Conventional Commits](https://www.conventionalcommits.org/).
+Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): type-check, lint, format check, dependency rules, and build. Locally, a commit triggers the same checks on staged files via husky + lint-staged.
 
 ## Deploy
 

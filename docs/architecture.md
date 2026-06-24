@@ -12,7 +12,7 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 | Data      | Shopify **Storefront API** + **Customer Account API**                         |
 | Types     | `@shopify/hydrogen-codegen` → `*.generated.d.ts`                              |
 | Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                               |
-| Tooling   | pnpm, ESLint (flat), Prettier, commitlint, dependency-cruiser                 |
+| Tooling   | pnpm, ESLint (flat), Prettier, dependency-cruiser                             |
 
 ## Request & data flow
 
