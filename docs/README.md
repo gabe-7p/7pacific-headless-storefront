@@ -5,6 +5,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 ## Contents
 
 - [architecture.md](architecture.md) — stack, request/data flow, code organization, the module pattern, env model, deployment.
+- [migration-playbook.md](migration-playbook.md) — the repeatable step-by-step process for porting a page/component from the live Liquid theme to Hydrogen (audit → assets → implement → visual + functional verify → done).
 - [decisions/](decisions/README.md) — Architecture Decision Records (the _why_ behind settled choices).
 
 ## If you're working on X, read Y
@@ -18,6 +19,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 | Adding/naming a component or data helper                | [.claude/rules/naming-conventions.md](../.claude/rules/naming-conventions.md)                                                                                                    |
 | Building UI / using a shadcn/ui primitive               | [.claude/rules/ui-components.md](../.claude/rules/ui-components.md) · [decisions/0006-shadcn-ui-for-headless-primitives.md](decisions/0006-shadcn-ui-for-headless-primitives.md) |
 | Building a new feature / module                         | [architecture.md](architecture.md#the-module-pattern-how-features-grow)                                                                                                          |
+| Porting a page/component from the live Liquid theme     | [migration-playbook.md](migration-playbook.md)                                                                                                                                   |
 | Touching products or color swatches                     | [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md) · [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)             |
 | Avoiding common bugs (nullability, waterfalls, secrets) | [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)                                                                                                          |
 | Adding env vars                                         | [.env.example](../.env.example) · [architecture.md](architecture.md#environment--secrets)                                                                                        |
