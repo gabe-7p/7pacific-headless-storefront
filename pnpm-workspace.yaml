@@ -1,3 +1,7 @@
+allowBuilds:
+  esbuild: false
+  unrs-resolver: false
+  workerd: false
 # Single-package repo: this file exists only to hold pnpm settings (the new home
 # for them in pnpm v10+). No `packages:` list — this is not a monorepo.
 #
