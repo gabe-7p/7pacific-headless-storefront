@@ -4,7 +4,7 @@ Headless storefront for **7Pacific** (DTC athletic apparel), built on **Shopify 
 
 - **Framework**: Hydrogen 2026.1 on React Router 7 · React 18 · Vite 6
 - **Styling**: Tailwind CSS v4 + shadcn/ui (Radix headless primitives, vendored into `app/components/ui/`)
-- **Data**: Shopify Storefront API + Customer Account API (typed via GraphQL codegen)
+- **Data**: Shopify Storefront API (typed via GraphQL codegen) — guest checkout, no customer accounts
 - **Hosting**: Oxygen (preview deploy per PR, production on `main`)
 
 New here? Read [CLAUDE.md](CLAUDE.md) for conventions and [docs/](docs/README.md) for architecture and decisions.
@@ -30,7 +30,7 @@ pnpm install
 
 ### Environment variables
 
-The app needs Storefront/Customer-Account credentials to render live data. Copy the template and fill it in:
+The app needs Storefront API credentials to render live data. Copy the template and fill it in:
 
 ```bash
 cp .env.example .env
@@ -93,7 +93,6 @@ app/
   routes/        one file per route; data loaders/actions live here
   components/    presentational components — layout/ cart/ product/ search/ common/ ui/ (shadcn primitives)
   lib/           GraphQL fragments, context, session, shared utilities
-  graphql/       Customer Account API operations
   styles/        Tailwind + minimal globals
 docs/            architecture, decision records, doc index
 .claude/         agent settings, /check & /review_pr commands, coding rules

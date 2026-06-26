@@ -27,7 +27,6 @@ conventions audit (**GD-32**). Each unit was built via the
 | Contact                       | `routes/pages.contact-us`                               | GD-25  |
 | Generic pages                 | `routes/pages.$handle`                                  | GD-26  |
 | Blog + article                | `routes/blogs.$blogHandle.*`                            | GD-27  |
-| Customer account              | `routes/account.*` (Customer Account API)               | GD-28  |
 | 404 + legacy redirects        | `root` ErrorBoundary, `routes/$` (`storefrontRedirect`) | GD-29  |
 | SEO/meta + JSON-LD            | `lib/seo` (`socialMeta`, `productJsonLd`)               | GD-30  |
 | UI primitives                 | `components/ui/*` (shadcn: button, dialog, select, …)   | GD-16  |
@@ -50,6 +49,9 @@ The full gate is green per PR and enforces the conventions in
   the same shape in `modules/product/content/product-features.ts`.
 - Contact + newsletter actions validate/acknowledge; wiring delivery to a provider
   is pending (Storefront API has no contact mutation).
-- Customer account round-trip (login → order → address) needs a signed-in smoke test.
+- Customer accounts are intentionally **not** rebuilt headless — we don't use the Customer
+  Account API and there are no storefront-hosted `/account` pages (order history, addresses,
+  profile). Checkout is Shopify-hosted (guest + Shop Pay). The header "Log in" icon links to
+  Shopify's hosted account portal via `{store-domain}/account`, which 302-redirects there.
 - **GD-31 production cutover** (custom domain on Oxygen, DNS, prod env, analytics)
   is an owner action and remains open.

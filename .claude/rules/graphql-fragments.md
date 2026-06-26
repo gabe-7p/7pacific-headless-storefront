@@ -1,6 +1,6 @@
 # GraphQL & Fragments
 
-How we write Storefront / Customer Account API operations. The whole approach is the Hydrogen-native one: co-located tagged-template strings + `@shopify/hydrogen-codegen`. No Apollo, no client cache, no separate `.graphql` files.
+How we write Storefront API operations. The whole approach is the Hydrogen-native one: co-located tagged-template strings + `@shopify/hydrogen-codegen`. No Apollo, no client cache, no separate `.graphql` files.
 
 ## The pattern
 
@@ -36,7 +36,7 @@ const { product } = await context.storefront.query(PRODUCT_QUERY, {
 - **Every operation string starts with the `#graphql` comment and ends with `as const`.** The `#graphql` triggers editor highlighting + GraphQL lint; `as const` is load-bearing — codegen keys the result type off the literal string, so without it you lose type inference.
 - **Shared shapes are fragments in `app/lib/fragments.ts`**; one-off queries stay co-located in their loader. Compose fragments by spreading (`...ProductCard`) and interpolating the fragment string (`${PRODUCT_CARD_FRAGMENT}`) into the query.
 - **Keep base fragments lean** — only fields every consumer needs. Feature-specific fields (PDP gallery, tech-stack metafields) belong in the query that needs them, not in the shared base fragment.
-- **Import generated types, never hand-write them.** `ProductCardFragment`, `ProductQuery`, etc. come from `'storefrontapi.generated'` (Customer Account types from `'customer-accountapi.generated'`).
+- **Import generated types, never hand-write them.** `ProductCardFragment`, `ProductQuery`, etc. come from `'storefrontapi.generated'`.
 - **Run `pnpm graphql:generate` after editing any query/fragment.** `pnpm dev` and `pnpm build` run codegen automatically; `pnpm type-check` in CI catches a stale/mismatched type.
 - **Localize where relevant** with `@inContext(country:$country, language:$language)` and the matching `$country`/`$language` variables (we're English/US for v1, but keep the directive).
 - **Set caching** on storefront queries (`cache: storefront.CacheLong()` for menus/catalog that rarely change, `CacheShort()` for volatile data).
@@ -48,4 +48,4 @@ PascalCase fragment name → `<Name>Fragment` type. Query const in `SCREAMING_SN
 
 ## Don't edit the generated files
 
-`storefrontapi.generated.d.ts` and `customer-accountapi.generated.d.ts` are outputs — change the source operation and regenerate.
+`storefrontapi.generated.d.ts` is an output — change the source operation and regenerate.

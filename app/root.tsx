@@ -129,7 +129,7 @@ async function loadCriticalData({ context }: Route.LoaderArgs) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({ context }: Route.LoaderArgs) {
-  const { storefront, customerAccount, cart } = context;
+  const { storefront, cart } = context;
 
   // defer the footer query (below the fold)
   const footer = storefront
@@ -146,7 +146,6 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
     });
   return {
     cart: cart.get(),
-    isLoggedIn: customerAccount.isLoggedIn(),
     footer,
   };
 }
