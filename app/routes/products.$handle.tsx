@@ -14,7 +14,7 @@ import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
-import { ColorSwatches } from '~/modules/product';
+import { ColorSwatches, FeatureCarousel } from '~/modules/product';
 
 import type { Route } from './+types/products.$handle';
 
@@ -139,6 +139,9 @@ const Product = () => {
           </div>
         </Container>
       </section>
+
+      <FeatureCarousel handle={product.handle} />
+
       <Analytics.ProductView
         data={{
           products: [
