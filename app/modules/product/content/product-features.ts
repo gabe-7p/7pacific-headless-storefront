@@ -35,3 +35,41 @@ export const PRODUCT_FEATURES: Partial<Record<ProductType, ReadonlyArray<Product
     },
   ],
 };
+
+export type TechRow = {
+  label: string;
+  /** One or more lines of detail rendered under the row. */
+  lines: ReadonlyArray<string>;
+};
+
+/**
+ * PDP tech-stack accordion rows, keyed by product type (live `tech-stack`
+ * section, which is product-type conditional). Shorts populated from live;
+ * DETAILS/CARE are shared, MATERIALS differs by type.
+ */
+const SHARED_TECH: ReadonlyArray<TechRow> = [
+  { label: 'Details', lines: ['Designed in San Francisco. Made in China.'] },
+  {
+    label: 'Care',
+    lines: [
+      'Machine wash cold',
+      'Wash with like colors',
+      'Do not bleach',
+      'Lay flat to dry',
+      'Do not iron',
+    ],
+  },
+];
+
+export const PRODUCT_TECH_STACK: Partial<Record<ProductType, ReadonlyArray<TechRow>>> = {
+  short: [
+    {
+      label: 'Materials',
+      lines: [
+        'Shell: 92% Polyester, 8% Elastane',
+        'Inner Short: 82% Recycled Polyester, 18% Elastane',
+      ],
+    },
+    ...SHARED_TECH,
+  ],
+};
