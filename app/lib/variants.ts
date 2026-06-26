@@ -15,7 +15,7 @@ export function useVariantUrl(handle: string, selectedOptions?: SelectedOption[]
   }, [handle, selectedOptions, pathname]);
 }
 
-export function getVariantUrl({
+function getVariantUrl({
   handle,
   pathname,
   searchParams,

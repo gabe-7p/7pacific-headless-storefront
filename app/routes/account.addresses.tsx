@@ -17,7 +17,7 @@ import {
 
 import type { Route } from './+types/account.addresses';
 
-export type ActionResponse = {
+type ActionResponse = {
   addressId?: string | null;
   createdAddress?: AddressFragment;
   defaultAddress?: string | null;
@@ -332,7 +332,7 @@ const ExistingAddresses = ({
   );
 };
 
-export const AddressForm = ({
+const AddressForm = ({
   addressId,
   address,
   defaultAddress,

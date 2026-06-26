@@ -6,7 +6,7 @@ import { CUSTOMER_UPDATE_MUTATION } from '~/graphql/customer-account/CustomerUpd
 
 import type { Route } from './+types/account.profile';
 
-export type ActionResponse = {
+type ActionResponse = {
   error: string | null;
   customer: CustomerFragment | null;
 };
