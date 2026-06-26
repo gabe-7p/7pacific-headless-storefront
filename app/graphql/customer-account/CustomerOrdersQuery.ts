@@ -1,5 +1,5 @@
 // NOTE: https://shopify.dev/docs/api/customer/latest/objects/Order
-export const ORDER_ITEM_FRAGMENT = `#graphql
+const ORDER_ITEM_FRAGMENT = `#graphql
   fragment OrderItem on Order {
     totalPrice {
       amount
@@ -20,7 +20,7 @@ export const ORDER_ITEM_FRAGMENT = `#graphql
 ` as const;
 
 // NOTE: https://shopify.dev/docs/api/customer/latest/objects/Customer
-export const CUSTOMER_ORDERS_FRAGMENT = `#graphql
+const CUSTOMER_ORDERS_FRAGMENT = `#graphql
   fragment CustomerOrders on Customer {
     orders(
       sortKey: PROCESSED_AT,

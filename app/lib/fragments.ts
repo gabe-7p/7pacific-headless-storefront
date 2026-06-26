@@ -278,23 +278,3 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     }
   }
 ` as const;
-
-/**
- * The minimal collection shape for collection lists and links.
- * Spread into a query alongside `${COLLECTION_CARD_FRAGMENT}`.
- */
-export const COLLECTION_CARD_FRAGMENT = `#graphql
-  fragment CollectionCard on Collection {
-    id
-    handle
-    title
-    description
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
-` as const;

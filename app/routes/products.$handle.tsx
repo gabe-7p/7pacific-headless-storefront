@@ -78,7 +78,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
   return {};
 }
 
-const Product = () => {
+const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
   const { product } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information

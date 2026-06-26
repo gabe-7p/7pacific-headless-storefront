@@ -8,7 +8,7 @@
  * app/styles/tailwind.css; this file is for content/data.
  */
 
-export type SocialPlatform = 'Instagram';
+type SocialPlatform = 'Instagram';
 export type SocialLink = { platform: SocialPlatform; href: string };
 export type NavLink = { title: string; url: string };
 
