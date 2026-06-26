@@ -4,12 +4,14 @@ import { type FetcherWithComponents } from 'react-router';
 export const AddToCartButton = ({
   analytics,
   children,
+  className,
   disabled,
   lines,
   onClick,
 }: {
   analytics?: unknown;
   children: React.ReactNode;
+  className?: string;
   disabled?: boolean;
   lines: Array<OptimisticCartLineInput>;
   onClick?: () => void;
@@ -19,7 +21,12 @@ export const AddToCartButton = ({
       {(fetcher: FetcherWithComponents<unknown>) => (
         <>
           <input name="analytics" type="hidden" value={JSON.stringify(analytics)} />
-          <button type="submit" onClick={onClick} disabled={disabled ?? fetcher.state !== 'idle'}>
+          <button
+            type="submit"
+            className={className}
+            onClick={onClick}
+            disabled={disabled ?? fetcher.state !== 'idle'}
+          >
             {children}
           </button>
         </>
