@@ -22,7 +22,7 @@ const first = collection.products.nodes[0]?.title;
 
 ## Don't expose private tokens to the browser
 
-`PUBLIC_*` env vars are safe client-side; `PRIVATE_STOREFRONT_API_TOKEN`, `SESSION_SECRET`, and the Customer Account client secret are **server-only**. Never reference them in component code or pass them through loader return data.
+`PUBLIC_*` env vars are safe client-side; `PRIVATE_STOREFRONT_API_TOKEN` and `SESSION_SECRET` are **server-only**. Never reference them in component code or pass them through loader return data.
 
 ## Avoid request waterfalls
 
@@ -69,4 +69,4 @@ The 9 live products are **separate Shopify products per color**, not variants. C
 
 ## Don't edit generated files
 
-`storefrontapi.generated.d.ts`, `customer-accountapi.generated.d.ts`, and `.react-router/types/*` are regenerated — edit the source query/fragment and re-run codegen.
+`storefrontapi.generated.d.ts` and `.react-router/types/*` are regenerated — edit the source query/fragment and re-run codegen.

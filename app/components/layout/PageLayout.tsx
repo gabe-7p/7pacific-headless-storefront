@@ -12,7 +12,6 @@ type PageLayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
   footer: Promise<FooterQuery | null>;
   header: HeaderQuery;
-  isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
   children?: React.ReactNode;
 };
@@ -22,7 +21,6 @@ export const PageLayout = ({
   children = null,
   footer,
   header,
-  isLoggedIn,
   publicStoreDomain,
 }: PageLayoutProps) => {
   return (
@@ -30,14 +28,7 @@ export const PageLayout = ({
       <CartAside cart={cart} />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
       <Announcement />
-      {header && (
-        <Header
-          header={header}
-          cart={cart}
-          isLoggedIn={isLoggedIn}
-          publicStoreDomain={publicStoreDomain}
-        />
-      )}
+      {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
       <main>{children}</main>
       <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
     </Aside.Provider>
