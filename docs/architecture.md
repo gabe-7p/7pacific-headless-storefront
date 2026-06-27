@@ -9,10 +9,10 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 | Framework | Hydrogen 2026.1 on **React Router 7** (not Remix), Vite 6                     |
 | Runtime   | Oxygen (Shopify's edge worker hosting)                                        |
 | UI        | React 18 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives |
-| Data      | Shopify **Storefront API** + **Customer Account API**                         |
+| Data      | Shopify **Storefront API** (guest checkout — no customer accounts)            |
 | Types     | `@shopify/hydrogen-codegen` → `*.generated.d.ts`                              |
 | Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                               |
-| Tooling   | pnpm, ESLint (flat), Prettier, commitlint, dependency-cruiser                 |
+| Tooling   | pnpm, ESLint (flat), Prettier, dependency-cruiser                             |
 
 ## Request & data flow
 
@@ -23,7 +23,7 @@ Browser ── request ──▶ Oxygen worker
                          │
                          ▼
               route loader / action  ──▶  context.storefront.query(...)  ──▶  Shopify Storefront API
-                         │                 context.customerAccount / context.cart
+                         │                 context.cart
                          ▼
               typed data returned to the route
                          │
@@ -31,7 +31,7 @@ Browser ── request ──▶ Oxygen worker
               React components render (Tailwind + shadcn/ui primitives)  ──▶  HTML streamed to browser
 ```
 
-- **`context`** (built in [app/lib/context.ts](../app/lib/context.ts)) exposes `storefront`, `customerAccount`, `cart`, `session`, and `env` to every loader/action.
+- **`context`** (built in [app/lib/context.ts](../app/lib/context.ts)) exposes `storefront`, `cart`, `session`, and `env` to every loader/action.
 - **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise and rendered with `<Suspense>`/`<Await>` so it doesn't block first byte.
 - **Independent queries run in parallel** (`Promise.all`) to avoid request waterfalls.
 
@@ -39,7 +39,7 @@ See [.claude/rules/module-boundaries.md](../.claude/rules/module-boundaries.md) 
 
 ## GraphQL
 
-Queries are co-located `#graphql` tagged-template `const`s ending in `as const`; shared shapes are fragments in [app/lib/fragments.ts](../app/lib/fragments.ts). `pnpm graphql:generate` reads those strings and emits typed results into `storefrontapi.generated.d.ts` / `customer-accountapi.generated.d.ts`, which you import from — never hand-write response types. Full rules: [.claude/rules/graphql-fragments.md](../.claude/rules/graphql-fragments.md).
+Queries are co-located `#graphql` tagged-template `const`s ending in `as const`; shared shapes are fragments in [app/lib/fragments.ts](../app/lib/fragments.ts). `pnpm graphql:generate` reads those strings and emits typed results into `storefrontapi.generated.d.ts`, which you import from — never hand-write response types. Full rules: [.claude/rules/graphql-fragments.md](../.claude/rules/graphql-fragments.md).
 
 ## Code organization
 
@@ -55,7 +55,6 @@ app/
     search/      search + predictive search
     common/      shared primitives
   lib/           fragments.ts, context.ts, session.ts, search.ts, variants.ts, …
-  graphql/       customer-account/ operations
   styles/        tailwind.css + globals
 ```
 
@@ -89,7 +88,7 @@ The 9 live products are **separate Shopify products per color**, not Shopify var
 
 ## Environment & secrets
 
-Configuration is via environment variables ([.env.example](../.env.example) documents each). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN`, `SESSION_SECRET`, and the Customer Account client secret are **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`).
+Configuration is via environment variables ([.env.example](../.env.example) documents each). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` and `SESSION_SECRET` are **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`).
 
 ## Deployment
 
@@ -102,4 +101,4 @@ CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality ga
 
 ## Migration context
 
-This repo replaces a customized **Impulse v8** Liquid theme. We migrate **live pages only** (home, product, collection, our-story, contact, cart, search, account), English-only, with marketing copy as typed TS constants. The full migration plan lives in Linear epic **GD-1** ("Refactor" project); each ticket maps _what exists now → what it becomes_ and ships independently.
+This repo replaces a customized **Impulse v8** Liquid theme. We migrate **live pages only** (home, product, collection, our-story, contact, cart, search), English-only, with marketing copy as typed TS constants. The full migration plan lives in Linear epic **GD-1** ("Refactor" project); each ticket maps _what exists now → what it becomes_ and ships independently.

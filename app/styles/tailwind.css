@@ -90,7 +90,7 @@
  * values are never repeated inline. Coexists with the shadcn tokens above.
  */
 @theme {
-  --font-sans: 'Barlow', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: 'Barlow', sans-serif; /* matches the live Impulse theme exactly */
 
   --color-announcement: #000000;
   --color-announcement-text: #ffffff;
@@ -115,8 +115,279 @@
  */
 :root {
   --page-max: 1400px;
-  --header-h: 4rem; /* 64px */
-  --announcement-h: 2rem; /* 32px */
+  --header-h: 5.75rem; /* 92px — matches live Impulse header (logo ~47px + 20px padding each side) */
+  --announcement-h: 1.75rem; /* 28px — matches live announcement bar */
   --topbar-h: calc(var(--header-h) + var(--announcement-h));
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* ============================================================================
+ * Migrated base + component styles (was reset.css + app.css)
+ *
+ * These rules are intentionally UNLAYERED plain CSS — they sit outside any
+ * `@layer`, exactly as the old reset.css/app.css link tags did, so unlayered
+ * rules still win over Tailwind's layered utilities and the cascade is
+ * unchanged from before the merge. Only rules whose elements/classes are still
+ * referenced were kept; the Hydrogen demo skeleton (aside drawer, .header/
+ * .footer/.cart-* classes, featured-collection grids, …) was dropped as dead.
+ *
+ * Long-term these legacy global classes should migrate to Tailwind utilities in
+ * the components that use them (predictive-search, product-*, order-search-*),
+ * at which point this block shrinks toward just the base element resets.
+ *
+ * NB: don't set `font-family` here — Tailwind owns it via `font-sans` (Barlow)
+ * on <body>; an unlayered rule here would override that utility site-wide.
+ * ========================================================================== */
+
+/* --- base element resets (was reset.css) --- */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+h5 {
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+hr {
+  border-bottom: none;
+  border-top: 1px solid #000;
+  margin: 0;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+body > main {
+  margin: 0 1rem 1rem 1rem;
+}
+
+section {
+  padding: 1rem 0;
+  @media (min-width: 768px) {
+    padding: 2rem 0;
+  }
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+}
+
+form {
+  max-width: 100%;
+  @media (min-width: 768px) {
+    max-width: 400px;
+  }
+}
+
+input {
+  border-radius: 4px;
+  border: 1px solid #000;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+}
+
+legend {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+dl {
+  margin: 0.5rem 0;
+}
+
+code {
+  background: #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+  padding: 0.25rem;
+}
+
+/* --- component styles still referenced by JSX (was app.css) --- */
+img {
+  border-radius: 4px;
+}
+
+/* non-anchor links (e.g. unavailable product options) */
+.link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* routes/products.$handle.tsx */
+.product {
+  display: grid;
+  @media (min-width: 45em) {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 4rem;
+  }
+}
+
+.product h1 {
+  margin-top: 0;
+}
+
+.product-image img {
+  height: auto;
+  width: 100%;
+}
+
+.product-main {
+  align-self: start;
+  position: sticky;
+  top: 6rem;
+}
+
+.product-price-on-sale {
+  display: flex;
+  grid-gap: 0.5rem;
+}
+
+.product-price-on-sale s {
+  opacity: 0.5;
+}
+
+.product-options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 0.75rem;
+}
+
+.product-options-item,
+.product-options-item:disabled {
+  padding: 0.25rem 0.5rem;
+  background-color: transparent;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.product-option-label-swatch {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.25rem 0;
+}
+
+.product-option-label-swatch img {
+  width: 100%;
+}
+
+/* routes/account */
+.account-logout {
+  display: inline-block;
+}
+
+.order-search-form {
+  margin-bottom: 1.5rem;
+}
+
+.order-search-fieldset {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.order-search-legend {
+  font-weight: 600;
+  padding: 0 0.5rem;
+}
+
+.order-search-inputs {
+  display: grid;
+  gap: 1rem;
+  margin: 0.25rem 0 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .order-search-inputs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.order-search-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.order-search-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }

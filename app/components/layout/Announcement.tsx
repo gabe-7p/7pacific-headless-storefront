@@ -7,11 +7,7 @@ import { BRAND } from '~/lib/brand';
  */
 export const Announcement = () => {
   const { message, href } = BRAND.announcement;
-  const content = (
-    <span className="text-[10px] font-semibold tracking-[0.18em] uppercase md:text-[11px]">
-      {message}
-    </span>
-  );
+  const content = <span className="text-xs font-normal tracking-wide">{message}</span>;
 
   return (
     <div className="bg-announcement text-announcement-text fixed inset-x-0 top-0 z-50 flex h-(--announcement-h) items-center justify-center px-4 text-center">

@@ -13,7 +13,6 @@ import { cn } from '~/lib/cn';
 type HeaderProps = {
   header: HeaderQuery;
   cart: Promise<CartApiQueryFragment | null>;
-  isLoggedIn: Promise<boolean>;
   publicStoreDomain: string;
 };
 
@@ -35,7 +34,7 @@ const useScrolledPast = (threshold: number) => {
   return scrolled;
 };
 
-export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderProps) => {
+export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
   const { shop, menu } = header;
   const { pathname } = useLocation();
   const scrolled = useScrolledPast(STICKY_THRESHOLD);
@@ -73,10 +72,10 @@ export const Header = ({ header, isLoggedIn, cart, publicStoreDomain }: HeaderPr
             className="justify-self-center"
             aria-label={shop.name}
           >
-            <Logo tone={overlay ? 'light' : 'dark'} />
+            <Logo tone={overlay ? 'light' : 'dark'} className="h-8 md:h-12" />
           </NavLink>
 
-          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+          <HeaderCtas cart={cart} publicStoreDomain={publicStoreDomain} />
         </Container>
       </header>
       {/* Spacer so content isn't hidden under the fixed header (skipped on the
@@ -134,8 +133,8 @@ export const HeaderMenu = ({
             to={toInternalPath(item.url)}
             className={({ isActive }) =>
               cn(
-                'tracking-wide uppercase transition-opacity hover:opacity-70',
-                isMobile ? 'py-3 text-lg font-medium' : 'text-xs font-medium',
+                'tracking-wide transition-opacity hover:opacity-70',
+                isMobile ? 'py-3 text-lg font-medium' : 'text-xs font-normal',
                 isActive && 'underline underline-offset-4'
               )
             }
@@ -144,20 +143,39 @@ export const HeaderMenu = ({
           </NavLink>
         );
       })}
+      {/* Mobile-only login — desktop shows the account icon in HeaderCtas instead.
+          Links out to Shopify's hosted account portal (see HeaderCtas for why). */}
+      {isMobile && (
+        <a
+          href={`https://${publicStoreDomain}/account`}
+          onClick={close}
+          className="py-3 text-lg font-medium tracking-wide"
+        >
+          Log in
+        </a>
+      )}
     </nav>
   );
 };
 
-const HeaderCtas = ({ isLoggedIn, cart }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) => {
+const HeaderCtas = ({
+  cart,
+  publicStoreDomain,
+}: Pick<HeaderProps, 'cart' | 'publicStoreDomain'>) => {
   return (
     <nav className="flex items-center justify-end gap-4" role="navigation">
-      <NavLink prefetch="intent" to="/account" className="transition-opacity hover:opacity-70">
-        <Suspense fallback={<AccountIcon label="Sign in" />}>
-          <Await resolve={isLoggedIn} errorElement={<AccountIcon label="Sign in" />}>
-            {(loggedIn) => <AccountIcon label={loggedIn ? 'Account' : 'Sign in'} />}
-          </Await>
-        </Suspense>
-      </NavLink>
+      {/* Customer login lives on Shopify's hosted account portal, not this headless
+          storefront (we don't use the Customer Account API). `{store-domain}/account`
+          302-redirects to it; the myshopify domain is always Shopify-served, so this
+          link survives the custom-domain cutover. Desktop-only, mirroring the cart. */}
+      <a
+        href={`https://${publicStoreDomain}/account`}
+        className="hidden items-center transition-opacity hover:opacity-70 md:inline-flex"
+        title="Log in"
+      >
+        <User className="size-[22px]" strokeWidth={1.6} />
+        <span className="sr-only">Log in</span>
+      </a>
       <CartToggle cart={cart} />
     </nav>
   );
@@ -176,13 +194,6 @@ const HeaderMenuMobileToggle = () => {
     </button>
   );
 };
-
-const AccountIcon = ({ label }: { label: string }) => (
-  <span className="inline-flex items-center" title={label}>
-    <User className="size-[22px]" strokeWidth={1.6} />
-    <span className="sr-only">{label}</span>
-  </span>
-);
 
 const CartBadge = ({ count }: { count: number | null }) => {
   const { open } = useAside();

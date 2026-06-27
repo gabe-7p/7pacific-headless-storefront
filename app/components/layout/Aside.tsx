@@ -2,7 +2,7 @@ import { createContext, type ReactNode, useContext, useState } from 'react';
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '~/components/ui/sheet';
 
-type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
+type AsideType = 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
   type: AsideType;
   open: (mode: AsideType) => void;

@@ -8,7 +8,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 
 - **Framework**: Hydrogen 2026.1.1 on React Router 7 (loaders/actions, server-first), React 18, Vite 6
 - **Hosting**: Oxygen (deploys from GitHub — preview per PR, production on `main`)
-- **Data**: Shopify Storefront API + Customer Account API, typed via `@shopify/hydrogen-codegen`
+- **Data**: Shopify Storefront API, typed via `@shopify/hydrogen-codegen` (guest checkout — no customer accounts)
 - **Styling**: Tailwind v4 (no CSS-in-JS, no runtime UI kit) + **shadcn/ui** for headless primitives — Radix behavior, vendored into `app/components/ui/` and styled with Tailwind
 - **Language**: TypeScript (strict, `noUncheckedIndexedAccess`); package manager **pnpm**; Node 22
 
@@ -33,9 +33,8 @@ app/
   routes/        one file per route (React Router flat convention); loader/action live here
   components/    presentational only — layout/ cart/ product/ search/ common/ ui/ (generated shadcn primitives)
   lib/           fragments.ts, context.ts, session.ts, cross-cutting utils (+ colorMap.ts, future)
-  graphql/       customer-account/ operations
   styles/        tailwind.css + minimal globals
-*.generated.d.ts storefront / customer-account types (GENERATED — never edit)
+*.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```

@@ -13,8 +13,6 @@ import {
 
 import favicon from '~/assets/favicon.svg';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
-import appStyles from '~/styles/app.css?url';
-import resetStyles from '~/styles/reset.css?url';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -41,8 +39,8 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, current
 };
 
 /**
- * The main and reset stylesheets are added in the Layout component
- * to prevent a bug in development HMR updates.
+ * The Tailwind stylesheet is added via a <link> in the Layout component
+ * (not here) to prevent a bug in development HMR updates.
  *
  * This avoids the "failed to execute 'insertBefore' on 'Node'" error
  * that occurs after editing and navigating to another page.
@@ -131,7 +129,7 @@ async function loadCriticalData({ context }: Route.LoaderArgs) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({ context }: Route.LoaderArgs) {
-  const { storefront, customerAccount, cart } = context;
+  const { storefront, cart } = context;
 
   // defer the footer query (below the fold)
   const footer = storefront
@@ -148,7 +146,6 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
     });
   return {
     cart: cart.get(),
-    isLoggedIn: customerAccount.isLoggedIn(),
     footer,
   };
 }
@@ -162,8 +159,6 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={tailwindCss}></link>
-        <link rel="stylesheet" href={resetStyles}></link>
-        <link rel="stylesheet" href={appStyles}></link>
         <Meta />
         <Links />
       </head>
