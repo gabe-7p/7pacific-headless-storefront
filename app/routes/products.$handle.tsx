@@ -16,18 +16,39 @@ import { ProductPrice } from '~/components/product/ProductPrice';
 import { RelatedProducts } from '~/components/product/RelatedProducts';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
-import { pageTitle } from '~/lib/seo';
+import { pageTitle, productJsonLd, socialMeta } from '~/lib/seo';
 import { ColorSwatches, FeatureCarousel, TechStack } from '~/modules/product';
 
 import type { Route } from './+types/products.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
+  const product = data?.product;
+  if (!product) return [{ title: pageTitle() }];
+
+  const variant = product.selectedOrFirstAvailableVariant;
+  const image = variant?.image?.url;
+  const url = `/products/${product.handle}`;
+  const title = pageTitle(product.title);
+
   return [
-    { title: pageTitle(data?.product.title) },
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
+    { title },
+    { rel: 'canonical', href: url },
+    ...socialMeta({
+      title,
+      description: product.seo?.description || product.description,
+      image,
+      url,
+      type: 'product',
+    }),
+    productJsonLd({
+      title: product.title,
+      description: product.seo?.description || product.description,
+      image,
+      url,
+      price: variant?.price?.amount,
+      currency: variant?.price?.currencyCode,
+      available: variant?.availableForSale,
+    }),
   ];
 };
 
