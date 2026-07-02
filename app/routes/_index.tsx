@@ -1,5 +1,6 @@
 import { useLoaderData } from 'react-router';
 
+import { FadeIn, MotionProvider } from '~/components/common/Motion';
 import { CoreValues } from '~/components/home/CoreValues';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
@@ -29,12 +30,18 @@ export async function loader({ context }: Route.LoaderArgs) {
 const Homepage = () => {
   const { products } = useLoaderData<typeof loader>();
   return (
-    <>
+    <MotionProvider>
       <Hero />
-      <FirstDrop products={products} />
-      <CoreValues />
-      <TestedInTraining />
-    </>
+      <FadeIn>
+        <FirstDrop products={products} />
+      </FadeIn>
+      <FadeIn>
+        <CoreValues />
+      </FadeIn>
+      <FadeIn>
+        <TestedInTraining />
+      </FadeIn>
+    </MotionProvider>
   );
 };
 

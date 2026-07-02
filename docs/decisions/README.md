@@ -39,3 +39,4 @@ What this makes easy, what it costs, what we're explicitly not doing.
 | [0004](0004-native-graphql-pattern.md)            | Hydrogen-native GraphQL pattern (no Apollo)          |
 | [0005](0005-color-as-separate-product.md)         | Keep "color = separate product" data model for v1    |
 | [0006](0006-shadcn-ui-for-headless-primitives.md) | shadcn/ui for headless primitives (refines 0002)     |
+| [0007](0007-motion-for-animation.md)              | Motion for animation, not GSAP (extends 0002)        |
