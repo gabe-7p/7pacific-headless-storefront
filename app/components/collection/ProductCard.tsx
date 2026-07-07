@@ -14,8 +14,10 @@ type ProductCardProps = {
 
 /**
  * Grid product card — image, optional badge, title, price, and color swatches
- * linking to sibling color products. Presentational: renders the typed
- * `ProductCardFragment` it's given and fetches nothing.
+ * linking to sibling color products. Swatches are hidden at rest and revealed
+ * on card hover, matching the live theme's resting card (image/title/price
+ * only). Presentational: renders the typed `ProductCardFragment` it's given
+ * and fetches nothing.
  */
 export const ProductCard = ({
   product,
@@ -52,7 +54,10 @@ export const ProductCard = ({
           {title}
         </Link>
         <Money data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />
-        <ColorSwatches handle={handle} className="mt-1" />
+        <ColorSwatches
+          handle={handle}
+          className="mt-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
+        />
       </div>
     </div>
   );
