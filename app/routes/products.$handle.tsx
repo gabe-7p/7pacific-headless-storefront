@@ -10,6 +10,7 @@ import {
 import { redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
@@ -113,22 +114,25 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
         )}
         <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-transparent lg:from-black/20" />
         <Container className="relative z-10">
-          <div className="max-w-md bg-black/70 p-8 backdrop-blur-sm md:p-10">
-            <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
-            <div className="mt-3 text-lg">
-              <ProductPrice
-                price={selectedVariant?.price}
-                compareAtPrice={selectedVariant?.compareAtPrice}
-              />
+          <div className="flex max-w-md flex-col bg-white text-neutral-900">
+            <div className="p-8 md:p-10">
+              <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
+              <div className="mt-3 text-lg">
+                <ProductPrice
+                  price={selectedVariant?.price}
+                  compareAtPrice={selectedVariant?.compareAtPrice}
+                />
+              </div>
+              {description && (
+                <p className="mt-4 line-clamp-8 text-sm leading-relaxed text-neutral-600">
+                  {description}
+                </p>
+              )}
+              <div className="mt-6">
+                <ProductForm productOptions={productOptions} />
+              </div>
             </div>
-            {description && (
-              <p className="mt-4 line-clamp-8 text-sm leading-relaxed text-white/75">
-                {description}
-              </p>
-            )}
-            <div className="mt-6">
-              <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
-            </div>
+            <AddToCartBar selectedVariant={selectedVariant} />
           </div>
         </Container>
       </section>

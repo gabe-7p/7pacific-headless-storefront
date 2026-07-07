@@ -2,8 +2,6 @@ import { type MappedProductOptions } from '@shopify/hydrogen';
 import { useNavigate } from 'react-router';
 import type { ProductFragment } from 'storefrontapi.generated';
 
-import { AddToCartButton } from '~/components/cart/AddToCartButton';
-import { useAside } from '~/components/layout/Aside';
 import { cn } from '~/lib/cn';
 
 /** Map Shopify's verbose size values to the short labels the live PDP shows. */
@@ -21,19 +19,13 @@ const SIZE_LABELS: Record<string, string> = {
 const shortLabel = (value: string) => SIZE_LABELS[value.trim().toLowerCase()] ?? value;
 
 /**
- * Buy-box options + add-to-cart, styled for the dark PDP buy-box panel.
+ * Buy-box options (size/variant selector), styled for the white PDP buy card.
  * Size values render as buttons (mapped to S/M/L/XL); a single-value option
- * (e.g. the hat's "One Size") renders as a disabled pill.
+ * (e.g. the hat's "One Size") renders as a disabled pill. Add-to-cart lives in
+ * a separate AddToCartBar rendered flush at the card bottom.
  */
-export const ProductForm = ({
-  productOptions,
-  selectedVariant,
-}: {
-  productOptions: MappedProductOptions[];
-  selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
-}) => {
+export const ProductForm = ({ productOptions }: { productOptions: MappedProductOptions[] }) => {
   const navigate = useNavigate();
-  const { open } = useAside();
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,7 +33,7 @@ export const ProductForm = ({
         const isSingle = option.optionValues.length === 1;
         return (
           <div key={option.name}>
-            <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-white/70 uppercase">
+            <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
               {option.name}
             </p>
             <div className="flex flex-wrap gap-2">
@@ -64,8 +56,8 @@ export const ProductForm = ({
                     className={cn(
                       'min-w-11 border px-3 py-2 text-sm font-medium transition-colors',
                       selected
-                        ? 'border-white bg-white text-black'
-                        : 'border-white/40 text-white hover:border-white',
+                        ? 'border-neutral-900 bg-neutral-900 text-white'
+                        : 'border-neutral-300 text-neutral-900 hover:border-neutral-900',
                       !available && 'opacity-40',
                       isSingle && 'cursor-default'
                     )}
@@ -78,19 +70,6 @@ export const ProductForm = ({
           </div>
         );
       })}
-
-      <AddToCartButton
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => open('cart')}
-        className="bg-brand text-brand-text mt-2 w-full px-6 py-4 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
-        lines={
-          selectedVariant
-            ? [{ merchandiseId: selectedVariant.id, quantity: 1, selectedVariant }]
-            : []
-        }
-      >
-        {selectedVariant?.availableForSale ? 'Add to cart //' : 'Sold out'}
-      </AddToCartButton>
     </div>
   );
 };
