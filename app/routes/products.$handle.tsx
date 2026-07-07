@@ -15,6 +15,7 @@ import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
+import { ColorSwatches } from '~/modules/product';
 
 import type { Route } from './+types/products.$handle';
 
@@ -128,6 +129,12 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
                   {description}
                 </p>
               )}
+              <div className="mt-6">
+                <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
+                  Color
+                </p>
+                <ColorSwatches handle={product.handle} size="lg" alwaysRender />
+              </div>
               <div className="mt-6">
                 <ProductForm productOptions={productOptions} />
               </div>
