@@ -1,7 +1,8 @@
-import { Image, Money } from '@shopify/hydrogen';
+import { Image } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 import type { ProductCardFragment } from 'storefrontapi.generated';
 
+import { Price } from '~/components/common/Price';
 import { ColorSwatches } from '~/modules/product';
 
 type ProductCardProps = {
@@ -53,7 +54,7 @@ export const ProductCard = ({
         <Link to={to} prefetch="intent" className="text-xs font-medium tracking-wide uppercase">
           {title}
         </Link>
-        <Money data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />
+        <Price data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />
         <ColorSwatches
           handle={handle}
           className="mt-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
