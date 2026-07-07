@@ -1,4 +1,4 @@
-import { Form, useActionData, useNavigation } from 'react-router';
+import { Form, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
@@ -11,6 +11,16 @@ import type { Route } from './+types/pages.contact-us';
 export const meta: Route.MetaFunction = () => {
   return [{ title: pageTitle('Contact Us') }];
 };
+
+export async function loader({ context }: Route.LoaderArgs) {
+  // The live Contact page's static copy (intro, support email, returns block)
+  // lives in the Shopify page body; render it above the form.
+  const { page } = await context.storefront.query(CONTACT_PAGE_QUERY, {
+    variables: { handle: 'contact-us' },
+    cache: context.storefront.CacheLong(),
+  });
+  return { page };
+}
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -37,6 +47,7 @@ const fieldClass =
   'w-full border border-border-subtle bg-white px-4 py-3 text-sm focus:border-black focus:outline-none';
 
 const Contact = () => {
+  const { page } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
   const submitting = navigation.state !== 'idle';
@@ -44,12 +55,20 @@ const Contact = () => {
 
   return (
     <Container className="max-w-2xl py-16 md:py-24">
-      <div className="text-center">
-        <Heading as="h1" size="lg">
-          {CONTACT.heading}
-        </Heading>
-        <p className="mx-auto mt-3 max-w-md text-sm text-neutral-600">{CONTACT.intro}</p>
-      </div>
+      <Heading as="h1" size="lg">
+        Contact Us
+      </Heading>
+
+      {page?.body && (
+        <div
+          className="mt-6 [&_a]:text-brand [&_a]:underline [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:uppercase [&_p]:mt-4 [&_p]:text-sm [&_p]:leading-7 [&_p]:text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-900"
+          dangerouslySetInnerHTML={{ __html: page.body }}
+        />
+      )}
+
+      <Heading as="h2" size="md" className="mt-12">
+        Send Us a Message
+      </Heading>
 
       {actionData?.ok ? (
         <p className="mt-10 text-center text-sm font-medium">{CONTACT.successMessage}</p>
@@ -114,5 +133,16 @@ const Contact = () => {
     </Container>
   );
 };
+
+const CONTACT_PAGE_QUERY = `#graphql
+  query ContactPage($handle: String!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    page(handle: $handle) {
+      id
+      title
+      body
+    }
+  }
+` as const;
 
 export default Contact;
