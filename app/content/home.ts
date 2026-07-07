@@ -10,7 +10,7 @@ const CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
 
 export const HOME_HERO = {
   eyebrow: 'Introducing',
-  /** Rendered as the oversized wordmark over the hero. */
+  /** Screen-reader text for the hero's h1 — visually it's the wordmark SVG. */
   wordmark: 'PACIFIC',
   subtitle: 'Discipline Looks Good Now',
   cta: { label: 'Own The Start', href: '/collections/summer-25' },

@@ -2,6 +2,7 @@ import { Image } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { Logo } from '~/components/common/Logo';
 import { Button } from '~/components/ui/button';
 import { HOME_HERO } from '~/content/home';
 
@@ -29,8 +30,12 @@ export const Hero = () => (
         <p className="mb-1 text-[8px] font-semibold tracking-[0.2em] uppercase md:mb-3 md:text-xs">
           {HOME_HERO.eyebrow}
         </p>
-        <h1 className="text-4xl font-extrabold tracking-tight uppercase md:text-8xl md:leading-[0.82] lg:text-[9rem]">
-          {HOME_HERO.wordmark}
+        <h1 className="w-full">
+          <Logo
+            tone="light"
+            className="mx-auto h-auto w-[64vw] max-w-[1200px] md:mx-0 md:w-[83vw]"
+          />
+          <span className="sr-only">{HOME_HERO.wordmark}</span>
         </h1>
         <p className="mt-1 text-[11px] font-light tracking-[0.2em] uppercase md:mt-4 md:text-3xl lg:text-5xl">
           {HOME_HERO.subtitle}
