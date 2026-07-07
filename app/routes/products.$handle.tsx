@@ -103,15 +103,15 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
 
   return (
     <>
-      <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-neutral-900 text-white">
+      <section className="relative flex aspect-[3/4] items-center overflow-hidden bg-neutral-100 text-white sm:aspect-[4/3] lg:aspect-auto lg:h-[46rem]">
         {selectedVariant?.image && (
           <Image
             data={selectedVariant.image}
             sizes="100vw"
-            className="absolute inset-0 size-full object-cover"
+            className="absolute inset-0 size-full object-contain object-bottom lg:object-[80%_bottom]"
           />
         )}
-        <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-transparent lg:from-black/20" />
         <Container className="relative z-10">
           <div className="max-w-md bg-black/70 p-8 backdrop-blur-sm md:p-10">
             <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
