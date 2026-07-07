@@ -8,9 +8,17 @@ import { pageTitle } from '~/lib/seo';
 import type { Route } from './+types/pages.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
+  const title = pageTitle(data?.page.title);
+  const description = data?.page.seo?.description ?? '';
+  // Use the first in-body image (feature/landing pages) as the share image.
+  const ogImage = data?.page.body.match(/<img[^>]+src="([^"]+)"/i)?.[1];
+
   return [
-    { title: pageTitle(data?.page.title) },
-    { name: 'description', content: data?.page.seo?.description ?? '' },
+    { title },
+    { name: 'description', content: description },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    ...(ogImage ? [{ property: 'og:image', content: ogImage }] : []),
   ];
 };
 
