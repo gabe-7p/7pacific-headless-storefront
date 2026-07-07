@@ -7,6 +7,7 @@ import { useAside } from '~/components/layout/Aside';
  * The PDP add-to-cart bar — rendered flush at the bottom edge of the buy card,
  * spanning its full width. Extracted from ProductForm so the buy-card layout
  * (7PA-99) and per-breakpoint bar styling (7PA-154) can evolve independently.
+ * Black on desktop, orange full-bleed on mobile/tablet.
  */
 export const AddToCartBar = ({
   selectedVariant,

@@ -17,6 +17,7 @@ import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { Recommendations } from '~/components/product/Recommendations';
+import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
@@ -176,6 +177,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
           </div>
         </Container>
       </section>
+      <StickyAddToCart selectedVariant={selectedVariant} />
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
