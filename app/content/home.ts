@@ -20,7 +20,22 @@ export const HOME_HERO = {
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
   subtitle: 'Ultra-Light. Breathable. Ready To Train. Click in to see why.',
-  collectionHandle: 'summer-25',
+  /**
+   * Display order for the grid, matching the live homepage (shorts, tees, hat —
+   * same order as PRODUCT_COLOR_MAP). Products missing from this list render
+   * after the ordered ones, so a new product appears rather than disappearing.
+   */
+  productOrder: [
+    'airrail-6-performance-shorts-mountain-mist',
+    'airrail-6-performance-shorts-mint',
+    'airrail-6-performance-shorts-midnight',
+    'tracefiber-performance-tech-tee-white',
+    'tracefiber-performance-tech-tee-mint',
+    'tracefiber-performance-tech-tee-midnight',
+    'tracefiber-performance-tech-tee-tangerine',
+    'tracefiber-performance-tech-tee-mountain-mist',
+    'motionframe-running-hat-white',
+  ],
 } as const;
 
 export type CoreValue = {

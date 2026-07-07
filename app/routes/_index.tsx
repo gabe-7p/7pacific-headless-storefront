@@ -19,12 +19,19 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { collection } = await context.storefront.query(HOME_COLLECTION_QUERY, {
-    variables: { handle: HOME_FIRST_DROP.collectionHandle },
+  const { products } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
     cache: context.storefront.CacheLong(),
   });
 
-  return { products: collection?.products.nodes ?? [] };
+  // Match the live homepage's display order; unknown handles sort last.
+  const order = HOME_FIRST_DROP.productOrder as ReadonlyArray<string>;
+  const rank = (handle: string) => {
+    const index = order.indexOf(handle);
+    return index === -1 ? order.length : index;
+  };
+  const sorted = [...products.nodes].sort((a, b) => rank(a.handle) - rank(b.handle));
+
+  return { products: sorted };
 }
 
 const Homepage = () => {
@@ -45,16 +52,13 @@ const Homepage = () => {
   );
 };
 
-const HOME_COLLECTION_QUERY = `#graphql
+const HOME_PRODUCTS_QUERY = `#graphql
   ${PRODUCT_CARD_FRAGMENT}
-  query HomeCollection($handle: String!, $country: CountryCode, $language: LanguageCode)
+  query HomeProducts($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
-      id
-      products(first: 12) {
-        nodes {
-          ...ProductCard
-        }
+    products(first: 12) {
+      nodes {
+        ...ProductCard
       }
     }
   }

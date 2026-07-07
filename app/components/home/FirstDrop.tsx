@@ -6,8 +6,9 @@ import { Heading } from '~/components/common/Heading';
 import { HOME_FIRST_DROP } from '~/content/home';
 
 /**
- * "Our First Drop" — heading + the summer-25 product grid. Mirrors the live
- * `main-collection` section; renders the typed products the loader fetched.
+ * "Our First Drop" — heading + the full-catalog product grid. Mirrors the live
+ * `main-collection` section; renders the typed products the loader fetched
+ * (all live products, ordered by HOME_FIRST_DROP.productOrder).
  */
 export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
   <Container className="py-14 md:py-20">
@@ -17,7 +18,7 @@ export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFra
       </Heading>
       <p className="mt-2 text-sm text-neutral-600">{HOME_FIRST_DROP.subtitle}</p>
     </div>
-    <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-3">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
