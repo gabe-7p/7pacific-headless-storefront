@@ -18,25 +18,46 @@ const SIZE_LABELS: Record<string, string> = {
 
 const shortLabel = (value: string) => SIZE_LABELS[value.trim().toLowerCase()] ?? value;
 
+const OptionLabel = ({ children }: { children: string }) => (
+  <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
+    {children}
+  </p>
+);
+
 /**
- * Buy-box options (size/variant selector), styled for the white PDP buy card.
- * Size values render as buttons (mapped to S/M/L/XL); a single-value option
- * (e.g. the hat's "One Size") renders as a disabled pill. Add-to-cart lives in
- * a separate AddToCartBar rendered flush at the card bottom.
+ * Buy-box options (size selector), styled for the white PDP buy card as a
+ * full-width joined segmented bar (selected cell filled black). Shopify's
+ * internal single-variant "Title" option is filtered out; products with no
+ * real size option (e.g. the hat) render a single "One Size" cell like live.
+ * Add-to-cart lives in a separate AddToCartBar flush at the card bottom.
  */
 export const ProductForm = ({ productOptions }: { productOptions: MappedProductOptions[] }) => {
   const navigate = useNavigate();
 
+  // "Title" is Shopify's placeholder option for single-variant products.
+  const options = productOptions.filter((option) => option.name !== 'Title');
+
+  if (options.length === 0) {
+    return (
+      <div>
+        <OptionLabel>Size</OptionLabel>
+        <div className="flex w-full">
+          <span className="flex-1 cursor-default border border-neutral-900 bg-neutral-900 py-3 text-center text-sm font-medium text-white">
+            One Size
+          </span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      {productOptions.map((option) => {
+      {options.map((option) => {
         const isSingle = option.optionValues.length === 1;
         return (
           <div key={option.name}>
-            <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
-              {option.name}
-            </p>
-            <div className="flex flex-wrap gap-2">
+            <OptionLabel>{option.name}</OptionLabel>
+            <div className="flex w-full">
               {option.optionValues.map((value) => {
                 const { name, selected, available, exists, variantUriQuery } = value;
                 return (
@@ -54,10 +75,10 @@ export const ProductForm = ({ productOptions }: { productOptions: MappedProductO
                       }
                     }}
                     className={cn(
-                      'min-w-11 border px-3 py-2 text-sm font-medium transition-colors',
+                      '-ml-px flex-1 border py-3 text-center text-sm font-medium transition-colors first:ml-0',
                       selected
-                        ? 'border-neutral-900 bg-neutral-900 text-white'
-                        : 'border-neutral-300 text-neutral-900 hover:border-neutral-900',
+                        ? 'z-10 border-neutral-900 bg-neutral-900 text-white'
+                        : 'border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900',
                       !available && 'opacity-40',
                       isSingle && 'cursor-default'
                     )}
