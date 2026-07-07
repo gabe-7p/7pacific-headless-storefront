@@ -14,7 +14,12 @@ export const HOME_HERO = {
   wordmark: 'PACIFIC',
   subtitle: 'Discipline Looks Good Now',
   cta: { label: 'Own The Start', href: '/collections/summer-25' },
-  backgroundImage: `${CDN}/24_121_7pacific_03806.jpg`,
+  /** Intrinsic dimensions drive the hero's natural aspect ratio (3:2). */
+  backgroundImage: {
+    url: `${CDN}/24_121_7pacific_03806.jpg`,
+    width: 1656,
+    height: 1104,
+  },
 } as const;
 
 export const HOME_FIRST_DROP = {
