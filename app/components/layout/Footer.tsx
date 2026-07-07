@@ -21,7 +21,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
       <Await resolve={footerPromise}>
         {(footer) => (
           <footer className="bg-footer text-footer-text">
-            <Container className="grid gap-10 py-14 md:grid-cols-2">
+            <Container className="grid gap-10 py-14 md:grid-cols-3">
               <div className="flex flex-col gap-6">
                 <NavLink to="/" prefetch="intent" aria-label={header.shop.name}>
                   <Logo tone="light" className="h-8" />
@@ -29,18 +29,16 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                 <SocialIcons />
               </div>
               <Newsletter />
+              <FooterSupport
+                menu={footer?.menu}
+                primaryDomainUrl={header.shop.primaryDomain.url}
+                publicStoreDomain={publicStoreDomain}
+              />
             </Container>
 
             <div className="border-t border-white/15">
-              <Container className="flex flex-col gap-4 py-6 text-xs tracking-wide uppercase md:flex-row md:items-center md:justify-between">
-                <FooterMenu
-                  menu={footer?.menu}
-                  primaryDomainUrl={header.shop.primaryDomain.url}
-                  publicStoreDomain={publicStoreDomain}
-                />
-                <p className="text-white/60">
-                  © {new Date().getFullYear()} {header.shop.name}
-                </p>
+              <Container className="py-6 text-center text-xs tracking-wide text-white/60 uppercase">
+                © {new Date().getFullYear()} {header.shop.name}
               </Container>
             </div>
           </footer>
@@ -57,7 +55,7 @@ const Newsletter = () => {
   const { heading, body, placeholder, submitLabel, successMessage } = BRAND.newsletter;
 
   return (
-    <div className="md:max-w-md md:justify-self-end">
+    <div className="md:max-w-md">
       <Heading as="h3" size="sm">
         {heading}
       </Heading>
@@ -127,7 +125,7 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const FooterMenu = ({
+const FooterSupport = ({
   menu,
   primaryDomainUrl,
   publicStoreDomain,
@@ -148,32 +146,37 @@ const FooterMenu = ({
       : itemUrl;
 
   return (
-    <nav className="flex flex-wrap gap-x-6 gap-y-2" role="navigation">
-      {items.map((item) => {
-        if (!item.url) return null;
-        const url = toInternalPath(item.url);
-        const isExternal = !url.startsWith('/');
-        return isExternal ? (
-          <a
-            key={item.id}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/70 transition-colors hover:text-white"
-          >
-            {item.title}
-          </a>
-        ) : (
-          <NavLink
-            key={item.id}
-            to={url}
-            prefetch="intent"
-            className="text-white/70 transition-colors hover:text-white"
-          >
-            {item.title}
-          </NavLink>
-        );
-      })}
-    </nav>
+    <div>
+      <Heading as="h3" size="sm">
+        Support
+      </Heading>
+      <nav className="mt-4 flex flex-col gap-2 text-sm" role="navigation">
+        {items.map((item) => {
+          if (!item.url) return null;
+          const url = toInternalPath(item.url);
+          const isExternal = !url.startsWith('/');
+          return isExternal ? (
+            <a
+              key={item.id}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/70 transition-colors hover:text-white"
+            >
+              {item.title}
+            </a>
+          ) : (
+            <NavLink
+              key={item.id}
+              to={url}
+              prefetch="intent"
+              className="text-white/70 transition-colors hover:text-white"
+            >
+              {item.title}
+            </NavLink>
+          );
+        })}
+      </nav>
+    </div>
   );
 };
