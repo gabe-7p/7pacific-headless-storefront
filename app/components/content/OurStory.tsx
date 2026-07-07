@@ -69,7 +69,7 @@ export const OurStory = () => {
       {/* FITNESS — heading, then body + small square image. Desktop: body left,
           image right. Tablet/mobile: heading, image, body (image between). */}
       <Container className="pb-16 md:pb-24">
-        <Heading as="h2" size="md">
+        <Heading as="h2" size="display" className="max-w-2xl">
           {fitness.heading}
         </Heading>
         <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
