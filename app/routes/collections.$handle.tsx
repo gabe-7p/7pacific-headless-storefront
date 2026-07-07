@@ -8,6 +8,10 @@ import { useState } from 'react';
 import { Link, redirect, useLoaderData, useSearchParams } from 'react-router';
 import type { CollectionQuery } from 'storefrontapi.generated';
 
+import {
+  MarketingSections,
+  parseMarketingSections,
+} from '~/components/collection/MarketingSections';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
@@ -99,7 +103,10 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
 
   redirectIfHandleIsLocalized(request, { handle, data: collection });
 
-  return { collection };
+  return {
+    collection,
+    marketingSections: parseMarketingSections(collection.marketingSections?.value),
+  };
 }
 
 function loadDeferredData(_args: Route.LoaderArgs) {
@@ -107,7 +114,7 @@ function loadDeferredData(_args: Route.LoaderArgs) {
 }
 
 const Collection = () => {
-  const { collection } = useLoaderData<typeof loader>();
+  const { collection, marketingSections } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const appliedFilters = searchParams.getAll('filter');
@@ -164,6 +171,8 @@ const Collection = () => {
           </PaginatedResourceSection>
         </div>
       </div>
+
+      <MarketingSections sections={marketingSections} />
 
       <Analytics.CollectionView
         data={{ collection: { id: collection.id, handle: collection.handle } }}
@@ -324,6 +333,9 @@ const COLLECTION_QUERY = `#graphql
       handle
       title
       description
+      marketingSections: metafield(namespace: "custom", key: "marketing_sections") {
+        value
+      }
       products(
         first: $first
         last: $last
