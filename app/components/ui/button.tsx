@@ -21,6 +21,10 @@ const buttonVariants = cva(
         // letterspaced label, trailing chevron — matches the live theme.
         brand:
           "bg-brand text-brand-text hover:bg-brand/90 rounded-none font-semibold uppercase tracking-[0.15em] after:content-['>']",
+        // 7Pacific secondary CTA: outlined in the current text color, so it
+        // adapts to dark or light card backgrounds without a tone prop.
+        'brand-outline':
+          "rounded-none border border-current bg-transparent font-semibold uppercase tracking-[0.15em] hover:opacity-70 after:content-['>']",
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
