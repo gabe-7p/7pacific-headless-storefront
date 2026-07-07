@@ -52,7 +52,7 @@ const Policy = () => {
         <Link to="/policies">← Back to Policies</Link>
       </div>
       <br />
-      <h1 className="my-8 text-2xl font-bold">{policy.title}</h1>
+      <h1>{policy.title}</h1>
       <div dangerouslySetInnerHTML={{ __html: policy.body }} />
     </div>
   );

@@ -62,7 +62,7 @@ const Page = () => {
   return (
     <div className="page">
       <header>
-        <h1 className="my-8 text-2xl font-bold">{page.title}</h1>
+        <h1>{page.title}</h1>
       </header>
       <main dangerouslySetInnerHTML={{ __html: page.body }} />
     </div>

@@ -12,8 +12,8 @@ import type { ReactNode } from 'react';
  * Wrap the app (or a subtree that animates) once in `<MotionProvider>`.
  */
 
-/** Easing pulled to one place; same curve as the CSS `--ease-brand` token. */
-const EASE_BRAND = [0.165, 0.84, 0.44, 1] as const;
+/** Easing + duration pulled to one place; mirrors the `--ease-brand` intent. */
+const EASE_BRAND = [0.22, 1, 0.36, 1] as const;
 
 export const MotionProvider = ({ children }: { children: ReactNode }) => (
   <LazyMotion features={domAnimation} strict>
