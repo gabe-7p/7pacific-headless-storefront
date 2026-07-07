@@ -138,6 +138,9 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               <div className="mt-6">
                 <ProductForm productOptions={productOptions} />
               </div>
+              {product.fitNote?.value && (
+                <p className="mt-4 text-sm text-neutral-500 italic">{product.fitNote.value}</p>
+              )}
             </div>
             <AddToCartBar selectedVariant={selectedVariant} />
           </div>
@@ -235,6 +238,9 @@ const PRODUCT_FRAGMENT = `#graphql
     seo {
       description
       title
+    }
+    fitNote: metafield(namespace: "custom", key: "fit_note") {
+      value
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
