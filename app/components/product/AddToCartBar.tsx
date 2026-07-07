@@ -19,7 +19,7 @@ export const AddToCartBar = ({
     <AddToCartButton
       disabled={!selectedVariant || !selectedVariant.availableForSale}
       onClick={() => open('cart')}
-      className="bg-brand text-brand-text w-full px-6 py-4 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+      className="bg-brand text-brand-text w-full px-6 py-4 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50 lg:bg-neutral-900 lg:text-white"
       lines={
         selectedVariant ? [{ merchandiseId: selectedVariant.id, quantity: 1, selectedVariant }] : []
       }
