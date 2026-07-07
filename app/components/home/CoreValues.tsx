@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { SectionHeader } from '~/components/common/SectionHeader';
 import { type CoreValue, HOME_CORE_VALUES } from '~/content/home';
 import { cn } from '~/lib/cn';
 
@@ -40,12 +41,7 @@ export const CoreValues = () => {
   const { heading, subtitle, video, images, values } = HOME_CORE_VALUES;
   return (
     <Container className="py-14 md:py-20">
-      <div className="mb-8 max-w-2xl">
-        <Heading as="h2" size="lg">
-          {heading}
-        </Heading>
-        <p className="mt-2 text-sm text-neutral-600">{subtitle}</p>
-      </div>
+      <SectionHeader heading={heading} subtitle={subtitle} className="max-w-2xl" />
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:auto-rows-[260px]">
         <Media className="md:row-span-2">

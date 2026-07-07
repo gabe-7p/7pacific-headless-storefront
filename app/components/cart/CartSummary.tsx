@@ -47,9 +47,9 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
 const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
   if (!checkoutUrl) return null;
   return (
-    <Button asChild variant="brand" size="lg" className="mt-5 w-full tracking-wide uppercase">
+    <Button asChild variant="brand" size="lg" className="mt-5 w-full">
       <a href={checkoutUrl} target="_self">
-        Checkout &rarr;
+        Checkout
       </a>
     </Button>
   );

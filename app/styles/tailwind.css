@@ -124,270 +124,201 @@
 /* ============================================================================
  * Migrated base + component styles (was reset.css + app.css)
  *
- * These rules are intentionally UNLAYERED plain CSS — they sit outside any
- * `@layer`, exactly as the old reset.css/app.css link tags did, so unlayered
- * rules still win over Tailwind's layered utilities and the cascade is
- * unchanged from before the merge. Only rules whose elements/classes are still
- * referenced were kept; the Hydrogen demo skeleton (aside drawer, .header/
- * .footer/.cart-* classes, featured-collection grids, …) was dropped as dead.
+ * These now live INSIDE Tailwind layers (`@layer base` / `@layer components`)
+ * so utilities always win. They were unlayered originally, which let element
+ * rules (h1/h2/p sizes, `a { color }`, `body > main` margins, `section`
+ * padding, `img { border-radius }`) silently override Tailwind classes and
+ * caused visual-parity bugs vs the live theme (7PA-122 et al.) — those rules
+ * were deleted outright. Only rules whose elements/classes are still
+ * referenced were kept.
  *
- * Long-term these legacy global classes should migrate to Tailwind utilities in
- * the components that use them (predictive-search, product-*, order-search-*),
- * at which point this block shrinks toward just the base element resets.
+ * Long-term these legacy classes should migrate to Tailwind utilities in the
+ * components that use them (product-*, order-search-*), at which point this
+ * block shrinks away.
  *
  * NB: don't set `font-family` here — Tailwind owns it via `font-sans` (Barlow)
- * on <body>; an unlayered rule here would override that utility site-wide.
+ * on <body>.
  * ========================================================================== */
 
-/* --- base element resets (was reset.css) --- */
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+/* --- base element defaults (was reset.css) ---
+ * Now inside @layer base so any Tailwind utility wins. The old unlayered
+ * versions silently beat utilities site-wide and caused live-parity bugs:
+ * h1/h2/p font-size rules shrank hero + section headings, `a { color:#000 }`
+ * made CTAs on dark cards invisible, `body > main` margins produced white
+ * gutters around full-bleed sections, `section { padding }` added stray white
+ * strips, and `img { border-radius: 4px }` rounded every image. Those rules
+ * are deleted — Tailwind preflight + per-component utilities own them now. */
+@layer base {
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
 
-h1,
-h2,
-p {
-  margin: 0;
-  padding: 0;
-}
+  hr {
+    border-bottom: none;
+    border-top: 1px solid #000;
+    margin: 0;
+  }
 
-h1 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 2rem;
-  margin-top: 2rem;
-}
+  pre {
+    white-space: pre-wrap;
+  }
 
-h2 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1.4;
-  margin-bottom: 1rem;
-}
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+  }
 
-h4 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
+  form {
+    max-width: 100%;
+    @media (min-width: 768px) {
+      max-width: 400px;
+    }
+  }
 
-h5 {
-  margin-bottom: 1rem;
-  margin-top: 0.5rem;
-}
+  input {
+    border-radius: 4px;
+    border: 1px solid #000;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+  }
 
-p {
-  font-size: 1rem;
-  line-height: 1.4;
-}
+  legend {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
 
-a {
-  color: #000;
-  text-decoration: none;
-}
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
 
-a:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
+  li {
+    margin-bottom: 0.5rem;
+  }
 
-hr {
-  border-bottom: none;
-  border-top: 1px solid #000;
-  margin: 0;
-}
+  dl {
+    margin: 0.5rem 0;
+  }
 
-pre {
-  white-space: pre-wrap;
-}
-
-body > main {
-  margin: 0 1rem 1rem 1rem;
-}
-
-section {
-  padding: 1rem 0;
-  @media (min-width: 768px) {
-    padding: 2rem 0;
+  code {
+    background: #ddd;
+    border-radius: 4px;
+    font-family: monospace;
+    padding: 0.25rem;
   }
 }
 
-fieldset {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.5rem;
-  padding: 1rem;
-}
-
-form {
-  max-width: 100%;
-  @media (min-width: 768px) {
-    max-width: 400px;
+/* --- component styles still referenced by JSX (was app.css) ---
+ * Layered for the same reason as the base block: utilities must win. */
+@layer components {
+  /* routes/products.$handle.tsx */
+  .product {
+    display: grid;
+    @media (min-width: 45em) {
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 4rem;
+    }
   }
-}
 
-input {
-  border-radius: 4px;
-  border: 1px solid #000;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  margin-top: 0.25rem;
-  padding: 0.5rem;
-}
-
-legend {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-li {
-  margin-bottom: 0.5rem;
-}
-
-dl {
-  margin: 0.5rem 0;
-}
-
-code {
-  background: #ddd;
-  border-radius: 4px;
-  font-family: monospace;
-  padding: 0.25rem;
-}
-
-/* --- component styles still referenced by JSX (was app.css) --- */
-img {
-  border-radius: 4px;
-}
-
-/* non-anchor links (e.g. unavailable product options) */
-.link:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* routes/products.$handle.tsx */
-.product {
-  display: grid;
-  @media (min-width: 45em) {
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 4rem;
+  .product h1 {
+    margin-top: 0;
   }
-}
 
-.product h1 {
-  margin-top: 0;
-}
+  .product-image img {
+    height: auto;
+    width: 100%;
+  }
 
-.product-image img {
-  height: auto;
-  width: 100%;
-}
+  .product-main {
+    align-self: start;
+    position: sticky;
+    top: 6rem;
+  }
 
-.product-main {
-  align-self: start;
-  position: sticky;
-  top: 6rem;
-}
+  .product-price-on-sale {
+    display: flex;
+    grid-gap: 0.5rem;
+  }
 
-.product-price-on-sale {
-  display: flex;
-  grid-gap: 0.5rem;
-}
+  .product-price-on-sale s {
+    opacity: 0.5;
+  }
 
-.product-price-on-sale s {
-  opacity: 0.5;
-}
+  .product-options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 0.75rem;
+  }
 
-.product-options-grid {
-  display: flex;
-  flex-wrap: wrap;
-  grid-gap: 0.75rem;
-}
+  .product-options-item,
+  .product-options-item:disabled {
+    padding: 0.25rem 0.5rem;
+    background-color: transparent;
+    font-size: 1rem;
+    font-family: inherit;
+  }
 
-.product-options-item,
-.product-options-item:disabled {
-  padding: 0.25rem 0.5rem;
-  background-color: transparent;
-  font-size: 1rem;
-  font-family: inherit;
-}
+  .product-option-label-swatch {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.25rem 0;
+  }
 
-.product-option-label-swatch {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin: 0.25rem 0;
-}
+  .product-option-label-swatch img {
+    width: 100%;
+  }
 
-.product-option-label-swatch img {
-  width: 100%;
-}
+  /* routes/account */
+  .account-logout {
+    display: inline-block;
+  }
 
-/* routes/account */
-.account-logout {
-  display: inline-block;
-}
+  .order-search-form {
+    margin-bottom: 1.5rem;
+  }
 
-.order-search-form {
-  margin-bottom: 1.5rem;
-}
+  .order-search-fieldset {
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 1rem;
+  }
 
-.order-search-fieldset {
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  padding: 1rem;
-}
+  .order-search-legend {
+    font-weight: 600;
+    padding: 0 0.5rem;
+  }
 
-.order-search-legend {
-  font-weight: 600;
-  padding: 0 0.5rem;
-}
-
-.order-search-inputs {
-  display: grid;
-  gap: 1rem;
-  margin: 0.25rem 0 1rem;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
   .order-search-inputs {
-    grid-template-columns: 1fr 1fr;
+    display: grid;
+    gap: 1rem;
+    margin: 0.25rem 0 1rem;
+    grid-template-columns: 1fr;
   }
-}
 
-.order-search-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
-}
+  @media (min-width: 640px) {
+    .order-search-inputs {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
 
-.order-search-buttons {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  .order-search-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .order-search-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
 }

@@ -27,7 +27,7 @@ const Policies = () => {
 
   return (
     <div className="policies">
-      <h1>Policies</h1>
+      <h1 className="my-8 text-2xl font-bold">Policies</h1>
       <div>
         {policies.map((policy) => (
           <fieldset key={policy.id}>
