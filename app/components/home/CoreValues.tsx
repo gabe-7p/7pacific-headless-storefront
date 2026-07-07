@@ -9,7 +9,10 @@ import { cn } from '~/lib/cn';
 const ValueCard = ({ value, className }: { value: CoreValue; className?: string }) => (
   <div
     className={cn(
-      'bg-announcement text-announcement-text flex flex-col justify-between p-8',
+      'flex flex-col justify-between p-8',
+      value.tone === 'dark'
+        ? 'bg-tenet-dark text-tenet-dark-text'
+        : 'bg-tenet-light text-tenet-light-text',
       className
     )}
   >
@@ -17,7 +20,7 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
       <Heading as="h3" size="md">
         {value.title}
       </Heading>
-      <p className="mt-3 text-sm text-white/80">{value.body}</p>
+      <p className="mt-3 text-sm opacity-80">{value.body}</p>
     </div>
     <Link
       to={value.cta.href}
