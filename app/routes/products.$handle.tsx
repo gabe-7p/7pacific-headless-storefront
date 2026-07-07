@@ -101,7 +101,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const { title, description } = product;
+  const { title, descriptionHtml } = product;
 
   return (
     <>
@@ -124,10 +124,11 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
                   compareAtPrice={selectedVariant?.compareAtPrice}
                 />
               </div>
-              {description && (
-                <p className="mt-4 line-clamp-8 text-sm leading-relaxed text-neutral-600">
-                  {description}
-                </p>
+              {descriptionHtml && (
+                <div
+                  className="mt-4 text-sm leading-relaxed text-neutral-600"
+                  dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                />
               )}
               <div className="mt-6">
                 <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
