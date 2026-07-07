@@ -27,7 +27,7 @@ export const Hero = () => (
     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-black/20" />
     <div className="absolute inset-0 z-10 flex">
       <Container className="flex flex-col items-center justify-center pt-(--topbar-h) text-center md:items-start md:pt-0 md:text-left">
-        <p className="mb-1 text-[8px] font-semibold tracking-[0.2em] uppercase md:mb-3 md:text-xs">
+        <p className="mb-1 inline-block rounded-md bg-neutral-500/50 px-3 py-1 text-[8px] font-semibold tracking-[0.2em] uppercase italic backdrop-blur-[2px] md:mb-3 md:px-4 md:py-1.5 md:text-xs">
           {HOME_HERO.eyebrow}
         </p>
         <h1 className="w-full">
