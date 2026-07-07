@@ -126,7 +126,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               </div>
               {descriptionHtml && (
                 <div
-                  className="mt-4 text-sm leading-relaxed text-neutral-600"
+                  className="mt-4 text-sm leading-7 text-neutral-600 [&_p]:mb-4 [&_p:last-child]:mb-0"
                   dangerouslySetInnerHTML={{ __html: descriptionHtml }}
                 />
               )}
