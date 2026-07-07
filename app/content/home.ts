@@ -47,6 +47,8 @@ export type CoreValue = {
   title: string;
   body: string;
   cta: { label: string; href: string };
+  /** Card background tone — live alternates dark charcoal and light gray. */
+  tone: 'dark' | 'light';
 };
 
 export const HOME_CORE_VALUES = {
@@ -62,16 +64,19 @@ export const HOME_CORE_VALUES = {
   values: [
     {
       title: 'Love The Journey',
+      tone: 'dark',
       body: 'The peak is a moment. The climb is the life. We think everyone builds a stronger version of themselves when you sweat together.',
       cta: { label: 'Read Our Story', href: '/pages/our-story' },
     },
     {
       title: 'No Losses, Only Lessons',
+      tone: 'light',
       body: "When something doesn't work out, we figure out why and come back more experienced.",
       cta: { label: 'Join The Membership', href: '#newsletter' },
     },
     {
       title: 'Play The Long Game',
+      tone: 'dark',
       body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
       cta: {
         label: 'Shop Shirts',
@@ -80,6 +85,7 @@ export const HOME_CORE_VALUES = {
     },
     {
       title: 'Track The Truth',
+      tone: 'light',
       body: 'The space between the start and end point is yours to shape. Measure the work to watch the evolution.',
       cta: { label: 'Shop Shorts', href: '/products/airrail-6-performance-shorts-mountain-mist' },
     },

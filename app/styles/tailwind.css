@@ -103,6 +103,12 @@
   --color-savings: #ff4e4e; /* sale / savings text */
   --color-cart-dot: #ff4f33; /* cart count bubble */
   --color-border-subtle: #e8e8e1;
+
+  /* Homepage tenet cards — sampled from the live theme */
+  --color-tenet-dark: #282829;
+  --color-tenet-dark-text: #ffffff;
+  --color-tenet-light: #d9d9d9;
+  --color-tenet-light-text: #000000;
 }
 
 /**
