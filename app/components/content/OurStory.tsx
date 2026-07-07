@@ -46,15 +46,25 @@ export const OurStory = () => {
         </div>
       </section>
 
-      {/* MISSION — full-width statement, no image. */}
-      <Container className="py-16 md:py-24">
-        <p className="text-brand text-xs font-semibold tracking-[0.2em] uppercase">
-          {mission.eyebrow}
-        </p>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-neutral-700">
-          {mission.statement}
-        </p>
-      </Container>
+      {/* MISSION — full-width section: two-line display heading, full-bleed
+          orange rule, larger statement copy. */}
+      <section className="py-16 md:py-24">
+        <Container>
+          <Heading as="h2" size="display" className="text-4xl leading-[0.95] md:text-6xl">
+            {mission.heading.split(' ').map((word) => (
+              <span key={word} className="block">
+                {word}
+              </span>
+            ))}
+          </Heading>
+        </Container>
+        <div className="border-brand mt-6 border-t-2" />
+        <Container>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-700 md:text-xl">
+            {mission.statement}
+          </p>
+        </Container>
+      </section>
 
       {/* FITNESS — heading, then body + small square image. Desktop: body left,
           image right. Tablet/mobile: heading, image, body (image between). */}
