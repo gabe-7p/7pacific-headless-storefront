@@ -7,6 +7,7 @@ import { Announcement } from '~/components/layout/Announcement';
 import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
 import { Header, HeaderMenu } from '~/components/layout/Header';
+import { NewsletterPopup } from '~/components/layout/NewsletterPopup';
 
 type PageLayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -31,6 +32,7 @@ export const PageLayout = ({
       {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
       <main>{children}</main>
       <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
+      <NewsletterPopup />
     </Aside.Provider>
   );
 };
