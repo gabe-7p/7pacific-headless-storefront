@@ -77,7 +77,7 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
       <p className="text-sm text-neutral-600">
         Looks like you haven&rsquo;t added anything yet — let&rsquo;s get you started.
       </p>
-      <Button asChild variant="brand" size="lg" className="mt-5 tracking-wide uppercase">
+      <Button asChild variant="brand" size="lg" className="mt-5">
         <Link to="/collections" onClick={close} prefetch="viewport">
           Continue shopping
         </Link>
