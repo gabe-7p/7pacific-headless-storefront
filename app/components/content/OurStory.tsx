@@ -10,7 +10,7 @@ import { OUR_STORY } from '~/content/our-story';
  * typed copy/assets from content/our-story.ts (mirrors the live Liquid section).
  */
 export const OurStory = () => {
-  const { hero, mission, story } = OUR_STORY;
+  const { hero, mission, fitness, story } = OUR_STORY;
   return (
     <>
       <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-neutral-900 text-white">
@@ -46,27 +46,35 @@ export const OurStory = () => {
         </div>
       </section>
 
-      <Container className="grid items-center gap-10 py-16 md:grid-cols-2 md:py-24">
-        <div>
-          <p className="text-brand text-xs font-semibold tracking-[0.2em] uppercase">
-            {mission.eyebrow}
-          </p>
-          <p className="mt-3 text-lg font-medium text-neutral-700">{mission.statement}</p>
-          <Heading as="h2" size="lg" className="mt-6">
-            {mission.heading}
-          </Heading>
-          <div className="mt-5 space-y-4 text-sm leading-relaxed text-neutral-600">
-            {mission.body.map((p) => (
+      {/* MISSION — full-width statement, no image. */}
+      <Container className="py-16 md:py-24">
+        <p className="text-brand text-xs font-semibold tracking-[0.2em] uppercase">
+          {mission.eyebrow}
+        </p>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-neutral-700">
+          {mission.statement}
+        </p>
+      </Container>
+
+      {/* FITNESS — heading, then body + small square image. Desktop: body left,
+          image right. Tablet/mobile: heading, image, body (image between). */}
+      <Container className="pb-16 md:pb-24">
+        <Heading as="h2" size="md">
+          {fitness.heading}
+        </Heading>
+        <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+          <img
+            src={fitness.image}
+            alt=""
+            loading="lazy"
+            className="order-1 mx-auto aspect-square w-full max-w-sm object-cover lg:order-2 lg:mx-0 lg:w-[300px] lg:max-w-none lg:flex-none"
+          />
+          <div className="order-2 space-y-4 text-sm leading-relaxed text-neutral-600 lg:order-1 lg:flex-1">
+            {fitness.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </div>
         </div>
-        <img
-          src={mission.image}
-          alt=""
-          loading="lazy"
-          className="aspect-[4/5] w-full rounded object-cover"
-        />
       </Container>
 
       <div className="bg-neutral-50">
