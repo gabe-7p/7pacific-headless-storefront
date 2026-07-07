@@ -14,10 +14,15 @@ import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
+import { TechStack } from '~/components/product/TechStack';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
 import { ColorSwatches } from '~/modules/product';
-import { parseJsonMetafield, type ProductDetailCard } from '~/modules/product/lib/content';
+import {
+  parseJsonMetafield,
+  type ProductDetailCard,
+  type TechStack as TechStackData,
+} from '~/modules/product/lib/content';
 
 import type { Route } from './+types/products.$handle';
 
@@ -70,6 +75,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
   return {
     product,
     productDetails: parseJsonMetafield<Array<ProductDetailCard>>(product.productDetails),
+    techStack: parseJsonMetafield<TechStackData>(product.techStack),
   };
 }
 
@@ -86,7 +92,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
 }
 
 const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
-  const { product, productDetails } = useLoaderData<typeof loader>();
+  const { product, productDetails, techStack } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -151,6 +157,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
         </Container>
       </section>
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
+      {techStack && <TechStack data={techStack} />}
       <Analytics.ProductView
         data={{
           products: [
@@ -248,6 +255,9 @@ const PRODUCT_FRAGMENT = `#graphql
       value
     }
     productDetails: metafield(namespace: "custom", key: "product_details") {
+      value
+    }
+    techStack: metafield(namespace: "custom", key: "tech_stack") {
       value
     }
   }

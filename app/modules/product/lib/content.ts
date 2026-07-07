@@ -6,6 +6,15 @@
 
 export type ProductDetailCard = { imageUrl: string; caption: string; subcaption: string };
 
+export type TechIcon = 'perforations' | 'grip-tape' | 'effort';
+export type TechFeature = { heading: string; description: string; icon: TechIcon };
+export type TechStack = {
+  features: ReadonlyArray<TechFeature>;
+  materials: ReadonlyArray<string>;
+  details: string;
+  care: ReadonlyArray<string>;
+};
+
 /**
  * Parse a JSON metafield's raw `value` string into a typed shape. Returns null
  * on a missing or malformed value so a bad metafield degrades gracefully
