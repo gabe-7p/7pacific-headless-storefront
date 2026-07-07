@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { SectionHeader } from '~/components/common/SectionHeader';
+import { Button } from '~/components/ui/button';
 import { type CoreValue, HOME_CORE_VALUES } from '~/content/home';
 import { cn } from '~/lib/cn';
 
@@ -22,13 +23,11 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
       </Heading>
       <p className="mt-3 text-sm opacity-80">{value.body}</p>
     </div>
-    <Link
-      to={value.cta.href}
-      prefetch="intent"
-      className="mt-6 inline-block text-xs font-semibold tracking-wide uppercase underline-offset-4 hover:underline"
-    >
-      {value.cta.label} →
-    </Link>
+    <Button asChild variant="brand-outline" size="xs" className="mt-6 self-start">
+      <Link to={value.cta.href} prefetch="intent">
+        {value.cta.label}
+      </Link>
+    </Button>
   </div>
 );
 
