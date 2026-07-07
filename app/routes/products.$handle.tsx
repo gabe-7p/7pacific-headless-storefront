@@ -11,11 +11,13 @@ import { redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
+import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
 import { ColorSwatches } from '~/modules/product';
+import { parseJsonMetafield, type ProductDetailCard } from '~/modules/product/lib/content';
 
 import type { Route } from './+types/products.$handle';
 
@@ -67,6 +69,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
 
   return {
     product,
+    productDetails: parseJsonMetafield<Array<ProductDetailCard>>(product.productDetails),
   };
 }
 
@@ -83,7 +86,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
 }
 
 const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
-  const { product } = useLoaderData<typeof loader>();
+  const { product, productDetails } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -147,6 +150,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
           </div>
         </Container>
       </section>
+      {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       <Analytics.ProductView
         data={{
           products: [
@@ -241,6 +245,9 @@ const PRODUCT_FRAGMENT = `#graphql
       title
     }
     fitNote: metafield(namespace: "custom", key: "fit_note") {
+      value
+    }
+    productDetails: metafield(namespace: "custom", key: "product_details") {
       value
     }
   }
