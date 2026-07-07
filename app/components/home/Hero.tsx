@@ -23,17 +23,24 @@ export const Hero = () => (
       fetchPriority="high"
       className="block h-auto w-full"
     />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30" />
-    <div className="absolute inset-0 z-10 flex items-end">
-      <Container className="pb-6 md:pb-14 lg:pb-24">
-        <p className="mb-3 text-xs font-semibold tracking-[0.2em] uppercase">{HOME_HERO.eyebrow}</p>
-        <h1 className="text-7xl font-extrabold tracking-tight uppercase md:text-[9rem] md:leading-[0.82]">
+    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-black/20" />
+    <div className="absolute inset-0 z-10 flex">
+      <Container className="flex flex-col items-center justify-center pt-(--topbar-h) text-center md:items-start md:pt-0 md:text-left">
+        <p className="mb-1 text-[8px] font-semibold tracking-[0.2em] uppercase md:mb-3 md:text-xs">
+          {HOME_HERO.eyebrow}
+        </p>
+        <h1 className="text-4xl font-extrabold tracking-tight uppercase md:text-8xl md:leading-[0.82] lg:text-[9rem]">
           {HOME_HERO.wordmark}
         </h1>
-        <p className="mt-4 text-lg font-medium tracking-wide uppercase md:text-2xl">
+        <p className="mt-1 text-[11px] font-light tracking-[0.2em] uppercase md:mt-4 md:text-3xl lg:text-5xl">
           {HOME_HERO.subtitle}
         </p>
-        <Button asChild variant="brand" className="mt-6">
+        <Button
+          asChild
+          variant="brand"
+          size="sm"
+          className="mt-2 self-center md:mt-10 md:h-10 md:px-6"
+        >
           <Link to={HOME_HERO.cta.href}>{HOME_HERO.cta.label}</Link>
         </Button>
       </Container>
