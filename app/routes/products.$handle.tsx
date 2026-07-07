@@ -11,6 +11,7 @@ import { redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
+import { BrandBanner } from '~/components/product/BrandBanner';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
@@ -158,6 +159,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
       </section>
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       {techStack && <TechStack data={techStack} />}
+      <BrandBanner />
       <Analytics.ProductView
         data={{
           products: [
