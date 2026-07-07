@@ -7,7 +7,8 @@ import {
   useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import { redirect, useLoaderData } from 'react-router';
+import { Suspense } from 'react';
+import { Await, redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
@@ -15,7 +16,9 @@ import { BrandBanner } from '~/components/product/BrandBanner';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
+import { Recommendations } from '~/components/product/Recommendations';
 import { TechStack } from '~/components/product/TechStack';
+import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
 import { ColorSwatches } from '~/modules/product';
@@ -86,14 +89,30 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({ context, params }: Route.LoaderArgs) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
+  const { handle } = params;
 
-  return {};
+  // "PLANNING TO SWEAT MORE?" — read the curated recommended_products metafield
+  // references. Deferred + guarded so a failure never 500s the PDP.
+  const recommendations = context.storefront
+    .query(RECOMMENDATIONS_QUERY, {
+      variables: { handle: handle! },
+      cache: context.storefront.CacheLong(),
+    })
+    .then(({ product }) => {
+      const nodes = product?.recommended?.references?.nodes ?? [];
+      // Exclude the product being viewed; cap at 3 like live.
+      return nodes.filter((node) => node.handle !== handle).slice(0, 3);
+    })
+    .catch((error: Error) => {
+      console.error(error);
+      return null;
+    });
+
+  return { recommendations };
 }
 
 const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
-  const { product, productDetails, techStack } = useLoaderData<typeof loader>();
+  const { product, productDetails, techStack, recommendations } = useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -160,6 +179,13 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
+      <Suspense fallback={null}>
+        <Await resolve={recommendations}>
+          {(products) =>
+            products && products.length > 0 ? <Recommendations products={products} /> : null
+          }
+        </Await>
+      </Suspense>
       <Analytics.ProductView
         data={{
           products: [
@@ -278,6 +304,24 @@ const PRODUCT_QUERY = `#graphql
     }
   }
   ${PRODUCT_FRAGMENT}
+` as const;
+
+const RECOMMENDATIONS_QUERY = `#graphql
+  ${PRODUCT_CARD_FRAGMENT}
+  query ProductRecommendations($handle: String!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    product(handle: $handle) {
+      recommended: metafield(namespace: "custom", key: "recommended_products") {
+        references(first: 10) {
+          nodes {
+            ... on Product {
+              ...ProductCard
+            }
+          }
+        }
+      }
+    }
+  }
 ` as const;
 
 export default Product;
