@@ -21,16 +21,20 @@ export const TestedInTraining = () => (
         className="absolute inset-0 size-full object-cover"
       />
       <div className="absolute inset-0 bg-black/55" />
-      <div className="relative z-10 px-6 py-16 text-center md:px-12 md:text-left lg:px-16 lg:py-24">
-        <Heading as="h2" size="lg">
+      <div className="relative z-10 px-6 py-16 md:px-12 lg:px-16 lg:py-24">
+        <Heading
+          as="h2"
+          size="display"
+          className="text-4xl leading-tight font-light tracking-wide md:text-5xl lg:text-[3.5rem]"
+        >
           {HOME_TESTED.headingLines.map((line) => (
             <span key={line} className="block">
               {line}
             </span>
           ))}
         </Heading>
-        <p className="mx-auto mt-4 max-w-xl text-sm text-white/85 md:mx-0">{HOME_TESTED.body}</p>
-        <Button asChild variant="brand" className="mt-6">
+        <p className="mt-6 max-w-md text-sm text-white/85">{HOME_TESTED.body}</p>
+        <Button asChild variant="brand" className="mt-8">
           <Link to={HOME_TESTED.cta.href}>{HOME_TESTED.cta.label}</Link>
         </Button>
       </div>
