@@ -188,6 +188,7 @@ const App = () => {
 };
 
 export const ErrorBoundary = () => {
+  const rootData = useRouteLoaderData<RootLoader>('root');
   const error = useRouteError();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
@@ -201,7 +202,7 @@ export const ErrorBoundary = () => {
 
   const isNotFound = errorStatus === 404;
 
-  return (
+  const content = (
     <div className="mx-auto flex min-h-[60vh] max-w-(--page-max) flex-col items-center justify-center px-4 py-20 text-center">
       <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
       <h1 className="mt-3 text-3xl font-bold tracking-wide uppercase md:text-4xl">
@@ -224,6 +225,16 @@ export const ErrorBoundary = () => {
         </pre>
       )}
     </div>
+  );
+
+  // Render inside the site chrome when root data is available (the common
+  // route-level 404). If the root loader itself failed, fall back to bare.
+  if (!rootData) return content;
+
+  return (
+    <Analytics.Provider cart={rootData.cart} shop={rootData.shop} consent={rootData.consent}>
+      <PageLayout {...rootData}>{content}</PageLayout>
+    </Analytics.Provider>
   );
 };
 
