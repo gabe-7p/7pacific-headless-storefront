@@ -104,17 +104,17 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
 
   return (
     <>
-      <section className="relative flex aspect-[3/4] items-center overflow-hidden bg-neutral-100 text-white sm:aspect-[4/3] lg:aspect-auto lg:h-[46rem]">
+      <section className="overflow-hidden bg-neutral-100 text-neutral-900 lg:relative lg:flex lg:h-[46rem] lg:items-center lg:text-white">
         {selectedVariant?.image && (
           <Image
             data={selectedVariant.image}
             sizes="100vw"
-            className="absolute inset-0 size-full object-contain object-bottom lg:object-[80%_bottom]"
+            className="aspect-[3/4] w-full object-contain object-bottom sm:aspect-[4/3] lg:absolute lg:inset-0 lg:size-full lg:object-[80%_bottom]"
           />
         )}
-        <div className="absolute inset-0 bg-linear-to-r from-black/50 via-transparent to-transparent lg:from-black/20" />
-        <Container className="relative z-10">
-          <div className="flex max-w-md flex-col bg-white text-neutral-900">
+        <div className="hidden lg:absolute lg:inset-0 lg:block lg:bg-linear-to-r lg:from-black/20 lg:via-transparent lg:to-transparent" />
+        <Container className="px-0 sm:px-0 md:px-0 lg:relative lg:z-10 lg:px-8">
+          <div className="flex flex-col bg-white text-neutral-900 lg:max-w-md">
             <div className="p-8 md:p-10">
               <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
               <div className="mt-3 text-lg">
