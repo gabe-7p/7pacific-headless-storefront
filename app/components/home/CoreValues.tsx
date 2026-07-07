@@ -10,20 +10,18 @@ import { cn } from '~/lib/cn';
 const ValueCard = ({ value, className }: { value: CoreValue; className?: string }) => (
   <div
     className={cn(
-      'flex flex-col justify-between p-8',
+      'flex flex-col items-start justify-center p-8 md:p-10 lg:p-12',
       value.tone === 'dark'
         ? 'bg-tenet-dark text-tenet-dark-text'
         : 'bg-tenet-light text-tenet-light-text',
       className
     )}
   >
-    <div>
-      <Heading as="h3" size="md">
-        {value.title}
-      </Heading>
-      <p className="mt-3 text-sm opacity-80">{value.body}</p>
-    </div>
-    <Button asChild variant="brand-outline" size="xs" className="mt-6 self-start">
+    <Heading as="h3" size="md" className="tracking-[0.15em]">
+      {value.title}
+    </Heading>
+    <p className="mt-4 max-w-[38ch] text-sm leading-relaxed opacity-80">{value.body}</p>
+    <Button asChild variant="brand-outline" size="xs" className="mt-6">
       <Link to={value.cta.href} prefetch="intent">
         {value.cta.label}
       </Link>
