@@ -12,11 +12,7 @@ import { HOME_FIRST_DROP } from '~/content/home';
  */
 export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
   <Container className="py-14 md:py-20">
-    <SectionHeader
-      heading={HOME_FIRST_DROP.heading}
-      subtitle={HOME_FIRST_DROP.subtitle}
-      align="center"
-    />
+    <SectionHeader heading={HOME_FIRST_DROP.heading} subtitle={HOME_FIRST_DROP.subtitle} />
     <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-3">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
