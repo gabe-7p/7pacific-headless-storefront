@@ -109,6 +109,18 @@
   --color-tenet-dark-text: #ffffff;
   --color-tenet-light: #d9d9d9;
   --color-tenet-light-text: #000000;
+
+  /* Announcement-bar scrolling marquee (track is duplicated, so -50% loops). */
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 /**
