@@ -278,3 +278,24 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     }
   }
 ` as const;
+
+/**
+ * The minimal article shape for blog index cards and "you may also like" rows.
+ * Spread into a query alongside `${ARTICLE_CARD_FRAGMENT}`.
+ */
+export const ARTICLE_CARD_FRAGMENT = `#graphql
+  fragment ArticleCard on Article {
+    id
+    handle
+    title
+    publishedAt
+    tags
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+` as const;
