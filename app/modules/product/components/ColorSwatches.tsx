@@ -12,6 +12,12 @@ type ColorSwatchesProps = {
   /** A product handle (with or without a color suffix). */
   handle: string;
   size?: 'sm' | 'lg';
+  /**
+   * Render even when the product has a single color. On grids we hide the row
+   * for single-color products; on the PDP the COLOR row always shows (a lone
+   * swatch with the active ring), matching live.
+   */
+  alwaysRender?: boolean;
   className?: string;
 };
 
@@ -20,9 +26,14 @@ type ColorSwatchesProps = {
  * color product (separate-product-per-color model). The current color is
  * highlighted.
  */
-export const ColorSwatches = ({ handle, size = 'sm', className }: ColorSwatchesProps) => {
+export const ColorSwatches = ({
+  handle,
+  size = 'sm',
+  alwaysRender = false,
+  className,
+}: ColorSwatchesProps) => {
   const colors = getAvailableColors(handle);
-  if (colors.length < 2) return null;
+  if (colors.length < (alwaysRender ? 1 : 2)) return null;
 
   const current = getCurrentColor(handle);
   const dimension = size === 'lg' ? 'size-6' : 'size-4';
