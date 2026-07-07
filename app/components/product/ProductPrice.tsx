@@ -1,5 +1,6 @@
-import { Money } from '@shopify/hydrogen';
 import type { MoneyV2 } from '@shopify/hydrogen/storefront-api-types';
+
+import { Price } from '~/components/common/Price';
 
 export const ProductPrice = ({
   price,
@@ -9,16 +10,16 @@ export const ProductPrice = ({
   compareAtPrice?: MoneyV2 | null;
 }) => {
   return (
-    <div className="product-price">
+    <div className="product-price font-bold">
       {compareAtPrice ? (
         <div className="product-price-on-sale">
-          {price ? <Money data={price} /> : null}
-          <s>
-            <Money data={compareAtPrice} />
+          {price ? <Price data={price} /> : null}
+          <s className="text-neutral-400">
+            <Price data={compareAtPrice} />
           </s>
         </div>
       ) : price ? (
-        <Money data={price} />
+        <Price data={price} />
       ) : (
         <span>&nbsp;</span>
       )}
