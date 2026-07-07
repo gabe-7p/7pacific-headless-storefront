@@ -6,6 +6,8 @@ const SIZES = {
   sm: 'text-lg',
   md: 'text-2xl',
   lg: 'text-2xl md:text-3xl',
+  /** Live-theme homepage section headings (~30px mobile / ~36-40px desktop). */
+  display: 'text-3xl tracking-[0.08em] md:text-4xl',
 } as const;
 
 type HeadingProps = {
