@@ -72,7 +72,10 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
             className="justify-self-center"
             aria-label={shop.name}
           >
-            <Logo tone={overlay ? 'light' : 'dark'} className="h-8 md:h-12" />
+            <Logo
+              tone={overlay ? 'light' : 'dark'}
+              className={cn('h-5 lg:h-8', overlay && 'opacity-70')}
+            />
           </NavLink>
 
           <HeaderCtas cart={cart} publicStoreDomain={publicStoreDomain} />
