@@ -30,7 +30,11 @@ const OptionLabel = ({ children }: { children: string }) => (
  * real size option (e.g. the hat) render a single "One Size" cell like live.
  * Add-to-cart lives in a separate AddToCartBar flush at the card bottom.
  */
-export const ProductForm = ({ productOptions }: { productOptions: MappedProductOptions[] }) => {
+export const ProductForm = ({
+  productOptions,
+}: {
+  productOptions: Array<MappedProductOptions>;
+}) => {
   const navigate = useNavigate();
 
   // "Title" is Shopify's placeholder option for single-variant products.

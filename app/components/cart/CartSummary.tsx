@@ -67,7 +67,7 @@ const CartDiscounts = ({
 }: {
   discountCodes?: CartApiQueryFragment['discountCodes'];
 }) => {
-  const codes: string[] =
+  const codes: Array<string> =
     discountCodes?.filter((discount) => discount.applicable)?.map(({ code }) => code) || [];
 
   return (
@@ -109,7 +109,7 @@ const UpdateDiscountForm = ({
   discountCodes,
   children,
 }: {
-  discountCodes?: string[];
+  discountCodes?: Array<string>;
   children: React.ReactNode;
 }) => {
   return (
@@ -132,8 +132,8 @@ const CartGiftCard = ({
   const giftCardAddFetcher = useFetcher({ key: 'gift-card-add' });
 
   useEffect(() => {
-    if (giftCardAddFetcher.data) {
-      giftCardCodeInput.current!.value = '';
+    if (giftCardAddFetcher.data && giftCardCodeInput.current) {
+      giftCardCodeInput.current.value = '';
     }
   }, [giftCardAddFetcher.data]);
 

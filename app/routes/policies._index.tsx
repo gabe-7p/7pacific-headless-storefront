@@ -9,7 +9,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   const data: PoliciesQuery = await context.storefront.query(POLICIES_QUERY);
 
   const shopPolicies = data.shop;
-  const policies: PolicyItemFragment[] = [
+  const policies: Array<PolicyItemFragment> = [
     shopPolicies?.privacyPolicy,
     shopPolicies?.shippingPolicy,
     shopPolicies?.termsOfService,

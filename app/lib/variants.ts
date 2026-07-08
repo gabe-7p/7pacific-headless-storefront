@@ -2,7 +2,7 @@ import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router';
 
-export function useVariantUrl(handle: string, selectedOptions?: SelectedOption[]) {
+export const useVariantUrl = (handle: string, selectedOptions?: Array<SelectedOption>) => {
   const { pathname } = useLocation();
 
   return useMemo(() => {
@@ -13,9 +13,9 @@ export function useVariantUrl(handle: string, selectedOptions?: SelectedOption[]
       selectedOptions,
     });
   }, [handle, selectedOptions, pathname]);
-}
+};
 
-function getVariantUrl({
+const getVariantUrl = ({
   handle,
   pathname,
   searchParams,
@@ -24,12 +24,12 @@ function getVariantUrl({
   handle: string;
   pathname: string;
   searchParams: URLSearchParams;
-  selectedOptions?: SelectedOption[];
-}) {
+  selectedOptions?: Array<SelectedOption>;
+}) => {
   const match = /(\/[a-zA-Z]{2}-[a-zA-Z]{2}\/)/g.exec(pathname);
-  const isLocalePathname = match && match.length > 0;
+  const localePrefix = match?.[0];
 
-  const path = isLocalePathname ? `${match![0]}products/${handle}` : `/products/${handle}`;
+  const path = localePrefix ? `${localePrefix}products/${handle}` : `/products/${handle}`;
 
   selectedOptions?.forEach((option) => {
     searchParams.set(option.name, option.value);
@@ -38,4 +38,4 @@ function getVariantUrl({
   const searchString = searchParams.toString();
 
   return path + (searchString ? '?' + searchParams.toString() : '');
-}
+};

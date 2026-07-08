@@ -67,7 +67,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   const sort = sortFromParam(url.searchParams.get('sort'));
   // Each applied filter is a `filter` search param whose value is the JSON
   // `input` the Storefront API gave us for that facet value.
-  const filters = url.searchParams.getAll('filter').reduce<ProductFilter[]>((acc, raw) => {
+  const filters = url.searchParams.getAll('filter').reduce<Array<ProductFilter>>((acc, raw) => {
     try {
       acc.push(JSON.parse(raw) as ProductFilter);
     } catch {

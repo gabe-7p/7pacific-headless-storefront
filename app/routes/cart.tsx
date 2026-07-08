@@ -43,7 +43,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       const formDiscountCode = inputs.discountCode;
 
       // User inputted discount code
-      const discountCodes = (formDiscountCode ? [formDiscountCode] : []) as string[];
+      const discountCodes = (formDiscountCode ? [formDiscountCode] : []) as Array<string>;
 
       // Combine discount codes already applied on cart
       discountCodes.push(...inputs.discountCodes);
@@ -54,13 +54,13 @@ export async function action({ request, context }: Route.ActionArgs) {
     case CartForm.ACTIONS.GiftCardCodesAdd: {
       const formGiftCardCode = inputs.giftCardCode;
 
-      const giftCardCodes = (formGiftCardCode ? [formGiftCardCode] : []) as string[];
+      const giftCardCodes = (formGiftCardCode ? [formGiftCardCode] : []) as Array<string>;
 
       result = await cart.addGiftCardCodes(giftCardCodes);
       break;
     }
     case CartForm.ACTIONS.GiftCardCodesRemove: {
-      const appliedGiftCardIds = inputs.giftCardCodes as string[];
+      const appliedGiftCardIds = inputs.giftCardCodes as Array<string>;
       result = await cart.removeGiftCardCodes(appliedGiftCardIds);
       break;
     }

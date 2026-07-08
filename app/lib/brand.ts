@@ -25,7 +25,7 @@ export const BRAND = {
 
   social: [
     { platform: 'Instagram', href: 'https://www.instagram.com/7_pacific/' },
-  ] satisfies SocialLink[],
+  ] satisfies Array<SocialLink>,
 
   newsletter: {
     heading: 'Join The Membership',
@@ -40,12 +40,12 @@ export const BRAND = {
     { title: 'Terms of Service', url: '/pages/terms-of-service' },
     { title: 'Contact Us', url: '/pages/contact-us' },
     { title: 'Returns', url: '/pages/returns' },
-  ] satisfies NavLink[],
+  ] satisfies Array<NavLink>,
 
   /** Fallback header nav, used only if the Storefront `main-menu` is empty. */
   headerLinks: [
     { title: 'Shop', url: '/' },
     { title: 'Our Story', url: '/pages/our-story' },
     { title: 'Contact Us', url: '/pages/contact-us' },
-  ] satisfies NavLink[],
+  ] satisfies Array<NavLink>,
 } as const;
