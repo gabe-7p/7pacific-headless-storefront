@@ -75,7 +75,7 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       <p className="text-sm text-neutral-600">Your cart is currently empty.</p>
       <Link
-        to="/collections"
+        to="/collections/summer-25"
         onClick={close}
         prefetch="viewport"
         className="mt-2 inline-block text-sm text-neutral-600 underline underline-offset-4 transition-colors hover:text-black"
