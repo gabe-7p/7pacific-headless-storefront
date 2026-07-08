@@ -97,7 +97,7 @@ of truth — read the relevant one before changing that area).
   reused, put it in its single source and import it — don't redefine it inline.
 - **Content.** Marketing/product copy → typed `content/*.ts` constants, not JSX literals.
 - **Domain gotcha.** Color = a separate Shopify product (not a variant); switch colors by navigating
-  sibling handles via [lib/colorMap.ts](../app/modules/product/lib/colorMap.ts). See
+  sibling handles via [lib/colorMap.ts](../app/lib/colorMap.ts). See
   [common-pitfalls.md](../.claude/rules/common-pitfalls.md).
 - **Nullability.** Storefront fields are mostly nullable and `noUncheckedIndexedAccess` is on —
   optional-chain and guard. Use `<Image>`/`<Money>`. Parallelize independent loader queries; defer +

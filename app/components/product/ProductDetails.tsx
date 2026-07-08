@@ -1,7 +1,7 @@
 import { Scroller } from '~/components/common/Scroller';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { PdpSection } from '~/components/product/PdpSection';
-import type { ProductDetailCard } from '~/modules/product/lib/content';
+import type { ProductDetailCard } from '~/lib/productContent';
 
 const DetailCard = ({ card }: { card: ProductDetailCard }) => (
   <div>

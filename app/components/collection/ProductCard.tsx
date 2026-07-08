@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import type { ProductCardFragment } from 'storefrontapi.generated';
 
 import { Price } from '~/components/common/Price';
-import { ColorSwatches } from '~/modules/product';
+import { ColorSwatches } from '~/components/product/ColorSwatches';
 
 type ProductCardProps = {
   product: ProductCardFragment;

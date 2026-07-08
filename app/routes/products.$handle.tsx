@@ -13,6 +13,7 @@ import { Await, redirect, useLoaderData } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
+import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
@@ -20,14 +21,13 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
-import { redirectIfHandleIsLocalized } from '~/lib/redirect';
-import { pageTitle } from '~/lib/seo';
-import { ColorSwatches } from '~/modules/product';
 import {
   parseJsonMetafield,
   type ProductDetailCard,
   type TechStack as TechStackData,
-} from '~/modules/product/lib/content';
+} from '~/lib/productContent';
+import { redirectIfHandleIsLocalized } from '~/lib/redirect';
+import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/products.$handle';
 

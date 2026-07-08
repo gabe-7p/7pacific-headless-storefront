@@ -6,7 +6,7 @@ import {
   getColorHex,
   getColorVariantHandle,
   getCurrentColor,
-} from '~/modules/product/lib/colorMap';
+} from '~/lib/colorMap';
 
 type ColorSwatchesProps = {
   /** A product handle (with or without a color suffix). */
