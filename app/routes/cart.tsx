@@ -1,8 +1,9 @@
 import type { CartQueryDataReturn } from '@shopify/hydrogen';
 import { CartForm } from '@shopify/hydrogen';
-import { data, type HeadersFunction, Link, useLoaderData } from 'react-router';
+import { data, type HeadersFunction, useLoaderData } from 'react-router';
 
 import { CartMain } from '~/components/cart/CartMain';
+import { TextLink } from '~/components/common/TextLink';
 import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/cart';
@@ -109,13 +110,9 @@ const Cart = () => {
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">Cart</h1>
         {hasItems && (
-          <Link
-            to="/collections/summer-25"
-            prefetch="intent"
-            className="mt-2 inline-block text-sm text-neutral-600 underline underline-offset-4 transition-colors hover:text-black"
-          >
+          <TextLink to="/collections/summer-25" prefetch="intent" className="mt-2 inline-block">
             Continue shopping
-          </Link>
+          </TextLink>
         )}
       </div>
       <CartMain layout="page" cart={cart} />

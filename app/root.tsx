@@ -12,6 +12,7 @@ import {
 } from 'react-router';
 
 import favicon from '~/assets/favicon.svg';
+import { TextLink } from '~/components/common/TextLink';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 
 import type { Route } from './+types/root';
@@ -222,12 +223,9 @@ export const ErrorBoundary = () => {
           : 'An unexpected error occurred. Please try again.'}
       </p>
       {isNotFound ? (
-        <a
-          href="/"
-          className="mt-4 inline-block w-fit text-sm text-neutral-700 underline underline-offset-4 transition-colors hover:text-black"
-        >
+        <TextLink to="/" className="mt-4 inline-block w-fit text-neutral-700">
           Continue shopping
-        </a>
+        </TextLink>
       ) : (
         <a
           href="/"
