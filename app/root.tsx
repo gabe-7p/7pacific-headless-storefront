@@ -203,19 +203,27 @@ export const ErrorBoundary = () => {
   const isNotFound = errorStatus === 404;
 
   const content = (
-    <div className="mx-auto flex min-h-[60vh] max-w-(--page-max) flex-col items-center justify-center px-4 py-20 text-center">
-      <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
-      <h1 className="mt-3 text-3xl font-bold tracking-wide uppercase md:text-4xl">
-        {isNotFound ? 'Page not found' : 'Something went wrong'}
+    <div className="mx-auto flex min-h-[60vh] max-w-(--page-max) flex-col justify-center px-4 py-20">
+      {!isNotFound && (
+        <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
+      )}
+      <h1
+        className={
+          isNotFound
+            ? 'text-3xl font-bold tracking-tight md:text-4xl'
+            : 'mt-3 text-3xl font-bold tracking-wide uppercase md:text-4xl'
+        }
+      >
+        {isNotFound ? '404 Page Not Found' : 'Something went wrong'}
       </h1>
-      <p className="mt-4 max-w-md text-sm text-neutral-600">
+      <p className="mt-4 max-w-md text-sm text-neutral-700">
         {isNotFound
-          ? "The page you're looking for doesn't exist or has moved."
+          ? 'The page you were looking for does not exist.'
           : 'An unexpected error occurred. Please try again.'}
       </p>
       <a
         href="/"
-        className="bg-brand text-brand-text mt-8 inline-block px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90"
+        className="bg-brand text-brand-text mt-8 inline-block w-fit px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90"
       >
         Back to shopping
       </a>
