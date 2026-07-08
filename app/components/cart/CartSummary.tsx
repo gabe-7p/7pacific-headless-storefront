@@ -20,7 +20,7 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
         'px-5 py-5',
         layout === 'aside'
           ? 'border-border-subtle border-t'
-          : 'border-border-subtle md:w-80 md:flex-none md:border md:p-6'
+          : 'border-border-subtle lg:w-80 lg:flex-none lg:border lg:p-6'
       )}
     >
       <div className="flex items-baseline justify-between">
