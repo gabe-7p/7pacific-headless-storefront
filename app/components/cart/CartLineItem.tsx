@@ -147,7 +147,7 @@ const CartLineRemoveButton = ({ lineIds, disabled }: { lineIds: string[]; disabl
       <button
         disabled={disabled}
         type="submit"
-        className="text-xs text-neutral-500 underline underline-offset-2 transition-colors hover:text-black"
+        className="mt-2 text-xs text-neutral-500 transition-colors hover:text-black"
       >
         Remove
       </button>
