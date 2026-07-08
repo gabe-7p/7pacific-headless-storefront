@@ -13,7 +13,6 @@ import {
   parseMarketingSections,
 } from '~/components/collection/MarketingSections';
 import { ProductCard } from '~/components/collection/ProductCard';
-import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
 import {
@@ -121,7 +120,10 @@ const Collection = () => {
   const facets = collection.products.filters ?? [];
 
   return (
-    <Container className="py-10">
+    // Near full-bleed with ~20px outer margins so product imagery dominates the
+    // viewport (matches live) — intentionally not wrapped in the max-width
+    // Container the rest of the site uses.
+    <div className="w-full px-5 py-10">
       <header className="mb-8">
         <Heading as="h1" size="lg">
           {collection.title}
@@ -137,7 +139,7 @@ const Collection = () => {
             variant="ghost"
             size="sm"
             onClick={() => setFiltersOpen((open) => !open)}
-            className="tracking-[0.15em] uppercase md:hidden"
+            className="tracking-[0.15em] uppercase"
           >
             {filtersOpen ? 'Hide filters' : 'Filters'}
           </Button>
@@ -149,35 +151,29 @@ const Collection = () => {
 
       {appliedFilters.length > 0 && <AppliedFilters facets={facets} />}
 
-      <div className="md:flex md:gap-10">
-        {facets.length > 0 && (
-          <aside
-            className={
-              filtersOpen ? 'block md:w-56 md:flex-none' : 'hidden md:block md:w-56 md:flex-none'
-            }
-          >
-            <FilterGroups facets={facets} />
-          </aside>
-        )}
-
-        <div className="flex-1">
-          <PaginatedResourceSection
-            connection={collection.products}
-            resourcesClassName="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3"
-          >
-            {({ node: product }) => (
-              <ProductCard key={product.id} product={product} label={product.label?.value} />
-            )}
-          </PaginatedResourceSection>
+      {/* Filters open as a collapsible panel above the grid (live uses a drawer),
+          leaving the product grid the full page width. */}
+      {facets.length > 0 && filtersOpen && (
+        <div className="mb-8 border-b border-neutral-200 pb-6">
+          <FilterGroups facets={facets} />
         </div>
-      </div>
+      )}
+
+      <PaginatedResourceSection
+        connection={collection.products}
+        resourcesClassName="grid grid-cols-1 gap-5 lg:grid-cols-2"
+      >
+        {({ node: product }) => (
+          <ProductCard key={product.id} product={product} label={product.label?.value} />
+        )}
+      </PaginatedResourceSection>
 
       <MarketingSections sections={marketingSections} />
 
       <Analytics.CollectionView
         data={{ collection: { id: collection.id, handle: collection.handle } }}
       />
-    </Container>
+    </div>
   );
 };
 
