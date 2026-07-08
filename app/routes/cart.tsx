@@ -1,6 +1,6 @@
 import type { CartQueryDataReturn } from '@shopify/hydrogen';
 import { CartForm } from '@shopify/hydrogen';
-import { data, type HeadersFunction, useLoaderData } from 'react-router';
+import { data, type HeadersFunction, Link, useLoaderData } from 'react-router';
 
 import { CartMain } from '~/components/cart/CartMain';
 import { pageTitle } from '~/lib/seo';
@@ -102,10 +102,22 @@ export async function loader({ context }: Route.LoaderArgs) {
 
 const Cart = () => {
   const cart = useLoaderData<typeof loader>();
+  const hasItems = (cart?.totalQuantity ?? 0) > 0;
 
   return (
     <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">
-      <h1 className="mb-8 text-center text-2xl font-semibold tracking-tight">Cart</h1>
+      <div className="mb-8 text-center">
+        <h1 className="text-2xl font-semibold tracking-tight">Cart</h1>
+        {hasItems && (
+          <Link
+            to="/collections"
+            prefetch="intent"
+            className="mt-2 inline-block text-sm text-neutral-600 underline underline-offset-4 transition-colors hover:text-black"
+          >
+            Continue shopping
+          </Link>
+        )}
+      </div>
       <CartMain layout="page" cart={cart} />
     </div>
   );
