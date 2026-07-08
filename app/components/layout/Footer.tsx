@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { Suspense } from 'react';
 import { Await, NavLink, useFetcher } from 'react-router';
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
@@ -77,7 +77,7 @@ const Newsletter = () => {
               autoCorrect="off"
               autoCapitalize="off"
               placeholder={placeholder}
-              className="w-full border-b-2 border-white bg-transparent py-2 pr-10 text-white placeholder:text-white/60 focus:outline-none"
+              className="w-full rounded-none border-0 border-b border-white/60 bg-transparent px-0 py-2 pr-10 text-white placeholder:text-white/60 focus:border-white focus:outline-none"
             />
             <button
               type="submit"
@@ -85,7 +85,7 @@ const Newsletter = () => {
               aria-label={submitLabel}
               className="absolute top-1/2 right-0 -translate-y-1/2 transition-opacity hover:opacity-70 disabled:opacity-40"
             >
-              <ArrowRight className="size-5" />
+              <Mail className="size-5" />
             </button>
           </div>
           {fetcher.data?.error && (
