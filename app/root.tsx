@@ -12,6 +12,7 @@ import {
 } from 'react-router';
 
 import favicon from '~/assets/favicon.svg';
+import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 
@@ -208,15 +209,14 @@ export const ErrorBoundary = () => {
       {!isNotFound && (
         <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
       )}
-      <h1
-        className={
-          isNotFound
-            ? 'text-3xl font-bold tracking-tight md:text-4xl'
-            : 'mt-3 text-3xl font-bold tracking-wide uppercase md:text-4xl'
-        }
+      <Heading
+        as="h1"
+        size="xl"
+        variant={isNotFound ? 'quiet' : 'brand'}
+        className={isNotFound ? undefined : 'mt-3'}
       >
         {isNotFound ? '404 Page Not Found' : 'Something went wrong'}
-      </h1>
+      </Heading>
       <p className="mt-4 max-w-md text-sm text-neutral-700">
         {isNotFound
           ? 'The page you were looking for does not exist.'

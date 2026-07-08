@@ -1,6 +1,8 @@
 import { type Shop } from '@shopify/hydrogen/storefront-api-types';
 import { Link, useLoaderData } from 'react-router';
 
+import { Heading } from '~/components/common/Heading';
+
 import type { Route } from './+types/policies.$handle';
 
 type SelectedPolicies = keyof Pick<
@@ -52,7 +54,9 @@ const Policy = () => {
         <Link to="/policies">← Back to Policies</Link>
       </div>
       <br />
-      <h1 className="my-8 text-2xl font-bold">{policy.title}</h1>
+      <Heading as="h1" variant="quiet" className="my-8 tracking-normal">
+        {policy.title}
+      </Heading>
       <div dangerouslySetInnerHTML={{ __html: policy.body }} />
     </div>
   );

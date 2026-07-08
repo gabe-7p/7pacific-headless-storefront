@@ -1,6 +1,8 @@
 import { Link, useLoaderData } from 'react-router';
 import type { PoliciesQuery, PolicyItemFragment } from 'storefrontapi.generated';
 
+import { Heading } from '~/components/common/Heading';
+
 import type { Route } from './+types/policies._index';
 
 export async function loader({ context }: Route.LoaderArgs) {
@@ -27,7 +29,9 @@ const Policies = () => {
 
   return (
     <div className="policies">
-      <h1 className="my-8 text-2xl font-bold">Policies</h1>
+      <Heading as="h1" variant="quiet" className="my-8 tracking-normal">
+        Policies
+      </Heading>
       <div>
         {policies.map((policy) => (
           <fieldset key={policy.id}>

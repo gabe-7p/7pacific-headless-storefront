@@ -1,6 +1,7 @@
 import effortIcon from '~/assets/effort-percents.svg';
 import gripTapeIcon from '~/assets/grip-tape-icon.svg';
 import perforationsIcon from '~/assets/perforations-icon.svg';
+import { Eyebrow } from '~/components/common/Eyebrow';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { PdpSection } from '~/components/product/PdpSection';
 import type { TechFeature, TechIcon, TechStack as TechStackData } from '~/lib/productContent';
@@ -27,7 +28,9 @@ const Feature = ({ feature }: { feature: TechFeature }) => (
 
 const Column = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div>
-    <h4 className="text-xs font-semibold tracking-[0.15em] text-white/60 uppercase">{label}</h4>
+    <Eyebrow as="h4" className="text-white/60">
+      {label}
+    </Eyebrow>
     <div className="mt-3 space-y-1 text-sm text-white/80">{children}</div>
   </div>
 );
