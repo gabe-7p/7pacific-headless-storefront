@@ -114,17 +114,6 @@ export const HeaderMenu = ({
       className={cn(isMobile ? 'flex flex-col gap-1 p-5' : 'hidden items-center gap-7 lg:flex')}
       role="navigation"
     >
-      {isMobile && (
-        <NavLink
-          end
-          onClick={close}
-          prefetch="intent"
-          to="/"
-          className="py-3 text-lg font-medium tracking-wide uppercase"
-        >
-          Home
-        </NavLink>
-      )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
         return (
