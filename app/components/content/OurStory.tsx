@@ -102,7 +102,7 @@ export const OurStory = () => {
               src={story.image}
               alt={story.founder.name}
               loading="lazy"
-              className="mx-auto aspect-square w-full max-w-sm object-cover lg:mx-0 lg:w-[300px] lg:max-w-none lg:flex-none"
+              className="mx-auto aspect-[285/195] w-full max-w-sm object-cover lg:mx-0 lg:w-[285px] lg:max-w-none lg:flex-none"
             />
             <div className="lg:flex-1">
               <div className="space-y-4 text-sm leading-relaxed text-neutral-600">
