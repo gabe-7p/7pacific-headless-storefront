@@ -111,12 +111,8 @@ export const OurStory = () => {
                 ))}
               </div>
               <div className="mt-6">
-                <p className="text-brand text-sm font-semibold tracking-wide uppercase">
-                  {story.founder.name}
-                </p>
-                <p className="text-xs tracking-wide text-neutral-500 uppercase">
-                  {story.founder.role}
-                </p>
+                <p className="text-brand text-lg font-semibold">{story.founder.name}</p>
+                <p className="mt-0.5 text-xs text-neutral-700">{story.founder.role}</p>
               </div>
             </div>
           </div>
