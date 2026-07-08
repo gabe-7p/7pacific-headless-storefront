@@ -68,84 +68,90 @@ const Contact = () => {
   };
 
   return (
-    <Container className="max-w-2xl py-16 md:py-24">
-      <Heading as="h1" size="lg">
-        Contact Us
-      </Heading>
+    <Container className="py-16 md:py-24">
+      {/* Left-aligned content column (matches live) — not a centered narrow box. */}
+      <div className="max-w-2xl">
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Contact Us</h1>
 
-      {page?.body && (
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-        <div
-          onClick={handleContentClick}
-          className="border-border-subtle mt-6 border bg-neutral-50 p-6 md:p-8 [&_a]:text-brand [&_a]:underline [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:uppercase [&_h2:first-of-type]:mt-6 [&_p]:mt-3 [&_p]:text-sm [&_p]:leading-7 [&_p]:text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-900"
-          dangerouslySetInnerHTML={{ __html: page.body }}
-        />
-      )}
+        {page?.body && (
+          // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+          <div
+            onClick={handleContentClick}
+            className="border-border-subtle mt-6 border bg-neutral-50 p-6 md:p-8 [&_a]:text-brand [&_a]:underline [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:uppercase [&_h2:first-of-type]:mt-6 [&_p]:mt-3 [&_p]:text-sm [&_p]:leading-7 [&_p]:text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-900"
+            dangerouslySetInnerHTML={{ __html: page.body }}
+          />
+        )}
 
-      <Heading as="h2" size="md" className="mt-12">
-        Send Us a Message
-      </Heading>
+        <Heading as="h2" size="md" className="mt-12">
+          Send Us a Message
+        </Heading>
 
-      {actionData?.ok ? (
-        <p className="mt-10 text-center text-sm font-medium">{CONTACT.successMessage}</p>
-      ) : (
-        <Form method="post" className="mt-10 space-y-4" noValidate>
-          <div>
-            <label htmlFor="name" className="sr-only">
-              {CONTACT.fields.name.label}
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              placeholder={CONTACT.fields.name.placeholder}
-              className={fieldClass}
-            />
-            {errors?.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
-          </div>
-          <div>
-            <label htmlFor="email" className="sr-only">
-              {CONTACT.fields.email.label}
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder={CONTACT.fields.email.placeholder}
-              className={fieldClass}
-            />
-            {errors?.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
-          </div>
-          <div>
-            <label htmlFor="phone" className="sr-only">
-              {CONTACT.fields.phone.label}
-            </label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              placeholder={CONTACT.fields.phone.placeholder}
-              className={fieldClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="message" className="sr-only">
-              {CONTACT.fields.message.label}
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={6}
-              placeholder={CONTACT.fields.message.placeholder}
-              className={fieldClass}
-            />
-            {errors?.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
-          </div>
-          <Button type="submit" variant="brand" disabled={submitting} className="w-full sm:w-auto">
-            {submitting ? 'Sending…' : CONTACT.submitLabel}
-          </Button>
-        </Form>
-      )}
+        {actionData?.ok ? (
+          <p className="mt-10 text-center text-sm font-medium">{CONTACT.successMessage}</p>
+        ) : (
+          <Form method="post" className="mt-10 space-y-4" noValidate>
+            <div>
+              <label htmlFor="name" className="sr-only">
+                {CONTACT.fields.name.label}
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder={CONTACT.fields.name.placeholder}
+                className={fieldClass}
+              />
+              {errors?.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+            </div>
+            <div>
+              <label htmlFor="email" className="sr-only">
+                {CONTACT.fields.email.label}
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder={CONTACT.fields.email.placeholder}
+                className={fieldClass}
+              />
+              {errors?.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+            </div>
+            <div>
+              <label htmlFor="phone" className="sr-only">
+                {CONTACT.fields.phone.label}
+              </label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder={CONTACT.fields.phone.placeholder}
+                className={fieldClass}
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="sr-only">
+                {CONTACT.fields.message.label}
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={6}
+                placeholder={CONTACT.fields.message.placeholder}
+                className={fieldClass}
+              />
+              {errors?.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
+            </div>
+            <Button
+              type="submit"
+              variant="brand"
+              disabled={submitting}
+              className="w-full sm:w-auto"
+            >
+              {submitting ? 'Sending…' : CONTACT.submitLabel}
+            </Button>
+          </Form>
+        )}
+      </div>
     </Container>
   );
 };
