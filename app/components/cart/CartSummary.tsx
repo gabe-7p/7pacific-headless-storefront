@@ -29,7 +29,6 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
           {cart?.cost?.subtotalAmount?.amount ? <Money data={cart?.cost?.subtotalAmount} /> : '-'}
         </span>
       </div>
-      <p className="mt-1 text-xs text-neutral-500">Shipping &amp; taxes calculated at checkout.</p>
 
       {/* Discount / gift-card entry only on the full cart page (cleaner drawer) */}
       {layout === 'page' && (
@@ -40,6 +39,9 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       )}
 
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
+      <p className="mt-3 text-center text-xs text-neutral-500">
+        Shipping, taxes, and discount codes calculated at checkout.
+      </p>
     </div>
   );
 };
