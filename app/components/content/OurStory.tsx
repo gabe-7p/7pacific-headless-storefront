@@ -87,6 +87,9 @@ export const OurStory = () => {
         </div>
       </Container>
 
+      {/* Full-width black rule separating Fitness from Our Story (matches live). */}
+      <hr className="border-t border-black" />
+
       {/* STORY — display heading above the grid (left on desktop, centered on
           tablet/mobile); small square image + four-paragraph founder story. */}
       <div>
