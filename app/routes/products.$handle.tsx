@@ -11,6 +11,7 @@ import { Suspense } from 'react';
 import { Await, redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
@@ -152,10 +153,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
                 />
               </div>
               {descriptionHtml && (
-                <div
-                  className="mt-4 text-sm leading-7 text-neutral-600 [&_p]:mb-4 [&_p:last-child]:mb-0"
-                  dangerouslySetInnerHTML={{ __html: descriptionHtml }}
-                />
+                <Prose html={descriptionHtml} variant="description" className="mt-4" />
               )}
               <div className="mt-6">
                 <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">

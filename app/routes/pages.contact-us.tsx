@@ -3,6 +3,7 @@ import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from '
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { Prose } from '~/components/common/Prose';
 import { Button } from '~/components/ui/button';
 import { CONTACT } from '~/content/contact';
 import { pageTitle } from '~/lib/seo';
@@ -77,9 +78,10 @@ const Contact = () => {
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
           <div
             onClick={handleContentClick}
-            className="border-border-subtle mt-6 border bg-neutral-50 p-6 md:p-8 [&_a]:text-brand [&_a]:underline [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:uppercase [&_h2:first-of-type]:mt-6 [&_p]:mt-3 [&_p]:text-sm [&_p]:leading-7 [&_p]:text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-900"
-            dangerouslySetInnerHTML={{ __html: page.body }}
-          />
+            className="border-border-subtle mt-6 border bg-neutral-50 p-6 md:p-8"
+          >
+            <Prose html={page.body} variant="compact" />
+          </div>
         )}
 
         <Heading as="h2" size="md" className="mt-12">
