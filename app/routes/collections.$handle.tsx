@@ -58,13 +58,7 @@ const SORT_OPTIONS: ReadonlyArray<SortOption> = [
 const sortFromParam = (value: string | null): SortOption =>
   SORT_OPTIONS.find((option) => option.value === value) ?? SORT_OPTIONS[0]!;
 
-export async function loader(args: Route.LoaderArgs) {
-  const deferredData = loadDeferredData(args);
-  const criticalData = await loadCriticalData(args);
-  return { ...deferredData, ...criticalData };
-}
-
-async function loadCriticalData({ context, params, request }: Route.LoaderArgs) {
+export async function loader({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
   const { storefront } = context;
   const paginationVariables = getPaginationVariables(request, { pageBy: 24 });
@@ -84,17 +78,15 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
     return acc;
   }, []);
 
-  const [{ collection }] = await Promise.all([
-    storefront.query(COLLECTION_QUERY, {
-      variables: {
-        handle,
-        filters,
-        sortKey: sort.sortKey,
-        reverse: sort.reverse,
-        ...paginationVariables,
-      },
-    }),
-  ]);
+  const { collection } = await storefront.query(COLLECTION_QUERY, {
+    variables: {
+      handle,
+      filters,
+      sortKey: sort.sortKey,
+      reverse: sort.reverse,
+      ...paginationVariables,
+    },
+  });
 
   if (!collection) {
     throw new Response(`Collection ${handle} not found`, { status: 404 });
@@ -106,10 +98,6 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
     collection,
     marketingSections: parseMarketingSections(collection.marketingSections?.value),
   };
-}
-
-function loadDeferredData(_args: Route.LoaderArgs) {
-  return {};
 }
 
 const Collection = () => {
