@@ -280,15 +280,6 @@ export type ProductCardFragment = Pick<
   priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
 };
 
-export type ArticleCardFragment = Pick<
-  StorefrontAPI.Article,
-  'id' | 'handle' | 'title' | 'publishedAt' | 'tags'
-> & {
-  image?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-  >;
-};
-
 export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
@@ -312,56 +303,6 @@ export type HomeProductsQuery = {
       }
     >;
   };
-};
-
-export type BlogQueryVariables = StorefrontAPI.Exact<{
-  blogHandle: StorefrontAPI.Scalars['String']['input'];
-  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-}>;
-
-export type BlogQuery = {
-  blog?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Blog, 'handle' | 'title'> & {
-      articles: {
-        nodes: Array<
-          Pick<StorefrontAPI.Article, 'id' | 'handle' | 'title' | 'publishedAt' | 'tags'> & {
-            image?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-            >;
-          }
-        >;
-      };
-    }
-  >;
-};
-
-export type ArticleQueryVariables = StorefrontAPI.Exact<{
-  blogHandle: StorefrontAPI.Scalars['String']['input'];
-  articleHandle: StorefrontAPI.Scalars['String']['input'];
-  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-}>;
-
-export type ArticleQuery = {
-  blog?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Blog, 'handle' | 'title'> & {
-      articleByHandle?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Article, 'id' | 'title' | 'contentHtml' | 'publishedAt' | 'tags'> & {
-          seo?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Seo, 'description' | 'title'>>;
-        }
-      >;
-      articles: {
-        nodes: Array<
-          Pick<StorefrontAPI.Article, 'id' | 'handle' | 'title' | 'publishedAt' | 'tags'> & {
-            image?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-            >;
-          }
-        >;
-      };
-    }
-  >;
 };
 
 export type CollectionQueryVariables = StorefrontAPI.Exact<{
@@ -739,14 +680,6 @@ interface GeneratedQueryTypes {
   '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  query HomeProducts($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 12) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n': {
     return: HomeProductsQuery;
     variables: HomeProductsQueryVariables;
-  };
-  '#graphql\n  #graphql\n  fragment ArticleCard on Article {\n    id\n    handle\n    title\n    publishedAt\n    tags\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  query Blog($blogHandle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    blog(handle: $blogHandle) {\n      handle\n      title\n      articles(first: 20, sortKey: PUBLISHED_AT, reverse: true) {\n        nodes {\n          ...ArticleCard\n        }\n      }\n    }\n  }\n': {
-    return: BlogQuery;
-    variables: BlogQueryVariables;
-  };
-  '#graphql\n  #graphql\n  fragment ArticleCard on Article {\n    id\n    handle\n    title\n    publishedAt\n    tags\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  query Article($blogHandle: String!, $articleHandle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    blog(handle: $blogHandle) {\n      handle\n      title\n      articleByHandle(handle: $articleHandle) {\n        id\n        title\n        contentHtml\n        publishedAt\n        tags\n        seo {\n          description\n          title\n        }\n      }\n      articles(first: 4, sortKey: PUBLISHED_AT, reverse: true) {\n        nodes {\n          ...ArticleCard\n        }\n      }\n    }\n  }\n': {
-    return: ArticleQuery;
-    variables: ArticleQueryVariables;
   };
   '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $filters: [ProductFilter!]\n    $sortKey: ProductCollectionSortKeys!\n    $reverse: Boolean\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      marketingSections: metafield(namespace: "custom", key: "marketing_sections") {\n        value\n      }\n      products(\n        first: $first\n        last: $last\n        before: $startCursor\n        after: $endCursor\n        filters: $filters\n        sortKey: $sortKey\n        reverse: $reverse\n      ) {\n        nodes {\n          ...ProductCard\n          label: metafield(namespace: "theme", key: "label") {\n            value\n          }\n        }\n        filters {\n          id\n          label\n          type\n          values {\n            id\n            label\n            count\n            input\n          }\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
     return: CollectionQuery;
