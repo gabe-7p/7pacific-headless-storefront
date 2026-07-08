@@ -20,7 +20,9 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
         'px-5 py-5',
         layout === 'aside'
           ? 'border-border-subtle border-t'
-          : 'lg:w-80 lg:flex-none lg:bg-neutral-50 lg:p-6'
+          : // Mobile/tablet: plain full-width rows with a separating top rule (no
+            // card). Desktop: a light-gray panel, no rule.
+            'border-border-subtle border-t lg:w-80 lg:flex-none lg:border-t-0 lg:bg-neutral-50 lg:p-6'
       )}
     >
       <div className="flex items-baseline justify-between">
