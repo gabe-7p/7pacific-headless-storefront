@@ -111,7 +111,7 @@ export const HeaderMenu = ({
 
   return (
     <nav
-      className={cn(isMobile ? 'flex flex-col gap-1 p-5' : 'hidden items-center gap-7 lg:flex')}
+      className={cn(isMobile ? 'flex flex-col py-2' : 'hidden items-center gap-7 lg:flex')}
       role="navigation"
     >
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
@@ -126,7 +126,9 @@ export const HeaderMenu = ({
             className={({ isActive }) =>
               cn(
                 'tracking-wide transition-opacity hover:opacity-70',
-                isMobile ? 'py-3 text-lg font-medium' : 'text-xs font-normal',
+                isMobile
+                  ? 'border-border-subtle border-b px-5 py-4 text-lg font-medium'
+                  : 'text-xs font-normal',
                 isActive && 'underline underline-offset-4'
               )
             }
@@ -141,14 +143,39 @@ export const HeaderMenu = ({
         <a
           href={`https://${publicStoreDomain}/account`}
           onClick={close}
-          className="py-3 text-lg font-medium tracking-wide"
+          className="mt-2 px-5 py-3 text-sm tracking-wide text-neutral-600 transition-opacity hover:opacity-70"
         >
           Log in
         </a>
       )}
+      {isMobile &&
+        BRAND.social
+          .filter((social) => social.platform === 'Instagram')
+          .map((social) => (
+            <a
+              key={social.platform}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.platform}
+              className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
+            >
+              <InstagramGlyph />
+            </a>
+          ))}
     </nav>
   );
 };
+
+// lucide-react v1 dropped brand/logo icons, so the Instagram glyph is inline
+// (mirrors the footer's icon).
+const InstagramGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+  </svg>
+);
 
 const HeaderCtas = ({
   cart,
