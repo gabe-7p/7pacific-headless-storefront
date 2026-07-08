@@ -27,13 +27,13 @@ import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { parseJsonMetafield } from '~/lib/metafields';
 import type { ProductDetailCard, TechStack as TechStackData } from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
-import { pageTitle } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/products.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
   return [
-    { title: pageTitle(data?.product.title) },
+    ...buildMeta({ title: data?.product.title, description: data?.product.description }),
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,

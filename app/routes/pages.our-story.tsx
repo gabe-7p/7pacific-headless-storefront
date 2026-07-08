@@ -1,10 +1,10 @@
 import { OurStory } from '~/components/content/OurStory';
-import { pageTitle } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/pages.our-story';
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: pageTitle('Our Story') }];
+  return buildMeta({ title: 'Our Story' });
 };
 
 const OurStoryPage = () => <OurStory />;

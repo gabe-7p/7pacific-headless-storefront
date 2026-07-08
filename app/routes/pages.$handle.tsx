@@ -4,23 +4,19 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
-import { pageTitle } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/pages.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
-  const title = pageTitle(data?.page.title);
-  const description = data?.page.seo?.description ?? '';
   // Use the first in-body image (feature/landing pages) as the share image.
   const ogImage = data?.page.body.match(/<img[^>]+src="([^"]+)"/i)?.[1];
 
-  return [
-    { title },
-    { name: 'description', content: description },
-    { property: 'og:title', content: title },
-    { property: 'og:description', content: description },
-    ...(ogImage ? [{ property: 'og:image', content: ogImage }] : []),
-  ];
+  return buildMeta({
+    title: data?.page.title,
+    description: data?.page.seo?.description,
+    image: ogImage,
+  });
 };
 
 export async function loader({ context, request, params }: Route.LoaderArgs) {

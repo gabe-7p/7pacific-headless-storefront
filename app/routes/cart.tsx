@@ -5,12 +5,12 @@ import { data, type HeadersFunction, useLoaderData } from 'react-router';
 import { CartMain } from '~/components/cart/CartMain';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
-import { pageTitle } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/cart';
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: pageTitle('Cart') }];
+  return buildMeta({ title: 'Cart' });
 };
 
 export const headers: HeadersFunction = ({ actionHeaders }) => actionHeaders;

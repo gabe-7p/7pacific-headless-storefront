@@ -2,6 +2,7 @@ import { type Shop } from '@shopify/hydrogen/storefront-api-types';
 import { Link, useLoaderData } from 'react-router';
 
 import { Heading } from '~/components/common/Heading';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/policies.$handle';
 
@@ -11,7 +12,7 @@ type SelectedPolicies = keyof Pick<
 >;
 
 export const meta: Route.MetaFunction = ({ data }) => {
-  return [{ title: `Hydrogen | ${data?.policy.title ?? ''}` }];
+  return buildMeta({ title: data?.policy.title });
 };
 
 export async function loader({ params, context }: Route.LoaderArgs) {

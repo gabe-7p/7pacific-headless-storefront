@@ -29,12 +29,12 @@ import {
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { parseMarketingSections } from '~/lib/metafields';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
-import { pageTitle } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/collections.$handle';
 
 export const meta: Route.MetaFunction = ({ data }) => {
-  return [{ title: pageTitle(data?.collection.title) }];
+  return buildMeta({ title: data?.collection.title, description: data?.collection.description });
 };
 
 type SortOption = {

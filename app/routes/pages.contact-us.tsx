@@ -6,12 +6,12 @@ import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { Button } from '~/components/ui/button';
 import { CONTACT } from '~/content/contact';
-import { pageTitle } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/pages.contact-us';
 
 export const meta: Route.MetaFunction = () => {
-  return [{ title: pageTitle('Contact Us') }];
+  return buildMeta({ title: 'Contact Us' });
 };
 
 export async function loader({ context }: Route.LoaderArgs) {

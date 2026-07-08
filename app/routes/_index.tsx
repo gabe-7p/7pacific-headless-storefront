@@ -7,15 +7,12 @@ import { Hero } from '~/components/home/Hero';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
 import { HOME_FIRST_DROP } from '~/content/home';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
-import { DEFAULT_DESCRIPTION } from '~/lib/seo';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/_index';
 
 export const meta: Route.MetaFunction = () => {
-  return [
-    { title: '7Pacific — Lightweight and Breathable Training Gear' },
-    { name: 'description', content: DEFAULT_DESCRIPTION },
-  ];
+  return buildMeta({ absoluteTitle: '7Pacific — Lightweight and Breathable Training Gear' });
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
