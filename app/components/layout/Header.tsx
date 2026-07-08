@@ -108,7 +108,7 @@ export const HeaderMenu = ({
 
   return (
     <nav
-      className={cn(isMobile ? 'flex flex-col gap-1 p-5' : 'hidden items-center gap-7 md:flex')}
+      className={cn(isMobile ? 'flex flex-col gap-1 p-5' : 'hidden items-center gap-7 lg:flex')}
       role="navigation"
     >
       {isMobile && (
@@ -170,7 +170,7 @@ const HeaderCtas = ({
           link survives the custom-domain cutover. Desktop-only, mirroring the cart. */}
       <a
         href={`https://${publicStoreDomain}/account`}
-        className="hidden items-center transition-opacity hover:opacity-70 md:inline-flex"
+        className="hidden items-center transition-opacity hover:opacity-70 lg:inline-flex"
         title="Log in"
       >
         <User className="size-[22px]" strokeWidth={1.6} />
@@ -186,7 +186,7 @@ const HeaderMenuMobileToggle = () => {
   return (
     <button
       type="button"
-      className="transition-opacity hover:opacity-70 md:hidden"
+      className="transition-opacity hover:opacity-70 lg:hidden"
       aria-label="Open menu"
       onClick={() => open('mobile')}
     >
