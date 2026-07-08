@@ -41,6 +41,7 @@ export const OUR_STORY = {
       'Fitness opens doors. Fitness shows us that there’s more out there, more to see, more to chase, more to become.',
       'For me, it changed everything. It brought me to California to play football, introduced me to my fiancée on a volleyball court, and took me skiing across some of the most awe-inspiring places in the world. Wherever life led, fitness brought connection through groups big and small that trained hard, showed up, and pushed one another further.',
       'Through it all, one truth stuck: the discipline we build in training makes every other part of life that much better. That’s why 7Pacific exists. To create the kind of gear that keeps up with your pursuit, and a community that reminds us we’re never in it alone.',
+      'We’re building performance apparel that’s lightweight, breathable, and built to endure whatever you put it through. Designed to move with you for every climb, lift, sprint, and stride. When you’re ready to take on your next challenge, don’t wait. Gear up with 7Pacific and step into what you were made for.',
     ],
   },
 } as const;
