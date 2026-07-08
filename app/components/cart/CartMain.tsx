@@ -59,11 +59,11 @@ export const CartMain = ({ layout, cart: originalCart }: CartMainProps) => {
   );
 
   return (
-    <div className={layout === 'page' ? 'md:flex md:items-start md:gap-12' : 'flex flex-col'}>
+    <div className={layout === 'page' ? 'lg:flex lg:items-start lg:gap-12' : 'flex flex-col'}>
       <p id="cart-lines" className="sr-only">
         Line items
       </p>
-      <div className={layout === 'page' ? 'flex-1' : 'px-5'}>{lines}</div>
+      <div className={layout === 'page' ? 'lg:flex-1' : 'px-5'}>{lines}</div>
       {cartHasItems && <CartSummary cart={cart} layout={layout} />}
     </div>
   );
