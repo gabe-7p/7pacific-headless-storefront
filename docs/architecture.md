@@ -60,7 +60,7 @@ app/
 
 ### The module pattern (how features grow)
 
-When a feature accumulates enough surface area to stand on its own — the **product detail page** (Phase 4) is the first real candidate — promote it to a self-contained module:
+When a feature accumulates enough surface area to stand on its own, promote it to a self-contained module. (The PDP was trialed as `modules/product/` and deliberately dissolved back into `components/product/` + `lib/` while the app is this small — a half-adopted module boundary cost more than it bought. The pattern below remains the target shape if a feature genuinely outgrows the flat layout.)
 
 ```
 app/modules/<feature>/

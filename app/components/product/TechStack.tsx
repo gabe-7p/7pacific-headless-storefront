@@ -3,11 +3,7 @@ import gripTapeIcon from '~/assets/grip-tape-icon.svg';
 import perforationsIcon from '~/assets/perforations-icon.svg';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { PdpSection } from '~/components/product/PdpSection';
-import type {
-  TechFeature,
-  TechIcon,
-  TechStack as TechStackData,
-} from '~/modules/product/lib/content';
+import type { TechFeature, TechIcon, TechStack as TechStackData } from '~/lib/productContent';
 
 const ICONS: Record<TechIcon, string> = {
   perforations: perforationsIcon,
