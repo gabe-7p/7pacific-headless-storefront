@@ -21,7 +21,7 @@ It is **not a runtime UI kit**. The CLI copies component _source_ into `app/comp
 pnpm dlx shadcn@latest add <name>   # e.g. dialog, select, accordion, tooltip
 ```
 
-It reads [`components.json`](../../components.json) (aliased to `~/*`, base color `neutral`, new-york style) and writes to `app/components/ui/`. Then restyle the generated classes to match the brand. Already scaffolded: `button`, `dialog`, `select`, `dropdown-menu`, `accordion`, `tooltip`.
+It reads [`components.json`](../../components.json) (aliased to `~/*`, base color `neutral`, new-york style) and writes to `app/components/ui/`. Then restyle the generated classes to match the brand. Already scaffolded: `button`, `dialog`, `select`, `accordion`, `sheet`. (Add primitives only when a consumer exists — unused generated files get deleted.)
 
 ## Rules for `app/components/ui/`
 
@@ -29,7 +29,6 @@ It reads [`components.json`](../../components.json) (aliased to `~/*`, base colo
 - **Restyle, don't re-architect.** Change Tailwind classes to match the brand; keep the Radix structure/behavior. If you need to update a primitive, re-run `shadcn add` and re-apply your styling rather than hand-patching internals.
 - **Tokens live in `app/styles/tailwind.css`.** The shadcn base-color CSS variables (`--background`, `--primary`, `--border`, …) and the `@theme inline` mapping sit alongside the brand `@theme` tokens. They don't collide — keep both.
 - **Primitives are still presentational.** No data fetching or GraphQL in `components/ui/` — same boundary as every other component (see [module-boundaries.md](module-boundaries.md)).
-- **`tooltip` needs a provider.** Wrap the app (or the subtree using tooltips) in `TooltipProvider`.
 
 ## Why this split
 
