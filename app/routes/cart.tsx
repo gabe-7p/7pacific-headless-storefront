@@ -110,7 +110,7 @@ const Cart = () => {
         <h1 className="text-2xl font-semibold tracking-tight">Cart</h1>
         {hasItems && (
           <Link
-            to="/collections"
+            to="/collections/summer-25"
             prefetch="intent"
             className="mt-2 inline-block text-sm text-neutral-600 underline underline-offset-4 transition-colors hover:text-black"
           >

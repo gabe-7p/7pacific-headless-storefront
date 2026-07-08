@@ -44,7 +44,7 @@ export const BRAND = {
 
   /** Fallback header nav, used only if the Storefront `main-menu` is empty. */
   headerLinks: [
-    { title: 'Shop', url: '/collections' },
+    { title: 'Shop', url: '/' },
     { title: 'Our Story', url: '/pages/our-story' },
     { title: 'Contact Us', url: '/pages/contact-us' },
   ] satisfies NavLink[],
