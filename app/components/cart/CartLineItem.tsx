@@ -60,10 +60,11 @@ export const CartLineItem = ({
             {product.title}
           </Link>
           {selectedOptions.length > 0 && (
-            <ul className="mt-1 text-xs text-neutral-500">
+            <ul className="mt-1 text-sm text-neutral-700">
               {selectedOptions.map((option) => (
                 <li key={option.name}>
-                  {option.name}: {option.value}
+                  <span className="font-semibold text-neutral-900">{option.name}:</span>{' '}
+                  {option.value}
                 </li>
               ))}
             </ul>
