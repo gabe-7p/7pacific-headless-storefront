@@ -1,21 +1,5 @@
 import { cn } from '~/lib/cn';
-
-export type MarketingSection = {
-  imageUrl: string;
-  heading: string;
-  body: string;
-  align?: 'left' | 'right';
-};
-
-/** Parse the collection's `custom.marketing_sections` JSON metafield value. */
-export const parseMarketingSections = (value?: string | null): Array<MarketingSection> => {
-  if (!value) return [];
-  try {
-    return JSON.parse(value) as Array<MarketingSection>;
-  } catch {
-    return [];
-  }
-};
+import type { MarketingSection } from '~/lib/metafields';
 
 /**
  * Image + text marketing sections shown below the collection product grid. Each

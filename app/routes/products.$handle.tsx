@@ -21,11 +21,8 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
-import {
-  parseJsonMetafield,
-  type ProductDetailCard,
-  type TechStack as TechStackData,
-} from '~/lib/productContent';
+import { parseJsonMetafield } from '~/lib/metafields';
+import type { ProductDetailCard, TechStack as TechStackData } from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
 
