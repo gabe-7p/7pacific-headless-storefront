@@ -1,16 +1,13 @@
 import { Link } from 'react-router';
 
 import { cn } from '~/lib/cn';
-import {
-  getAvailableColors,
-  getColorHex,
-  getColorVariantHandle,
-  getCurrentColor,
-} from '~/lib/colorMap';
+import type { ColorSwatch } from '~/lib/colors';
 
 type ColorSwatchesProps = {
-  /** A product handle (with or without a color suffix). */
-  handle: string;
+  /** The product's color family (from `getColorSwatches`), in display order. */
+  swatches: Array<ColorSwatch>;
+  /** Handle of the product being viewed — its swatch gets the active ring. */
+  currentHandle: string;
   size?: 'sm' | 'lg';
   /**
    * Render even when the product has a single color. On grids we hide the row
@@ -22,33 +19,32 @@ type ColorSwatchesProps = {
 };
 
 /**
- * One swatch per available color for the product, each linking to the sibling
+ * One swatch per color in the product's family, each linking to the sibling
  * color product (separate-product-per-color model). The current color is
  * highlighted.
  */
 export const ColorSwatches = ({
-  handle,
+  swatches,
+  currentHandle,
   size = 'sm',
   alwaysRender = false,
   className,
 }: ColorSwatchesProps) => {
-  const colors = getAvailableColors(handle);
-  if (colors.length < (alwaysRender ? 1 : 2)) return null;
+  if (swatches.length < (alwaysRender ? 1 : 2)) return null;
 
-  const current = getCurrentColor(handle);
   const dimension = size === 'lg' ? 'size-6' : 'size-4';
 
   return (
     <ul className={cn('flex flex-wrap items-center gap-2', className)}>
-      {colors.map((color) => {
-        const isActive = color === current;
+      {swatches.map((swatch) => {
+        const isActive = swatch.handle === currentHandle;
         return (
-          <li key={color}>
+          <li key={swatch.handle}>
             <Link
-              to={`/products/${getColorVariantHandle(handle, color)}`}
+              to={`/products/${swatch.handle}`}
               prefetch="intent"
-              title={color}
-              aria-label={color}
+              title={swatch.name}
+              aria-label={swatch.name}
               aria-current={isActive ? 'true' : undefined}
               className={cn(
                 'block rounded-full ring-1 ring-black/20 transition-shadow hover:ring-black',
@@ -57,9 +53,9 @@ export const ColorSwatches = ({
               )}
               // Dynamic, data-driven color value — the one accepted inline style
               // (it can't be enumerated as a Tailwind class).
-              style={{ backgroundColor: getColorHex(color) }}
+              style={{ backgroundColor: swatch.hex }}
             >
-              <span className="sr-only">{color}</span>
+              <span className="sr-only">{swatch.name}</span>
             </Link>
           </li>
         );

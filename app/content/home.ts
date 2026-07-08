@@ -27,7 +27,7 @@ export const HOME_FIRST_DROP = {
   subtitle: 'Ultra-Light. Breathable. Ready To Train. Click in to see why.',
   /**
    * Display order for the grid, matching the live homepage (shorts, tees, hat —
-   * same order as PRODUCT_COLOR_MAP). Products missing from this list render
+   * same order as the color_siblings metafields). Products missing from this list render
    * after the ordered ones, so a new product appears rather than disappearing.
    */
   productOrder: [

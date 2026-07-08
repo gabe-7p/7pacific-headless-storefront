@@ -84,7 +84,7 @@ Rules for modules:
 
 ## Domain model: color = separate product
 
-The 9 live products are **separate Shopify products per color**, not Shopify variants. Color "swatches" navigate between sibling product handles, mapped in `lib/colorMap.ts` (ported from the Liquid theme's `color-map.js`). Don't model color as a `ProductVariant` selectedOption. Rationale: [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md).
+The 9 live products are **separate Shopify products per color**, not Shopify variants. Color "swatches" navigate between sibling product handles; the family (names, hexes, ordered sibling references) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't model color as a `ProductVariant` selectedOption. Rationale: [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md).
 
 ## Environment & secrets
 

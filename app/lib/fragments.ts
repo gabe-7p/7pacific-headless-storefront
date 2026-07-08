@@ -276,5 +276,22 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
         currencyCode
       }
     }
+    # Color = separate product: the ordered color family lives in the
+    # custom.color_siblings metafield (each sibling carries its own name/hex).
+    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
+      references(first: 10) {
+        nodes {
+          ... on Product {
+            handle
+            colorName: metafield(namespace: "custom", key: "color_name") {
+              value
+            }
+            colorHex: metafield(namespace: "custom", key: "color_hex") {
+              value
+            }
+          }
+        }
+      }
+    }
   }
 ` as const;

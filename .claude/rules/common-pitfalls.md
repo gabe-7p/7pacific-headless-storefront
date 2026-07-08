@@ -61,7 +61,7 @@ Render Storefront images with `<Image data={...} sizes="..." />` (responsive src
 
 ## The "color = separate product" data model
 
-The 9 live products are **separate Shopify products per color**, not variants. Color switching navigates between sibling handles via `lib/colorMap.ts`. Don't assume color is a `ProductVariant` selectedOption.
+The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
 
 ## No `any`
 
