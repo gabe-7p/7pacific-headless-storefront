@@ -148,9 +148,34 @@ export const HeaderMenu = ({
           Log in
         </a>
       )}
+      {isMobile &&
+        BRAND.social
+          .filter((social) => social.platform === 'Instagram')
+          .map((social) => (
+            <a
+              key={social.platform}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.platform}
+              className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
+            >
+              <InstagramGlyph />
+            </a>
+          ))}
     </nav>
   );
 };
+
+// lucide-react v1 dropped brand/logo icons, so the Instagram glyph is inline
+// (mirrors the footer's icon).
+const InstagramGlyph = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
+    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+  </svg>
+);
 
 const HeaderCtas = ({
   cart,
