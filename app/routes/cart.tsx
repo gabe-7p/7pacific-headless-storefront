@@ -3,7 +3,6 @@ import { CartForm } from '@shopify/hydrogen';
 import { data, type HeadersFunction, useLoaderData } from 'react-router';
 
 import { CartMain } from '~/components/cart/CartMain';
-import { Heading } from '~/components/common/Heading';
 import { pageTitle } from '~/lib/seo';
 
 import type { Route } from './+types/cart';
@@ -106,9 +105,7 @@ const Cart = () => {
 
   return (
     <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">
-      <Heading as="h1" className="mb-8">
-        Cart
-      </Heading>
+      <h1 className="mb-8 text-center text-2xl font-semibold tracking-tight">Cart</h1>
       <CartMain layout="page" cart={cart} />
     </div>
   );
