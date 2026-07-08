@@ -13,25 +13,37 @@ export const OurStory = () => {
   const { hero, mission, story } = OUR_STORY;
   return (
     <>
-      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-neutral-900 text-center text-white">
+      <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-neutral-900 text-white">
         <img
           src={hero.backgroundImage}
           alt=""
           className="absolute inset-0 size-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/45" />
-        <Container className="relative z-10">
-          <Heading as="h1" size="lg" className="text-5xl md:text-7xl">
-            {hero.title}
-          </Heading>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            {hero.ctas.map((cta) => (
-              <Button key={cta.label} asChild variant={cta.variant}>
-                <Link to={cta.href}>{cta.label}</Link>
-              </Button>
-            ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+        <div className="relative z-10 w-full">
+          {/* Display heading anchored bottom-left, flush with the page gutter. */}
+          <Container className="pb-5">
+            <Heading as="h1" size="display" className="text-6xl leading-none md:text-8xl">
+              {hero.title}
+            </Heading>
+          </Container>
+          {/* CTA band: left-anchored pills on desktop; full-width stacked bars
+              spanning the viewport on tablet/mobile. */}
+          <div className="border-t border-white/25">
+            <div className="mx-auto flex w-full max-w-(--page-max) flex-col gap-px lg:flex-row lg:gap-3 lg:px-8 lg:py-4">
+              {hero.ctas.map((cta) => (
+                <Button
+                  key={cta.label}
+                  asChild
+                  variant={cta.variant}
+                  className="w-full justify-between px-5 py-4 lg:w-auto lg:justify-center lg:px-6 lg:py-2"
+                >
+                  <Link to={cta.href}>{cta.label}</Link>
+                </Button>
+              ))}
+            </div>
           </div>
-        </Container>
+        </div>
       </section>
 
       <Container className="grid items-center gap-10 py-16 md:grid-cols-2 md:py-24">
