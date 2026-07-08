@@ -3,14 +3,8 @@ import { createHydrogenContext } from '@shopify/hydrogen';
 import { CART_QUERY_FRAGMENT } from '~/lib/fragments';
 import { AppSession } from '~/lib/session';
 
-// Define the additional context object
-const additionalContext = {
-  // Additional context for custom properties, CMS clients, 3P SDKs, etc.
-  // These will be available as both context.propertyName and context.get(propertyContext)
-  // Example of complex objects that could be added:
-  // cms: await createCMSClient(env),
-  // reviews: await createReviewsClient(env),
-} as const;
+// Extra loader/action context (CMS clients, 3P SDKs, …) — none needed yet.
+const additionalContext = {} as const;
 
 // Automatically augment HydrogenAdditionalContext with the additional context type
 type AdditionalContextType = typeof additionalContext;
