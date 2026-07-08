@@ -75,7 +75,7 @@ const Page = () => {
 
   return (
     <Container className="max-w-[60rem] py-12 md:py-16">
-      <Heading as="h1" size="lg">
+      <Heading as="h1" size="display">
         {page.title}
       </Heading>
       <div
