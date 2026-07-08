@@ -21,10 +21,15 @@ export const OUR_STORY = {
       },
     ],
   },
+  // Mission and Fitness are two distinct sections on live: Mission is a
+  // full-width statement (no image); Fitness pairs its heading + body with a
+  // small square image.
   mission: {
     eyebrow: 'Our Mission',
     statement:
       'Create the most lightweight and breathable training gear, while building a community that pushes you further.',
+  },
+  fitness: {
     heading: "Fitness is more than movement, it's momentum",
     image: `${CDN}/our_mission2.jpg`,
     body: [
