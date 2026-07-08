@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useFetcher } from 'react-router';
 
+import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '~/components/ui/dialog';
 import { BRAND } from '~/lib/brand';
-import type { NewsletterResponse } from '~/routes/api.newsletter';
 
 const DISMISSED_KEY = 'nl_popup_dismissed';
 const IMAGE =
@@ -16,10 +15,7 @@ const IMAGE =
  */
 export const NewsletterPopup = () => {
   const [open, setOpen] = useState(false);
-  const fetcher = useFetcher<NewsletterResponse>();
-  const submitting = fetcher.state !== 'idle';
-  const succeeded = fetcher.data?.ok === true;
-  const { heading, body, placeholder, submitLabel, successMessage } = BRAND.newsletter;
+  const { heading, body } = BRAND.newsletter;
 
   const dismiss = () => {
     setOpen(false);
@@ -44,15 +40,13 @@ export const NewsletterPopup = () => {
   }, []);
 
   // Don't re-nag after a successful signup.
-  useEffect(() => {
-    if (succeeded) {
-      try {
-        localStorage.setItem(DISMISSED_KEY, '1');
-      } catch {
-        // ignore
-      }
+  const persistDismissal = () => {
+    try {
+      localStorage.setItem(DISMISSED_KEY, '1');
+    } catch {
+      // ignore
     }
-  }, [succeeded]);
+  };
 
   return (
     <Dialog open={open} onOpenChange={(next) => (next ? setOpen(true) : dismiss())}>
@@ -62,35 +56,7 @@ export const NewsletterPopup = () => {
           <DialogTitle className="text-xl font-bold tracking-wide uppercase">{heading}</DialogTitle>
           <DialogDescription className="mt-3 text-sm text-neutral-600">{body}</DialogDescription>
 
-          {succeeded ? (
-            <p className="mt-6 text-sm font-medium">{successMessage}</p>
-          ) : (
-            <fetcher.Form method="post" action="/api/newsletter" className="mt-6">
-              <label htmlFor="nl-popup-email" className="sr-only">
-                {placeholder}
-              </label>
-              <input
-                id="nl-popup-email"
-                type="email"
-                name="email"
-                required
-                autoCorrect="off"
-                autoCapitalize="off"
-                placeholder={placeholder}
-                className="border-border-subtle w-full border bg-white px-4 py-3 text-sm focus:border-black focus:outline-none"
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                className="bg-brand text-brand-text mt-3 w-full px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
-              >
-                {submitting ? 'Signing up…' : submitLabel}
-              </button>
-              {fetcher.data?.error && (
-                <p className="mt-2 text-sm text-neutral-500">{fetcher.data.error}</p>
-              )}
-            </fetcher.Form>
-          )}
+          <NewsletterForm variant="popup" onSuccess={persistDismissal} />
         </div>
       </DialogContent>
     </Dialog>
