@@ -74,7 +74,7 @@ const Page = () => {
   const { page } = useLoaderData<typeof loader>();
 
   return (
-    <Container className="max-w-3xl py-12 md:py-16">
+    <Container className="max-w-[60rem] py-12 md:py-16">
       <Heading as="h1" size="lg">
         {page.title}
       </Heading>

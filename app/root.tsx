@@ -221,12 +221,21 @@ export const ErrorBoundary = () => {
           ? 'The page you were looking for does not exist.'
           : 'An unexpected error occurred. Please try again.'}
       </p>
-      <a
-        href="/"
-        className="bg-brand text-brand-text mt-8 inline-block w-fit px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90"
-      >
-        Back to shopping
-      </a>
+      {isNotFound ? (
+        <a
+          href="/"
+          className="mt-4 inline-block w-fit text-sm text-neutral-700 underline underline-offset-4 transition-colors hover:text-black"
+        >
+          Continue shopping
+        </a>
+      ) : (
+        <a
+          href="/"
+          className="bg-brand text-brand-text mt-8 inline-block w-fit px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90"
+        >
+          Back to shopping
+        </a>
+      )}
       {!isNotFound && errorMessage && (
         <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-neutral-400">
           {errorMessage}
