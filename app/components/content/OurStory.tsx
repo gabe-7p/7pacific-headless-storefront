@@ -87,28 +87,34 @@ export const OurStory = () => {
         </div>
       </Container>
 
+      {/* STORY — display heading above the grid (left on desktop, centered on
+          tablet/mobile); small square image + four-paragraph founder story. */}
       <div className="bg-neutral-50">
-        <Container className="grid items-center gap-10 py-16 md:grid-cols-2 md:py-24">
-          <img
-            src={story.image}
-            alt={story.founder.name}
-            loading="lazy"
-            className="order-1 aspect-[4/5] w-full rounded object-cover md:order-none"
-          />
-          <div className="order-2">
-            <p className="text-brand text-xs font-semibold tracking-[0.2em] uppercase">
-              {story.eyebrow}
-            </p>
-            <div className="mt-5 space-y-4 text-sm leading-relaxed text-neutral-600">
-              {story.body.map((p) => (
-                <p key={p}>{p}</p>
-              ))}
-            </div>
-            <div className="mt-6">
-              <p className="text-sm font-semibold tracking-wide uppercase">{story.founder.name}</p>
-              <p className="text-xs tracking-wide text-neutral-500 uppercase">
-                {story.founder.role}
-              </p>
+        <Container className="py-16 md:py-24">
+          <Heading as="h2" size="display" className="text-center lg:text-left">
+            {story.heading}
+          </Heading>
+          <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+            <img
+              src={story.image}
+              alt={story.founder.name}
+              loading="lazy"
+              className="mx-auto aspect-square w-full max-w-sm object-cover lg:mx-0 lg:w-[300px] lg:max-w-none lg:flex-none"
+            />
+            <div className="lg:flex-1">
+              <div className="space-y-4 text-sm leading-relaxed text-neutral-600">
+                {story.body.map((p) => (
+                  <p key={p}>{p}</p>
+                ))}
+              </div>
+              <div className="mt-6">
+                <p className="text-brand text-sm font-semibold tracking-wide uppercase">
+                  {story.founder.name}
+                </p>
+                <p className="text-xs tracking-wide text-neutral-500 uppercase">
+                  {story.founder.role}
+                </p>
+              </div>
             </div>
           </div>
         </Container>

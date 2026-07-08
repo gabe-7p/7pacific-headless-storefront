@@ -39,7 +39,7 @@ export const OUR_STORY = {
     ],
   },
   story: {
-    eyebrow: 'Our Story',
+    heading: 'Our Story',
     image: `${CDN}/our_founder.jpg`,
     founder: { name: 'Gabriel Dalessandro', role: 'Founder & CEO' },
     body: [
