@@ -72,7 +72,9 @@ const Contact = () => {
     <Container className="py-16 md:py-24">
       {/* Left-aligned content column (matches live) — not a centered narrow box. */}
       <div className="max-w-2xl">
-        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Contact Us</h1>
+        <Heading as="h1" variant="quiet" size="xl">
+          Contact Us
+        </Heading>
 
         {page?.body && (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events

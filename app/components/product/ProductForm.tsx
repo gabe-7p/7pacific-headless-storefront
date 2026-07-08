@@ -2,6 +2,7 @@ import { type MappedProductOptions } from '@shopify/hydrogen';
 import { useNavigate } from 'react-router';
 import type { ProductFragment } from 'storefrontapi.generated';
 
+import { Eyebrow } from '~/components/common/Eyebrow';
 import { cn } from '~/lib/cn';
 
 /** Map Shopify's verbose size values to the short labels the live PDP shows. */
@@ -19,9 +20,7 @@ const SIZE_LABELS: Record<string, string> = {
 const shortLabel = (value: string) => SIZE_LABELS[value.trim().toLowerCase()] ?? value;
 
 const OptionLabel = ({ children }: { children: string }) => (
-  <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
-    {children}
-  </p>
+  <Eyebrow className="mb-2 text-neutral-500">{children}</Eyebrow>
 );
 
 /**

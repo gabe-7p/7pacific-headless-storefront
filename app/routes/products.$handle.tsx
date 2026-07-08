@@ -11,6 +11,8 @@ import { Suspense } from 'react';
 import { Await, redirect, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { Eyebrow } from '~/components/common/Eyebrow';
+import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
@@ -145,7 +147,9 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
         <Container className="px-0 sm:px-0 md:px-0 lg:relative lg:z-10 lg:px-8">
           <div className="flex flex-col bg-white text-neutral-900 lg:max-w-md">
             <div className="p-8 md:p-10">
-              <h1 className="text-2xl font-bold tracking-wide uppercase md:text-3xl">{title}</h1>
+              <Heading as="h1" size="lg">
+                {title}
+              </Heading>
               <div className="mt-3 text-lg">
                 <ProductPrice
                   price={selectedVariant?.price}
@@ -156,9 +160,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
                 <Prose html={descriptionHtml} variant="description" className="mt-4" />
               )}
               <div className="mt-6">
-                <p className="mb-2 text-xs font-semibold tracking-[0.15em] text-neutral-500 uppercase">
-                  Color
-                </p>
+                <Eyebrow className="mb-2 text-neutral-500">Color</Eyebrow>
                 <ColorSwatches handle={product.handle} size="lg" alwaysRender />
               </div>
               <div className="mt-6">
