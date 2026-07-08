@@ -1,12 +1,12 @@
 import { redirect } from 'react-router';
 
-export function redirectIfHandleIsLocalized(
+export const redirectIfHandleIsLocalized = (
   request: Request,
   ...localizedResources: Array<{
     handle: string;
     data: { handle: string } & unknown;
   }>
-) {
+) => {
   const url = new URL(request.url);
   let shouldRedirect = false;
 
@@ -20,4 +20,4 @@ export function redirectIfHandleIsLocalized(
   if (shouldRedirect) {
     throw redirect(url.toString());
   }
-}
+};

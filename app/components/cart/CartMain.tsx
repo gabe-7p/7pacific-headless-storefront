@@ -14,10 +14,10 @@ export type CartMainProps = {
   layout: CartLayout;
 };
 
-export type LineItemChildrenMap = { [parentId: string]: CartLine[] };
+export type LineItemChildrenMap = { [parentId: string]: Array<CartLine> };
 
 /** Returns a map of all line items and their children. */
-function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
+const getLineItemChildrenMap = (lines: Array<CartLine>): LineItemChildrenMap => {
   const children: LineItemChildrenMap = {};
   for (const line of lines) {
     if ('parentRelationship' in line && line.parentRelationship?.parent) {
@@ -34,7 +34,7 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
     }
   }
   return children;
-}
+};
 
 /**
  * The cart contents, shared by the /cart route (`page`) and the drawer (`aside`).

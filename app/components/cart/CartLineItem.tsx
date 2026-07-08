@@ -136,7 +136,13 @@ const QuantityStepper = ({ line }: { line: CartLine }) => {
   );
 };
 
-const CartLineRemoveButton = ({ lineIds, disabled }: { lineIds: string[]; disabled: boolean }) => {
+const CartLineRemoveButton = ({
+  lineIds,
+  disabled,
+}: {
+  lineIds: Array<string>;
+  disabled: boolean;
+}) => {
   return (
     <CartForm
       fetcherKey={getUpdateKey(lineIds)}
@@ -160,7 +166,7 @@ const CartLineUpdateButton = ({
   lines,
 }: {
   children: React.ReactNode;
-  lines: CartLineUpdateInput[];
+  lines: Array<CartLineUpdateInput>;
 }) => {
   const lineIds = lines.map((line) => line.id);
 
@@ -177,6 +183,5 @@ const CartLineUpdateButton = ({
 };
 
 /** Stable key so rapid +/- on the same line cancel rather than race. */
-function getUpdateKey(lineIds: string[]) {
-  return [CartForm.ACTIONS.LinesUpdate, ...lineIds].join('-');
-}
+const getUpdateKey = (lineIds: Array<string>) =>
+  [CartForm.ACTIONS.LinesUpdate, ...lineIds].join('-');

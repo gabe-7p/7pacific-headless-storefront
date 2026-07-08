@@ -17,7 +17,7 @@ export class AppSession implements HydrogenSession {
     this.#session = session;
   }
 
-  static async init(request: Request, secrets: string[]) {
+  static async init(request: Request, secrets: Array<string>) {
     const storage = createCookieSessionStorage({
       cookie: {
         name: 'session',

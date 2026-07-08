@@ -80,10 +80,10 @@ const AsideProvider = ({ children }: { children: ReactNode }) => {
 
 Aside.Provider = AsideProvider;
 
-export function useAside() {
+export const useAside = () => {
   const aside = useContext(AsideContext);
   if (!aside) {
     throw new Error('useAside must be used within an AsideProvider');
   }
   return aside;
-}
+};

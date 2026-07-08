@@ -92,11 +92,14 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
 function loadDeferredData({ context, params }: Route.LoaderArgs) {
   const { handle } = params;
 
+  // No handle → the critical loader is about to 404; skip the deferred fetch.
+  if (!handle) return { recommendations: Promise.resolve(null) };
+
   // "PLANNING TO SWEAT MORE?" — read the curated recommended_products metafield
   // references. Deferred + guarded so a failure never 500s the PDP.
   const recommendations = context.storefront
     .query(RECOMMENDATIONS_QUERY, {
-      variables: { handle: handle! },
+      variables: { handle },
       cache: context.storefront.CacheLong(),
     })
     .then(({ product }) => {
