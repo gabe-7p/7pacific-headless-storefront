@@ -2,8 +2,13 @@ import { Link, useLoaderData } from 'react-router';
 import type { PoliciesQuery, PolicyItemFragment } from 'storefrontapi.generated';
 
 import { Heading } from '~/components/common/Heading';
+import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/policies._index';
+
+export const meta: Route.MetaFunction = () => {
+  return buildMeta({ title: 'Policies' });
+};
 
 export async function loader({ context }: Route.LoaderArgs) {
   const data: PoliciesQuery = await context.storefront.query(POLICIES_QUERY);
