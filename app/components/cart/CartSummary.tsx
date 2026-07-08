@@ -20,11 +20,11 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
         'px-5 py-5',
         layout === 'aside'
           ? 'border-border-subtle border-t'
-          : 'border-border-subtle lg:w-80 lg:flex-none lg:border lg:p-6'
+          : 'lg:w-80 lg:flex-none lg:bg-neutral-50 lg:p-6'
       )}
     >
       <div className="flex items-baseline justify-between">
-        <span className="text-sm font-semibold tracking-wide uppercase">Subtotal</span>
+        <span className="text-sm">Subtotal</span>
         <span className="text-sm font-medium">
           {cart?.cost?.subtotalAmount?.amount ? <Money data={cart?.cost?.subtotalAmount} /> : '-'}
         </span>
