@@ -87,9 +87,12 @@ export const OurStory = () => {
         </div>
       </Container>
 
+      {/* Full-width black rule separating Fitness from Our Story (matches live). */}
+      <hr className="border-t border-black" />
+
       {/* STORY — display heading above the grid (left on desktop, centered on
           tablet/mobile); small square image + four-paragraph founder story. */}
-      <div className="bg-neutral-50">
+      <div>
         <Container className="py-16 md:py-24">
           <Heading as="h2" size="display" className="text-center lg:text-left">
             {story.heading}
@@ -99,7 +102,7 @@ export const OurStory = () => {
               src={story.image}
               alt={story.founder.name}
               loading="lazy"
-              className="mx-auto aspect-square w-full max-w-sm object-cover lg:mx-0 lg:w-[300px] lg:max-w-none lg:flex-none"
+              className="mx-auto aspect-[285/195] w-full max-w-sm object-cover lg:mx-0 lg:w-[285px] lg:max-w-none lg:flex-none"
             />
             <div className="lg:flex-1">
               <div className="space-y-4 text-sm leading-relaxed text-neutral-600">
@@ -108,12 +111,8 @@ export const OurStory = () => {
                 ))}
               </div>
               <div className="mt-6">
-                <p className="text-brand text-sm font-semibold tracking-wide uppercase">
-                  {story.founder.name}
-                </p>
-                <p className="text-xs tracking-wide text-neutral-500 uppercase">
-                  {story.founder.role}
-                </p>
+                <p className="text-brand text-lg font-semibold">{story.founder.name}</p>
+                <p className="mt-0.5 text-xs text-neutral-700">{story.founder.role}</p>
               </div>
             </div>
           </div>
