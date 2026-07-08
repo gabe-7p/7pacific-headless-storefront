@@ -61,7 +61,7 @@ const MobileMenuAside = ({
   return (
     header.menu &&
     header.shop.primaryDomain?.url && (
-      <Aside type="mobile" heading="MENU">
+      <Aside type="mobile" heading="MENU" side="left">
         <HeaderMenu
           menu={header.menu}
           viewport="mobile"

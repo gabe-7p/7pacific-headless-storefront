@@ -10,18 +10,21 @@ type AsideContextValue = {
 };
 
 /**
- * A right-side slide-in drawer. Built on the shadcn/ui `Sheet` (Radix Dialog),
- * so focus trap, scroll lock, return-focus, Esc-to-close, and ARIA come for
- * free. Open state is shared via {@link useAside}.
+ * A slide-in drawer, anchored to `side` (right by default; the mobile menu uses
+ * left to match live). Built on the shadcn/ui `Sheet` (Radix Dialog), so focus
+ * trap, scroll lock, return-focus, Esc-to-close, and ARIA come for free. Open
+ * state is shared via {@link useAside}.
  */
 export const Aside = ({
   children,
   heading,
   type,
+  side = 'right',
 }: {
   children?: ReactNode;
   type: AsideType;
   heading: ReactNode;
+  side?: 'left' | 'right';
 }) => {
   const { type: activeType, close } = useAside();
   const open = type === activeType;
@@ -34,7 +37,7 @@ export const Aside = ({
       }}
     >
       <SheetContent
-        side="right"
+        side={side}
         className="w-[350px] gap-0 p-0 sm:w-[450px] sm:max-w-none"
         aria-describedby={undefined}
       >
