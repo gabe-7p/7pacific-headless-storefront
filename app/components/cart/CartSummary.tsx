@@ -28,6 +28,9 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       <div className="flex items-baseline justify-between">
         <span className="text-sm">Subtotal</span>
         <span className="text-sm font-medium">
+          {/* Deliberately raw <Money> ("$74.00"), NOT the brand <Price> ("$74 USD"):
+              the live cart shows cents without a currency suffix. Product cards
+              and the PDP use <Price>. */}
           {cart?.cost?.subtotalAmount?.amount ? <Money data={cart?.cost?.subtotalAmount} /> : '-'}
         </span>
       </div>
