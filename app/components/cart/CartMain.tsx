@@ -74,9 +74,7 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
   const { close } = useAside();
   return (
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
-      <p className="text-sm text-neutral-600">
-        Looks like you haven&rsquo;t added anything yet — let&rsquo;s get you started.
-      </p>
+      <p className="text-sm text-neutral-600">Your cart is currently empty.</p>
       <Button asChild variant="brand" size="lg" className="mt-5">
         <Link to="/collections" onClick={close} prefetch="viewport">
           Continue shopping
