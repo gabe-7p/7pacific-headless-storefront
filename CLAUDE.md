@@ -21,6 +21,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 | Type check                | `pnpm type-check`                              |
 | Lint                      | `pnpm lint`                                    |
 | Format                    | `pnpm prettier` / check: `pnpm prettier:check` |
+| Unit tests (Vitest)       | `pnpm test`                                    |
 | Regenerate GraphQL types  | `pnpm graphql:generate`                        |
 | Dependency-boundary check | `pnpm depcruise`                               |
 | Add a shadcn/ui primitive | `pnpm dlx shadcn@latest add <name>`            |
@@ -31,8 +32,9 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 ```
 app/
   routes/        one file per route (React Router flat convention); loader/action live here
-  components/    presentational only — layout/ cart/ product/ search/ common/ ui/ (generated shadcn primitives)
-  lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils
+  components/    presentational only — layout/ cart/ product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
+  content/       typed marketing copy + store links (links.ts = the ONE place product/collection handles live)
+  lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
   styles/        tailwind.css + minimal globals
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
@@ -65,7 +67,16 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 
 ## Domain note: color = separate product
 
-The 9 live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/colors.ts` — don't model color as a `ProductVariant` selectedOption. Adding a product/color is a Shopify-only task (see CLAUDE.md "How to add/swap a product or color").
+The 9 live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/colors.ts` — don't model color as a `ProductVariant` selectedOption.
+
+## How to add/swap a product or color (Shopify-only — no deploy)
+
+1. **Create the product** in Shopify admin (one product per color, handle ending in the color suffix, e.g. `…-slate`). Publish it to the **7Pacific Headless Storefront** channel.
+2. **Set its color metafields**: `custom.color_name` ("Slate"), `custom.color_hex` (`#8A8F98`), `custom.color_siblings` (ordered list of ALL products in the color family, **including the new product itself**).
+3. **Update every sibling's `custom.color_siblings`** to include the new product (the list is the swatch row, in display order).
+4. **Set the PDP content metafields** if it's a new product type: `custom.fit_note`, `custom.product_details` (JSON), `custom.tech_stack` (JSON), `custom.recommended_products`.
+5. **Add it to collections**: `summer-25` (the shop-all collection page) and `homepage-first-drop` (drag into position — its order IS the homepage grid order).
+6. Only if a CTA should target it: update [app/content/links.ts](app/content/links.ts) — the one place product/collection handles appear in code.
 
 ## Documentation discipline
 

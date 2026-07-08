@@ -49,12 +49,15 @@ Today the code is organized by **domain folders**:
 app/
   routes/        one file per route (React Router flat convention)
   components/
-    layout/      Header, Footer, PageLayout, Aside
+    layout/      Header, Footer, PageLayout, Aside, NewsletterPopup, Announcement
     cart/        cart UI
-    product/     ProductForm, ProductImage, ProductPrice, ProductItem
-    search/      search + predictive search
-    common/      shared primitives
-  lib/           fragments.ts, context.ts, session.ts, search.ts, variants.ts, …
+    product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
+    collection/  ProductCard, MarketingSections
+    home/        homepage sections
+    content/     static-page compositions (OurStory)
+    common/      shared primitives (Container, Heading, Prose, TextLink, Eyebrow, …)
+  content/       typed marketing copy + store links (links.ts)
+  lib/           fragments.ts, context.ts, session.ts, colors.ts, metafields.ts, seo.ts, … (+ colocated *.test.ts)
   styles/        tailwind.css + globals
 ```
 
@@ -97,7 +100,7 @@ Oxygen builds and deploys from GitHub:
 - **Pull request** → Oxygen builds a **preview deployment** with its own URL. This is our primary way to verify a migrated unit against the real store (in place of E2E/visual-regression tooling for v1).
 - **`main`** → **production** deployment.
 
-CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality gate (type-check · lint · format · deps · build) on every PR independently of the Oxygen build.
+CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality gate (type-check · lint · format · deps · unit tests · build) on every PR independently of the Oxygen build.
 
 ## Migration context
 

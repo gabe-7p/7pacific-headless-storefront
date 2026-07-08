@@ -15,7 +15,8 @@
     "prettier": "prettier --write .",
     "prettier:check": "prettier --check .",
     "depcruise": "depcruise app",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest run"
   },
   "dependencies": {
     "@shopify/hydrogen": "*2026.1.1",
@@ -68,7 +69,8 @@
     "prettier": "^3.4.2",
     "typescript": "^5.9.2",
     "vite": "^6.2.4",
-    "vite-tsconfig-paths": "^4.3.1"
+    "vite-tsconfig-paths": "^4.3.1",
+    "vitest": "^4.1.10"
   },
   "engines": {
     "node": "^22 || ^24"
