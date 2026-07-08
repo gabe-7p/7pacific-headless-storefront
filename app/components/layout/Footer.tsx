@@ -1,14 +1,14 @@
-import { ChevronDown, Mail } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { type ReactNode, Suspense, useEffect, useState } from 'react';
-import { Await, NavLink, useFetcher } from 'react-router';
+import { Await, NavLink } from 'react-router';
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Logo } from '~/components/common/Logo';
+import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
-import type { NewsletterResponse } from '~/routes/api.newsletter';
 
 type FooterProps = {
   footer: Promise<FooterQuery | null>;
@@ -103,51 +103,12 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
   );
 };
 
-const Newsletter = () => {
-  const fetcher = useFetcher<NewsletterResponse>();
-  const submitting = fetcher.state !== 'idle';
-  const succeeded = fetcher.data?.ok === true;
-  const { body, placeholder, submitLabel, successMessage } = BRAND.newsletter;
-
-  return (
-    <div className="md:max-w-md">
-      <p className="text-sm text-white/80">{body}</p>
-
-      {succeeded ? (
-        <p className="mt-5 text-sm font-medium">{successMessage}</p>
-      ) : (
-        <fetcher.Form method="post" action="/api/newsletter" className="mt-5">
-          <div className="relative max-w-sm">
-            <label htmlFor="newsletter-email" className="sr-only">
-              {placeholder}
-            </label>
-            <input
-              id="newsletter-email"
-              type="email"
-              name="email"
-              required
-              autoCorrect="off"
-              autoCapitalize="off"
-              placeholder={placeholder}
-              className="w-full rounded-none border-0 border-b border-white/60 bg-transparent px-0 py-2 pr-10 text-white placeholder:text-white/60 focus:border-white focus:outline-none"
-            />
-            <button
-              type="submit"
-              disabled={submitting}
-              aria-label={submitLabel}
-              className="absolute top-1/2 right-0 -translate-y-1/2 transition-opacity hover:opacity-70 disabled:opacity-40"
-            >
-              <Mail className="size-5" />
-            </button>
-          </div>
-          {fetcher.data?.error && (
-            <p className="mt-2 text-sm text-white/80">{fetcher.data.error}</p>
-          )}
-        </fetcher.Form>
-      )}
-    </div>
-  );
-};
+const Newsletter = () => (
+  <div className="md:max-w-md">
+    <p className="text-sm text-white/80">{BRAND.newsletter.body}</p>
+    <NewsletterForm variant="footer" />
+  </div>
+);
 
 const SocialIcons = () => (
   <ul className="flex gap-4">
