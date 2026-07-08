@@ -12,7 +12,9 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const data: PoliciesQuery = await context.storefront.query(POLICIES_QUERY);
+  const data: PoliciesQuery = await context.storefront.query(POLICIES_QUERY, {
+    cache: context.storefront.CacheLong(),
+  });
 
   const shopPolicies = data.shop;
   const policies: Array<PolicyItemFragment> = [

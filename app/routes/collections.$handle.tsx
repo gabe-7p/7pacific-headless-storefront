@@ -78,6 +78,8 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   }, []);
 
   const { collection } = await storefront.query(COLLECTION_QUERY, {
+    // Product listings change with availability/merchandising: short cache.
+    cache: storefront.CacheShort(),
     variables: {
       handle,
       filters,

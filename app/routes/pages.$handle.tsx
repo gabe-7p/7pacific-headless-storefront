@@ -29,6 +29,7 @@ export async function loader({ context, request, params }: Route.LoaderArgs) {
     variables: {
       handle: params.handle,
     },
+    cache: context.storefront.CacheLong(),
   });
 
   if (!page) {

@@ -39,7 +39,14 @@ const { product } = await context.storefront.query(PRODUCT_QUERY, {
 - **Import generated types, never hand-write them.** `ProductCardFragment`, `ProductQuery`, etc. come from `'storefrontapi.generated'`.
 - **Run `pnpm graphql:generate` after editing any query/fragment.** `pnpm dev` and `pnpm build` run codegen automatically; `pnpm type-check` in CI catches a stale/mismatched type.
 - **Localize where relevant** with `@inContext(country:$country, language:$language)` and the matching `$country`/`$language` variables (we're English/US for v1, but keep the directive).
-- **Set caching** on storefront queries (`cache: storefront.CacheLong()` for menus/catalog that rarely change, `CacheShort()` for volatile data).
+- **Set an explicit `cache:` on every `storefront.query`** — never rely on the implicit default, so caching intent is reviewable. The policy:
+
+  | Strategy       | Use for                                                                          | Current users                                                |
+  | -------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+  | `CacheLong()`  | Rarely-changing content: menus, static pages, curated recommendations            | header/footer menus, contact page, home, PDP recommendations |
+  | `CacheShort()` | Price/availability-sensitive listings: the PDP product, collection product grids | `PRODUCT_QUERY`, `COLLECTION_QUERY`                          |
+  | (none)         | Mutations and `context.cart` (Hydrogen manages cart freshness itself)            | cart action                                                  |
+
 - **No GraphQL in components** — see [module-boundaries.md](module-boundaries.md).
 
 ## Fragment naming
