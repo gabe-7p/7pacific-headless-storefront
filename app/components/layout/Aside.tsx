@@ -20,11 +20,13 @@ export const Aside = ({
   heading,
   type,
   side = 'right',
+  showHeader = true,
 }: {
   children?: ReactNode;
   type: AsideType;
   heading: ReactNode;
   side?: 'left' | 'right';
+  showHeader?: boolean;
 }) => {
   const { type: activeType, close } = useAside();
   const open = type === activeType;
@@ -41,11 +43,17 @@ export const Aside = ({
         className="w-[350px] gap-0 p-0 sm:w-[450px] sm:max-w-none"
         aria-describedby={undefined}
       >
-        <SheetHeader className="border-border-subtle h-16 justify-center border-b px-5">
-          <SheetTitle className="text-sm font-semibold tracking-[0.18em] uppercase">
-            {heading}
-          </SheetTitle>
-        </SheetHeader>
+        {showHeader ? (
+          <SheetHeader className="border-border-subtle h-16 justify-center border-b px-5">
+            <SheetTitle className="text-sm font-semibold tracking-[0.18em] uppercase">
+              {heading}
+            </SheetTitle>
+          </SheetHeader>
+        ) : (
+          // No visible chrome (matches live's mobile menu) — the title is kept
+          // sr-only because Radix Dialog requires one for accessibility.
+          <SheetTitle className="sr-only">{heading}</SheetTitle>
+        )}
         <div className="flex-1 overflow-y-auto">{children}</div>
       </SheetContent>
     </Sheet>
