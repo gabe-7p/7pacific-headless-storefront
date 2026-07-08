@@ -10,12 +10,14 @@ export const OUR_STORY = {
   hero: {
     title: 'About Us',
     backgroundImage: `${CDN}/our_story_hero_image.jpg`,
+    // Both CTAs are the orange brand button (uppercase + trailing chevron),
+    // matching live — the second is no longer an outline variant.
     ctas: [
       { label: 'Join The Movement', href: '#newsletter', variant: 'brand' as const },
       {
         label: 'Train With Us',
         href: '/products/airrail-6-performance-shorts-mountain-mist',
-        variant: 'outline' as const,
+        variant: 'brand' as const,
       },
     ],
   },
