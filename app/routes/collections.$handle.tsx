@@ -8,10 +8,7 @@ import { useState } from 'react';
 import { Link, redirect, useLoaderData, useSearchParams } from 'react-router';
 import type { CollectionQuery } from 'storefrontapi.generated';
 
-import {
-  MarketingSections,
-  parseMarketingSections,
-} from '~/components/collection/MarketingSections';
+import { MarketingSections } from '~/components/collection/MarketingSections';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
 import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
@@ -30,6 +27,7 @@ import {
   SelectValue,
 } from '~/components/ui/select';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import { parseMarketingSections } from '~/lib/metafields';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { pageTitle } from '~/lib/seo';
 
@@ -63,7 +61,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   const { storefront } = context;
   const paginationVariables = getPaginationVariables(request, { pageBy: 24 });
 
-  if (!handle) throw redirect('/collections');
+  if (!handle) throw redirect('/');
 
   const url = new URL(request.url);
   const sort = sortFromParam(url.searchParams.get('sort'));
