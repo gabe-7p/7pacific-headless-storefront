@@ -37,8 +37,15 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
             </Container>
 
             <div className="border-t border-white/15">
-              <Container className="py-6 text-center text-xs tracking-wide text-white/60 uppercase">
-                © {new Date().getFullYear()} {header.shop.name}
+              <Container className="py-6 text-center">
+                <a
+                  href="https://www.shopify.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs tracking-wide text-white/60 transition-opacity hover:opacity-80"
+                >
+                  Powered by Shopify
+                </a>
               </Container>
             </div>
           </footer>
