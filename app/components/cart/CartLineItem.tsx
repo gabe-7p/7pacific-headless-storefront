@@ -69,10 +69,13 @@ export const CartLineItem = ({
               ))}
             </ul>
           )}
-          <div className="mt-1 text-sm">
-            <ProductPrice price={line?.cost?.totalAmount} />
+          <div className="mt-3 flex items-center justify-between gap-4">
+            <QuantityStepper line={line} />
+            <div className="text-sm font-medium">
+              <ProductPrice price={line?.cost?.totalAmount} />
+            </div>
           </div>
-          <CartLineQuantity line={line} />
+          <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
         </div>
       </div>
 
@@ -97,41 +100,38 @@ export const CartLineItem = ({
   );
 };
 
-/** Quantity stepper (−/value/+) plus a remove control. */
-const CartLineQuantity = ({ line }: { line: CartLine }) => {
+/** Quantity stepper (−/value/+). */
+const QuantityStepper = ({ line }: { line: CartLine }) => {
   if (!line || typeof line?.quantity === 'undefined') return null;
   const { id: lineId, quantity, isOptimistic } = line;
   const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="mt-3 flex items-center gap-4">
-      <div className="border-border-subtle inline-flex items-center border">
-        <CartLineUpdateButton lines={[{ id: lineId, quantity: prevQuantity }]}>
-          <button
-            aria-label="Decrease quantity"
-            disabled={quantity <= 1 || !!isOptimistic}
-            name="decrease-quantity"
-            value={prevQuantity}
-            className="flex size-8 items-center justify-center transition-opacity hover:opacity-60 disabled:opacity-30"
-          >
-            <Minus className="size-3.5" />
-          </button>
-        </CartLineUpdateButton>
-        <span className="min-w-8 text-center text-sm tabular-nums">{quantity}</span>
-        <CartLineUpdateButton lines={[{ id: lineId, quantity: nextQuantity }]}>
-          <button
-            aria-label="Increase quantity"
-            name="increase-quantity"
-            value={nextQuantity}
-            disabled={!!isOptimistic}
-            className="flex size-8 items-center justify-center transition-opacity hover:opacity-60 disabled:opacity-30"
-          >
-            <Plus className="size-3.5" />
-          </button>
-        </CartLineUpdateButton>
-      </div>
-      <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
+    <div className="border-border-subtle inline-flex items-center border">
+      <CartLineUpdateButton lines={[{ id: lineId, quantity: prevQuantity }]}>
+        <button
+          aria-label="Decrease quantity"
+          disabled={quantity <= 1 || !!isOptimistic}
+          name="decrease-quantity"
+          value={prevQuantity}
+          className="flex size-8 items-center justify-center transition-opacity hover:opacity-60 disabled:opacity-30"
+        >
+          <Minus className="size-3.5" />
+        </button>
+      </CartLineUpdateButton>
+      <span className="min-w-8 text-center text-sm tabular-nums">{quantity}</span>
+      <CartLineUpdateButton lines={[{ id: lineId, quantity: nextQuantity }]}>
+        <button
+          aria-label="Increase quantity"
+          name="increase-quantity"
+          value={nextQuantity}
+          disabled={!!isOptimistic}
+          className="flex size-8 items-center justify-center transition-opacity hover:opacity-60 disabled:opacity-30"
+        >
+          <Plus className="size-3.5" />
+        </button>
+      </CartLineUpdateButton>
     </div>
   );
 };
@@ -147,7 +147,7 @@ const CartLineRemoveButton = ({ lineIds, disabled }: { lineIds: string[]; disabl
       <button
         disabled={disabled}
         type="submit"
-        className="text-xs text-neutral-500 underline underline-offset-2 transition-colors hover:text-black"
+        className="mt-2 text-xs text-neutral-500 transition-colors hover:text-black"
       >
         Remove
       </button>
