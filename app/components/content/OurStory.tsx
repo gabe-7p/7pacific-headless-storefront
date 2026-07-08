@@ -89,7 +89,7 @@ export const OurStory = () => {
 
       {/* STORY — display heading above the grid (left on desktop, centered on
           tablet/mobile); small square image + four-paragraph founder story. */}
-      <div className="bg-neutral-50">
+      <div>
         <Container className="py-16 md:py-24">
           <Heading as="h2" size="display" className="text-center lg:text-left">
             {story.heading}
