@@ -4,7 +4,9 @@
  * "For Intensity. Not Errands." brand section.
  */
 
-const CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
+import { BRAND } from '~/lib/brand';
+
+const CDN = BRAND.filesCdn;
 
 export const PRODUCT_BRAND_BANNER = {
   headingLines: ['For Intensity.', 'Not Errands.'],

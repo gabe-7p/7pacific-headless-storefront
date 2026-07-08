@@ -5,7 +5,7 @@ import { CoreValues } from '~/components/home/CoreValues';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
-import { HOME_FIRST_DROP } from '~/content/home';
+import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
 
@@ -16,19 +16,18 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { products } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
+  // Grid order is merchant-controlled: the manual homepage collection's
+  // product order IS the display order (reorder in Shopify admin).
+  const { collection, products } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
+    variables: { handle: HOMEPAGE_COLLECTION_HANDLE },
     cache: context.storefront.CacheLong(),
   });
 
-  // Match the live homepage's display order; unknown handles sort last.
-  const order = HOME_FIRST_DROP.productOrder as ReadonlyArray<string>;
-  const rank = (handle: string) => {
-    const index = order.indexOf(handle);
-    return index === -1 ? order.length : index;
-  };
-  const sorted = [...products.nodes].sort((a, b) => rank(a.handle) - rank(b.handle));
+  // Fall back to all products if the collection is missing/empty, so a
+  // misconfigured collection never blanks the homepage.
+  const nodes = collection?.products.nodes.length ? collection.products.nodes : products.nodes;
 
-  return { products: sorted };
+  return { products: nodes };
 }
 
 const Homepage = () => {
@@ -51,8 +50,15 @@ const Homepage = () => {
 
 const HOME_PRODUCTS_QUERY = `#graphql
   ${PRODUCT_CARD_FRAGMENT}
-  query HomeProducts($country: CountryCode, $language: LanguageCode)
+  query HomeProducts($handle: String!, $country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      products(first: 12) {
+        nodes {
+          ...ProductCard
+        }
+      }
+    }
     products(first: 12) {
       nodes {
         ...ProductCard

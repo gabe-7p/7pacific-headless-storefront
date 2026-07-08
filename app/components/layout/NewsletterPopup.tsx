@@ -5,8 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from '~/compone
 import { BRAND } from '~/lib/brand';
 
 const DISMISSED_KEY = 'nl_popup_dismissed';
-const IMAGE =
-  'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_019221_cropped2.png';
+const IMAGE = `${BRAND.filesCdn}/24_121_7pacific_019221_cropped2.png`;
 
 /**
  * Site-wide "Join the Membership" newsletter popup. Shows once per visitor
