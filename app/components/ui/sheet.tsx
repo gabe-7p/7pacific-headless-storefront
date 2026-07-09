@@ -1,7 +1,7 @@
-import { XIcon } from 'lucide-react';
 import { Dialog as SheetPrimitive } from 'radix-ui';
 import type * as React from 'react';
 
+import { CloseIcon } from '~/components/common/icons';
 import { cn } from '~/lib/cn';
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
@@ -38,6 +38,7 @@ function SheetOverlay({
 
 function SheetContent({
   className,
+  overlayClassName,
   children,
   side = 'right',
   showCloseButton = true,
@@ -45,10 +46,12 @@ function SheetContent({
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: 'top' | 'right' | 'bottom' | 'left';
   showCloseButton?: boolean;
+  /** Restyle the scrim (7Pacific: the mobile menu doesn't dim the page). */
+  overlayClassName?: string;
 }) {
   return (
     <SheetPortal>
-      <SheetOverlay />
+      <SheetOverlay className={overlayClassName} />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
@@ -68,7 +71,7 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none">
-            <XIcon className="size-4" />
+            <CloseIcon className="size-6" />
             <span className="sr-only">Close</span>
           </SheetPrimitive.Close>
         )}

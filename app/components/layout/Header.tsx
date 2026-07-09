@@ -1,10 +1,10 @@
 import { type CartViewPayload, useAnalytics, useOptimisticCart } from '@shopify/hydrogen';
-import { Menu, ShoppingBag, User } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 import { Await, NavLink, useAsyncValue, useLocation } from 'react-router';
 import type { CartApiQueryFragment, HeaderQuery } from 'storefrontapi.generated';
 
 import { Container } from '~/components/common/Container';
+import { BagIcon, HamburgerIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/lib/brand';
@@ -106,7 +106,13 @@ export const HeaderMenu = ({
 
   return (
     <nav
-      className={cn(isMobile ? 'flex flex-col py-2' : 'hidden items-center gap-7 lg:flex')}
+      // Live's mobile drawer clears the close button before the first link and
+      // rules a hairline above it.
+      className={cn(
+        isMobile
+          ? 'border-border-subtle mt-[68px] flex flex-col border-t'
+          : 'hidden items-center gap-7 lg:flex'
+      )}
       role="navigation"
     >
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
@@ -118,15 +124,13 @@ export const HeaderMenu = ({
             onClick={close}
             prefetch="intent"
             to={toInternalPath(item.url)}
-            className={({ isActive }) =>
-              cn(
-                'tracking-wide transition-opacity hover:opacity-70',
-                isMobile
-                  ? 'border-border-subtle border-b px-5 py-4 text-lg font-medium'
-                  : 'text-xs font-normal',
-                isActive && 'underline underline-offset-4'
-              )
-            }
+            // Live never marks the current page in the nav, so no active state.
+            className={cn(
+              'tracking-wide transition-opacity hover:opacity-70',
+              isMobile
+                ? 'border-border-subtle border-b px-5 py-4 text-lg font-medium'
+                : 'text-xs font-normal'
+            )}
           >
             {item.title}
           </NavLink>
@@ -187,7 +191,7 @@ const HeaderCtas = ({
         className="hidden items-center transition-opacity hover:opacity-70 lg:inline-flex"
         title="Log in"
       >
-        <User className="size-[22px]" strokeWidth={1.6} />
+        <UserIcon className="size-7" />
         <span className="sr-only">Log in</span>
       </a>
       <CartToggle cart={cart} />
@@ -204,7 +208,7 @@ const HeaderMenuMobileToggle = () => {
       aria-label="Open menu"
       onClick={() => open('mobile')}
     >
-      <Menu className="size-6" />
+      <HamburgerIcon className="size-7" />
     </button>
   );
 };
@@ -229,7 +233,7 @@ const CartBadge = ({ count }: { count: number | null }) => {
         } as CartViewPayload);
       }}
     >
-      <ShoppingBag className="size-6" strokeWidth={1.6} />
+      <BagIcon className="size-7" />
       {count !== null && count > 0 && (
         <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white">
           {count}
