@@ -1,7 +1,9 @@
 import { type Shop } from '@shopify/hydrogen/storefront-api-types';
-import { Link, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 
+import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { Prose } from '~/components/common/Prose';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
 
@@ -50,18 +52,21 @@ const Policy = () => {
   const { policy } = useLoaderData<typeof loader>();
 
   return (
-    <div className="policy">
-      <br />
-      <br />
-      <div>
-        <Link to="/policies">← Back to Policies</Link>
+    // Live renders policies in a narrow centred column. It has no /policies
+    // index, so there's no "back" link to offer.
+    <Container className="py-16 md:py-24">
+      <div className="mx-auto max-w-[400px]">
+        <Heading
+          as="h1"
+          variant="quiet"
+          size="none"
+          className="text-center text-[22px] font-semibold tracking-normal"
+        >
+          {policy.title}
+        </Heading>
+        <Prose html={policy.body} variant="policy" className="mt-8" />
       </div>
-      <br />
-      <Heading as="h1" variant="quiet" className="my-8 tracking-normal">
-        {policy.title}
-      </Heading>
-      <div dangerouslySetInnerHTML={{ __html: policy.body }} />
-    </div>
+    </Container>
   );
 };
 
