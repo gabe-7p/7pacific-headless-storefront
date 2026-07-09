@@ -44,47 +44,42 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
   const overlay = isHome && !scrolled;
 
   return (
-    <>
-      <header
-        className={cn(
-          // sits directly below the fixed announcement bar
-          'fixed inset-x-0 top-(--announcement-h) z-40 transition-colors duration-300 ease-(--ease-brand)',
-          overlay
-            ? 'bg-linear-to-b from-black/30 to-transparent text-white'
-            : 'bg-nav text-nav-text shadow-sm'
-        )}
-      >
-        <Container className="grid h-(--header-h) grid-cols-[1fr_auto_1fr] items-center">
-          <div className="flex items-center gap-6">
-            <HeaderMenuMobileToggle />
-            <HeaderMenu
-              menu={menu}
-              viewport="desktop"
-              primaryDomainUrl={shop.primaryDomain.url}
-              publicStoreDomain={publicStoreDomain}
-            />
-          </div>
+    <header
+      className={cn(
+        // positioned by the sticky topbar wrapper in PageLayout
+        'transition-colors duration-300 ease-(--ease-brand)',
+        overlay
+          ? 'bg-linear-to-b from-black/30 to-transparent text-white'
+          : 'bg-nav text-nav-text shadow-sm'
+      )}
+    >
+      <Container className="grid h-(--header-h) grid-cols-[1fr_auto_1fr] items-center">
+        <div className="flex items-center gap-6">
+          <HeaderMenuMobileToggle />
+          <HeaderMenu
+            menu={menu}
+            viewport="desktop"
+            primaryDomainUrl={shop.primaryDomain.url}
+            publicStoreDomain={publicStoreDomain}
+          />
+        </div>
 
-          <NavLink
-            prefetch="intent"
-            to="/"
-            end
-            className="justify-self-center"
-            aria-label={shop.name}
-          >
-            <Logo
-              tone={overlay ? 'light' : 'dark'}
-              className={cn('h-5 lg:h-8', overlay && 'opacity-70')}
-            />
-          </NavLink>
+        <NavLink
+          prefetch="intent"
+          to="/"
+          end
+          className="justify-self-center"
+          aria-label={shop.name}
+        >
+          <Logo
+            tone={overlay ? 'light' : 'dark'}
+            className={cn('h-5 lg:h-8', overlay && 'opacity-70')}
+          />
+        </NavLink>
 
-          <HeaderCtas cart={cart} publicStoreDomain={publicStoreDomain} />
-        </Container>
-      </header>
-      {/* Spacer so content isn't hidden under the fixed header (skipped on the
-          homepage, where the hero sits beneath the transparent overlay). */}
-      {!isHome && <div aria-hidden className="h-(--topbar-h)" />}
-    </>
+        <HeaderCtas cart={cart} publicStoreDomain={publicStoreDomain} />
+      </Container>
+    </header>
   );
 };
 
