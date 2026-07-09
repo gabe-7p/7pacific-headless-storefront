@@ -42,21 +42,22 @@ export const OurStory = () => {
               {hero.title}
             </Heading>
           </Container>
-          {/* CTA band: left-anchored pills on desktop; full-width stacked bars
-              spanning the viewport on tablet/mobile. */}
+          {/* CTA band: compact left-anchored buttons on desktop; inset stacked
+              bars on tablet/mobile. Live sizes them by content — 4px padding,
+              30/31px tall, label and chevron sitting together on the left. */}
           <div className="border-t border-white/25">
-            <div className="mx-auto flex w-full max-w-(--page-max) flex-col gap-px lg:flex-row lg:gap-3 lg:px-8 lg:py-4">
+            <Container className="flex flex-col gap-5 py-5 lg:flex-row lg:py-4">
               {hero.ctas.map((cta) => (
                 <Button
                   key={cta.label}
                   asChild
                   variant={cta.variant}
-                  className="w-full justify-between px-5 py-4 lg:w-auto lg:justify-center lg:px-6 lg:py-2"
+                  className="h-[30px] w-full justify-start px-2 py-0 text-xs lg:h-[31px] lg:w-auto lg:text-base"
                 >
                   <Link to={cta.href}>{cta.label}</Link>
                 </Button>
               ))}
-            </div>
+            </Container>
           </div>
         </div>
       </section>
