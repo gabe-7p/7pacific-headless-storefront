@@ -1,4 +1,4 @@
-import { CartForm, Image, type OptimisticCartLine } from '@shopify/hydrogen';
+import { CartForm, Image, Money, type OptimisticCartLine } from '@shopify/hydrogen';
 import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types';
 import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
@@ -72,10 +72,15 @@ export const CartLineItem = ({
           <div className="mt-3 flex items-center justify-between gap-4">
             <QuantityStepper line={line} />
             <div className="text-sm font-medium">
-              <ProductPrice price={line?.cost?.totalAmount} />
+              {/* Raw <Money> ("$79.00") to match the cart's subtotal, not the
+                  brand <Price> ("$79 USD") the PDP and product cards use. */}
+              {line?.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
             </div>
           </div>
-          <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
+          {/* Live's drawer removes via the stepper; the /cart page has the link. */}
+          {layout === 'page' && (
+            <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
+          )}
         </div>
       </div>
 
