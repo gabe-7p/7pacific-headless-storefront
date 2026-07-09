@@ -12,7 +12,11 @@ import { HOME_FIRST_DROP } from '~/content/home';
  */
 export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
   <Container className="py-14 md:py-20">
-    <SectionHeader heading={HOME_FIRST_DROP.heading} subtitle={HOME_FIRST_DROP.subtitle} />
+    <SectionHeader
+      heading={HOME_FIRST_DROP.heading}
+      subtitle={HOME_FIRST_DROP.subtitle}
+      scale="section"
+    />
     <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-3">
       {products.map((product, index) => (
         // Eager-load the first visible row (2 on mobile, 3 on desktop) so the
