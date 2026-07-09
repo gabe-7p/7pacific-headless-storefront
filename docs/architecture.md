@@ -100,6 +100,8 @@ Oxygen builds and deploys from GitHub:
 - **Pull request** → Oxygen builds a **preview deployment** with its own URL. This is our primary way to verify a migrated unit against the real store (in place of E2E/visual-regression tooling for v1).
 - **`main`** → **production** deployment.
 
+> **Known preview-only console noise:** `*.o2.myshopify.dev` previews sit behind Shopify's SSO auth wall. When your preview login cookie expires, subresources loaded in frames (e.g. the analytics/consent sandbox iframe) get 302'd to `accounts.shopify.com/oauth/authorize` (redirect via `cf-auth-worker.myshopify.dev`) and the browser logs _"Unsafe attempt to load URL … Domains, protocols and ports must match."_ This is Oxygen's preview auth, **not app code** — reload and re-authenticate to clear it. It cannot occur on the production domain (no auth wall).
+
 CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality gate (type-check · lint · format · deps · unit tests · build) on every PR independently of the Oxygen build.
 
 ## Migration context
