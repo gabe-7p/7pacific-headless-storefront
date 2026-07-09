@@ -278,6 +278,16 @@ export type ProductCardFragment = Pick<
     Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
   >;
   priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
+  colorSiblings?: StorefrontAPI.Maybe<{
+    references?: StorefrontAPI.Maybe<{
+      nodes: Array<
+        Pick<StorefrontAPI.Product, 'handle'> & {
+          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        }
+      >;
+    }>;
+  }>;
 };
 
 export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
@@ -300,6 +310,16 @@ export type HomeProductsQuery = {
           Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
         >;
         priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
+        colorSiblings?: StorefrontAPI.Maybe<{
+          references?: StorefrontAPI.Maybe<{
+            nodes: Array<
+              Pick<StorefrontAPI.Product, 'handle'> & {
+                colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+              }
+            >;
+          }>;
+        }>;
       }
     >;
   };
@@ -332,6 +352,16 @@ export type CollectionQuery = {
               Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
             >;
             priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
+            colorSiblings?: StorefrontAPI.Maybe<{
+              references?: StorefrontAPI.Maybe<{
+                nodes: Array<
+                  Pick<StorefrontAPI.Product, 'handle'> & {
+                    colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                    colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                  }
+                >;
+              }>;
+            }>;
           }
         >;
         filters: Array<
@@ -516,6 +546,16 @@ export type ProductFragment = Pick<
   >;
   seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
   fitNote?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  colorSiblings?: StorefrontAPI.Maybe<{
+    references?: StorefrontAPI.Maybe<{
+      nodes: Array<
+        Pick<StorefrontAPI.Product, 'handle'> & {
+          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        }
+      >;
+    }>;
+  }>;
   productDetails?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
   techStack?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
 };
@@ -610,6 +650,16 @@ export type ProductQuery = {
       >;
       seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
       fitNote?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+      colorSiblings?: StorefrontAPI.Maybe<{
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            Pick<StorefrontAPI.Product, 'handle'> & {
+              colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+              colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+            }
+          >;
+        }>;
+      }>;
       productDetails?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
       techStack?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
     }
@@ -632,6 +682,16 @@ export type ProductRecommendationsQuery = {
               Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
             >;
             priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
+            colorSiblings?: StorefrontAPI.Maybe<{
+              references?: StorefrontAPI.Maybe<{
+                nodes: Array<
+                  Pick<StorefrontAPI.Product, 'handle'> & {
+                    colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                    colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                  }
+                >;
+              }>;
+            }>;
           }
         >;
       }>;
@@ -652,11 +712,11 @@ interface GeneratedQueryTypes {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  query HomeProducts($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 12) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query HomeProducts($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 12) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n': {
     return: HomeProductsQuery;
     variables: HomeProductsQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $filters: [ProductFilter!]\n    $sortKey: ProductCollectionSortKeys!\n    $reverse: Boolean\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      marketingSections: metafield(namespace: "custom", key: "marketing_sections") {\n        value\n      }\n      products(\n        first: $first\n        last: $last\n        before: $startCursor\n        after: $endCursor\n        filters: $filters\n        sortKey: $sortKey\n        reverse: $reverse\n      ) {\n        nodes {\n          ...ProductCard\n          label: metafield(namespace: "theme", key: "label") {\n            value\n          }\n        }\n        filters {\n          id\n          label\n          type\n          values {\n            id\n            label\n            count\n            input\n          }\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $filters: [ProductFilter!]\n    $sortKey: ProductCollectionSortKeys!\n    $reverse: Boolean\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      marketingSections: metafield(namespace: "custom", key: "marketing_sections") {\n        value\n      }\n      products(\n        first: $first\n        last: $last\n        before: $startCursor\n        after: $endCursor\n        filters: $filters\n        sortKey: $sortKey\n        reverse: $reverse\n      ) {\n        nodes {\n          ...ProductCard\n          label: metafield(namespace: "theme", key: "label") {\n            value\n          }\n        }\n        filters {\n          id\n          label\n          type\n          values {\n            id\n            label\n            count\n            input\n          }\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
     return: CollectionQuery;
     variables: CollectionQueryVariables;
   };
@@ -676,11 +736,11 @@ interface GeneratedQueryTypes {
     return: PoliciesQuery;
     variables: PoliciesQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n    fitNote: metafield(namespace: "custom", key: "fit_note") {\n      value\n    }\n    productDetails: metafield(namespace: "custom", key: "product_details") {\n      value\n    }\n    techStack: metafield(namespace: "custom", key: "tech_stack") {\n      value\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n    fitNote: metafield(namespace: "custom", key: "fit_note") {\n      value\n    }\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n    productDetails: metafield(namespace: "custom", key: "product_details") {\n      value\n    }\n    techStack: metafield(namespace: "custom", key: "tech_stack") {\n      value\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n  }\n\n  query ProductRecommendations($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      recommended: metafield(namespace: "custom", key: "recommended_products") {\n        references(first: 10) {\n          nodes {\n            ... on Product {\n              ...ProductCard\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query ProductRecommendations($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      recommended: metafield(namespace: "custom", key: "recommended_products") {\n        references(first: 10) {\n          nodes {\n            ... on Product {\n              ...ProductCard\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: ProductRecommendationsQuery;
     variables: ProductRecommendationsQueryVariables;
   };

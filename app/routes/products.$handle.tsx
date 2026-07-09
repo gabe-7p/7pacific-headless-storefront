@@ -23,6 +23,7 @@ import { ProductPrice } from '~/components/product/ProductPrice';
 import { Recommendations } from '~/components/product/Recommendations';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
+import { getColorSwatches } from '~/lib/colors';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { parseJsonMetafield } from '~/lib/metafields';
@@ -167,7 +168,12 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               )}
               <div className="mt-6">
                 <Eyebrow className="mb-2 text-neutral-500">Color</Eyebrow>
-                <ColorSwatches handle={product.handle} size="lg" alwaysRender />
+                <ColorSwatches
+                  swatches={getColorSwatches(product.colorSiblings)}
+                  currentHandle={product.handle}
+                  size="lg"
+                  alwaysRender
+                />
               </div>
               <div className="mt-6">
                 <ProductForm productOptions={productOptions} />
@@ -286,6 +292,21 @@ const PRODUCT_FRAGMENT = `#graphql
     }
     fitNote: metafield(namespace: "custom", key: "fit_note") {
       value
+    }
+    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
+      references(first: 10) {
+        nodes {
+          ... on Product {
+            handle
+            colorName: metafield(namespace: "custom", key: "color_name") {
+              value
+            }
+            colorHex: metafield(namespace: "custom", key: "color_hex") {
+              value
+            }
+          }
+        }
+      }
     }
     productDetails: metafield(namespace: "custom", key: "product_details") {
       value

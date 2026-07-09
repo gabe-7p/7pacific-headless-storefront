@@ -32,7 +32,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 app/
   routes/        one file per route (React Router flat convention); loader/action live here
   components/    presentational only — layout/ cart/ product/ search/ common/ ui/ (generated shadcn primitives)
-  lib/           fragments.ts, context.ts, session.ts, colorMap.ts, productContent.ts, cross-cutting utils
+  lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils
   styles/        tailwind.css + minimal globals
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
@@ -65,7 +65,7 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 
 ## Domain note: color = separate product
 
-The 9 live products are **separate Shopify products per color**, not variants. Color switching navigates between sibling handles via `lib/colorMap.ts` — don't model color as a `ProductVariant` selectedOption.
+The 9 live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/colors.ts` — don't model color as a `ProductVariant` selectedOption. Adding a product/color is a Shopify-only task (see CLAUDE.md "How to add/swap a product or color").
 
 ## Documentation discipline
 

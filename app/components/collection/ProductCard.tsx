@@ -4,6 +4,7 @@ import type { ProductCardFragment } from 'storefrontapi.generated';
 
 import { Price } from '~/components/common/Price';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
+import { getColorSwatches } from '~/lib/colors';
 
 type ProductCardProps = {
   product: ProductCardFragment;
@@ -56,7 +57,8 @@ export const ProductCard = ({
         </Link>
         <Price data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />
         <ColorSwatches
-          handle={handle}
+          swatches={getColorSwatches(product.colorSiblings)}
+          currentHandle={handle}
           className="mt-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
         />
       </div>

@@ -45,7 +45,7 @@ Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists` for single-record f
 ## Files & routes
 
 - Route files follow React Router's flat convention (`collections.$handle.tsx`, `blogs.$blogHandle.$articleHandle.tsx`) — don't rename them by hand.
-- Non-route files: `camelCase.ts` for utilities/logic (`colorMap.ts`), `PascalCase.tsx` for components.
+- Non-route files: `camelCase.ts` for utilities/logic (`colors.ts`), `PascalCase.tsx` for components.
 - Typed content constants: `content/<topic>.ts` (e.g. `content/our-story.ts`).
 
 ## Variables & types
