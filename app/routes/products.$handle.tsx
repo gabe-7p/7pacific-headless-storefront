@@ -174,7 +174,12 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               the measure the description was authored against. */}
           <div className="flex flex-col bg-white text-neutral-900 lg:max-w-[500px]">
             <div className="p-5">
-              <Heading as="h1" size="lg">
+              {/* Live: 24px / 600 / 0.05em. */}
+              <Heading
+                as="h1"
+                size="none"
+                className="text-2xl leading-[1.3] font-semibold tracking-[0.05em]"
+              >
                 {title}
               </Heading>
               <div className="mt-3 text-lg">

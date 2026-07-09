@@ -12,10 +12,11 @@ import { SectionHeader } from '~/components/common/SectionHeader';
  */
 export const Recommendations = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
   <Container className="py-14 md:py-20">
+    {/* Live left-aligns this heading and its subtitle at 40px. */}
     <SectionHeader
       heading="Planning To Sweat More?"
       subtitle="Shop more of what you need to get you through those sessions."
-      align="center"
+      scale="sub"
     />
     <Scroller>
       {products.map((product) => (

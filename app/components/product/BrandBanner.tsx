@@ -22,7 +22,12 @@ export const BrandBanner = () => {
         />
         <div className="absolute inset-0 flex justify-center px-6 pt-10 text-center md:justify-end md:pt-16 lg:pt-24 lg:pr-[8%]">
           <div className="max-w-md">
-            <Heading as="h2" size="display">
+            {/* Live: 60px / 500 / -0.02em (tight negative tracking). */}
+            <Heading
+              as="h2"
+              size="none"
+              className="text-[2.25rem] leading-[1.1] tracking-[-0.02em] md:text-[3.75rem]"
+            >
               {headingLines.map((line) => (
                 <span key={line} className="block">
                   {line}
