@@ -5,7 +5,14 @@ import type { ProductDetailCard } from '~/lib/productContent';
 
 const DetailCard = ({ card }: { card: ProductDetailCard }) => (
   <div>
-    <img src={card.imageUrl} alt="" loading="lazy" className="aspect-square w-full object-cover" />
+    {/* Live crops these portrait — 32:45 on mobile, 5:6 (500x600) on desktop.
+        A square crop cut the legs and waistband out of the compositions. */}
+    <img
+      src={card.imageUrl}
+      alt=""
+      loading="lazy"
+      className="aspect-[32/45] w-full object-cover lg:aspect-[5/6]"
+    />
     <h3 className="mt-3 text-sm font-bold tracking-wide uppercase">{card.caption}</h3>
     <p className="mt-1 text-sm text-white/70">{card.subcaption}</p>
   </div>
@@ -18,7 +25,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
  */
 export const ProductDetails = ({ cards }: { cards: ReadonlyArray<ProductDetailCard> }) => (
   <PdpSection>
-    <SectionHeader heading="Product Details" />
+    <SectionHeader heading="Product Details" scale="panel" />
     <Scroller>
       {cards.map((card) => (
         <DetailCard key={card.caption} card={card} />
