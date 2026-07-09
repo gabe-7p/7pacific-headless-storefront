@@ -70,18 +70,15 @@ const Contact = () => {
 
   return (
     <Container className="py-16 md:py-24">
-      {/* Left-aligned content column (matches live) — not a centered narrow box. */}
-      <div className="max-w-2xl">
-        <Heading as="h1" variant="quiet" size="xl">
+      {/* Live centres a ~960px column and lets the copy sit on the page — no card. */}
+      <div className="mx-auto max-w-[960px]">
+        <Heading as="h1" variant="quiet" size="none" className="text-[2.4rem] font-semibold">
           Contact Us
         </Heading>
 
         {page?.body && (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-          <div
-            onClick={handleContentClick}
-            className="border-border-subtle mt-6 border bg-neutral-50 p-6 md:p-8"
-          >
+          <div onClick={handleContentClick} className="mt-6">
             <Prose html={page.body} variant="compact" />
           </div>
         )}
