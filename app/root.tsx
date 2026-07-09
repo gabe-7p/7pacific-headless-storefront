@@ -67,6 +67,9 @@ export function links() {
       href: 'https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap',
     },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
+    // Legacy fallback (public/favicon.ico): browsers and tools that ignore the
+    // SVG link probe /favicon.ico directly — without it that request 404s.
+    { rel: 'alternate icon', type: 'image/x-icon', href: '/favicon.ico' },
   ];
 }
 

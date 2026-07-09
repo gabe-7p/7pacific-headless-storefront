@@ -36,6 +36,7 @@ app/
   content/       typed marketing copy + store links (links.ts = the ONE place product/collection handles live)
   lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
   styles/        tailwind.css + minimal globals
+public/          static files served at the web root as-is (favicon.ico)
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
