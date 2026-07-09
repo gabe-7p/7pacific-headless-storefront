@@ -12,6 +12,8 @@ type ProductCardProps = {
   label?: string | null;
   /** Responsive `sizes` hint for the image. */
   imageSizes?: string;
+  /** Eager-load the featured image (for above-the-fold cards). Default lazy. */
+  priority?: boolean;
 };
 
 /**
@@ -26,6 +28,7 @@ export const ProductCard = ({
   product,
   label,
   imageSizes = '(min-width: 768px) 33vw, 50vw',
+  priority = false,
 }: ProductCardProps) => {
   const { handle, title, featuredImage, priceRange } = product;
   // Second Shopify image crossfades in on hover (live's product-image-hover).
@@ -48,6 +51,9 @@ export const ProductCard = ({
             <Image
               data={featuredImage}
               sizes={imageSizes}
+              // Eager-load the first visible row (above the fold) so the grid
+              // paints immediately; the rest lazy-load on scroll.
+              loading={priority ? 'eager' : 'lazy'}
               className="aspect-square w-full object-cover"
             />
           )}

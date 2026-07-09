@@ -35,9 +35,11 @@ const Homepage = () => {
   return (
     <MotionProvider>
       <Hero />
-      <FadeIn>
-        <FirstDrop products={products} />
-      </FadeIn>
+      {/* First Drop is the primary above/at-the-fold content — render it
+          immediately (no scroll-reveal gate) so it's painted on load rather
+          than staying invisible until 30% scrolls into view. The lower
+          sections keep the scroll-triggered fade. */}
+      <FirstDrop products={products} />
       <FadeIn>
         <CoreValues />
       </FadeIn>

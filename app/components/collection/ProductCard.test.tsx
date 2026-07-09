@@ -75,6 +75,18 @@ describe('ProductCard hover ensemble', () => {
     expect(container.querySelectorAll('img')).toHaveLength(1);
   });
 
+  it('lazy-loads the featured image by default and eager-loads it when priority', () => {
+    const lazy = renderCard(TEE);
+    expect(lazy.container.querySelector('img')?.getAttribute('loading')).toBe('lazy');
+    cleanup();
+    const eager = render(
+      <MemoryRouter>
+        <ProductCard product={TEE} priority />
+      </MemoryRouter>
+    );
+    expect(eager.container.querySelector('img')?.getAttribute('loading')).toBe('eager');
+  });
+
   it('never nests the swatch links inside the image link (valid HTML)', () => {
     const { container } = renderCard(TEE);
     expect(container.querySelector('a a')).toBeNull();
