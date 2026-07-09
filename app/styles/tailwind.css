@@ -140,17 +140,16 @@
 
 /**
  * Brand layout & motion constants — the single source of truth for page width,
- * the fixed top-bar heights, and the signature easing. Consumed via Tailwind
+ * the top-bar heights, and the signature easing. Consumed via Tailwind
  * arbitrary values, e.g. `max-w-[var(--page-max)]`, `h-[var(--header-h)]`,
  * `top-[var(--announcement-h)]`, `ease-[var(--ease-brand)]`. Change a value here
- * and every consumer follows — including the header/announcement/spacer coupling
- * (`--topbar-h` is derived, so the spacer always matches).
+ * and every consumer follows — the sticky topbar offsets itself by
+ * `--announcement-h` so the announcement scrolls away while the header pins.
  */
 :root {
   --page-max: 1400px;
   --header-h: 5.75rem; /* 92px — matches live Impulse header (logo ~47px + 20px padding each side) */
   --announcement-h: 1.75rem; /* 28px — matches live announcement bar */
-  --topbar-h: calc(var(--header-h) + var(--announcement-h));
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 

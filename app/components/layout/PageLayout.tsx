@@ -28,8 +28,12 @@ export const PageLayout = ({
     <Aside.Provider>
       <CartAside cart={cart} />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      <Announcement />
-      {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
+      {/* Sticky topbar offset by the announcement height: the announcement
+          scrolls away with the page while the header pins — mirrors live. */}
+      <div className="sticky -top-(--announcement-h) z-40">
+        <Announcement />
+        {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
+      </div>
       <main>{children}</main>
       <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
       <NewsletterPopup />
