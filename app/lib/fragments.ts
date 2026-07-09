@@ -270,6 +270,17 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
       width
       height
     }
+    # First two images: [0] is the resting card image, [1] crossfades in on
+    # hover (matches the live card's product-image-hover behavior).
+    images(first: 2) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     priceRange {
       minVariantPrice {
         amount
