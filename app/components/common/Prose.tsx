@@ -11,8 +11,8 @@ const PROSE_VARIANTS = {
   /** Tighter paragraph rhythm for boxed/card content (contact page). */
   compact:
     '[&_a]:text-brand [&_a]:underline [&_h2]:mt-8 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:tracking-wide [&_h2]:uppercase [&_h2:first-of-type]:mt-6 [&_p]:mt-3 [&_p]:text-sm [&_p]:leading-7 [&_p]:text-neutral-600 [&_strong]:font-semibold [&_strong]:text-neutral-900',
-  /** Plain paragraphs only (PDP description). */
-  description: 'text-sm leading-7 text-neutral-600 [&_p]:mb-4 [&_p:last-child]:mb-0',
+  /** Plain paragraphs only (PDP description) — live's tight 13px/1.3 rhythm. */
+  description: 'text-[13px] leading-[1.3] text-neutral-600 [&_p]:mb-4 [&_p:last-child]:mb-0',
 } as const;
 
 type ProseProps = {

@@ -147,7 +147,10 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
 
   return (
     <>
-      <section className="overflow-hidden bg-neutral-100 text-neutral-900 lg:relative lg:flex lg:h-[46rem] lg:items-center lg:text-white">
+      {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
+          of overflowing it under the header and past the fold; the vertical
+          padding keeps the card inset like live's. */}
+      <section className="overflow-hidden bg-neutral-100 text-neutral-900 lg:relative lg:flex lg:min-h-[46rem] lg:items-center lg:py-10 lg:text-white">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
@@ -167,8 +170,10 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
         )}
         <div className="hidden lg:absolute lg:inset-0 lg:block lg:bg-linear-to-r lg:from-black/20 lg:via-transparent lg:to-transparent" />
         <Container className="px-0 sm:px-0 md:px-0 lg:relative lg:z-10 lg:px-8">
-          <div className="flex flex-col bg-white text-neutral-900 lg:max-w-md">
-            <div className="p-8 md:p-10">
+          {/* Live's card is 500px wide with 20px padding (460px of content) —
+              the measure the description was authored against. */}
+          <div className="flex flex-col bg-white text-neutral-900 lg:max-w-[500px]">
+            <div className="p-5">
               <Heading as="h1" size="lg">
                 {title}
               </Heading>
