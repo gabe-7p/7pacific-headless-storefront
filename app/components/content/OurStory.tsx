@@ -4,6 +4,16 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Button } from '~/components/ui/button';
 import { OUR_STORY } from '~/content/our-story';
+import { cn } from '~/lib/cn';
+
+/**
+ * Live: 28.8px → 30.72px (tablet) → 40px (desktop), 0.03em tracking, 1.1 leading.
+ * `leading-` is repeated on every heading because Tailwind's `text-*` utilities
+ * also set line-height, overriding the one on the Heading brand variant.
+ */
+const SECTION_HEADING = 'text-[1.8rem] leading-[1.1] md:text-[1.92rem] xl:text-[2.5rem]';
+/** Live body copy: 16px, 1.4 line-height. */
+const BODY_COPY = 'text-base leading-[1.4] text-neutral-700';
 
 /**
  * Our Story page — hero, mission, and founder story. Presentational: renders the
@@ -21,9 +31,14 @@ export const OurStory = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
         <div className="relative z-10 w-full">
-          {/* Display heading anchored bottom-left, flush with the page gutter. */}
+          {/* Display heading anchored bottom-left, flush with the page gutter.
+              Live: 48px (mobile/tablet) → 57.6px (desktop), 0.05em tracking. */}
           <Container className="pb-5">
-            <Heading as="h1" size="display" className="text-6xl leading-none md:text-8xl">
+            <Heading
+              as="h1"
+              size="none"
+              className="text-5xl leading-[1.1] tracking-[0.05em] xl:text-[3.6rem]"
+            >
               {hero.title}
             </Heading>
           </Container>
@@ -50,7 +65,7 @@ export const OurStory = () => {
           orange rule, larger statement copy. */}
       <section className="py-16 md:py-24">
         <Container>
-          <Heading as="h2" size="display" className="text-4xl leading-[0.95] md:text-6xl">
+          <Heading as="h2" size="none" className={SECTION_HEADING}>
             {mission.heading.split(' ').map((word) => (
               <span key={word} className="block">
                 {word}
@@ -60,16 +75,14 @@ export const OurStory = () => {
         </Container>
         <div className="border-brand mt-6 border-t-2" />
         <Container>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-700 md:text-xl">
-            {mission.statement}
-          </p>
+          <p className={cn(BODY_COPY, 'mt-6 max-w-xl')}>{mission.statement}</p>
         </Container>
       </section>
 
       {/* FITNESS — heading, then body + small square image. Desktop: body left,
           image right. Tablet/mobile: heading, image, body (image between). */}
       <Container className="pb-16 md:pb-24">
-        <Heading as="h2" size="display" className="max-w-2xl">
+        <Heading as="h2" size="none" className={cn(SECTION_HEADING, 'max-w-2xl')}>
           {fitness.heading}
         </Heading>
         <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
@@ -79,7 +92,7 @@ export const OurStory = () => {
             loading="lazy"
             className="order-1 mx-auto aspect-square w-full max-w-sm object-cover lg:order-2 lg:mx-0 lg:w-[300px] lg:max-w-none lg:flex-none"
           />
-          <div className="order-2 space-y-4 text-sm leading-relaxed text-neutral-600 lg:order-1 lg:flex-1">
+          <div className={cn(BODY_COPY, 'order-2 space-y-4 lg:order-1 lg:flex-1')}>
             {fitness.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
@@ -94,7 +107,12 @@ export const OurStory = () => {
           tablet/mobile); small square image + four-paragraph founder story. */}
       <div>
         <Container className="py-16 md:py-24">
-          <Heading as="h2" size="display" className="text-center lg:text-left">
+          {/* Live: 32px → 48px (desktop), 0.03em tracking. */}
+          <Heading
+            as="h2"
+            size="none"
+            className="text-center text-[2rem] leading-[1.1] lg:text-left xl:text-5xl"
+          >
             {story.heading}
           </Heading>
           <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
@@ -105,14 +123,17 @@ export const OurStory = () => {
               className="mx-auto aspect-[285/195] w-full max-w-sm object-cover lg:mx-0 lg:w-[285px] lg:max-w-none lg:flex-none"
             />
             <div className="lg:flex-1">
-              <div className="space-y-4 text-sm leading-relaxed text-neutral-600">
+              <div className={cn(BODY_COPY, 'space-y-4')}>
                 {story.body.map((p) => (
                   <p key={p}>{p}</p>
                 ))}
               </div>
+              {/* Live signature: 22px brand-orange name over a 14px grey role. */}
               <div className="mt-6">
-                <p className="text-brand text-lg font-semibold">{story.founder.name}</p>
-                <p className="mt-0.5 text-xs text-neutral-700">{story.founder.role}</p>
+                <p className="text-brand text-[1.375rem] leading-[1.2] font-medium">
+                  {story.founder.name}
+                </p>
+                <p className="mt-0.5 text-sm font-medium text-neutral-500">{story.founder.role}</p>
               </div>
             </div>
           </div>
