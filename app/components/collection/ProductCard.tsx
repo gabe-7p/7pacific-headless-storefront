@@ -33,7 +33,10 @@ export const ProductCard = ({
   const to = `/products/${handle}`;
 
   return (
-    <div className="group flex flex-col transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
+    // transition-[translate,…], NOT transform: Tailwind v4's -translate-y-*
+    // sets the native `translate` property, which a `transform` transition
+    // list won't animate (the lift would snap).
+    <div className="group flex flex-col transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
       <div className="relative overflow-hidden bg-neutral-100">
         <Link to={to} prefetch="intent" className="block" aria-label={title}>
           {label && (
@@ -49,10 +52,12 @@ export const ProductCard = ({
             />
           )}
           {hoverImage && (
+            // Eager like live: a lazy hover image can still be mid-fetch/decode
+            // on first hover, which reads as flicker instead of a crossfade.
             <Image
               data={hoverImage}
               sizes={imageSizes}
-              loading="lazy"
+              loading="eager"
               className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
           )}
