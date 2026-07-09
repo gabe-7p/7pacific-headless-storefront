@@ -75,7 +75,7 @@ The 9 live products are **separate Shopify products per color**, not variants. T
 1. **Create the product** in Shopify admin (one product per color, handle ending in the color suffix, e.g. `…-slate`). Publish it to the **7Pacific Headless Storefront** channel.
 2. **Set its color metafields**: `custom.color_name` ("Slate"), `custom.color_hex` (`#8A8F98`), `custom.color_siblings` (ordered list of ALL products in the color family, **including the new product itself**).
 3. **Update every sibling's `custom.color_siblings`** to include the new product (the list is the swatch row, in display order).
-4. **Set the PDP content metafields** if it's a new product type: `custom.fit_note`, `custom.product_details` (JSON), `custom.tech_stack` (JSON), `custom.recommended_products`.
+4. **Set the PDP content metafields**: `custom.hero_image` + `custom.hero_image_mobile` (file_reference — the desktop/mobile PDP hero, falls back to the variant image if unset), and if it's a new product type also `custom.fit_note`, `custom.product_details` (JSON), `custom.tech_stack` (JSON), `custom.recommended_products`.
 5. **Add it to collections**: `summer-25` (the shop-all collection page) and `homepage-first-drop` (drag into position — its order IS the homepage grid order).
 6. Only if a CTA should target it: update [app/content/links.ts](app/content/links.ts) — the one place product/collection handles appear in code.
 

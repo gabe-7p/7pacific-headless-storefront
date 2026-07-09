@@ -595,6 +595,20 @@ export type ProductFragment = Pick<
   }>;
   productDetails?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
   techStack?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  heroImage?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<{
+      image?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+      >;
+    }>;
+  }>;
+  heroImageMobile?: StorefrontAPI.Maybe<{
+    reference?: StorefrontAPI.Maybe<{
+      image?: StorefrontAPI.Maybe<
+        Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+      >;
+    }>;
+  }>;
 };
 
 export type ProductQueryVariables = StorefrontAPI.Exact<{
@@ -699,6 +713,20 @@ export type ProductQuery = {
       }>;
       productDetails?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
       techStack?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+      heroImage?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<{
+          image?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+          >;
+        }>;
+      }>;
+      heroImageMobile?: StorefrontAPI.Maybe<{
+        reference?: StorefrontAPI.Maybe<{
+          image?: StorefrontAPI.Maybe<
+            Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+          >;
+        }>;
+      }>;
     }
   >;
 };
@@ -778,7 +806,7 @@ interface GeneratedQueryTypes {
     return: PoliciesQuery;
     variables: PoliciesQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n    fitNote: metafield(namespace: "custom", key: "fit_note") {\n      value\n    }\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n    productDetails: metafield(namespace: "custom", key: "product_details") {\n      value\n    }\n    techStack: metafield(namespace: "custom", key: "tech_stack") {\n      value\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n    fitNote: metafield(namespace: "custom", key: "fit_note") {\n      value\n    }\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n    productDetails: metafield(namespace: "custom", key: "product_details") {\n      value\n    }\n    techStack: metafield(namespace: "custom", key: "tech_stack") {\n      value\n    }\n    # Dedicated PDP hero images (the theme\'s "Background Image" / "…Mobile"),\n    # per product. Falls back to the variant image when unset.\n    heroImage: metafield(namespace: "custom", key: "hero_image") {\n      reference {\n        ... on MediaImage {\n          image {\n            id\n            url\n            altText\n            width\n            height\n          }\n        }\n      }\n    }\n    heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {\n      reference {\n        ... on MediaImage {\n          image {\n            id\n            url\n            altText\n            width\n            height\n          }\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
