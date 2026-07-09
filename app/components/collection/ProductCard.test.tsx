@@ -66,6 +66,8 @@ describe('ProductCard hover ensemble', () => {
     expect(images[1]?.src).toContain('back');
     expect(images[1]?.className).toContain('opacity-0');
     expect(images[1]?.className).toContain('group-hover:opacity-100');
+    // Eager: a lazy hover image can still be mid-decode on first hover (flicker).
+    expect(images[1]?.getAttribute('loading')).toBe('eager');
   });
 
   it('degrades to a single image when the product has no second image', () => {
@@ -109,5 +111,13 @@ describe('ProductCard hover ensemble', () => {
     expect(root?.className).toContain('hover:-translate-y-1');
     expect(root?.className).toContain('hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]');
     expect(container.innerHTML).not.toContain('group-hover:scale-105');
+  });
+
+  it('transitions the translate property so the lift animates instead of snapping', () => {
+    const { container } = renderCard(TEE);
+    const root = container.firstElementChild;
+    // -translate-y-* sets the native `translate` property in Tailwind v4; a
+    // `transform`-only transition list would make the 4px lift jump.
+    expect(root?.className).toContain('transition-[translate,box-shadow]');
   });
 });
