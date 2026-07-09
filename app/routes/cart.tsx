@@ -5,6 +5,7 @@ import { data, type HeadersFunction, useLoaderData } from 'react-router';
 import { CartMain } from '~/components/cart/CartMain';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
+import { STORE_LINKS } from '~/content/links';
 import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/cart';
@@ -113,7 +114,7 @@ const Cart = () => {
           Cart
         </Heading>
         {hasItems && (
-          <TextLink to="/collections/summer-25" prefetch="intent" className="mt-2 inline-block">
+          <TextLink to={STORE_LINKS.shopAll} prefetch="intent" className="mt-2 inline-block">
             Continue shopping
           </TextLink>
         )}

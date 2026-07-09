@@ -6,14 +6,17 @@
  * the core-values photography) — change a value here, the homepage follows.
  */
 
-const CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
+import { STORE_LINKS } from '~/content/links';
+import { BRAND } from '~/lib/brand';
+
+const CDN = BRAND.filesCdn;
 
 export const HOME_HERO = {
   eyebrow: 'Introducing',
   /** Screen-reader text for the hero's h1 — visually it's the wordmark SVG. */
   wordmark: 'PACIFIC',
   subtitle: 'Discipline Looks Good Now',
-  cta: { label: 'Own The Start', href: '/collections/summer-25' },
+  cta: { label: 'Own The Start', href: STORE_LINKS.shopAll },
   /** Intrinsic dimensions drive the hero's natural aspect ratio (3:2). */
   backgroundImage: {
     url: `${CDN}/24_121_7pacific_03806.jpg`,
@@ -25,22 +28,8 @@ export const HOME_HERO = {
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
   subtitle: 'Ultra-Light. Breathable. Ready To Train. Click in to see why.',
-  /**
-   * Display order for the grid, matching the live homepage (shorts, tees, hat —
-   * same order as the color_siblings metafields). Products missing from this list render
-   * after the ordered ones, so a new product appears rather than disappearing.
-   */
-  productOrder: [
-    'airrail-6-performance-shorts-mountain-mist',
-    'airrail-6-performance-shorts-mint',
-    'airrail-6-performance-shorts-midnight',
-    'tracefiber-performance-tech-tee-white',
-    'tracefiber-performance-tech-tee-mint',
-    'tracefiber-performance-tech-tee-midnight',
-    'tracefiber-performance-tech-tee-tangerine',
-    'tracefiber-performance-tech-tee-mountain-mist',
-    'motionframe-running-hat-white',
-  ],
+  // Grid order is merchant-controlled: the manual `homepage-first-drop`
+  // collection in Shopify (see HOMEPAGE_COLLECTION_HANDLE in content/links.ts).
 } as const;
 
 export type CoreValue = {
@@ -78,16 +67,13 @@ export const HOME_CORE_VALUES = {
       title: 'Play The Long Game',
       tone: 'dark',
       body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
-      cta: {
-        label: 'Shop Shirts',
-        href: '/products/tracefiber-performance-tech-tee-mountain-mist',
-      },
+      cta: { label: 'Shop Shirts', href: STORE_LINKS.shopShirts },
     },
     {
       title: 'Track The Truth',
       tone: 'light',
       body: 'The space between the start and end point is yours to shape. Measure the work to watch the evolution.',
-      cta: { label: 'Shop Shorts', href: '/products/airrail-6-performance-shorts-mountain-mist' },
+      cta: { label: 'Shop Shorts', href: STORE_LINKS.shopShorts },
     },
   ] satisfies ReadonlyArray<CoreValue>,
 } as const;

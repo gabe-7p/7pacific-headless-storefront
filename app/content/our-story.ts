@@ -4,7 +4,10 @@
  * Files/CDN imagery as live. Rendered by app/components/content/OurStory.tsx.
  */
 
-const CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
+import { STORE_LINKS } from '~/content/links';
+import { BRAND } from '~/lib/brand';
+
+const CDN = BRAND.filesCdn;
 
 export const OUR_STORY = {
   hero: {
@@ -14,11 +17,7 @@ export const OUR_STORY = {
     // matching live — the second is no longer an outline variant.
     ctas: [
       { label: 'Join The Movement', href: '#newsletter', variant: 'brand' as const },
-      {
-        label: 'Train With Us',
-        href: '/products/airrail-6-performance-shorts-mountain-mist',
-        variant: 'brand' as const,
-      },
+      { label: 'Train With Us', href: STORE_LINKS.shopShorts, variant: 'brand' as const },
     ],
   },
   // Mission and Fitness are two distinct sections on live: Mission is a

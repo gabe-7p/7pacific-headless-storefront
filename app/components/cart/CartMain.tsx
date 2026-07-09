@@ -4,6 +4,7 @@ import type { CartApiQueryFragment } from 'storefrontapi.generated';
 import { type CartLine, CartLineItem } from '~/components/cart/CartLineItem';
 import { TextLink } from '~/components/common/TextLink';
 import { useAside } from '~/components/layout/Aside';
+import { STORE_LINKS } from '~/content/links';
 
 import { CartSummary } from './CartSummary';
 
@@ -75,7 +76,7 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       <p className="text-sm text-neutral-600">Your cart is currently empty.</p>
       <TextLink
-        to="/collections/summer-25"
+        to={STORE_LINKS.shopAll}
         onClick={close}
         prefetch="viewport"
         className="mt-2 inline-block"

@@ -8,7 +8,7 @@ import { HOME_FIRST_DROP } from '~/content/home';
 /**
  * "Our First Drop" — heading + the full-catalog product grid. Mirrors the live
  * `main-collection` section; renders the typed products the loader fetched
- * (all live products, ordered by HOME_FIRST_DROP.productOrder).
+ * (all live products, ordered by the manual homepage-first-drop collection).
  */
 export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
   <Container className="py-14 md:py-20">

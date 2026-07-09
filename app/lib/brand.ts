@@ -23,6 +23,9 @@ export const BRAND = {
     href: '',
   },
 
+  /** Base URL for brand assets uploaded to Shopify Files (one source; content files build URLs from it). */
+  filesCdn: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files',
+
   social: [
     { platform: 'Instagram', href: 'https://www.instagram.com/7_pacific/' },
   ] satisfies Array<SocialLink>,
