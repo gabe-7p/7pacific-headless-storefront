@@ -15,11 +15,12 @@ type ProductCardProps = {
 };
 
 /**
- * Grid product card — image, optional badge, title, price, and color swatches
- * linking to sibling color products. Swatches are hidden at rest and revealed
- * on card hover, matching the live theme's resting card (image/title/price
- * only). Presentational: renders the typed `ProductCardFragment` it's given
- * and fetches nothing.
+ * Grid product card, matching the live card's hover ensemble: the card lifts
+ * with a shadow, the product's second image crossfades in, and the color
+ * swatches rise from the bottom edge of the image one-by-one (left to right),
+ * each with a color-name tooltip and linking to its sibling color product.
+ * Presentational: renders the typed `ProductCardFragment` it's given and
+ * fetches nothing.
  */
 export const ProductCard = ({
   product,
@@ -27,40 +28,53 @@ export const ProductCard = ({
   imageSizes = '(min-width: 768px) 33vw, 50vw',
 }: ProductCardProps) => {
   const { handle, title, featuredImage, priceRange } = product;
+  // Second Shopify image crossfades in on hover (live's product-image-hover).
+  const hoverImage = product.images.nodes[1];
   const to = `/products/${handle}`;
 
   return (
-    <div className="group flex flex-col">
-      <Link
-        to={to}
-        prefetch="intent"
-        className="relative block overflow-hidden bg-neutral-100"
-        aria-label={title}
-      >
-        {label && (
-          <span className="absolute top-0 right-0 z-10 bg-black px-2 py-1 text-[10px] font-semibold tracking-wide text-white uppercase">
-            {label}
-          </span>
-        )}
-        {featuredImage && (
-          <Image
-            data={featuredImage}
-            sizes={imageSizes}
-            className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
+    <div className="group flex flex-col transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
+      <div className="relative overflow-hidden bg-neutral-100">
+        <Link to={to} prefetch="intent" className="block" aria-label={title}>
+          {label && (
+            <span className="absolute top-0 right-0 z-10 bg-black px-2 py-1 text-[10px] font-semibold tracking-wide text-white uppercase">
+              {label}
+            </span>
+          )}
+          {featuredImage && (
+            <Image
+              data={featuredImage}
+              sizes={imageSizes}
+              className="aspect-square w-full object-cover"
+            />
+          )}
+          {hoverImage && (
+            <Image
+              data={hoverImage}
+              sizes={imageSizes}
+              loading="lazy"
+              className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            />
+          )}
+        </Link>
+        {/* Swatch overlay at the image's bottom edge — a sibling of the image
+            link (nested anchors are invalid HTML). Slides up on card hover;
+            the swatches themselves cascade in via ColorSwatches. */}
+        <div className="absolute right-0 bottom-0 left-0 flex translate-y-[110%] justify-start px-4 py-1.5 transition-transform duration-200 group-hover:-translate-y-[10%]">
+          <ColorSwatches
+            swatches={getColorSwatches(product.colorSiblings)}
+            currentHandle={handle}
+            cascade
+            alwaysRender
           />
-        )}
-      </Link>
+        </div>
+      </div>
 
       <div className="mt-3 flex flex-col gap-1.5">
         <Link to={to} prefetch="intent" className="text-xs font-medium tracking-wide uppercase">
           {title}
         </Link>
         <Price data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />
-        <ColorSwatches
-          swatches={getColorSwatches(product.colorSiblings)}
-          currentHandle={handle}
-          className="mt-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
-        />
       </div>
     </div>
   );

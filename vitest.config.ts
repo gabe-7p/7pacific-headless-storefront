@@ -9,7 +9,9 @@ export default defineConfig({
     alias: { '~': path.resolve(__dirname, 'app') },
   },
   test: {
-    include: ['app/**/*.test.ts'],
+    include: ['app/**/*.test.{ts,tsx}'],
+    // Pure lib tests run in node; component tests opt into jsdom with a
+    // `// @vitest-environment jsdom` docblock at the top of the file.
     environment: 'node',
   },
 });
