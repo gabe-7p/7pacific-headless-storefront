@@ -28,3 +28,22 @@ export type MarketingSection = {
 /** Parse a collection's `custom.marketing_sections` JSON metafield value. */
 export const parseMarketingSections = (value?: string | null): Array<MarketingSection> =>
   parseJson<Array<MarketingSection>>(value) ?? [];
+
+type MetafieldImage = {
+  id?: string | null;
+  url: string;
+  altText?: string | null;
+  width?: number | null;
+  height?: number | null;
+};
+
+type ImageReferenceMetafield = { reference?: { image?: MetafieldImage | null } | null } | null;
+
+/**
+ * Pull the `<Image data>`-shaped image out of a `file_reference` (image)
+ * metafield's resolved `reference { ... on MediaImage { image {…} } }`.
+ * Returns null when the metafield or its reference is absent, so callers can
+ * fall back to another image.
+ */
+export const getMetafieldImage = (metafield?: ImageReferenceMetafield): MetafieldImage | null =>
+  metafield?.reference?.image ?? null;

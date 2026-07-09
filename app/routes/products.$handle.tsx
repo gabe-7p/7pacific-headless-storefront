@@ -26,7 +26,7 @@ import { TechStack } from '~/components/product/TechStack';
 import { getColorSwatches } from '~/lib/colors';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
-import { parseJsonMetafield } from '~/lib/metafields';
+import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
 import type { ProductDetailCard, TechStack as TechStackData } from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
@@ -140,14 +140,29 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
 
   const { title, descriptionHtml } = product;
 
+  // Dedicated per-product hero images (the theme's Background Image / …Mobile),
+  // falling back to the variant image when a product has none.
+  const heroDesktop = getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
+  const heroMobile = getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
+
   return (
     <>
       <section className="overflow-hidden bg-neutral-100 text-neutral-900 lg:relative lg:flex lg:h-[46rem] lg:items-center lg:text-white">
-        {selectedVariant?.image && (
+        {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
+            buy card — two images because live uses a distinct desktop vs mobile
+            source (matches its .desktop-image / .mobile-image divs). */}
+        {heroMobile && (
           <Image
-            data={selectedVariant.image}
+            data={heroMobile}
             sizes="100vw"
-            className="aspect-[3/4] w-full object-contain object-bottom sm:aspect-[4/3] lg:absolute lg:inset-0 lg:size-full lg:object-[80%_bottom]"
+            className="aspect-[3/4] w-full object-contain object-bottom sm:aspect-[4/3] lg:hidden"
+          />
+        )}
+        {heroDesktop && (
+          <Image
+            data={heroDesktop}
+            sizes="100vw"
+            className="hidden object-cover lg:absolute lg:inset-0 lg:block lg:size-full lg:object-[80%_bottom]"
           />
         )}
         <div className="hidden lg:absolute lg:inset-0 lg:block lg:bg-linear-to-r lg:from-black/20 lg:via-transparent lg:to-transparent" />
@@ -313,6 +328,34 @@ const PRODUCT_FRAGMENT = `#graphql
     }
     techStack: metafield(namespace: "custom", key: "tech_stack") {
       value
+    }
+    # Dedicated PDP hero images (the theme's "Background Image" / "…Mobile"),
+    # per product. Falls back to the variant image when unset.
+    heroImage: metafield(namespace: "custom", key: "hero_image") {
+      reference {
+        ... on MediaImage {
+          image {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
+    heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {
+      reference {
+        ... on MediaImage {
+          image {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
