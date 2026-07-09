@@ -5,7 +5,9 @@ import type { Route } from './+types/[robots.txt]';
 export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url);
 
-  const { shop } = await context.storefront.query(ROBOTS_QUERY);
+  const { shop } = await context.storefront.query(ROBOTS_QUERY, {
+    cache: context.storefront.CacheLong(),
+  });
 
   const shopId = parseGid(shop.id).id;
   const body = robotsTxtData({ url: url.origin, shopId });
