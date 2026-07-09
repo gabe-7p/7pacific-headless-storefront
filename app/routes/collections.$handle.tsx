@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from '~/components/ui/select';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import { notFound } from '~/lib/http';
 import { parseMarketingSections } from '~/lib/metafields';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
@@ -87,7 +88,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   });
 
   if (!collection) {
-    throw new Response(`Collection ${handle} not found`, { status: 404 });
+    throw notFound('Collection not found');
   }
 
   redirectIfHandleIsLocalized(request, { handle, data: collection });

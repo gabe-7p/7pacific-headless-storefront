@@ -2,6 +2,7 @@ import { Link, useLoaderData } from 'react-router';
 import type { PoliciesQuery, PolicyItemFragment } from 'storefrontapi.generated';
 
 import { Heading } from '~/components/common/Heading';
+import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/policies._index';
@@ -23,7 +24,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   ].filter((policy): policy is PolicyItemFragment => policy != null);
 
   if (!policies.length) {
-    throw new Response('No policies found', { status: 404 });
+    throw notFound('No policies found');
   }
 
   return { policies };

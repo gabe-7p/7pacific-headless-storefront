@@ -24,6 +24,7 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import { notFound } from '~/lib/http';
 import { parseJsonMetafield } from '~/lib/metafields';
 import type { ProductDetailCard, TechStack as TechStackData } from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
@@ -60,7 +61,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
   const { storefront } = context;
 
   if (!handle) {
-    throw new Error('Expected product handle to be defined');
+    throw notFound('Product not found');
   }
 
   const [{ product }] = await Promise.all([
@@ -71,7 +72,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
   ]);
 
   if (!product?.id) {
-    throw new Response(null, { status: 404 });
+    throw notFound('Product not found');
   }
 
   // The API handle might be localized, so redirect to the localized handle

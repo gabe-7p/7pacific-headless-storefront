@@ -2,6 +2,7 @@ import { type Shop } from '@shopify/hydrogen/storefront-api-types';
 import { Link, useLoaderData } from 'react-router';
 
 import { Heading } from '~/components/common/Heading';
+import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/policies.$handle';
@@ -17,7 +18,7 @@ export const meta: Route.MetaFunction = ({ data }) => {
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   if (!params.handle) {
-    throw new Response('No handle was passed in', { status: 404 });
+    throw notFound('Policy not found');
   }
 
   const policyName = params.handle.replace(/-([a-z])/g, (_: unknown, m1: string) =>
@@ -38,7 +39,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   const policy = data.shop?.[policyName];
 
   if (!policy) {
-    throw new Response('Could not find the policy', { status: 404 });
+    throw notFound('Policy not found');
   }
 
   return { policy };
