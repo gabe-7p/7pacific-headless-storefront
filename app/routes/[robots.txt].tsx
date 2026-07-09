@@ -62,7 +62,9 @@ Crawl-delay: 1
 
 /**
  * This function generates disallow rules that generally follow what Shopify's
- * Online Store has as defaults for their robots.txt
+ * Online Store has as defaults for their robots.txt — minus the blog and
+ * search rules: this site has no /blogs or /search routes (no blog, no search
+ * UI), so the crawl policy shouldn't reference them.
  */
 function generalDisallowRules({ shopId, sitemapUrl }: { shopId?: string; sitemapUrl?: string }) {
   return `Disallow: /admin
@@ -82,12 +84,6 @@ Disallow: /*/collections/*+*
 Disallow: /*/collections/*%2B*
 Disallow: /*/collections/*%2b*
 Disallow: */collections/*filter*&*filter*
-Disallow: /blogs/*+*
-Disallow: /blogs/*%2B*
-Disallow: /blogs/*%2b*
-Disallow: /*/blogs/*+*
-Disallow: /*/blogs/*%2B*
-Disallow: /*/blogs/*%2b*
 Disallow: /*?*oseid=*
 Disallow: /*preview_theme_id*
 Disallow: /*preview_script_id*
@@ -95,9 +91,6 @@ Disallow: /policies/
 Disallow: /*/*?*ls=*&ls=*
 Disallow: /*/*?*ls%3D*%3Fls%3D*
 Disallow: /*/*?*ls%3d*%3fls%3d*
-Disallow: /search
-Allow: /search/
-Disallow: /search/?*
 Disallow: /apple-app-site-association
 Disallow: /.well-known/shopify/monorail
 ${sitemapUrl ? `Sitemap: ${sitemapUrl}` : ''}`;
