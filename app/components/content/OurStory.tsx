@@ -87,11 +87,12 @@ export const OurStory = () => {
           {fitness.heading}
         </Heading>
         <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+          {/* Live: 6:5 crop up to tablet, 8:7 (400x350) on desktop. */}
           <img
             src={fitness.image}
             alt=""
             loading="lazy"
-            className="order-1 mx-auto aspect-square w-full max-w-sm object-cover lg:order-2 lg:mx-0 lg:w-[300px] lg:max-w-none lg:flex-none"
+            className="order-1 mx-auto aspect-[6/5] w-full max-w-[400px] object-cover lg:order-2 lg:mx-0 lg:aspect-[8/7] lg:w-[400px] lg:max-w-none lg:flex-none"
           />
           <div className={cn(BODY_COPY, 'order-2 space-y-4 lg:order-1 lg:flex-1')}>
             {fitness.body.map((p) => (
@@ -117,11 +118,12 @@ export const OurStory = () => {
             {story.heading}
           </Heading>
           <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+            {/* Live: 3:2 at every breakpoint, 375x250 on desktop. */}
             <img
               src={story.image}
               alt={story.founder.name}
               loading="lazy"
-              className="mx-auto aspect-[285/195] w-full max-w-sm object-cover lg:mx-0 lg:w-[285px] lg:max-w-none lg:flex-none"
+              className="mx-auto aspect-[3/2] w-full max-w-[400px] object-cover lg:mx-0 lg:w-[375px] lg:max-w-none lg:flex-none"
             />
             <div className="lg:flex-1">
               <div className={cn(BODY_COPY, 'space-y-4')}>
