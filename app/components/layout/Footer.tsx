@@ -23,14 +23,21 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
         {(footer) => (
           <footer className="bg-footer text-footer-text">
             <Container className="grid gap-0 py-14 md:grid-cols-3 md:gap-10">
+              {/* Live puts the Instagram glyph under the newsletter input in the
+                  centre column, not under the wordmark. */}
               <div className="flex flex-col gap-6 pb-8 md:pb-0">
                 <NavLink to="/" prefetch="intent" aria-label={header.shop.name}>
-                  <Logo tone="light" className="h-8" />
+                  <Logo tone="light" className="h-8 md:h-[47px]" />
                 </NavLink>
-                <SocialIcons />
+                <div className="md:hidden">
+                  <SocialIcons />
+                </div>
               </div>
               <FooterCollapsible title={BRAND.newsletter.heading}>
                 <Newsletter />
+                <div className="mt-6 hidden md:block">
+                  <SocialIcons />
+                </div>
               </FooterCollapsible>
               <FooterCollapsible title="Support">
                 <FooterSupport
@@ -41,18 +48,17 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
               </FooterCollapsible>
             </Container>
 
-            <div className="border-t border-white/15">
-              <Container className="py-6 text-center">
-                <a
-                  href="https://www.shopify.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs tracking-wide text-white/60 transition-opacity hover:opacity-80"
-                >
-                  Powered by Shopify
-                </a>
-              </Container>
-            </div>
+            {/* Live has no divider above this row. */}
+            <Container className="py-6 text-center">
+              <a
+                href="https://www.shopify.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs tracking-wide text-white/60 transition-opacity hover:opacity-80"
+              >
+                Powered by Shopify
+              </a>
+            </Container>
           </footer>
         )}
       </Await>
@@ -90,7 +96,8 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
         aria-expanded={open}
         className="flex w-full items-center justify-between py-4 md:pointer-events-none md:py-0"
       >
-        <Heading as="h3" size="sm">
+        {/* Live: 14px / 600 / 0.3em. */}
+        <Heading as="h3" size="none" className="text-sm font-semibold tracking-[0.3em]">
           {title}
         </Heading>
         <ChevronDown
@@ -105,7 +112,8 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
 
 const Newsletter = () => (
   <div className="md:max-w-md">
-    <p className="text-sm text-white/80">{BRAND.newsletter.body}</p>
+    {/* Live footer copy and links are 10.2px. */}
+    <p className="text-[10.2px] text-white/80">{BRAND.newsletter.body}</p>
     <NewsletterForm variant="footer" />
   </div>
 );
@@ -159,7 +167,7 @@ const FooterSupport = ({
       : itemUrl;
 
   return (
-    <nav className="flex flex-col gap-2 text-sm" role="navigation">
+    <nav className="flex flex-col gap-2 text-[10.2px]" role="navigation">
       {items.map((item) => {
         if (!item.url) return null;
         const url = toInternalPath(item.url);
