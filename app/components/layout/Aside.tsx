@@ -47,9 +47,8 @@ export const Aside = ({
       >
         {showHeader ? (
           <SheetHeader className="border-border-subtle h-16 justify-center border-b px-5">
-            <SheetTitle className="text-sm font-semibold tracking-[0.18em] uppercase">
-              {heading}
-            </SheetTitle>
+            {/* Live: title case, 18.7px / 600 / 0.05em. */}
+            <SheetTitle className="text-lg font-semibold tracking-[0.05em]">{heading}</SheetTitle>
           </SheetHeader>
         ) : (
           // No visible chrome (matches live's mobile menu) — the title is kept

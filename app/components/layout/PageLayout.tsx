@@ -43,7 +43,7 @@ export const PageLayout = ({
 
 const CartAside = ({ cart }: { cart: PageLayoutProps['cart'] }) => {
   return (
-    <Aside type="cart" heading="CART">
+    <Aside type="cart" heading="Cart">
       <Suspense fallback={<p>Loading cart ...</p>}>
         <Await resolve={cart}>
           {(cart) => {

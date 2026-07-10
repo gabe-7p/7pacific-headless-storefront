@@ -19,14 +19,20 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       className={cn(
         'px-5 py-5',
         layout === 'aside'
-          ? 'border-border-subtle border-t'
+          ? // Pinned to the drawer's bottom edge, as on live.
+            'border-border-subtle mt-auto border-t'
           : // Mobile/tablet: plain full-width rows with a separating top rule (no
             // card). Desktop: a light-gray panel, no rule.
             'border-border-subtle border-t lg:w-80 lg:flex-none lg:border-t-0 lg:bg-neutral-50 lg:p-6'
       )}
     >
       <div className="flex items-baseline justify-between">
-        <span className="text-sm">Subtotal</span>
+        {/* Live's drawer letterspaces the label; the /cart page keeps it plain. */}
+        <span
+          className={cn('text-sm', layout === 'aside' && 'text-[9.6px] tracking-[0.3em] uppercase')}
+        >
+          Subtotal
+        </span>
         <span className="text-sm font-medium">
           {/* Deliberately raw <Money> ("$74.00"), NOT the brand <Price> ("$74 USD"):
               the live cart shows cents without a currency suffix. Product cards
@@ -43,10 +49,11 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
         </div>
       )}
 
-      <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
+      {/* Live puts the disclaimer above the checkout button. */}
       <p className="mt-3 text-center text-xs text-neutral-500">
         Shipping, taxes, and discount codes calculated at checkout.
       </p>
+      <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
     </div>
   );
 };

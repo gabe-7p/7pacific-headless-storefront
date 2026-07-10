@@ -60,11 +60,14 @@ export const CartMain = ({ layout, cart: originalCart }: CartMainProps) => {
   );
 
   return (
-    <div className={layout === 'page' ? 'lg:flex lg:items-start lg:gap-12' : 'flex flex-col'}>
+    // In the drawer the lines scroll and the summary pins to the bottom, as on live.
+    <div
+      className={layout === 'page' ? 'lg:flex lg:items-start lg:gap-12' : 'flex h-full flex-col'}
+    >
       <p id="cart-lines" className="sr-only">
         Line items
       </p>
-      <div className={layout === 'page' ? 'lg:flex-1' : 'px-5'}>{lines}</div>
+      <div className={layout === 'page' ? 'lg:flex-1' : 'flex-1 overflow-y-auto px-5'}>{lines}</div>
       {cartHasItems && <CartSummary cart={cart} layout={layout} />}
     </div>
   );
@@ -75,14 +78,17 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
   return (
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       <p className="text-sm text-neutral-600">Your cart is currently empty.</p>
-      <TextLink
-        to={STORE_LINKS.shopAll}
-        onClick={close}
-        prefetch="viewport"
-        className="mt-2 inline-block"
-      >
-        Continue shopping
-      </TextLink>
+      {/* Live's drawer shows the message alone; the /cart page offers the link. */}
+      {layout === 'page' && (
+        <TextLink
+          to={STORE_LINKS.shopAll}
+          onClick={close}
+          prefetch="viewport"
+          className="mt-2 inline-block"
+        >
+          Continue shopping
+        </TextLink>
+      )}
     </div>
   );
 };
