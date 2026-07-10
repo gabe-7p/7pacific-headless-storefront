@@ -8,7 +8,8 @@ import { cn } from '~/lib/cn';
  * Mobile/tablet sticky add-to-cart bar (7PA-166). The in-card bar can't pin via
  * CSS `sticky` (it's the flush last child, so there's no travel room), so a
  * fixed orange bar slides up once the buy card scrolls out of view and hides
- * again when it returns. Desktop keeps the static in-card bar (`lg:hidden`).
+ * again when it returns. From 769px up (live's breakpoint, where the floating
+ * card appears) the static in-card bar takes over.
  */
 export const StickyAddToCart = ({
   selectedVariant,
@@ -39,7 +40,7 @@ export const StickyAddToCart = ({
       <div ref={sentinelRef} aria-hidden className="h-0" />
       <div
         className={cn(
-          'fixed inset-x-0 bottom-0 z-40 transition-transform duration-300 lg:hidden',
+          'fixed inset-x-0 bottom-0 z-40 transition-transform duration-300 min-[769px]:hidden',
           pinned ? 'translate-y-0' : 'translate-y-full'
         )}
       >

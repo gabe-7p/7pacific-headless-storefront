@@ -147,10 +147,12 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
 
   return (
     <>
-      {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
-          of overflowing it under the header and past the fold; the vertical
+      {/* The floating-card layout holds down to 769px (live's Impulse
+          breakpoint), not Tailwind's `lg`; below that the hero stacks. `min-h`
+          (not a fixed height) so a tall buy card grows the hero instead of
+          overflowing it under the header and past the fold; the vertical
           padding keeps the card inset like live's. */}
-      <section className="overflow-hidden bg-neutral-100 text-neutral-900 lg:relative lg:flex lg:min-h-[46rem] lg:items-center lg:py-10 lg:text-white">
+      <section className="overflow-hidden bg-neutral-100 text-neutral-900 min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[46rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-white">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
@@ -158,21 +160,24 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
           <Image
             data={heroMobile}
             sizes="100vw"
-            className="aspect-[3/4] w-full object-contain object-bottom sm:aspect-[4/3] lg:hidden"
+            className="aspect-[3/4] w-full object-contain object-bottom sm:aspect-[4/3] min-[769px]:hidden"
           />
         )}
         {heroDesktop && (
           <Image
             data={heroDesktop}
             sizes="100vw"
-            className="hidden object-cover lg:absolute lg:inset-0 lg:block lg:size-full lg:object-[80%_bottom]"
+            className="hidden object-cover min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full min-[769px]:object-[80%_bottom]"
           />
         )}
-        <div className="hidden lg:absolute lg:inset-0 lg:block lg:bg-linear-to-r lg:from-black/20 lg:via-transparent lg:to-transparent" />
-        <Container className="px-0 sm:px-0 md:px-0 lg:relative lg:z-10 lg:px-8">
+        <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-black/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
+        {/* The card carries its own left inset rather than the Container taking
+            horizontal padding: Tailwind emits `md:` after `min-[769px]:`, so a
+            `md:px-0` reset would win over `min-[769px]:px-8` at 769+. */}
+        <Container className="px-0 sm:px-0 md:px-0 min-[769px]:relative min-[769px]:z-10">
           {/* Live's card is 500px wide with 20px padding (460px of content) —
               the measure the description was authored against. */}
-          <div className="flex flex-col bg-white text-neutral-900 lg:max-w-[500px]">
+          <div className="flex flex-col bg-white text-neutral-900 min-[769px]:ml-8 min-[769px]:max-w-[500px]">
             <div className="p-5">
               {/* Live: 24px / 600 / 0.05em. */}
               <Heading
