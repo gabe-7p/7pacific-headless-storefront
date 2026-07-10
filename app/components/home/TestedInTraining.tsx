@@ -14,6 +14,9 @@ export const TestedInTraining = () => (
   // the text panel on the left.
   <section className="grid overflow-hidden bg-neutral-900 text-white lg:grid-cols-[5fr_4fr]">
     <div className="relative order-2 lg:order-1">
+      {/* No scrim over the video — live has none, and the footage is dark enough
+          to carry white text. `bg-neutral-900` on the section covers the gap
+          until the first frame decodes. */}
       <video
         src={HOME_TESTED.video}
         autoPlay
@@ -22,7 +25,6 @@ export const TestedInTraining = () => (
         playsInline
         className="absolute inset-0 size-full object-cover"
       />
-      <div className="absolute inset-0 bg-black/55" />
       <div className="relative z-10 px-6 py-16 md:px-12 lg:px-16 lg:py-24">
         {/* Live: 24px, 40px tablet, 64.8px desktop — regular weight, no tracking. */}
         <Heading
