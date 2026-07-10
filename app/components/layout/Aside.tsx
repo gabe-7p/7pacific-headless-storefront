@@ -41,6 +41,8 @@ export const Aside = ({
       <SheetContent
         side={side}
         className="w-[350px] gap-0 p-0 sm:w-[450px] sm:max-w-none"
+        // Live's mobile menu leaves the page behind undimmed.
+        overlayClassName={showHeader ? undefined : 'bg-transparent'}
         aria-describedby={undefined}
       >
         {showHeader ? (
