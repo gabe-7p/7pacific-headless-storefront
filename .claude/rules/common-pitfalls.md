@@ -63,6 +63,34 @@ Render Storefront images with `<Image data={...} sizes="..." />` (responsive src
 
 The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
 
+## Tailwind traps that silently lose a style
+
+Three bit us during the live-parity work; all three type-check and lint clean.
+
+**`text-*` also sets `line-height`.** So a `leading-` on a shared component is overridden by any size utility a caller passes. Repeat the leading next to each size:
+
+```tsx
+// ❌ variant's leading-[1.1] is dead — text-4xl re-sets line-height
+<Heading className="text-4xl" />
+// ✅
+<Heading className="text-4xl leading-[1.1]" />
+```
+
+**Named and arbitrary breakpoints don't interleave.** Tailwind emits named variants (`md:`) after arbitrary ones (`min-[1440px]:`), so the named one wins at the larger width regardless of intent. Use one form or the other in a chain:
+
+```tsx
+// ❌ md:px-5 still applies at 1440
+<div className="px-3 md:px-5 min-[1440px]:px-0" />
+// ✅ sorts by width
+<div className="px-3 min-[768px]:px-5 min-[1440px]:px-0" />
+```
+
+**A preset `size` on `Heading`/`SectionHeader` carries responsive steps** (`md:`/`xl:`) that a `className` can't override at those breakpoints. Pass `size="none"` when a page owns its whole scale.
+
+## The base layer caps every `form` at 400px
+
+`app/styles/tailwind.css` has `form { max-width: 400px }` from `md` up (a Hydrogen skeleton leftover). Any full-width form control — the PDP add-to-cart bar, a sticky bar — needs to opt out (`[&>form]:max-w-none` on a wrapper). Check rendered width, not just the classes on the button.
+
 ## No `any`
 
 `no-explicit-any` is a warning we treat as a defect — it hides type mismatches. Use `unknown` + narrowing, generics, or the generated types instead.

@@ -27,8 +27,17 @@ It reads [`components.json`](../../components.json) (aliased to `~/*`, base colo
 
 - **Generated, not authored.** These files don't follow the repo's component conventions (they use the `function` keyword and occasional `any`). `app/components/ui/**` is therefore **exempt** in [eslint.config.js](../../eslint.config.js) from `react/function-component-definition` and `@typescript-eslint/no-explicit-any`. Don't "fix" generated files to use const arrows.
 - **Restyle, don't re-architect.** Change Tailwind classes to match the brand; keep the Radix structure/behavior. If you need to update a primitive, re-run `shadcn add` and re-apply your styling rather than hand-patching internals.
+- **Local deviations must be re-applied after a regenerate.** `sheet.tsx` carries two: an `overlayClassName` pass-through (the mobile menu doesn't dim the page, the cart drawer does) and live's `CloseIcon` in place of lucide's `XIcon`. A `shadcn add sheet` would silently drop both.
 - **Tokens live in `app/styles/tailwind.css`.** The shadcn base-color CSS variables (`--background`, `--primary`, `--border`, …) and the `@theme inline` mapping sit alongside the brand `@theme` tokens. They don't collide — keep both.
 - **Primitives are still presentational.** No data fetching or GraphQL in `components/ui/` — same boundary as every other component (see [module-boundaries.md](module-boundaries.md)).
+
+## Icons: match live, don't approximate
+
+Header/drawer glyphs live in [`app/components/common/icons.tsx`](../../app/components/common/icons.tsx), traced from the live theme's sprite (all on a `64x64` viewBox). lucide's hamburger, person, bag, and X differ visibly in weight and shape, so **don't** substitute them there. `lucide-react` is still fine for incidental UI (chevrons, steppers, the mail glyph).
+
+## Matching live: measure, don't eyeball
+
+Parity work is driven by the rendered DOM, not screenshots alone. Read the live value with `getComputedStyle` / `getBoundingClientRect` at 375 / 768 / 1440, implement to that number, then re-measure. Screenshots confirm composition; they don't tell you a heading is weight 500 rather than 700, or that a breakpoint is 769px rather than 768px. Several audit tickets described the _symptom_ correctly but guessed the value — the measurement is the source of truth, and where they disagreed the ticket was corrected in the PR.
 
 ## Why this split
 
