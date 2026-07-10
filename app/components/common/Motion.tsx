@@ -32,13 +32,18 @@ type FadeInProps = {
  * Fade + rise reveal that fires once when the element scrolls into view.
  * Respects reduced-motion (Motion disables transform/opacity tweens automatically
  * when the user requests it). Must render inside a `<MotionProvider>`.
+ *
+ * `amount: 'some'` (any part visible), NOT a fraction: these wrap whole page
+ * sections, and a fraction is measured against the element's own height — a
+ * 2000px section with `amount: 0.3` stays invisible until you've scrolled 600px
+ * into it, which reads as the section failing to load.
  */
 export const FadeIn = ({ children, delay = 0, className }: FadeInProps) => (
   <m.div
     className={className}
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.3 }}
+    viewport={{ once: true, amount: 'some' }}
     transition={{ duration: 0.6, delay, ease: EASE_BRAND }}
   >
     {children}
