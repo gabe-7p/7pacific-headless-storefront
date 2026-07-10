@@ -80,9 +80,9 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 
 ```tsx
 // ❌ md:px-5 still applies at 1440
-className = 'px-3 md:px-5 min-[1440px]:px-0';
+<div className="px-3 md:px-5 min-[1440px]:px-0" />
 // ✅ sorts by width
-className = 'px-3 min-[768px]:px-5 min-[1440px]:px-0';
+<div className="px-3 min-[768px]:px-5 min-[1440px]:px-0" />
 ```
 
 **A preset `size` on `Heading`/`SectionHeader` carries responsive steps** (`md:`/`xl:`) that a `className` can't override at those breakpoints. Pass `size="none"` when a page owns its whole scale.
