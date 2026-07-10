@@ -10,8 +10,10 @@ import { HOME_TESTED } from '~/content/home';
  * photo filling the right. Mirrors the live `black-text-image-split` section.
  */
 export const TestedInTraining = () => (
-  <section className="grid overflow-hidden bg-neutral-900 text-white md:grid-cols-[13fr_10fr]">
-    <div className="relative">
+  // Live stacks photo-above-text up to tablet and splits 5:4 on desktop, with
+  // the text panel on the left.
+  <section className="grid overflow-hidden bg-neutral-900 text-white lg:grid-cols-[5fr_4fr]">
+    <div className="relative order-2 lg:order-1">
       <video
         src={HOME_TESTED.video}
         autoPlay
@@ -44,7 +46,7 @@ export const TestedInTraining = () => (
       src={HOME_TESTED.image}
       alt=""
       loading="lazy"
-      className="h-72 w-full object-cover md:h-full"
+      className="order-1 aspect-[351/367] w-full object-cover lg:order-2 lg:aspect-auto lg:h-full"
     />
   </section>
 );
