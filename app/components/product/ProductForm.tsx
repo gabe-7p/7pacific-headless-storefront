@@ -19,6 +19,10 @@ const SIZE_LABELS: Record<string, string> = {
 
 const shortLabel = (value: string) => SIZE_LABELS[value.trim().toLowerCase()] ?? value;
 
+/** Live's segmented size cell: 9.6px, semibold, 0.3em tracking, uppercase. */
+const SIZE_CELL =
+  'flex-1 border py-3 text-center text-[9.6px] font-semibold tracking-[0.3em] uppercase';
+
 const OptionLabel = ({ children }: { children: string }) => (
   <Eyebrow className="mb-2 text-neutral-500">{children}</Eyebrow>
 );
@@ -45,7 +49,9 @@ export const ProductForm = ({
       <div>
         <OptionLabel>Size</OptionLabel>
         <div className="flex w-full">
-          <span className="flex-1 cursor-default border border-neutral-900 bg-neutral-900 py-3 text-center text-sm font-medium text-white">
+          <span
+            className={cn(SIZE_CELL, 'cursor-default border-neutral-900 bg-neutral-900 text-white')}
+          >
             One Size
           </span>
         </div>
@@ -78,7 +84,8 @@ export const ProductForm = ({
                       }
                     }}
                     className={cn(
-                      '-ml-px flex-1 border py-3 text-center text-sm font-medium transition-colors first:ml-0',
+                      SIZE_CELL,
+                      '-ml-px transition-colors first:ml-0',
                       selected
                         ? 'z-10 border-neutral-900 bg-neutral-900 text-white'
                         : 'border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900',

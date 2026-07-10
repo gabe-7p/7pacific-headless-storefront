@@ -11,6 +11,8 @@ const SCALES = {
   section: 'text-[2.5rem] leading-[1.1] tracking-[1px] xl:text-[4rem]',
   /** PDP panel headings (Product Details, Tech Stack) — a modest flat 24px. */
   panel: 'text-2xl leading-[1.2] tracking-[0.3px]',
+  /** PDP sub-section headings (Recommendations) — a flat 40px. */
+  sub: 'text-[2.5rem] leading-[1.1] tracking-[1px]',
   /** Default display scale. */
   display: undefined,
 } as const;
