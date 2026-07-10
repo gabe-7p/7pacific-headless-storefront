@@ -17,10 +17,11 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
-        // 7Pacific primary CTA (orange-rust): square corners, uppercase
-        // letterspaced label, trailing chevron — matches the live theme.
+        // 7Pacific primary CTA (orange-rust): 2px corners, uppercase medium
+        // label, trailing chevron — matches the live theme's button geometry
+        // (weight 500, 0.03em tracking, 2px radius).
         brand:
-          "bg-brand text-brand-text hover:bg-brand/90 rounded-none font-semibold uppercase tracking-[0.15em] after:content-['>']",
+          "bg-brand text-brand-text hover:bg-brand/90 rounded-[2px] font-medium uppercase tracking-[0.03em] after:content-['>']",
         // 7Pacific secondary CTA: outlined in the current text color, so it
         // adapts to dark or light card backgrounds without a tone prop.
         'brand-outline':
