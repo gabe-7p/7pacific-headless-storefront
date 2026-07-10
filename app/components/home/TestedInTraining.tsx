@@ -22,10 +22,11 @@ export const TestedInTraining = () => (
       />
       <div className="absolute inset-0 bg-black/55" />
       <div className="relative z-10 px-6 py-16 md:px-12 lg:px-16 lg:py-24">
+        {/* Live: 24px, 40px tablet, 64.8px desktop — regular weight, no tracking. */}
         <Heading
           as="h2"
-          size="display"
-          className="text-4xl leading-tight font-light tracking-wide md:text-5xl lg:text-[3.5rem]"
+          size="none"
+          className="text-2xl leading-[1.2] font-normal tracking-normal md:text-[2.5rem] xl:text-[4.05rem]"
         >
           {HOME_TESTED.headingLines.map((line) => (
             <span key={line} className="block">

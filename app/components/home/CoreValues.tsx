@@ -17,10 +17,17 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
       className
     )}
   >
-    <Heading as="h3" size="md" className="tracking-[0.15em]">
+    {/* Live tenet heading: 24px, 28.8px tablet, 32px desktop; body 15.2/16px. */}
+    <Heading
+      as="h3"
+      size="none"
+      className="text-2xl leading-[1.1] tracking-[0.05em] md:text-[1.8rem] xl:text-[2rem]"
+    >
       {value.title}
     </Heading>
-    <p className="mt-4 max-w-[38ch] text-sm leading-relaxed opacity-80">{value.body}</p>
+    <p className="mt-4 max-w-[38ch] text-[0.95rem] leading-[1.2] opacity-80 md:text-base">
+      {value.body}
+    </p>
     <Button asChild variant="brand-outline" size="xs" className="mt-6">
       <Link to={value.cta.href} prefetch="intent">
         {value.cta.label}
@@ -71,7 +78,7 @@ export const CoreValues = () => {
 
   return (
     <Container className="py-14 md:py-20">
-      <SectionHeader heading={heading} subtitle={subtitle} className="max-w-2xl" />
+      <SectionHeader heading={heading} subtitle={subtitle} scale="section" />
 
       <div className="flex flex-col gap-3">
         {rows.map(({ value, media }, index) => {
