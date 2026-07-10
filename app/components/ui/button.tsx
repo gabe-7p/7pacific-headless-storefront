@@ -19,9 +19,10 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         // 7Pacific primary CTA (orange-rust): 2px corners, uppercase medium
         // label, trailing chevron — matches the live theme's button geometry
-        // (weight 500, 0.03em tracking, 2px radius).
+        // (weight 500, 0.03em tracking, 2px radius). Hover inverts to white on
+        // black, as it does everywhere on live.
         brand:
-          "bg-brand text-brand-text hover:bg-brand/90 rounded-[2px] font-medium uppercase tracking-[0.03em] after:content-['>']",
+          "bg-brand text-brand-text rounded-[2px] font-medium uppercase tracking-[0.03em] hover:bg-white hover:text-black after:content-['>']",
         // 7Pacific secondary CTA: outlined in the current text color, so it
         // adapts to dark or light card backgrounds without a tone prop.
         'brand-outline':

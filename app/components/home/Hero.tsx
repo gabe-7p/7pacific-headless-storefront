@@ -28,25 +28,27 @@ export const Hero = () => (
     />
     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-black/20" />
     <div className="absolute inset-0 z-10 flex">
-      <Container className="flex flex-col items-center justify-center pt-(--header-h) text-center md:items-start md:pt-0 md:text-left">
-        <p className="mb-1 inline-block rounded-md bg-neutral-500/50 px-3 py-1 text-[8px] font-semibold tracking-[0.2em] uppercase italic backdrop-blur-[2px] md:mb-3 md:px-4 md:py-1.5 md:text-xs">
-          {HOME_HERO.eyebrow}
-        </p>
-        <h1 className="w-full">
-          <Logo
-            tone="light"
-            className="mx-auto h-auto w-[64vw] max-w-[1200px] md:mx-0 md:w-[83vw]"
-          />
-          <span className="sr-only">{HOME_HERO.wordmark}</span>
-        </h1>
-        <p className="mt-1 text-[11px] font-light tracking-[0.2em] uppercase md:mt-4 md:text-3xl lg:text-5xl">
-          {HOME_HERO.subtitle}
-        </p>
+      <Container className="flex flex-col items-start justify-center pt-(--header-h) text-left md:pt-0">
+        {/* The eyebrow and subtitle share the wordmark's box so they left-align
+            to it — the wordmark is inset on mobile and near-flush from md up,
+            mirroring live. The CTA is centered at every breakpoint. */}
+        <div className="flex w-[64vw] max-w-[1200px] flex-col items-start self-center md:w-[83vw] md:self-start">
+          <p className="mb-1 inline-block rounded-[4px] bg-[#3c3b3b]/40 px-3 py-1 text-xs tracking-[0.04em] uppercase italic backdrop-blur-[2px] md:mb-3 md:px-4 md:py-1.5 md:text-base">
+            {HOME_HERO.eyebrow}
+          </p>
+          <h1 className="w-full">
+            <Logo tone="light" className="h-auto w-full" />
+            <span className="sr-only">{HOME_HERO.wordmark}</span>
+          </h1>
+          <p className="mt-1 text-sm tracking-[0.03em] uppercase md:mt-4 md:text-2xl xl:text-[3.75rem]">
+            {HOME_HERO.subtitle}
+          </p>
+        </div>
         <Button
           asChild
           variant="brand"
           size="sm"
-          className="mt-2 self-center md:mt-10 md:h-10 md:px-6"
+          className="mt-2 self-center text-sm md:mt-10 md:h-10 md:px-6 md:text-[1.2rem]"
         >
           <Link to={HOME_HERO.cta.href}>{HOME_HERO.cta.label}</Link>
         </Button>
