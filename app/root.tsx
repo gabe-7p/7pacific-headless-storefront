@@ -14,6 +14,7 @@ import {
 import favicon from '~/assets/favicon.svg';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
+import { cn } from '~/lib/cn';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 
 import type { Route } from './+types/root';
@@ -208,25 +209,34 @@ export const ErrorBoundary = () => {
   const isNotFound = errorStatus === 404;
 
   const content = (
-    <div className="mx-auto flex min-h-[60vh] max-w-(--page-max) flex-col justify-center px-4 py-20">
+    // Live doesn't centre the 404 vertically — it sits a fixed distance below
+    // the header, flush with the page gutter.
+    // Past --page-max the centring margin is the gutter, so the padding drops
+    // to zero — that's what puts live's text 20px from the viewport edge.
+    // Both gutters use arbitrary min-widths so Tailwind orders them by width
+    // (a named `md:` would sort after `min-[1440px]:` and win at 1440).
+    <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
       {!isNotFound && (
         <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
       )}
       <Heading
         as="h1"
-        size="xl"
+        size={isNotFound ? 'none' : 'xl'}
         variant={isNotFound ? 'quiet' : 'brand'}
-        className={isNotFound ? undefined : 'mt-3'}
+        className={
+          // Live: 18.7px on mobile, 22px from md up.
+          isNotFound ? 'text-[18.7px] font-semibold md:text-[22px]' : 'mt-3'
+        }
       >
         {isNotFound ? '404 Page Not Found' : 'Something went wrong'}
       </Heading>
-      <p className="mt-4 max-w-md text-sm text-neutral-700">
+      <p className={cn('mt-4 max-w-md text-neutral-700', isNotFound ? 'text-xs' : 'text-sm')}>
         {isNotFound
           ? 'The page you were looking for does not exist.'
           : 'An unexpected error occurred. Please try again.'}
       </p>
       {isNotFound ? (
-        <TextLink to="/" className="mt-4 inline-block w-fit text-neutral-700">
+        <TextLink to="/" className="mt-2 inline-block w-fit text-xs text-neutral-700">
           Continue shopping
         </TextLink>
       ) : (
