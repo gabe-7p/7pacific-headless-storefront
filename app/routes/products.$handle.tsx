@@ -17,6 +17,7 @@ import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
+import { EditionTag } from '~/components/product/EditionTag';
 import { EnvironmentalHero } from '~/components/product/EnvironmentalHero';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
@@ -188,6 +189,12 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               the measure the description was authored against. */}
           <div className="flex flex-col bg-white text-neutral-900 min-[769px]:ml-8 min-[769px]:max-w-[500px]">
             <div className="p-5">
+              {/* Edition device above the name (7PA-246). */}
+              <EditionTag
+                number={product.editionNumber?.value}
+                status={product.editionStatus?.value}
+                className="mb-2 block"
+              />
               {/* Product-name tier: 24px, 32px from md, +0.04em, lh 1.15
                   (face/weight from the Heading brand variant). */}
               <Heading
@@ -375,6 +382,13 @@ const PRODUCT_FRAGMENT = `#graphql
     # The Spec Card (7PA-231) — the locked seven-field JSON device
     # (fabric/weight/use/seams/pockets/fit/origin); see lib/productContent.
     specCard: metafield(namespace: "custom", key: "spec_card") {
+      value
+    }
+    # Edition device (7PA-246) — rendered above the product name.
+    editionNumber: metafield(namespace: "custom", key: "edition_number") {
+      value
+    }
+    editionStatus: metafield(namespace: "custom", key: "edition_status") {
       value
     }
     # Below-the-fold environmental hero + caption (locked PDP order step 6).
