@@ -17,12 +17,9 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
       className
     )}
   >
-    {/* Live tenet heading: 24px, 28.8px tablet, 32px desktop; body 15.2/16px. */}
-    <Heading
-      as="h3"
-      size="none"
-      className="text-2xl leading-[1.1] tracking-[0.05em] md:text-[1.8rem] xl:text-[2rem]"
-    >
+    {/* Tenet heading: 24px, 28.8px tablet, 32px desktop; tracking comes from
+        the Heading brand variant (section-header tier). */}
+    <Heading as="h3" size="none" className="text-2xl leading-[1.1] md:text-[1.8rem] xl:text-[2rem]">
       {value.title}
     </Heading>
     <p className="mt-4 max-w-[38ch] text-[0.95rem] leading-[1.2] opacity-80 md:text-base">

@@ -2,17 +2,18 @@ import { Heading } from '~/components/common/Heading';
 import { cn } from '~/lib/cn';
 
 /**
- * Live uses distinct scales for its section headings — pick the one matching
- * the surface instead of overriding sizes at the call site. `leading-` repeats
+ * Section-header scales from the brand type table (36–48px, +0.01em, lh 1.1 —
+ * the tracking comes from Heading's brand variant). Pick the one matching the
+ * surface instead of overriding sizes at the call site. `leading-` repeats
  * with each size because Tailwind's `text-*` utilities also set line-height.
  */
 const SCALES = {
-  /** Homepage sections — 40px, 64px on desktop. Live's tracking is a flat 1px. */
-  section: 'text-[2.5rem] leading-[1.1] tracking-[1px] xl:text-[4rem]',
+  /** Homepage sections — 36px, 48px on desktop. */
+  section: 'text-4xl leading-[1.1] xl:text-5xl xl:leading-[1.1]',
   /** PDP panel headings (Product Details, Tech Stack) — a modest flat 24px. */
-  panel: 'text-2xl leading-[1.2] tracking-[0.3px]',
-  /** PDP sub-section headings (Recommendations) — a flat 40px. */
-  sub: 'text-[2.5rem] leading-[1.1] tracking-[1px]',
+  panel: 'text-2xl leading-[1.2]',
+  /** PDP sub-section headings (Recommendations) — a flat 36px. */
+  sub: 'text-4xl leading-[1.1]',
   /** Default display scale. */
   display: undefined,
 } as const;

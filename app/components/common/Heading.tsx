@@ -4,12 +4,13 @@ import { cn } from '~/lib/cn';
 
 const VARIANTS = {
   /**
-   * Brand section heading — uppercase Barlow. Live renders every display
-   * heading at weight 500 with 1.1 line-height and modest tracking; sizes and
-   * per-page tracking one-offs layer on top.
+   * Brand display heading — Archivo Condensed Bold, ALL CAPS (the only
+   * display weight in the system; hierarchy comes from size, not weight).
+   * Section-header tracking (+0.01em) is the default; hero (-0.005em) and
+   * product-name (+0.04em) tiers override via className.
    */
-  brand: 'font-medium tracking-[0.03em] uppercase leading-[1.1]',
-  /** Quiet page heading — bold, tight-tracked, sentence case (cart, contact, 404). */
+  brand: 'font-display font-bold tracking-header uppercase leading-[1.1]',
+  /** Quiet page heading — Inter bold, tight-tracked, sentence case (cart, contact, 404). */
   quiet: 'font-bold tracking-tight',
 } as const;
 
@@ -20,8 +21,8 @@ const SIZES = {
   md: 'text-2xl',
   lg: 'text-2xl md:text-3xl',
   xl: 'text-3xl md:text-4xl',
-  /** Live-theme homepage section headings (~30px mobile / ~36-40px desktop). */
-  display: 'text-3xl tracking-[0.08em] md:text-4xl',
+  /** Section-header tier (36px, 48px from md) — Brand Guidelines type table. */
+  display: 'text-4xl leading-[1.1] md:text-5xl md:leading-[1.1]',
 } as const;
 
 type HeadingProps = {

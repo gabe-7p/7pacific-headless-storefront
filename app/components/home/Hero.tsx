@@ -40,7 +40,9 @@ export const Hero = () => (
             <Logo tone="light" className="h-auto w-full" />
             <span className="sr-only">{HOME_HERO.wordmark}</span>
           </h1>
-          <p className="mt-1 text-sm tracking-[0.03em] uppercase md:mt-4 md:text-2xl xl:text-[3.75rem]">
+          {/* Hero display tier: Archivo Condensed Bold caps, -0.005em, lh ~0.95
+              (leading repeats per size — text-* utilities reset line-height). */}
+          <p className="font-display mt-1 text-sm leading-[0.95] font-bold tracking-hero uppercase md:mt-4 md:text-2xl md:leading-[0.95] xl:text-[3.75rem] xl:leading-[0.95]">
             {HOME_HERO.subtitle}
           </p>
         </div>

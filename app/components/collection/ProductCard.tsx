@@ -82,7 +82,13 @@ export const ProductCard = ({
       </div>
 
       <div className="mt-3 flex flex-col gap-1.5">
-        <Link to={to} prefetch="intent" className="text-xs font-medium tracking-wide uppercase">
+        {/* Product-name tier: Archivo Condensed Bold caps at +0.04em (card
+            keeps its compact size until the 7PA-234 card redesign). */}
+        <Link
+          to={to}
+          prefetch="intent"
+          className="font-display text-xs font-bold tracking-product uppercase"
+        >
           {title}
         </Link>
         <Price data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />

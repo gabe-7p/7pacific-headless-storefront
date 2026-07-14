@@ -71,9 +71,10 @@ export const CartLineItem = ({
           )}
           <div className="mt-3 flex items-center justify-between gap-4">
             <QuantityStepper line={line} />
-            <div className="text-sm font-medium">
+            <div className="font-mono text-sm font-medium">
               {/* Raw <Money> ("$79.00") to match the cart's subtotal, not the
-                  brand <Price> ("$79 USD") the PDP and product cards use. */}
+                  brand <Price> ("$79 USD") the PDP and product cards use.
+                  Mono face per the numbers-live-in-mono rule. */}
               {line?.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
             </div>
           </div>
@@ -125,7 +126,7 @@ const QuantityStepper = ({ line }: { line: CartLine }) => {
           <Minus className="size-3.5" />
         </button>
       </CartLineUpdateButton>
-      <span className="min-w-8 text-center text-sm tabular-nums">{quantity}</span>
+      <span className="min-w-8 text-center font-mono text-sm tabular-nums">{quantity}</span>
       <CartLineUpdateButton lines={[{ id: lineId, quantity: nextQuantity }]}>
         <button
           aria-label="Increase quantity"

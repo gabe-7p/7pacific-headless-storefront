@@ -12,6 +12,14 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Brand type stack — self-hosted variable fonts (subset woff2, font-display:
+ * swap), bundled by Vite and served same-origin so no third-party font CSP is
+ * needed. Archivo's `wdth.css` build carries the width axis; the display token
+ * below pins it to 75 ("Archivo Condensed"). */
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
 @custom-variant dark (&:is(.dark *));
 
 /* shadcn/ui base color: neutral. These feed the primitives in app/components/ui/. */
@@ -90,7 +98,25 @@
  * values are never repeated inline. Coexists with the shadcn tokens above.
  */
 @theme {
-  --font-sans: 'Barlow', sans-serif; /* matches the live Impulse theme exactly */
+  /* The three-face brand stack (7PA-228, Brand Guidelines → 03 Typography):
+   * display = Archivo Condensed Bold (ALL CAPS, the only display weight),
+   * sans = Inter (body + UI), mono = JetBrains Mono (every number, price,
+   * spec, and edition device). Hierarchy comes from size contrast (4:1–5:1),
+   * never weight. */
+  --font-display: 'Archivo Variable', 'Archivo', 'Arial Narrow', sans-serif;
+  --font-display--font-variation-settings: 'wdth' 75; /* Archivo Condensed */
+  --font-sans: 'Inter Variable', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Brand tracking scale — caps always track wider than default, body stays
+   * at 0. `tracking-caps` (+0.08em, nav/CTAs/edition numbers) and
+   * `tracking-spec` (+0.1em, mono spec strips) are the two load-bearing
+   * values called out by the guidelines. */
+  --tracking-hero: -0.005em; /* hero display headlines */
+  --tracking-header: 0.01em; /* section headers */
+  --tracking-product: 0.04em; /* product names */
+  --tracking-caps: 0.08em; /* caps UI: nav, CTAs, edition numbers */
+  --tracking-spec: 0.1em; /* JetBrains Mono spec strips */
 
   --color-announcement: #000000;
   --color-announcement-text: #ffffff;
@@ -168,8 +194,8 @@
  * components that use them (product-*, order-search-*), at which point this
  * block shrinks away.
  *
- * NB: don't set `font-family` here — Tailwind owns it via `font-sans` (Barlow)
- * on <body>.
+ * NB: don't set `font-family` here — Tailwind owns it via `font-sans` (Inter)
+ * on <body>; display/mono faces come from `font-display`/`font-mono`.
  * ========================================================================== */
 
 /* --- base element defaults (was reset.css) ---
