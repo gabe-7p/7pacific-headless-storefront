@@ -13,8 +13,8 @@ import {
 
 import favicon from '~/assets/favicon.svg';
 import { Heading } from '~/components/common/Heading';
-import { TextLink } from '~/components/common/TextLink';
-import { cn } from '~/lib/cn';
+import { Button } from '~/components/ui/button';
+import { MICROCOPY } from '~/content/microcopy';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 
 import type { Route } from './+types/root';
@@ -217,22 +217,20 @@ export const ErrorBoundary = () => {
         as="h1"
         size={isNotFound ? 'none' : 'xl'}
         variant={isNotFound ? 'quiet' : 'brand'}
-        className={
-          // Live: 18.7px on mobile, 22px from md up.
-          isNotFound ? 'text-[18.7px] font-semibold md:text-[22px]' : 'mt-3'
-        }
+        className={isNotFound ? 'max-w-md text-[18.7px] font-semibold md:text-[22px]' : 'mt-3'}
       >
-        {isNotFound ? '404 Page Not Found' : 'Something went wrong'}
+        {/* 404 copy is locked microcopy (7PA-243) — verbatim. */}
+        {isNotFound ? MICROCOPY.notFound : 'Something went wrong'}
       </Heading>
-      <p className={cn('mt-4 max-w-md text-neutral-700', isNotFound ? 'text-xs' : 'text-sm')}>
-        {isNotFound
-          ? 'The page you were looking for does not exist.'
-          : 'An unexpected error occurred. Please try again.'}
-      </p>
+      {!isNotFound && (
+        <p className="mt-4 max-w-md text-sm text-neutral-700">
+          An unexpected error occurred. Please try again.
+        </p>
+      )}
       {isNotFound ? (
-        <TextLink to="/" className="mt-2 inline-block w-fit text-xs text-neutral-700">
-          Continue shopping
-        </TextLink>
+        <Button asChild variant="brand-outline" size="sm" className="mt-6">
+          <a href="/">Homepage</a>
+        </Button>
       ) : (
         <a
           href="/"
