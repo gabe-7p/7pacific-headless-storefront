@@ -1,12 +1,14 @@
-import blackLogo from '~/assets/black_logo.svg';
-import whiteLogo from '~/assets/white_logo.svg';
+import logoDarkBg from '~/assets/logo-dark-bg.svg';
+import logoLightBg from '~/assets/logo-light-bg.svg';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
 
 /**
- * Brand logo (from Shopify Files, vendored into app/assets). `tone` picks the
- * variant by background: 'dark' = the black logo for light backgrounds (default),
- * 'light' = the white logo for dark/overlay backgrounds (hero header, footer).
+ * The sport-tag lockup (7PA-245) — the final D9 V5 artwork from the brand's
+ * Logo & Assets: boxed race-bib "7" + PACIFIC wordmark. `tone` picks the
+ * variant by surface luminance: 'dark' = the Light-Bg file for light
+ * surfaces (default), 'light' = the Dk-Bg file for dark/overlay surfaces
+ * (hero header, footer). Never recolor these outside the artwork itself.
  */
 export const Logo = ({
   tone = 'dark',
@@ -16,7 +18,7 @@ export const Logo = ({
   className?: string;
 }) => (
   <img
-    src={tone === 'light' ? whiteLogo : blackLogo}
+    src={tone === 'light' ? logoDarkBg : logoLightBg}
     alt={BRAND.name}
     width={1035}
     height={183}
