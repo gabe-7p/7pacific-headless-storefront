@@ -125,11 +125,11 @@ export const HeaderMenu = ({
             prefetch="intent"
             to={toInternalPath(item.url)}
             // Live never marks the current page in the nav, so no active state.
+            // Caps-UI tier: Inter Medium, ALL CAPS, +0.08em — the tracked-caps
+            // treatment the brand type rules call the most important UI move.
             className={cn(
-              'tracking-wide transition-opacity hover:opacity-70',
-              isMobile
-                ? 'border-border-subtle border-b px-5 py-4 text-lg font-medium'
-                : 'text-xs font-normal'
+              'font-medium tracking-caps uppercase transition-opacity hover:opacity-70',
+              isMobile ? 'border-border-subtle border-b px-5 py-4 text-sm' : 'text-xs'
             )}
           >
             {item.title}

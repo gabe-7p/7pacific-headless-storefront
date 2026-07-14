@@ -16,16 +16,12 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
-    // Allow the Barlow web font (loaded via a <link> in root.tsx): the
-    // stylesheet comes from fonts.googleapis.com and the font files from
-    // fonts.gstatic.com. These are merged with Hydrogen's defaults.
-    styleSrc: [
-      "'self'",
-      "'unsafe-inline'",
-      'https://cdn.shopify.com',
-      'https://fonts.googleapis.com',
-    ],
-    fontSrc: ["'self'", 'https://cdn.shopify.com', 'https://fonts.gstatic.com'],
+    // Brand fonts are self-hosted (@fontsource-variable imports in
+    // tailwind.css, bundled by Vite and served same-origin), so no
+    // third-party font hosts are allowed. These are merged with Hydrogen's
+    // defaults.
+    styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.shopify.com'],
+    fontSrc: ["'self'", 'https://cdn.shopify.com'],
   });
 
   const body = await renderToReadableStream(

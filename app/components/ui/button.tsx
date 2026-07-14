@@ -17,16 +17,16 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
-        // 7Pacific primary CTA (orange-rust): 2px corners, uppercase medium
-        // label, trailing chevron — matches the live theme's button geometry
-        // (weight 500, 0.03em tracking, 2px radius). Hover inverts to white on
-        // black, as it does everywhere on live.
+        // 7Pacific primary CTA: 2px corners, caps-UI label (Inter Medium at
+        // the brand's +0.08em caps tracking), trailing chevron. Hover inverts
+        // to white on black, as it does everywhere on live.
         brand:
-          "bg-brand text-brand-text rounded-[2px] font-medium uppercase tracking-[0.03em] hover:bg-white hover:text-black after:content-['>']",
+          "bg-brand text-brand-text rounded-[2px] font-medium uppercase tracking-caps hover:bg-white hover:text-black after:content-['>']",
         // 7Pacific secondary CTA: outlined in the current text color, so it
-        // adapts to dark or light card backgrounds without a tone prop.
+        // adapts to dark or light card backgrounds without a tone prop. Same
+        // caps-UI tier as `brand` (Medium — Semibold is for sub-headlines).
         'brand-outline':
-          "rounded-none border border-current bg-transparent font-semibold uppercase tracking-[0.15em] hover:opacity-70 after:content-['>']",
+          "rounded-none border border-current bg-transparent font-medium uppercase tracking-caps hover:opacity-70 after:content-['>']",
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

@@ -98,8 +98,8 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
         aria-expanded={open}
         className="flex w-full items-center justify-between py-4 min-[769px]:pointer-events-none min-[769px]:py-0"
       >
-        {/* Live: 14px / 600 / 0.3em. */}
-        <Heading as="h3" size="none" className="text-sm font-semibold tracking-[0.3em]">
+        {/* 14px / 0.3em — weight comes from the Heading brand variant. */}
+        <Heading as="h3" size="none" className="text-sm tracking-[0.3em]">
           {title}
         </Heading>
         <ChevronDown

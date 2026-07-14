@@ -10,10 +10,9 @@ type EyebrowProps = {
 
 /**
  * Small uppercase letterspaced label above a control or column
- * ("COLOR", "SIZE", "MATERIALS"). Color/margins come in via className.
+ * ("COLOR", "SIZE", "MATERIALS"). Caps-UI tier: Inter Medium at +0.08em —
+ * Semibold is reserved for sub-headlines. Color/margins come in via className.
  */
 export const Eyebrow = ({ as: Tag = 'p', className, children }: EyebrowProps) => (
-  <Tag className={cn('text-xs font-semibold tracking-[0.15em] uppercase', className)}>
-    {children}
-  </Tag>
+  <Tag className={cn('text-xs font-medium tracking-caps uppercase', className)}>{children}</Tag>
 );
