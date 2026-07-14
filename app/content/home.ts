@@ -43,10 +43,15 @@ export type CoreValue = {
   tone: 'dark' | 'light';
 };
 
+/**
+ * The four homepage cards (7PA-238). Not the internal values list — the
+ * Strategy Canvas calls publishing values verbatim "wall art." These are
+ * customer-facing reminders in the working voice; cards 1, 3, and 4 quote
+ * the approved Tone Chart caption/product-line boards verbatim.
+ */
 export const HOME_CORE_VALUES = {
   heading: 'What We Stand For',
-  subtitle:
-    "Our core tenets that guide our mission. It's what we strive to do as a company, and what we hope to inspire in our community.",
+  subtitle: 'The reminders we train by. Same ones, every season.',
   video: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
   images: {
     socialSharing: `${CDN}/social_sharing.jpg`,
@@ -55,28 +60,28 @@ export const HOME_CORE_VALUES = {
   },
   values: [
     {
-      title: 'Love The Journey',
+      title: 'The Early One',
       tone: 'dark',
-      body: 'The peak is a moment. The climb is the life. We think everyone builds a stronger version of themselves when you sweat together.',
-      cta: { label: 'Read Our Story', href: '/pages/our-story' },
+      body: "Nobody claps at 5:45 AM. That's sort of the point.",
+      cta: { label: 'Read the story', href: '/pages/our-story' },
     },
     {
-      title: 'No Losses, Only Lessons',
+      title: 'Earned, Not Given',
       tone: 'light',
-      body: "When something doesn't work out, we figure out why and come back more experienced.",
-      cta: { label: 'Join The Membership', href: '#newsletter' },
+      body: 'The work is the reward. The gear just has to keep up.',
+      cta: { label: 'Sign up', href: '#newsletter' },
     },
     {
-      title: 'Play The Long Game',
+      title: 'Set 4 of 5',
       tone: 'dark',
-      body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
-      cta: { label: 'Shop Shirts', href: STORE_LINKS.shopShirts },
+      body: 'Built for the part of training nobody posts.',
+      cta: { label: 'Shop tees', href: STORE_LINKS.shopShirts },
     },
     {
-      title: 'Track The Truth',
+      title: 'See You Out There',
       tone: 'light',
-      body: 'The space between the start and end point is yours to shape. Measure the work to watch the evolution.',
-      cta: { label: 'Shop Shorts', href: STORE_LINKS.shopShorts },
+      body: 'Fog until noon. Perfect conditions, depending who you ask.',
+      cta: { label: 'Shop shorts', href: STORE_LINKS.shopShorts },
     },
   ] satisfies ReadonlyArray<CoreValue>,
 } as const;
