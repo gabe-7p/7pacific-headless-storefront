@@ -12,12 +12,14 @@ import { BRAND } from '~/lib/brand';
 const CDN = BRAND.filesCdn;
 
 export const HOME_HERO = {
-  eyebrow: 'Introducing',
-  /** Screen-reader text for the hero's h1 — visually it's the wordmark SVG. */
-  wordmark: 'PACIFIC',
-  subtitle: 'Discipline Looks Good Now',
-  cta: { label: 'Own The Start', href: STORE_LINKS.shopAll },
-  /** Intrinsic dimensions drive the hero's natural aspect ratio (3:2). */
+  /**
+   * Locked hero spec (7PA-232): ≤8 words, one sentence, ALL CAPS via CSS.
+   * The headline is verbatim from the approved Tone Chart product-line board.
+   */
+  headline: 'Built for the part of training nobody posts.',
+  subline: 'Laser-cut vents. Bonded seams. Gear for the 6 AM session — fog included.',
+  /** One CTA, mono caps (the page's single Ember moment). */
+  cta: { label: 'Shop the Drop', href: STORE_LINKS.shopAll },
   backgroundImage: {
     url: `${CDN}/24_121_7pacific_03806.jpg`,
     width: 1656,
@@ -27,7 +29,8 @@ export const HOME_HERO = {
 
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
-  subtitle: 'Ultra-Light. Breathable. Ready To Train. Click in to see why.',
+  // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).
+  subtitle: 'Three silhouettes, nine colorways. Tested on the hills we run.',
   // Grid order is merchant-controlled: the manual `homepage-first-drop`
   // collection in Shopify (see HOMEPAGE_COLLECTION_HANDLE in content/links.ts).
 } as const;
