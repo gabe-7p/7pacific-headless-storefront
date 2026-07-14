@@ -133,3 +133,28 @@ describe('ProductCard hover ensemble', () => {
     expect(root?.className).toContain('transition-[translate,box-shadow]');
   });
 });
+
+describe('ProductCard signature device (7PA-234)', () => {
+  it('renders the derived short name, never the raw "- COLOR" title', () => {
+    const { container } = renderCard(TEE);
+    const nameLink = [...container.querySelectorAll('a')].find(
+      (a) => a.textContent === 'TRACEFIBER TEE'
+    );
+    expect(nameLink).toBeDefined();
+    expect(nameLink?.className).toContain('font-display');
+    expect(container.textContent).not.toContain('- WHITE');
+  });
+
+  it('renders the mono spec strip: color · family spec · price, middle-dot separated', () => {
+    const { container } = renderCard(TEE);
+    const strip = container.querySelector('span.font-mono');
+    expect(strip?.textContent).toContain('White · 84/16 mesh · ');
+    expect(strip?.textContent).toContain('$74');
+  });
+
+  it('omits the family spec for unmapped products instead of inventing one', () => {
+    const { container } = renderCard(HAT); // fixture title "MOTIONFRAME HAT - WHITE" → noun HAT
+    const strip = container.querySelector('span.font-mono');
+    expect(strip?.textContent).toContain('White · laser-cut perf · ');
+  });
+});
