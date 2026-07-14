@@ -20,8 +20,13 @@ export const BRAND = {
   /** Logotype shown in the header/footer. */
   wordmark: 'Pacific',
 
+  /**
+   * Announcement spec strip (7PA-242) — mono caps, middle-dot separators
+   * (never slash/pipe). Keeps the true shipping fact, framed as spec data
+   * inside the edition-number system (7PA-246).
+   */
   announcement: {
-    message: 'Free Shipping on orders over $200',
+    message: "ED. 01 · SUMMER '25 · LIVE NOW · FREE SHIPPING OVER $200",
     href: '',
   },
 
