@@ -140,7 +140,7 @@
   --color-brand: #d04d2a; /* Ember — primary CTA / accent */
   --color-brand-text: #e8e9ea; /* Chalk */
   --color-savings: #d04d2a; /* Ember — no separate sale red; we don't run sales */
-  --color-cart-dot: #d04d2a; /* Ember — cart count bubble */
+  --color-cart-dot: #22303c; /* Storm — the header renders on every page, and Ember is rationed to one moment per page (7PA-230) */
   --color-border-subtle: color-mix(in srgb, #9ca3a6 40%, transparent); /* Fog @ 40% */
 
   /* Homepage tenet cards */

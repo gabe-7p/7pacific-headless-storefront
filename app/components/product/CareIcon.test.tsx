@@ -15,10 +15,10 @@ describe('CareIcon', () => {
     'Do not iron',
   ])('renders an icon for "%s" (all seeded care labels)', (label) => {
     const { container } = render(<CareIcon label={label} />);
-    // Stroke follows the brand color token (text-brand + currentColor),
-    // not a hardcoded hex — 7PA-229.
+    // Stroke follows a palette token (currentColor), not a hardcoded hex
+    // (7PA-229); Concrete, not Ember — the accent is rationed (7PA-230).
     expect(container.querySelector('svg path')?.getAttribute('stroke')).toBe('currentColor');
-    expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-brand');
+    expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-concrete');
   });
 
   it('matches labels case- and whitespace-insensitively', () => {

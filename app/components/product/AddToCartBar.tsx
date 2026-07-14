@@ -20,17 +20,19 @@ export const AddToCartBar = ({
     // The base layer caps every `form` at 400px from md up; the bar has to span
     // its card (and the full viewport when sticky), so opt this one out.
     <div className="[&>form]:max-w-none">
+      {/* The PDP's one Ember moment (7PA-230) — Ember at every breakpoint,
+          mono caps in the bracket device. */}
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => open('cart')}
-        className="bg-brand text-brand-text min-h-[58px] w-full px-6 py-4 text-sm font-medium tracking-caps uppercase transition-opacity hover:opacity-90 disabled:opacity-50 min-[769px]:bg-neutral-900 min-[769px]:text-white"
+        className="bg-brand text-brand-text min-h-[58px] w-full px-6 py-4 font-mono text-sm font-medium tracking-caps uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
         lines={
           selectedVariant
             ? [{ merchandiseId: selectedVariant.id, quantity: 1, selectedVariant }]
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'Add to cart //' : 'Sold out'}
+        {selectedVariant?.availableForSale ? '[ Add to cart ]' : 'Sold out'}
       </AddToCartButton>
     </div>
   );

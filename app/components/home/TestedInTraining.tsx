@@ -40,7 +40,8 @@ export const TestedInTraining = () => (
           ))}
         </Heading>
         <p className="mt-6 max-w-md text-sm text-white/85">{HOME_TESTED.body}</p>
-        <Button asChild variant="brand" className="mt-8">
+        {/* Secondary — the home page's one Ember moment is the hero CTA (7PA-230). */}
+        <Button asChild variant="brand-outline" className="mt-8">
           <Link to={HOME_TESTED.cta.href}>{HOME_TESTED.cta.label}</Link>
         </Button>
       </div>

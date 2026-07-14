@@ -61,16 +61,9 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
 const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
   if (!checkoutUrl) return null;
   return (
-    // Matches the live theme's .btn/.cart__checkout exactly: full width,
-    // 3px radius ("round-slight"), 13px bold, .3em letterspacing — same at
-    // every breakpoint. Overrides the brand Button's defaults locally so the
-    // marketing CTAs elsewhere keep their own verified styling.
-    <Button
-      asChild
-      variant="brand"
-      size="lg"
-      className="mt-5 w-full rounded-[3px] text-[13px] font-bold tracking-[0.3em]"
-    >
+    // The cart's one Ember moment (7PA-230) — the primary variant's mono-caps
+    // bracket device, full width.
+    <Button asChild variant="brand" size="lg" className="mt-5 w-full">
       <a href={checkoutUrl} target="_self">
         Checkout
       </a>
