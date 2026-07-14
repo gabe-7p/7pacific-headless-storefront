@@ -33,7 +33,7 @@ export const Hero = () => (
             to it — the wordmark is inset on mobile and near-flush from md up,
             mirroring live. The CTA is centered at every breakpoint. */}
         <div className="flex w-[64vw] max-w-[1200px] flex-col items-start self-center md:w-[83vw] md:self-start">
-          <p className="mb-1 inline-block rounded-[4px] bg-[#3c3b3b]/40 px-3 py-1 text-xs tracking-[0.04em] uppercase italic backdrop-blur-[2px] md:mb-3 md:px-4 md:py-1.5 md:text-base">
+          <p className="bg-carbon/40 mb-1 inline-block rounded-[4px] px-3 py-1 text-xs tracking-[0.04em] uppercase italic backdrop-blur-[2px] md:mb-3 md:px-4 md:py-1.5 md:text-base">
             {HOME_HERO.eyebrow}
           </p>
           <h1 className="w-full">
