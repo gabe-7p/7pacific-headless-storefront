@@ -29,7 +29,7 @@ export type MarketingSection = {
 export const parseMarketingSections = (value?: string | null): Array<MarketingSection> =>
   parseJson<Array<MarketingSection>>(value) ?? [];
 
-type MetafieldImage = {
+export type MetafieldImage = {
   id?: string | null;
   url: string;
   altText?: string | null;
