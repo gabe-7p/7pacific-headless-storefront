@@ -7,7 +7,6 @@ import { Announcement } from '~/components/layout/Announcement';
 import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
 import { Header, HeaderMenu } from '~/components/layout/Header';
-import { NewsletterPopup } from '~/components/layout/NewsletterPopup';
 
 type PageLayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -35,8 +34,9 @@ export const PageLayout = ({
         {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
       </div>
       <main>{children}</main>
+      {/* The footer signup is the one newsletter per page — the site-wide
+          popup is gone (7PA-241: no interruption modals, no discount bribe). */}
       <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
-      <NewsletterPopup />
     </Aside.Provider>
   );
 };
