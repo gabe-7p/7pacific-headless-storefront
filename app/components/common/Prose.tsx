@@ -19,6 +19,12 @@ const PROSE_VARIANTS = {
   /** Plain paragraphs only (PDP description) — live's tight 13px/1.3 rhythm. */
   description: 'text-[13px] leading-[1.3] text-neutral-600 [&_p]:mb-4 [&_p:last-child]:mb-0',
   /**
+   * Journal long-form (7PA-248). The one surface the type table sets at 18px:
+   * body 18px / lh 1.65, 65ch measure, block paragraphs with no indents.
+   */
+  journal:
+    'max-w-[65ch] text-lg leading-[1.65] text-neutral-800 [&_a]:text-black [&_a]:underline [&_h2]:mt-10 [&_h2]:font-display [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:tracking-header [&_h2]:uppercase [&_img]:mt-8 [&_img]:w-full [&_li]:mt-2 [&_li]:leading-[1.65] [&_p]:mt-6 [&_strong]:font-semibold [&_ul]:mt-6 [&_ul]:list-disc [&_ul]:pl-5',
+  /**
    * Shopify policy bodies (`/policies/*`). Live sets both heading levels at
    * 22px/600 with generous spacing, 12px paragraphs, and real bulleted lists.
    */

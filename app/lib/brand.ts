@@ -59,12 +59,13 @@ export const BRAND = {
 
   /**
    * Fallback header nav, used only if the Storefront `main-menu` is empty.
-   * Mirrors the locked nav (7PA-235): Shop · Drops · Journal · About ·
-   * Account — Drops and Journal join once their routes exist (7PA-247/248);
-   * never ship a dead link. Contact lives in the footer only.
+   * The locked 5-item nav (7PA-235, completed by 7PA-247/248 shipping the
+   * Drops and Journal routes). Contact lives in the footer only.
    */
   headerLinks: [
     { title: 'Shop', url: STORE_LINKS.shopAll },
+    { title: 'Drops', url: '/drops' },
+    { title: 'Journal', url: '/journal' },
     { title: 'About', url: '/pages/our-story' },
     { title: 'Account', url: '/account' },
   ] satisfies Array<NavLink>,
