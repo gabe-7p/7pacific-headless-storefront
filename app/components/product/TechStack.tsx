@@ -66,7 +66,7 @@ export const TechStack = ({ data }: { data: TechStackData }) => {
   return (
     <PdpSection>
       <h2 className="mb-5 text-2xl font-medium">TECH STACK</h2>
-      <div className="divide-y divide-[#cccccc] border-t border-[#cccccc]">
+      <div className="divide-border-subtle border-border-subtle divide-y border-t">
         {data.features.map((feature) => (
           <Feature key={feature.heading} feature={feature} />
         ))}

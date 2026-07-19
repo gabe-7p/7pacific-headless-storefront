@@ -1,6 +1,7 @@
 /**
  * Care-instruction icons for the PDP TECH STACK section — path data extracted
- * verbatim from the live theme's inline SVGs (24×24, orange #F26927 stroke).
+ * verbatim from the live theme's inline SVGs (24×24). Stroked in the brand
+ * accent via `text-brand` + currentColor so the palette token rules the color.
  * Keyed by the normalized instruction label from the `custom.tech_stack`
  * metafield's `care` array; unknown labels render no icon (text-only).
  */
@@ -21,10 +22,17 @@ export const CareIcon = ({ label }: { label: string }) => {
   const path = CARE_ICON_PATHS[label.trim().toLowerCase()];
   if (!path) return null;
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden
+      className="text-brand shrink-0"
+    >
       <path
         d={path}
-        stroke="#F26927"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

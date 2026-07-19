@@ -15,7 +15,10 @@ describe('CareIcon', () => {
     'Do not iron',
   ])('renders an icon for "%s" (all seeded care labels)', (label) => {
     const { container } = render(<CareIcon label={label} />);
-    expect(container.querySelector('svg path')?.getAttribute('stroke')).toBe('#F26927');
+    // Stroke follows the brand color token (text-brand + currentColor),
+    // not a hardcoded hex — 7PA-229.
+    expect(container.querySelector('svg path')?.getAttribute('stroke')).toBe('currentColor');
+    expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-brand');
   });
 
   it('matches labels case- and whitespace-insensitively', () => {

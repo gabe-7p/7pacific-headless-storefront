@@ -72,7 +72,7 @@ export const ColorSwatches = ({
             {cascade && (
               // Color-name pill above the swatch (live's .color-swatch-tooltip).
               <span
-                className="pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-[2px] bg-[#666] px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:border-t-[#666] after:content-['']"
+                className="bg-concrete after:border-t-concrete pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-[2px] px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:content-['']"
                 aria-hidden
               >
                 {swatch.name}
