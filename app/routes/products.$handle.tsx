@@ -162,22 +162,26 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
           (not a fixed height) so a tall buy card grows the hero instead of
           overflowing it under the header and past the fold; the vertical
           padding keeps the card inset like live's. */}
-      <section className="overflow-hidden bg-neutral-100 text-neutral-900 min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[46rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-white">
+      <section className="overflow-hidden bg-neutral-100 text-neutral-900 min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-white">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
+        {/* Mobile matches live's .product-background-image: 75% wide, 400px
+            tall, cover-center (not a letterboxed contain). */}
         {heroMobile && (
           <Image
             data={heroMobile}
-            sizes="100vw"
-            className="aspect-[3/4] w-full object-contain object-bottom sm:aspect-[4/3] min-[769px]:hidden"
+            sizes="75vw"
+            className="mx-auto h-[400px] w-3/4 object-cover min-[769px]:hidden"
           />
         )}
+        {/* Desktop matches live's background-position: center — an off-center
+            anchor cropped the top of the shot out of the frame. */}
         {heroDesktop && (
           <Image
             data={heroDesktop}
             sizes="100vw"
-            className="hidden object-cover min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full min-[769px]:object-[80%_bottom]"
+            className="hidden object-cover object-center min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full"
           />
         )}
         <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-black/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
