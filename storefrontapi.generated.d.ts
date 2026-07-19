@@ -423,6 +423,80 @@ export type CollectionQuery = {
   >;
 };
 
+export type DropQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type DropQuery = {
+  metaobject?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Metaobject, 'handle'> & {
+      fields: Array<
+        Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+          reference?: StorefrontAPI.Maybe<{
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+            >;
+          }>;
+          references?: StorefrontAPI.Maybe<{
+            nodes: Array<
+              Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title' | 'vendor'> & {
+                featuredImage?: StorefrontAPI.Maybe<
+                  Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+                >;
+                images: {
+                  nodes: Array<
+                    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+                  >;
+                };
+                priceRange: {
+                  minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+                };
+                editionNumber?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                editionStatus?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                colorSiblings?: StorefrontAPI.Maybe<{
+                  references?: StorefrontAPI.Maybe<{
+                    nodes: Array<
+                      Pick<StorefrontAPI.Product, 'handle'> & {
+                        colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                        colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+                      }
+                    >;
+                  }>;
+                }>;
+              }
+            >;
+          }>;
+        }
+      >;
+    }
+  >;
+};
+
+export type DropsQueryVariables = StorefrontAPI.Exact<{
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type DropsQuery = {
+  metaobjects: {
+    nodes: Array<
+      Pick<StorefrontAPI.Metaobject, 'handle'> & {
+        fields: Array<
+          Pick<StorefrontAPI.MetaobjectField, 'key' | 'value'> & {
+            reference?: StorefrontAPI.Maybe<{
+              image?: StorefrontAPI.Maybe<
+                Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+              >;
+            }>;
+          }
+        >;
+      }
+    >;
+  };
+};
+
 export type PageQueryVariables = StorefrontAPI.Exact<{
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
@@ -821,6 +895,14 @@ interface GeneratedQueryTypes {
   '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $filters: [ProductFilter!]\n    $sortKey: ProductCollectionSortKeys!\n    $reverse: Boolean\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      marketingSections: metafield(namespace: "custom", key: "marketing_sections") {\n        value\n      }\n      products(\n        first: $first\n        last: $last\n        before: $startCursor\n        after: $endCursor\n        filters: $filters\n        sortKey: $sortKey\n        reverse: $reverse\n      ) {\n        nodes {\n          ...ProductCard\n          label: metafield(namespace: "theme", key: "label") {\n            value\n          }\n        }\n        filters {\n          id\n          label\n          type\n          values {\n            id\n            label\n            count\n            input\n          }\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
     return: CollectionQuery;
     variables: CollectionQueryVariables;
+  };
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    vendor\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query Drop($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    metaobject(handle: { type: "drop", handle: $handle }) {\n      handle\n      fields {\n        key\n        value\n        reference {\n          ... on MediaImage {\n            image { id url altText width height }\n          }\n        }\n        references(first: 12) {\n          nodes {\n            ... on Product {\n              ...ProductCard\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: DropQuery;
+    variables: DropQueryVariables;
+  };
+  '#graphql\n  query Drops($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    metaobjects(type: "drop", first: 20) {\n      nodes {\n        handle\n        fields {\n          key\n          value\n          reference {\n            ... on MediaImage {\n              image { id url altText width height }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+    return: DropsQuery;
+    variables: DropsQueryVariables;
   };
   '#graphql\n  query Page(\n    $language: LanguageCode,\n    $country: CountryCode,\n    $handle: String!\n  )\n  @inContext(language: $language, country: $country) {\n    page(handle: $handle) {\n      handle\n      id\n      title\n      body\n      seo {\n        description\n        title\n      }\n    }\n  }\n': {
     return: PageQuery;
