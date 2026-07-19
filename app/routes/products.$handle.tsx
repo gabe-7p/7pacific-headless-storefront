@@ -17,17 +17,23 @@ import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
+import { EnvironmentalHero } from '~/components/product/EnvironmentalHero';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { Recommendations } from '~/components/product/Recommendations';
+import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { getColorSwatches } from '~/lib/colors';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
-import type { ProductDetailCard, TechStack as TechStackData } from '~/lib/productContent';
+import type {
+  ProductDetailCard,
+  SpecCardData,
+  TechStack as TechStackData,
+} from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
 
@@ -85,6 +91,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
     product,
     productDetails: parseJsonMetafield<Array<ProductDetailCard>>(product.productDetails),
     techStack: parseJsonMetafield<TechStackData>(product.techStack),
+    specCard: parseJsonMetafield<SpecCardData>(product.specCard),
   };
 }
 
@@ -120,7 +127,8 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
 }
 
 const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
-  const { product, productDetails, techStack, recommendations } = useLoaderData<typeof loader>();
+  const { product, productDetails, techStack, specCard, recommendations } =
+    useLoaderData<typeof loader>();
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -144,6 +152,7 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
   // falling back to the variant image when a product has none.
   const heroDesktop = getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
   const heroMobile = getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
+  const environmentalHero = getMetafieldImage(product.environmentalHero);
 
   return (
     <>
@@ -197,6 +206,14 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               {descriptionHtml && (
                 <Prose html={descriptionHtml} variant="description" className="mt-4" />
               )}
+              {/* Locked PDP order (7PA-231): description → Spec Card → size
+                  selector + Add to Cart. Color sits with the selection cluster
+                  (color = separate product, not a variant option). */}
+              {specCard && (
+                <div className="mt-5">
+                  <SpecCard data={specCard} />
+                </div>
+              )}
               <div className="mt-6">
                 <Eyebrow className="mb-2 text-neutral-500">Color</Eyebrow>
                 <ColorSwatches
@@ -209,7 +226,9 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
               <div className="mt-6">
                 <ProductForm productOptions={productOptions} />
               </div>
-              {product.fitNote?.value && (
+              {/* The Chris fit line moves into the Spec Card's FIT row when a
+                  spec card exists — don't render it twice. */}
+              {!specCard?.fit && product.fitNote?.value && (
                 <p className="mt-4 text-sm text-neutral-500 italic">{product.fitNote.value}</p>
               )}
             </div>
@@ -218,6 +237,14 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
         </Container>
       </section>
       <StickyAddToCart selectedVariant={selectedVariant} />
+      {/* Locked order step 6: single environmental hero + one caption, first
+          thing below the fold. Renders once 7PA-236 supplies the imagery. */}
+      {environmentalHero && (
+        <EnvironmentalHero
+          image={environmentalHero}
+          caption={product.environmentalHeroCaption?.value}
+        />
+      )}
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
@@ -343,6 +370,29 @@ const PRODUCT_FRAGMENT = `#graphql
       value
     }
     techStack: metafield(namespace: "custom", key: "tech_stack") {
+      value
+    }
+    # The Spec Card (7PA-231) — the locked seven-field JSON device
+    # (fabric/weight/use/seams/pockets/fit/origin); see lib/productContent.
+    specCard: metafield(namespace: "custom", key: "spec_card") {
+      value
+    }
+    # Below-the-fold environmental hero + caption (locked PDP order step 6).
+    # Imagery lands with the photography program (7PA-236); renders if present.
+    environmentalHero: metafield(namespace: "custom", key: "environmental_hero") {
+      reference {
+        ... on MediaImage {
+          image {
+            id
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+    }
+    environmentalHeroCaption: metafield(namespace: "custom", key: "environmental_hero_caption") {
       value
     }
     # Dedicated PDP hero images (the theme's "Background Image" / "…Mobile"),
