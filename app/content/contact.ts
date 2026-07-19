@@ -1,13 +1,13 @@
-/** Contact page copy (typed constants), mirroring the live page.contact content. */
+/** Contact form copy (7PA-244 voice pass — plain, direct, no gushing). */
 export const CONTACT = {
-  heading: 'Get in touch',
-  intro: 'Want to learn more about 7Pacific? Drop us a line to stay in touch.',
+  heading: 'Or use the form',
+  intro: 'Email is fastest. The form works too.',
   fields: {
     name: { label: 'Name', placeholder: 'Name' },
     email: { label: 'Email', placeholder: 'Email' },
     phone: { label: 'Phone number', placeholder: 'Phone number (optional)' },
-    message: { label: 'Comment', placeholder: 'How can we help?' },
+    message: { label: 'Comment', placeholder: 'What’s going on?' },
   },
   submitLabel: 'Send',
-  successMessage: 'Thanks for reaching out — we’ll get back to you soon.',
+  successMessage: 'Sent. We’ll get back to you within 2 business days.',
 } as const;
