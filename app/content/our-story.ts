@@ -9,48 +9,45 @@ import { BRAND } from '~/lib/brand';
 
 const CDN = BRAND.filesCdn;
 
+/**
+ * Rewritten per 7PA-239: the locked mission verbatim, the dry working
+ * register (Plain 3 / Direct 3 on the Tone Chart), and a founder letter that
+ * reads as plain text. No "movement," no "momentum," no motivational close.
+ */
 export const OUR_STORY = {
   hero: {
-    title: 'About Us',
+    title: 'About',
     backgroundImage: `${CDN}/our_story_hero_image.jpg`,
-    // Both CTAs are secondary — the story page carries no Ember moment
-    // (7PA-230: Ember is rationed to one primary CTA per page, and this page
-    // has none). Copy itself is rewritten by 7PA-239.
-    ctas: [
-      { label: 'Join The Movement', href: '#newsletter', variant: 'brand-outline' as const },
-      {
-        label: 'Train With Us',
-        href: STORE_LINKS.shopShorts,
-        variant: 'brand-outline' as const,
-      },
-    ],
+    // One secondary CTA — the story page carries no Ember moment (7PA-230).
+    ctas: [{ label: 'Shop', href: STORE_LINKS.shopAll, variant: 'brand-outline' as const }],
   },
-  // Mission and Fitness are two distinct sections on live: Mission is a
-  // full-width statement (no image); Fitness pairs its heading + body with a
-  // small square image.
+  // Mission and the making section are two distinct sections: Mission is a
+  // full-width statement (no image); the second pairs its heading + body with
+  // a small square image.
   mission: {
     heading: 'Our Mission',
+    // The locked mission from the Strategy Canvas — verbatim, never restated.
     statement:
-      'Create the most lightweight and breathable training gear, while building a community that pushes you further.',
+      '7Pacific builds gear for athletes who came for the hard part and reminds them the journey is the most fun part.',
   },
   fitness: {
-    heading: "Fitness is more than movement, it's momentum",
+    heading: 'For training, not errands',
     image: `${CDN}/our_mission2.jpg`,
     body: [
-      'The most growth happens when you sweat together. We exist to inspire each other through training, mindset, and the power of community. Every product, every session, and every rep is designed to fuel progress together.',
-      "We found a lot of brands out there try to be many things to many people. Clothes that are designed to do everything okay, but nothing great. We're not that brand.",
-      'We’re creating gear that was designed for one purpose: Be as light and breathable as possible so you only ever have to focus on the workout at hand.',
+      'We make training clothes — shorts, tees, hats — that remove specific frictions: heat, weight, chafe. Designed in San Francisco, tested on the hills we actually run, before sunrise more often than not.',
+      "A lot of brands try to be many things to many people — clothes built to do everything okay and nothing great. We're not that brand. Every piece here earns its place in a session first.",
+      'No wellness. No hustle-worship. Training is the best part of the day; the gear should act like it.',
     ],
   },
   story: {
     heading: 'Our Story',
     image: `${CDN}/our_founder.jpg`,
-    founder: { name: 'Gabriel Dalessandro', role: 'Founder & CEO' },
+    founder: { name: 'Gabriel Dalessandro', role: 'Founder' },
     body: [
-      'Fitness opens doors. Fitness shows us that there’s more out there, more to see, more to chase, more to become.',
-      'For me, it changed everything. It brought me to California to play football, introduced me to my fiancee on a volleyball court, and took me skiing across some of the most awe-inspiring places in the world. Wherever life led, fitness brought connection through groups big and small that trained hard, showed up, and pushed one another further.',
-      'Through it all, one truth stuck: the discipline we build in training makes every other part of life that much better. That’s why 7Pacific exists. To create the kind of gear that keeps up with your pursuit, and a community that reminds us we’re never in it alone.',
-      'We’re building performance apparel that’s lightweight, breathable, and built to endure whatever you put it through. Designed to move with you for every climb, lift, sprint, and stride. When you’re ready to take on your next challenge, don’t wait. Gear up with 7Pacific and step into what you were made for.',
+      "Training brought me to California to play football. It introduced me to my fiancée on a volleyball court. It's taken me up ski lines I had no business looking at, and it built most of the friendships I count on — groups big and small that showed up, trained hard, and pushed each other further.",
+      "Somewhere in there the point changed. Results come and go in an afternoon; the early sessions before them are where the actual living happens. 7Pacific exists to build gear for that part — and to remind you, mid-effort, that it's the part you came for.",
+      "The gear itself stays simple: light, breathable, built to disappear so the work can't hide behind it. If it doesn't earn its place in a session, we don't ship it.",
+      'See you out there.',
     ],
   },
 } as const;
