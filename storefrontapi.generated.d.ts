@@ -497,6 +497,42 @@ export type DropsQuery = {
   };
 };
 
+export type JournalArticleQueryVariables = StorefrontAPI.Exact<{
+  handle: StorefrontAPI.Scalars['String']['input'];
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type JournalArticleQuery = {
+  blog?: StorefrontAPI.Maybe<{
+    articleByHandle?: StorefrontAPI.Maybe<
+      Pick<
+        StorefrontAPI.Article,
+        'id' | 'handle' | 'title' | 'excerpt' | 'contentHtml' | 'publishedAt'
+      > & {
+        image?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+        >;
+      }
+    >;
+  }>;
+};
+
+export type JournalQueryVariables = StorefrontAPI.Exact<{
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type JournalQuery = {
+  blog?: StorefrontAPI.Maybe<{
+    articles: {
+      nodes: Array<
+        Pick<StorefrontAPI.Article, 'id' | 'handle' | 'title' | 'excerpt' | 'publishedAt'>
+      >;
+    };
+  }>;
+};
+
 export type PageQueryVariables = StorefrontAPI.Exact<{
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
@@ -903,6 +939,14 @@ interface GeneratedQueryTypes {
   '#graphql\n  query Drops($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    metaobjects(type: "drop", first: 20) {\n      nodes {\n        handle\n        fields {\n          key\n          value\n          reference {\n            ... on MediaImage {\n              image { id url altText width height }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: DropsQuery;
     variables: DropsQueryVariables;
+  };
+  '#graphql\n  query JournalArticle($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    blog(handle: "journal") {\n      articleByHandle(handle: $handle) {\n        id\n        handle\n        title\n        excerpt\n        contentHtml\n        publishedAt\n        image {\n          id\n          url\n          altText\n          width\n          height\n        }\n      }\n    }\n  }\n': {
+    return: JournalArticleQuery;
+    variables: JournalArticleQueryVariables;
+  };
+  '#graphql\n  query Journal($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    blog(handle: "journal") {\n      articles(first: 20, sortKey: PUBLISHED_AT, reverse: true) {\n        nodes {\n          id\n          handle\n          title\n          excerpt\n          publishedAt\n        }\n      }\n    }\n  }\n': {
+    return: JournalQuery;
+    variables: JournalQueryVariables;
   };
   '#graphql\n  query Page(\n    $language: LanguageCode,\n    $country: CountryCode,\n    $handle: String!\n  )\n  @inContext(language: $language, country: $country) {\n    page(handle: $handle) {\n      handle\n      id\n      title\n      body\n      seo {\n        description\n        title\n      }\n    }\n  }\n': {
     return: PageQuery;
