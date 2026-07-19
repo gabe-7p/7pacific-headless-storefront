@@ -81,10 +81,13 @@ export const NewsletterForm = ({ variant, onSuccess }: NewsletterFormProps) => {
         placeholder={placeholder}
         className="border-border-subtle w-full border bg-white px-4 py-3 text-sm focus:border-black focus:outline-none"
       />
+      {/* Secondary, sentence case — buttons in forms are the type system's
+          "UI sentence" tier, and Ember is reserved for the page's primary CTA
+          (7PA-230). Text color inherits so it adapts to the Carbon footer. */}
       <button
         type="submit"
         disabled={submitting}
-        className="bg-brand text-brand-text mt-3 w-full px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="border-fog mt-3 w-full border px-6 py-3 text-sm font-medium transition-opacity hover:opacity-70 disabled:opacity-50"
       >
         {submitting ? 'Signing up…' : submitLabel}
       </button>

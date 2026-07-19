@@ -17,16 +17,16 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
-        // 7Pacific primary CTA: 2px corners, caps-UI label (Inter Medium at
-        // the brand's +0.08em caps tracking), trailing chevron. Hover inverts
-        // to white on black, as it does everywhere on live.
+        // 7Pacific primary CTA (7PA-230): the page's ONE Ember moment — mono
+        // caps in the bracket device (`[ LABEL ]`, brackets via pseudo
+        // elements so callers pass plain labels), Chalk on Ember. At most one
+        // `brand` button may render per page; everything else is secondary.
         brand:
-          "bg-brand text-brand-text rounded-[2px] font-medium uppercase tracking-caps hover:bg-white hover:text-black after:content-['>']",
-        // 7Pacific secondary CTA: outlined in the current text color, so it
-        // adapts to dark or light card backgrounds without a tone prop. Same
-        // caps-UI tier as `brand` (Medium — Semibold is for sub-headlines).
+          "bg-brand text-brand-text hover:bg-carbon hover:text-chalk rounded-[2px] font-mono font-medium uppercase tracking-caps before:content-['['] after:content-[']']",
+        // 7Pacific secondary CTA: same mono-caps bracket device, Fog border,
+        // text in the current color so it adapts to dark or light surfaces.
         'brand-outline':
-          "rounded-none border border-current bg-transparent font-medium uppercase tracking-caps hover:opacity-70 after:content-['>']",
+          "border-fog rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps before:content-['['] after:content-[']'] hover:opacity-70",
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

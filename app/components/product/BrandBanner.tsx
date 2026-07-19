@@ -35,7 +35,8 @@ export const BrandBanner = () => {
               ))}
             </Heading>
             <p className="mx-auto mt-4 max-w-sm text-sm text-neutral-600">{body}</p>
-            <Button asChild variant="brand" className="mt-6">
+            {/* Secondary — the PDP's one Ember moment is Add to Cart (7PA-230). */}
+            <Button asChild variant="brand-outline" className="mt-6">
               <Link to={cta.href}>{cta.label}</Link>
             </Button>
           </div>

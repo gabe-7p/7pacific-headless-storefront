@@ -211,7 +211,7 @@ export const ErrorBoundary = () => {
     // (a named `md:` would sort after `min-[1440px]:` and win at 1440).
     <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
       {!isNotFound && (
-        <p className="text-brand text-sm font-semibold tracking-[0.2em] uppercase">{errorStatus}</p>
+        <p className="text-concrete text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
       )}
       <Heading
         as="h1"
@@ -236,9 +236,9 @@ export const ErrorBoundary = () => {
       ) : (
         <a
           href="/"
-          className="bg-brand text-brand-text mt-8 inline-block w-fit px-6 py-3 text-sm font-bold tracking-[0.15em] uppercase transition-opacity hover:opacity-90"
+          className="bg-brand text-brand-text mt-8 inline-block w-fit px-6 py-3 font-mono text-sm font-medium tracking-caps uppercase transition-opacity hover:opacity-90"
         >
-          Back to shopping
+          [ Back to shopping ]
         </a>
       )}
       {!isNotFound && errorMessage && (

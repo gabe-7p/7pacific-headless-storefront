@@ -13,11 +13,16 @@ export const OUR_STORY = {
   hero: {
     title: 'About Us',
     backgroundImage: `${CDN}/our_story_hero_image.jpg`,
-    // Both CTAs are the orange brand button (uppercase + trailing chevron),
-    // matching live — the second is no longer an outline variant.
+    // Both CTAs are secondary — the story page carries no Ember moment
+    // (7PA-230: Ember is rationed to one primary CTA per page, and this page
+    // has none). Copy itself is rewritten by 7PA-239.
     ctas: [
-      { label: 'Join The Movement', href: '#newsletter', variant: 'brand' as const },
-      { label: 'Train With Us', href: STORE_LINKS.shopShorts, variant: 'brand' as const },
+      { label: 'Join The Movement', href: '#newsletter', variant: 'brand-outline' as const },
+      {
+        label: 'Train With Us',
+        href: STORE_LINKS.shopShorts,
+        variant: 'brand-outline' as const,
+      },
     ],
   },
   // Mission and Fitness are two distinct sections on live: Mission is a
