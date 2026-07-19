@@ -287,6 +287,14 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
         currencyCode
       }
     }
+    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card's mono
+    # spec strip.
+    editionNumber: metafield(namespace: "custom", key: "edition_number") {
+      value
+    }
+    editionStatus: metafield(namespace: "custom", key: "edition_status") {
+      value
+    }
     # Color = separate product: the ordered color family lives in the
     # custom.color_siblings metafield (each sibling carries its own name/hex).
     colorSiblings: metafield(namespace: "custom", key: "color_siblings") {

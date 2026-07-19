@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import type { ProductCardFragment } from 'storefrontapi.generated';
 
 import { ColorSwatches } from '~/components/product/ColorSwatches';
+import { EditionTag } from '~/components/product/EditionTag';
 import { getColorSwatches } from '~/lib/colors';
 import { getCardSpec, getShortTitle } from '~/lib/productDisplay';
 
@@ -94,8 +95,15 @@ export const ProductCard = ({
           {shortTitle}
         </Link>
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
-            separator), Carbon at 80%, price lives here in mono. */}
+            separator), Carbon at 80%, price lives here in mono. The edition
+            device (7PA-246) leads it, carrying its own status color. */}
         <span className="text-carbon/80 tracking-spec font-mono text-[11px] uppercase">
+          <EditionTag
+            number={product.editionNumber?.value}
+            status={product.editionStatus?.value}
+            className="text-[11px] tracking-spec"
+          />
+          {product.editionNumber?.value ? ' · ' : ''}
           {colorName ? `${colorName} · ` : ''}
           {cardSpec ? `${cardSpec} · ` : ''}
           <Money data={priceRange.minVariantPrice} withoutTrailingZeros as="span" />
