@@ -32,12 +32,17 @@ export const BRAND = {
     { platform: 'Instagram', href: 'https://www.instagram.com/7_pacific/' },
   ] satisfies Array<SocialLink>,
 
+  /**
+   * Newsletter copy (7PA-241) — acquisition through community, not price:
+   * no discount language, ever. One signup per page (the footer); the old
+   * site-wide popup is gone.
+   */
   newsletter: {
-    heading: 'Join The Membership',
-    body: 'Join the membership to get access to upcoming events, special apps, motivating content, and exclusive discounts.',
+    heading: 'The Early One',
+    body: 'Drop dates, training days, the occasional film. First word when editions go live. No discounts — we don’t run sales.',
     placeholder: 'Enter your email',
-    submitLabel: 'Subscribe',
-    successMessage: 'Thanks for subscribing.',
+    submitLabel: 'Sign up',
+    successMessage: 'You’re in. See you out there.',
   },
 
   /** Fallback footer links, used only if the Storefront `footer` menu is empty. */

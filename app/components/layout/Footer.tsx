@@ -118,7 +118,7 @@ const Newsletter = () => (
   <div className="min-[769px]:max-w-md">
     {/* Live footer copy and links are 10.2px. */}
     <p className="text-[10.2px] text-white/80">{BRAND.newsletter.body}</p>
-    <NewsletterForm variant="footer" />
+    <NewsletterForm />
   </div>
 );
 
