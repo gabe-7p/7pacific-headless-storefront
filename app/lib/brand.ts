@@ -8,6 +8,8 @@
  * app/styles/tailwind.css; this file is for content/data.
  */
 
+import { STORE_LINKS } from '~/content/links';
+
 type SocialPlatform = 'Instagram';
 export type SocialLink = { platform: SocialPlatform; href: string };
 export type NavLink = { title: string; url: string };
@@ -45,10 +47,15 @@ export const BRAND = {
     { title: 'Returns', url: '/pages/returns' },
   ] satisfies Array<NavLink>,
 
-  /** Fallback header nav, used only if the Storefront `main-menu` is empty. */
+  /**
+   * Fallback header nav, used only if the Storefront `main-menu` is empty.
+   * Mirrors the locked nav (7PA-235): Shop · Drops · Journal · About ·
+   * Account — Drops and Journal join once their routes exist (7PA-247/248);
+   * never ship a dead link. Contact lives in the footer only.
+   */
   headerLinks: [
-    { title: 'Shop', url: '/' },
-    { title: 'Our Story', url: '/pages/our-story' },
-    { title: 'Contact Us', url: '/pages/contact-us' },
+    { title: 'Shop', url: STORE_LINKS.shopAll },
+    { title: 'About', url: '/pages/our-story' },
+    { title: 'Account', url: '/account' },
   ] satisfies Array<NavLink>,
 } as const;

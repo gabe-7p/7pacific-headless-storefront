@@ -136,17 +136,8 @@ export const HeaderMenu = ({
           </NavLink>
         );
       })}
-      {/* Mobile-only login — desktop shows the account icon in HeaderCtas instead.
-          Links out to Shopify's hosted account portal (see HeaderCtas for why). */}
-      {isMobile && (
-        <a
-          href={`https://${publicStoreDomain}/account`}
-          onClick={close}
-          className="mt-2 px-5 py-3 text-sm tracking-wide text-neutral-600 transition-opacity hover:opacity-70"
-        >
-          Log in
-        </a>
-      )}
+      {/* Account is a first-class menu item now (7PA-235 locked nav), so the
+          drawer no longer needs its own Log in link. */}
       {isMobile &&
         BRAND.social
           .filter((social) => social.platform === 'Instagram')
