@@ -1,10 +1,10 @@
-import { Image } from '@shopify/hydrogen';
+import { Image, Money } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 import type { ProductCardFragment } from 'storefrontapi.generated';
 
-import { Price } from '~/components/common/Price';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { getColorSwatches } from '~/lib/colors';
+import { getCardSpec, getShortTitle } from '~/lib/productDisplay';
 
 type ProductCardProps = {
   product: ProductCardFragment;
@@ -34,6 +34,13 @@ export const ProductCard = ({
   // Second Shopify image crossfades in on hover (live's product-image-hover).
   const hoverImage = product.images.nodes[1];
   const to = `/products/${handle}`;
+
+  // The signature two-line device (7PA-234): short name + mono spec line.
+  // The product's own color name comes from its entry in the sibling list.
+  const swatches = getColorSwatches(product.colorSiblings);
+  const colorName = swatches.find((swatch) => swatch.handle === handle)?.name;
+  const shortTitle = getShortTitle(title, colorName);
+  const cardSpec = getCardSpec(shortTitle);
 
   return (
     // transition-[translate,…], NOT transform: Tailwind v4's -translate-y-*
@@ -72,26 +79,27 @@ export const ProductCard = ({
             link (nested anchors are invalid HTML). Slides up on card hover;
             the swatches themselves cascade in via ColorSwatches. */}
         <div className="absolute right-0 bottom-0 left-0 flex translate-y-[110%] justify-start px-4 py-1.5 transition-transform duration-200 group-hover:-translate-y-[10%]">
-          <ColorSwatches
-            swatches={getColorSwatches(product.colorSiblings)}
-            currentHandle={handle}
-            cascade
-            alwaysRender
-          />
+          <ColorSwatches swatches={swatches} currentHandle={handle} cascade alwaysRender />
         </div>
       </div>
 
-      <div className="mt-3 flex flex-col gap-1.5">
-        {/* Product-name tier: Archivo Condensed Bold caps at +0.04em (card
-            keeps its compact size until the 7PA-234 card redesign). */}
+      <div className="mt-3 flex flex-col gap-1">
+        {/* Line 1 — product-name tier: Archivo Condensed Bold caps, 24px,
+            +0.04em, derived short name (no raw "- COLOR" / "//" strings). */}
         <Link
           to={to}
           prefetch="intent"
-          className="font-display text-xs font-bold tracking-product uppercase"
+          className="font-display text-2xl leading-[1.15] font-bold tracking-product uppercase"
         >
-          {title}
+          {shortTitle}
         </Link>
-        <Price data={priceRange.minVariantPrice} className="text-sm text-neutral-700" />
+        {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
+            separator), Carbon at 80%, price lives here in mono. */}
+        <span className="text-carbon/80 tracking-spec font-mono text-[11px] uppercase">
+          {colorName ? `${colorName} · ` : ''}
+          {cardSpec ? `${cardSpec} · ` : ''}
+          <Money data={priceRange.minVariantPrice} withoutTrailingZeros as="span" />
+        </span>
       </div>
     </div>
   );
