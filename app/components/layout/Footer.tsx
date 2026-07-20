@@ -30,10 +30,12 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                 black out entirely (Carbon stays the ground colour) and adds
                 only the lines. Opacity alone dimmed the lines and the blacks
                 together, which is why the contours were hard to read.
-                brightness pushes the lines further up. */}
+                brightness pushes the lines further up, and opacity pulls them
+                back down a notch — under screen the black contributes nothing,
+                so opacity here dims the contours without darkening Carbon. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center brightness-200 mix-blend-screen"
+              className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center opacity-75 brightness-200 mix-blend-screen"
             />
             <Container className="grid gap-0 py-14 min-[769px]:grid-cols-3 min-[769px]:gap-10">
               {/* Live puts the Instagram glyph under the newsletter input in the
