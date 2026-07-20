@@ -6,7 +6,7 @@ import { Heading } from '~/components/common/Heading';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { getColorSwatches } from '~/lib/colors';
-import { getCardSpec, getShortTitle } from '~/lib/productDisplay';
+import { getShortTitle } from '~/lib/productDisplay';
 
 type ProductCardProps = {
   product: ProductCardFragment;
@@ -37,12 +37,11 @@ export const ProductCard = ({
   const hoverImage = product.images.nodes[1];
   const to = `/products/${handle}`;
 
-  // The signature two-line device (7PA-234): short name + mono spec line.
+  // The signature two-line device (7PA-234): short name + mono strip.
   // The product's own color name comes from its entry in the sibling list.
   const swatches = getColorSwatches(product.colorSiblings);
   const colorName = swatches.find((swatch) => swatch.handle === handle)?.name;
   const shortTitle = getShortTitle(title, colorName);
-  const cardSpec = getCardSpec(shortTitle);
 
   return (
     // transition-[translate,…], NOT transform: Tailwind v4's -translate-y-*
@@ -85,10 +84,10 @@ export const ProductCard = ({
         </div>
       </div>
 
-      <div className="mt-3 flex flex-col gap-1">
-        {/* Line 1 — product-name tier (Heading brand variant): 24px, +0.04em,
-            derived short name (no raw "- COLOR" / "//" strings). */}
-        <Heading as="h3" size="none" className="text-2xl leading-[1.15] tracking-product">
+      <div className="mt-1.5 flex flex-col gap-0.5">
+        {/* Line 1 — product-name tier (Heading brand variant): derived short
+            name (no raw "- COLOR" / "//" strings). */}
+        <Heading as="h3" size="none" className="text-lg leading-[1.15] tracking-product">
           <Link to={to} prefetch="intent">
             {shortTitle}
           </Link>
@@ -104,7 +103,6 @@ export const ProductCard = ({
           />
           {product.editionNumber?.value ? ' · ' : ''}
           {colorName ? `${colorName} · ` : ''}
-          {cardSpec ? `${cardSpec} · ` : ''}
           <Money data={priceRange.minVariantPrice} withoutTrailingZeros as="span" />
         </span>
       </div>

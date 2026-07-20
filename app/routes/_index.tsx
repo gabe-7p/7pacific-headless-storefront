@@ -12,7 +12,7 @@ import { buildMeta } from '~/lib/seo';
 import type { Route } from './+types/_index';
 
 export const meta: Route.MetaFunction = () => {
-  return buildMeta({ absoluteTitle: '7Pacific — Lightweight and Breathable Training Gear' });
+  return buildMeta({ absoluteTitle: '7Pacific · Lightweight and Breathable Training Gear' });
 };
 
 export async function loader({ context }: Route.LoaderArgs) {

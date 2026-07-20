@@ -147,16 +147,19 @@ describe('ProductCard signature device (7PA-234)', () => {
     expect(container.textContent).not.toContain('- WHITE');
   });
 
-  it('renders the mono spec strip: color · family spec · price, middle-dot separated', () => {
+  it('renders the mono strip: color · price, middle-dot separated', () => {
     const { container } = renderCard(TEE);
     const strip = container.querySelector('span.font-mono');
-    expect(strip?.textContent).toContain('White · 84/16 mesh · ');
+    expect(strip?.textContent).toContain('White · ');
     expect(strip?.textContent).toContain('$74');
   });
 
-  it('omits the family spec for unmapped products instead of inventing one', () => {
-    const { container } = renderCard(HAT); // fixture title "MOTIONFRAME HAT - WHITE" → noun HAT
+  // The per-family fabric spec ("84/16 mesh", "92/8 shell") was dropped from
+  // the card; those facts belong to the PDP Spec Card.
+  it('carries no fabric spec on the card', () => {
+    const { container } = renderCard(HAT);
     const strip = container.querySelector('span.font-mono');
-    expect(strip?.textContent).toContain('White · laser-cut perf · ');
+    expect(strip?.textContent).toContain('White · ');
+    expect(strip?.textContent).not.toContain('laser-cut perf');
   });
 });

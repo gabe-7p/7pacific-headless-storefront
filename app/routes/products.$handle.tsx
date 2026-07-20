@@ -221,11 +221,11 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
                   selector + Add to Cart. Color sits with the selection cluster
                   (color = separate product, not a variant option). */}
               {specCard && (
-                <div className="mt-5">
+                <div className="mt-4">
                   <SpecCard data={specCard} />
                 </div>
               )}
-              <div className="mt-6">
+              <div className="mt-4">
                 <Eyebrow className="mb-2 text-neutral-500">Color</Eyebrow>
                 <ColorSwatches
                   swatches={getColorSwatches(product.colorSiblings)}
@@ -234,13 +234,13 @@ const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
                   alwaysRender
                 />
               </div>
-              <div className="mt-6">
+              <div className="mt-4">
                 <ProductForm productOptions={productOptions} />
               </div>
-              {/* The Chris fit line moves into the Spec Card's FIT row when a
-                  spec card exists — don't render it twice. */}
+              {/* The fit line moves into the Spec Card's FIT row when a spec
+                  card exists — don't render it twice. */}
               {!specCard?.fit && product.fitNote?.value && (
-                <p className="mt-4 text-sm text-neutral-500 italic">{product.fitNote.value}</p>
+                <p className="mt-3 text-xs text-neutral-500 italic">{product.fitNote.value}</p>
               )}
             </div>
             <AddToCartBar selectedVariant={selectedVariant} />

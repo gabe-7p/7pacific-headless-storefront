@@ -34,8 +34,8 @@ export const OUR_STORY = {
     heading: 'For training, not errands',
     image: `${CDN}/our_mission2.jpg`,
     body: [
-      'We make training clothes — shorts, tees, hats — that remove specific frictions: heat, weight, chafe. Designed in San Francisco, tested on the hills we actually run, before sunrise more often than not.',
-      "A lot of brands try to be many things to many people — clothes built to do everything okay and nothing great. We're not that brand. Every piece here earns its place in a session first.",
+      'We make shorts, tees, and hats that remove specific frictions: heat, weight, chafe. Designed in San Francisco, tested on the hills we actually run, before sunrise more often than not.',
+      "A lot of brands try to be many things to many people: clothes built to do everything okay and nothing great. We're not that brand. Every piece here earns its place in a session first.",
       'No wellness. No hustle-worship. Training is the best part of the day; the gear should act like it.',
     ],
   },
@@ -44,8 +44,8 @@ export const OUR_STORY = {
     image: `${CDN}/our_founder.jpg`,
     founder: { name: 'Gabriel Dalessandro', role: 'Founder' },
     body: [
-      "Training brought me to California to play football. It introduced me to my fiancée on a volleyball court. It's taken me up ski lines I had no business looking at, and it built most of the friendships I count on — groups big and small that showed up, trained hard, and pushed each other further.",
-      "Somewhere in there the point changed. Results come and go in an afternoon; the early sessions before them are where the actual living happens. 7Pacific exists to build gear for that part — and to remind you, mid-effort, that it's the part you came for.",
+      "Training brought me to California to play football. It introduced me to my fiancée on a volleyball court. It's taken me up ski lines I had no business looking at, and it built most of the friendships I count on: groups big and small that showed up, trained hard, and pushed each other further.",
+      "Somewhere in there the point changed. Results come and go in an afternoon; the early sessions before them are where the actual living happens. 7Pacific exists to build gear for that part, and to remind you, mid-effort, that it's the part you came for.",
       "The gear itself stays simple: light, breathable, built to disappear so the work can't hide behind it. If it doesn't earn its place in a session, we don't ship it.",
       'See you out there.',
     ],

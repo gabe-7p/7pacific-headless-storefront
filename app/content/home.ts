@@ -17,9 +17,10 @@ export const HOME_HERO = {
    * The headline is verbatim from the approved Tone Chart product-line board.
    */
   headline: 'Built for the part of training nobody posts.',
-  subline: 'Laser-cut vents. Bonded seams. Gear for the 6 AM session — fog included.',
-  /** One CTA, mono caps (the page's single Ember moment). */
-  cta: { label: 'Shop the Drop', href: STORE_LINKS.shopAll },
+  subline: 'Laser-cut vents. Bonded seams. Gear for the 6 AM session, fog included.',
+  /** One CTA, mono caps (the page's single Ember moment). Label + target per
+      Gabe (2026-07-19): the live hero's line, pointed at the Mint shorts. */
+  cta: { label: 'Own the Start', href: STORE_LINKS.shopShortsMint },
   backgroundImage: {
     url: `${CDN}/24_121_7pacific_03806.jpg`,
     width: 1656,

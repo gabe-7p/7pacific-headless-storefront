@@ -15,7 +15,7 @@ import { HOME_HERO } from '~/content/home';
 export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
   // the announcement bar above it stays opaque.
-  <section className="bg-carbon text-chalk relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden md:min-h-[44rem]">
+  <section className="bg-carbon relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-white md:min-h-[44rem]">
     <Image
       src={HOME_HERO.backgroundImage.url}
       width={HOME_HERO.backgroundImage.width}
@@ -26,8 +26,9 @@ export const Hero = () => (
       fetchPriority="high"
       className="absolute inset-0 size-full object-cover"
     />
-    {/* Carbon scrim so Chalk type holds contrast on the photograph. */}
-    <div className="from-carbon/60 via-carbon/15 to-carbon/30 absolute inset-0 bg-linear-to-t" />
+    {/* No overlay: the photograph runs clean. Pure-white type carries its own
+        contrast here, so neither live's 10% wash nor a legibility scrim is
+        needed (per Gabe, 2026-07-19). */}
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}

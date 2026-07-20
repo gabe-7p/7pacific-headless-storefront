@@ -8,8 +8,8 @@ import { cn } from '~/lib/cn';
  * with each size because Tailwind's `text-*` utilities also set line-height.
  */
 const SCALES = {
-  /** Homepage sections — 36px, 48px on desktop. */
-  section: 'text-4xl leading-[1.1] xl:text-5xl xl:leading-[1.1]',
+  /** Homepage sections — 48px, 60px on desktop. */
+  section: 'text-5xl leading-[1.05] xl:text-6xl xl:leading-[1.05]',
   /** PDP panel headings (Product Details, Tech Stack) — a modest flat 24px. */
   panel: 'text-2xl leading-[1.2]',
   /** PDP sub-section headings (Recommendations) — a flat 36px. */

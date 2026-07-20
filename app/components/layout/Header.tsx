@@ -111,7 +111,9 @@ export const HeaderMenu = ({
       className={cn(
         isMobile
           ? 'border-border-subtle mt-[68px] flex flex-col border-t'
-          : 'hidden items-center gap-7 lg:flex'
+          : // Collapses at live's Impulse breakpoint (769px), not Tailwind's
+            // lg — the 11px nav fits well before 1024.
+            'hidden items-center gap-5 min-[769px]:flex'
       )}
       role="navigation"
     >
@@ -128,8 +130,12 @@ export const HeaderMenu = ({
             // Caps-UI tier: Inter Medium, ALL CAPS, +0.08em — the tracked-caps
             // treatment the brand type rules call the most important UI move.
             className={cn(
-              'font-medium tracking-caps uppercase transition-opacity hover:opacity-70',
-              isMobile ? 'border-border-subtle border-b px-5 py-4 text-sm' : 'text-xs'
+              'font-medium tracking-caps uppercase',
+              isMobile
+                ? 'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
+                : // Live's underline wipe (.site-nav__link--underline:after):
+                  // a 2px rule that grows left-to-right over 500ms on hover.
+                  'relative py-1 text-[11px] after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:content-[""] hover:after:scale-x-100 motion-reduce:after:transition-none'
             )}
           >
             {item.title}
@@ -179,7 +185,7 @@ const HeaderCtas = ({
           link survives the custom-domain cutover. Desktop-only, mirroring the cart. */}
       <a
         href={`https://${publicStoreDomain}/account`}
-        className="hidden items-center transition-opacity hover:opacity-70 lg:inline-flex"
+        className="hidden items-center transition-opacity hover:opacity-70 min-[769px]:inline-flex"
         title="Log in"
       >
         <UserIcon className="size-7" />
@@ -195,7 +201,8 @@ const HeaderMenuMobileToggle = () => {
   return (
     <button
       type="button"
-      className="transition-opacity hover:opacity-70 lg:hidden"
+      // Must flip at the same width the desktop nav appears (769px).
+      className="transition-opacity hover:opacity-70 min-[769px]:hidden"
       aria-label="Open menu"
       onClick={() => open('mobile')}
     >

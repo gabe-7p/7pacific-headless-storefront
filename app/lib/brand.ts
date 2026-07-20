@@ -21,12 +21,11 @@ export const BRAND = {
   wordmark: 'Pacific',
 
   /**
-   * Announcement spec strip (7PA-242) — mono caps, middle-dot separators
-   * (never slash/pipe). Keeps the true shipping fact, framed as spec data
-   * inside the edition-number system (7PA-246).
+   * Announcement spec strip (7PA-242): mono caps. The one shipping fact,
+   * nothing else (per Gabe, 2026-07-19).
    */
   announcement: {
-    message: "ED. 01 · SUMMER '25 · LIVE NOW · FREE SHIPPING OVER $200",
+    message: 'FREE SHIPPING OVER $200',
     href: '',
   },
 
@@ -44,7 +43,7 @@ export const BRAND = {
    */
   newsletter: {
     heading: 'The Early One',
-    body: 'Drop dates, training days, the occasional film. First word when editions go live. No discounts — we don’t run sales.',
+    body: 'Drop dates, training days, the occasional film. First word when editions go live. No discounts. We don’t run sales.',
     placeholder: 'Enter your email',
     submitLabel: 'Sign up',
     successMessage: 'You’re in. See you out there.',
