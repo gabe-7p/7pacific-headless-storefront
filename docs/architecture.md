@@ -61,6 +61,8 @@ app/
   styles/        tailwind.css + globals
 ```
 
+Site chrome (announcement/header/footer) is applied globally: `root.tsx`'s `App` wraps every route's `<Outlet/>` in `PageLayout`. A route can opt out with `export const handle: RouteHandle = { chrome: false }` (type exported from `app/root.tsx`) — it then renders bare and owns its full page, including the `main` landmark. Used by one-off chrome-less pages like `routes/amir-smith.tsx`.
+
 ### The module pattern (how features grow)
 
 When a feature accumulates enough surface area to stand on its own, promote it to a self-contained module. (The PDP was trialed as `modules/product/` and deliberately dissolved back into `components/product/` + `lib/` while the app is this small — a half-adopted module boundary cost more than it bought. The pattern below remains the target shape if a feature genuinely outgrows the flat layout.)

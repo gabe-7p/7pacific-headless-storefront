@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   type ShouldRevalidateFunction,
+  useMatches,
   useRouteError,
   useRouteLoaderData,
 } from 'react-router';
@@ -171,8 +172,20 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
   );
 };
 
+/**
+ * Route-level layout options. A route opts out of the site chrome
+ * (announcement/header/footer) with `export const handle: RouteHandle =
+ * { chrome: false }` — it then owns its full page, including a `main`
+ * landmark (see routes/amir-smith.tsx).
+ */
+export type RouteHandle = { chrome?: boolean };
+
 const App = () => {
   const data = useRouteLoaderData<RootLoader>('root');
+  const matches = useMatches();
+  const isBareChrome = matches.some(
+    (match) => (match.handle as RouteHandle | undefined)?.chrome === false
+  );
 
   if (!data) {
     return <Outlet />;
@@ -180,9 +193,13 @@ const App = () => {
 
   return (
     <Analytics.Provider cart={data.cart} shop={data.shop} consent={data.consent}>
-      <PageLayout {...data}>
+      {isBareChrome ? (
         <Outlet />
-      </PageLayout>
+      ) : (
+        <PageLayout {...data}>
+          <Outlet />
+        </PageLayout>
+      )}
     </Analytics.Provider>
   );
 };
