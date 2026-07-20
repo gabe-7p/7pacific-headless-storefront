@@ -1,4 +1,4 @@
-import { type OptimisticCartLine, useOptimisticCart } from '@shopify/hydrogen';
+import { useOptimisticCart } from '@shopify/hydrogen';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import { type CartLine, CartLineItem } from '~/components/cart/CartLineItem';

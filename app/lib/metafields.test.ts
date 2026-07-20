@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getMetafieldImage, parseJsonMetafield, parseMarketingSections } from '~/lib/metafields';
+import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
 
 describe('parseJsonMetafield', () => {
   it('parses a valid JSON metafield value', () => {
@@ -25,24 +25,6 @@ describe('parseJsonMetafield', () => {
   it('returns null for malformed JSON instead of throwing', () => {
     expect(parseJsonMetafield({ value: '{oops' })).toBeNull();
     expect(parseJsonMetafield({ value: 'not json at all' })).toBeNull();
-  });
-});
-
-describe('parseMarketingSections', () => {
-  const section = { imageUrl: 'https://cdn/x.jpg', heading: 'H', body: 'B', align: 'left' };
-
-  it('parses a valid sections array', () => {
-    expect(parseMarketingSections(JSON.stringify([section]))).toEqual([section]);
-  });
-
-  it('returns [] for missing or empty values', () => {
-    expect(parseMarketingSections(null)).toEqual([]);
-    expect(parseMarketingSections(undefined)).toEqual([]);
-    expect(parseMarketingSections('')).toEqual([]);
-  });
-
-  it('returns [] for malformed JSON instead of throwing', () => {
-    expect(parseMarketingSections('[{broken')).toEqual([]);
   });
 });
 

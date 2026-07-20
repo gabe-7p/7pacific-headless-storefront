@@ -18,17 +18,6 @@ const parseJson = <T>(value?: string | null): T | null => {
 export const parseJsonMetafield = <T>(metafield?: { value?: string | null } | null): T | null =>
   parseJson<T>(metafield?.value);
 
-export type MarketingSection = {
-  imageUrl: string;
-  heading: string;
-  body: string;
-  align?: 'left' | 'right';
-};
-
-/** Parse a collection's `custom.marketing_sections` JSON metafield value. */
-export const parseMarketingSections = (value?: string | null): Array<MarketingSection> =>
-  parseJson<Array<MarketingSection>>(value) ?? [];
-
 export type MetafieldImage = {
   id?: string | null;
   url: string;

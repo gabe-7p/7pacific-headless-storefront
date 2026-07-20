@@ -8,7 +8,7 @@ import {
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
 import { Suspense } from 'react';
-import { Await, redirect, useLoaderData } from 'react-router';
+import { Await, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Eyebrow } from '~/components/common/Eyebrow';
@@ -40,12 +40,15 @@ import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/products.$handle';
 
-export const meta: Route.MetaFunction = ({ data }) => {
+export const meta: Route.MetaFunction = ({ loaderData }) => {
   return [
-    ...buildMeta({ title: data?.product.title, description: data?.product.description }),
+    ...buildMeta({
+      title: loaderData?.product.title,
+      description: loaderData?.product.description,
+    }),
     {
       rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
+      href: `/products/${loaderData?.product.handle}`,
     },
   ];
 };
@@ -127,7 +130,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
   return { recommendations };
 }
 
-const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
+const Product = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
 
