@@ -111,7 +111,9 @@ export const HeaderMenu = ({
       className={cn(
         isMobile
           ? 'border-border-subtle mt-[68px] flex flex-col border-t'
-          : 'hidden items-center gap-5 lg:flex'
+          : // Collapses at live's Impulse breakpoint (769px), not Tailwind's
+            // lg — the 11px nav fits well before 1024.
+            'hidden items-center gap-5 min-[769px]:flex'
       )}
       role="navigation"
     >
@@ -183,7 +185,7 @@ const HeaderCtas = ({
           link survives the custom-domain cutover. Desktop-only, mirroring the cart. */}
       <a
         href={`https://${publicStoreDomain}/account`}
-        className="hidden items-center transition-opacity hover:opacity-70 lg:inline-flex"
+        className="hidden items-center transition-opacity hover:opacity-70 min-[769px]:inline-flex"
         title="Log in"
       >
         <UserIcon className="size-7" />
@@ -199,7 +201,8 @@ const HeaderMenuMobileToggle = () => {
   return (
     <button
       type="button"
-      className="transition-opacity hover:opacity-70 lg:hidden"
+      // Must flip at the same width the desktop nav appears (769px).
+      className="transition-opacity hover:opacity-70 min-[769px]:hidden"
       aria-label="Open menu"
       onClick={() => open('mobile')}
     >
