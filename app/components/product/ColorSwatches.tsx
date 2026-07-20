@@ -55,7 +55,8 @@ export const ColorSwatches = ({
 }: ColorSwatchesProps) => {
   if (swatches.length < (alwaysRender ? 1 : 2)) return null;
 
-  const dimension = size === 'lg' ? 'size-6' : 'size-4';
+  // `lg` is the PDP's selection cluster; `sm` the card overlay.
+  const dimension = size === 'lg' ? 'size-5' : 'size-4';
 
   return (
     <ul className={cn('flex flex-wrap items-center gap-2', cascade && 'gap-1.5', className)}>

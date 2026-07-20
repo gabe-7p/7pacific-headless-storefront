@@ -187,7 +187,7 @@
  */
 :root {
   --page-max: 1400px;
-  --header-h: 5rem; /* 80px — trimmed from live's 92px Impulse header; the rebrand nav wants a tighter bar */
+  --header-h: 4.5rem; /* 72px — trimmed from live's 92px Impulse header; the rebrand nav wants a tighter bar */
   --announcement-h: 1.5rem; /* 24px — trimmed from live's 28px bar */
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
 }

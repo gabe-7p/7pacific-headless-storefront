@@ -16,7 +16,7 @@ export const Recommendations = ({ products }: { products: ReadonlyArray<ProductC
     <SectionHeader
       heading="Planning To Sweat More?"
       subtitle="Shop more of what you need to get you through those sessions."
-      scale="sub"
+      scale="panel"
     />
     {/* Four across rather than three: these are a secondary browse row, so the
         cards sit smaller than the PDP detail cards. */}
