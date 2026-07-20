@@ -27,7 +27,11 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
 export const ProductDetails = ({ cards }: { cards: ReadonlyArray<ProductDetailCard> }) => (
   <PdpSection>
     <SectionHeader heading="Product Details" scale="panel" />
-    <Scroller>
+    {/* Live styles this gallery's scrollbar so it's always visible (8px,
+        white/10 track, white/30 thumb) — not the macOS overlay bar that only
+        appears mid-scroll. Styling the -webkit pseudos opts out of overlay
+        scrollbars in Chrome/Safari, exactly as live does. */}
+    <Scroller className="[&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-white/10 [&::-webkit-scrollbar-thumb]:bg-white/30">
       {cards.map((card) => (
         <DetailCard key={card.caption} card={card} />
       ))}
