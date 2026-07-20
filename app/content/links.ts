@@ -9,6 +9,8 @@ export const STORE_LINKS = {
   shopAll: '/collections/summer-25',
   shopShirts: '/products/tracefiber-performance-tech-tee-mountain-mist',
   shopShorts: '/products/airrail-6-performance-shorts-mountain-mist',
+  /** Homepage hero CTA target. */
+  shopShortsMint: '/products/airrail-6-performance-shorts-mint',
 } as const;
 
 /**

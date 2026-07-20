@@ -150,7 +150,7 @@
   --color-tenet-light-text: #0f1518; /* Carbon */
 
   /* Announcement-bar scrolling marquee (track is duplicated, so -50% loops). */
-  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee: marquee 45s linear infinite;
 
   @keyframes marquee {
     from {

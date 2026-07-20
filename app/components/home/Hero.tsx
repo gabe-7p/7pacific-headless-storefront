@@ -26,8 +26,9 @@ export const Hero = () => (
       fetchPriority="high"
       className="absolute inset-0 size-full object-cover"
     />
-    {/* Carbon scrim so Chalk type holds contrast on the photograph. */}
-    <div className="from-carbon/60 via-carbon/15 to-carbon/30 absolute inset-0 bg-linear-to-t" />
+    {/* Live's contrast overlay: a flat 10% black wash (.custom-hero-overlay),
+        not a gradient — anything heavier muddies the photograph. */}
+    <div className="absolute inset-0 bg-black/10" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}
