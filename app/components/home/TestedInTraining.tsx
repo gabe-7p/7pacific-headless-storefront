@@ -8,10 +8,11 @@ import { HOME_TESTED } from '~/content/home';
  * photo filling the right. Mirrors the live `black-text-image-split` section.
  */
 export const TestedInTraining = () => (
-  // Live stacks photo-above-text up to tablet and splits 5:4 on desktop, with
-  // the text panel on the left.
-  <section className="grid overflow-hidden bg-neutral-900 text-white lg:grid-cols-[5fr_4fr]">
-    <div className="relative order-2 lg:order-1">
+  // Splits 5:4 (text left) from 640px up rather than live's 1024: the photo is
+  // only 696px wide natively, so a full-bleed stacked layout upscales it into
+  // visible blur. Holding the split keeps its cell at or under native width.
+  <section className="grid overflow-hidden bg-neutral-900 text-white sm:grid-cols-[5fr_4fr]">
+    <div className="relative order-2 sm:order-1">
       {/* No scrim over the video — live has none, and the footage is dark enough
           to carry white text. `bg-neutral-900` on the section covers the gap
           until the first frame decodes. */}
@@ -23,7 +24,7 @@ export const TestedInTraining = () => (
         playsInline
         className="absolute inset-0 size-full object-cover"
       />
-      <div className="relative z-10 px-6 py-11 md:px-12 lg:px-16 lg:py-16">
+      <div className="relative z-10 px-6 py-11 md:px-10 lg:px-16 lg:py-16">
         {/* 24px, 40px tablet, 64.8px desktop — face/weight/tracking from the
             Heading brand variant (display is always Bold in the type system). */}
         <Heading
@@ -48,7 +49,7 @@ export const TestedInTraining = () => (
       src={HOME_TESTED.image}
       alt=""
       loading="lazy"
-      className="order-1 aspect-[351/367] w-full object-cover lg:order-2 lg:aspect-auto lg:h-full"
+      className="order-1 aspect-[351/367] w-full object-cover sm:order-2 sm:aspect-auto sm:h-full"
     />
   </section>
 );
