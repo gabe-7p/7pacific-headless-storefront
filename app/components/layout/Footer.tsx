@@ -21,7 +21,15 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="bg-footer text-footer-text">
+          <footer className="bg-footer text-footer-text relative isolate overflow-hidden">
+            {/* SF topography plate. `isolate` scopes the -z-10 so the layer
+                sits behind the footer's own content but never behind the page.
+                Held at 60% so Carbon still reads as the ground colour and the
+                contour lines stay a texture rather than a picture. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center opacity-60"
+            />
             <Container className="grid gap-0 py-14 min-[769px]:grid-cols-3 min-[769px]:gap-10">
               {/* Live puts the Instagram glyph under the newsletter input in the
                   centre column, not under the wordmark. */}
