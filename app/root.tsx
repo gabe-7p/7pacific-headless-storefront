@@ -1,4 +1,5 @@
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen';
+import { ChevronRight } from 'lucide-react';
 import {
   isRouteErrorResponse,
   Links,
@@ -229,7 +230,10 @@ export const ErrorBoundary = () => {
       )}
       {isNotFound ? (
         <Button asChild variant="brand-outline" size="sm" className="mt-6">
-          <a href="/">Homepage</a>
+          <a href="/">
+            Homepage
+            <ChevronRight />
+          </a>
         </Button>
       ) : (
         <a

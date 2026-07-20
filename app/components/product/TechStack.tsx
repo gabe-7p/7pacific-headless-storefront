@@ -20,7 +20,7 @@ const ICONS: Record<TechIcon, string> = {
 const ROW_GRID =
   'grid grid-cols-1 gap-5 py-5 text-center min-[769px]:grid-cols-[1fr_2fr_1fr] min-[769px]:gap-[30px] min-[769px]:py-[25px] min-[769px]:text-left min-[1025px]:grid-cols-[1fr_1.3fr_1fr] min-[1025px]:gap-5 min-[1025px]:py-[30px]';
 
-const ROW_TITLE = 'text-base font-bold tracking-[1px] uppercase min-[1025px]:text-[1.1rem]';
+const ROW_TITLE = 'text-base font-medium tracking-[1px] uppercase min-[1025px]:text-[1.1rem]';
 
 // A column centers its content when the row is stacked (≤768), left-aligns once
 // the row becomes a grid.

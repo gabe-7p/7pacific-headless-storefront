@@ -25,7 +25,7 @@ export const MarketingSections = ({ sections }: { sections: ReadonlyArray<Market
               section.align === 'left' ? 'md:left-6' : 'md:right-6'
             )}
           >
-            <h3 className="text-lg font-bold tracking-wide uppercase md:text-xl">
+            <h3 className="text-lg font-medium tracking-wide uppercase md:text-xl">
               {section.heading}
             </h3>
             <p className="mt-3 text-sm leading-6 text-neutral-600">{section.body}</p>

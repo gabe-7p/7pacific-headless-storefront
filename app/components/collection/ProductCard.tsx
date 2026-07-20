@@ -90,7 +90,7 @@ export const ProductCard = ({
         <Link
           to={to}
           prefetch="intent"
-          className="font-display text-2xl leading-[1.15] font-bold tracking-product uppercase"
+          className="font-display text-2xl leading-[1.15] font-medium tracking-product uppercase"
         >
           {shortTitle}
         </Link>

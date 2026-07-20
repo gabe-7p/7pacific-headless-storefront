@@ -1,3 +1,4 @@
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -28,6 +29,7 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
     <Button asChild variant="brand-outline" size="xs" className="mt-6">
       <Link to={value.cta.href} prefetch="intent">
         {value.cta.label}
+        <ChevronRight />
       </Link>
     </Button>
   </div>

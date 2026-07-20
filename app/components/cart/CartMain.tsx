@@ -1,4 +1,5 @@
 import { type OptimisticCartLine, useOptimisticCart } from '@shopify/hydrogen';
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
@@ -84,6 +85,7 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
       <Button asChild variant="brand-outline" size="sm" className="mt-4">
         <Link to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport">
           Shop the drop
+          <ChevronRight />
         </Link>
       </Button>
     </div>

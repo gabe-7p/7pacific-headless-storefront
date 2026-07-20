@@ -1,4 +1,5 @@
 import { CartForm, Money, type OptimisticCart } from '@shopify/hydrogen';
+import { ChevronRight } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { useFetcher } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
@@ -66,6 +67,7 @@ const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
     <Button asChild variant="brand" size="lg" className="mt-5 w-full">
       <a href={checkoutUrl} target="_self">
         Checkout
+        <ChevronRight />
       </a>
     </Button>
   );

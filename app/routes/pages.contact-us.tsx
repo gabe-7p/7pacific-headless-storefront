@@ -1,3 +1,4 @@
+import { ChevronRight } from 'lucide-react';
 import type { MouseEvent } from 'react';
 import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from 'react-router';
 
@@ -150,6 +151,7 @@ const Contact = () => {
               className="w-full sm:w-auto"
             >
               {submitting ? 'Sending…' : CONTACT.submitLabel}
+              <ChevronRight />
             </Button>
           </Form>
         )}

@@ -1,3 +1,4 @@
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 
 import { Heading } from '~/components/common/Heading';
@@ -42,7 +43,10 @@ export const TestedInTraining = () => (
         <p className="mt-6 max-w-md text-sm text-white/85">{HOME_TESTED.body}</p>
         {/* Secondary — the home page's one Ember moment is the hero CTA (7PA-230). */}
         <Button asChild variant="brand-outline" className="mt-8">
-          <Link to={HOME_TESTED.cta.href}>{HOME_TESTED.cta.label}</Link>
+          <Link to={HOME_TESTED.cta.href}>
+            {HOME_TESTED.cta.label}
+            <ChevronRight />
+          </Link>
         </Button>
       </div>
     </div>

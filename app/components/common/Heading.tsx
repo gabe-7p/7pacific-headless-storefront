@@ -4,14 +4,14 @@ import { cn } from '~/lib/cn';
 
 const VARIANTS = {
   /**
-   * Brand display heading — Archivo Condensed Bold, ALL CAPS (the only
+   * Brand display heading — Archivo Condensed Medium (500), ALL CAPS (the only
    * display weight in the system; hierarchy comes from size, not weight).
    * Section-header tracking (+0.01em) is the default; hero (-0.005em) and
    * product-name (+0.04em) tiers override via className.
    */
-  brand: 'font-display font-bold tracking-header uppercase leading-[1.1]',
-  /** Quiet page heading — Inter bold, tight-tracked, sentence case (cart, contact, 404). */
-  quiet: 'font-bold tracking-tight',
+  brand: 'font-display font-medium tracking-header uppercase leading-[1.1]',
+  /** Quiet page heading — Inter medium, tight-tracked, sentence case (cart, contact, 404). */
+  quiet: 'font-medium tracking-tight',
 } as const;
 
 const SIZES = {
