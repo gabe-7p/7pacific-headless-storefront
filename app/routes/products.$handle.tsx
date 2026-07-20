@@ -8,7 +8,7 @@ import {
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
 import { Suspense } from 'react';
-import { Await, redirect, useLoaderData } from 'react-router';
+import { Await, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Eyebrow } from '~/components/common/Eyebrow';
@@ -127,7 +127,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
   return { recommendations };
 }
 
-const Product = ({ loaderData }: { loaderData: Route.ComponentProps }) => {
+const Product = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
 

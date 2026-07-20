@@ -1,6 +1,5 @@
 import { type MappedProductOptions } from '@shopify/hydrogen';
 import { useNavigate } from 'react-router';
-import type { ProductFragment } from 'storefrontapi.generated';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { cn } from '~/lib/cn';

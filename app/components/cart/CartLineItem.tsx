@@ -6,7 +6,6 @@ import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout, LineItemChildrenMap } from '~/components/cart/CartMain';
 import { useAside } from '~/components/layout/Aside';
-import { ProductPrice } from '~/components/product/ProductPrice';
 import { useVariantUrl } from '~/lib/variants';
 
 export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
