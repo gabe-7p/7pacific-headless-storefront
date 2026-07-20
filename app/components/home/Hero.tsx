@@ -26,9 +26,10 @@ export const Hero = () => (
       fetchPriority="high"
       className="absolute inset-0 size-full object-cover"
     />
-    {/* No overlay: the photograph runs clean. Pure-white type carries its own
-        contrast here, so neither live's 10% wash nor a legibility scrim is
-        needed (per Gabe, 2026-07-19). */}
+    {/* Live's .custom-hero-overlay verbatim: a flat rgba(0,0,0,0.10) wash over
+        the whole frame, nothing graded. pointer-events-none so it never eats a
+        click meant for the CTA beneath it. */}
+    <div className="pointer-events-none absolute inset-0 bg-black/10" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}
