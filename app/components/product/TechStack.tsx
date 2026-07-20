@@ -2,6 +2,7 @@ import effortIcon from '~/assets/effort-percents.svg';
 import gripTapeIcon from '~/assets/grip-tape-icon.svg';
 import perforationsIcon from '~/assets/perforations-icon.svg';
 import { Heading } from '~/components/common/Heading';
+import { SectionHeader } from '~/components/common/SectionHeader';
 import { CareIcon } from '~/components/product/CareIcon';
 import { PdpSection } from '~/components/product/PdpSection';
 import type { TechFeature, TechIcon, TechStack as TechStackData } from '~/lib/productContent';
@@ -71,10 +72,7 @@ export const TechStack = ({ data }: { data: TechStackData }) => {
 
   return (
     <PdpSection>
-      {/* Flat 30px to sit level with the Product Details panel heading. */}
-      <Heading as="h2" variant="quiet" size="none" className="mb-5 text-3xl tracking-normal">
-        TECH STACK
-      </Heading>
+      <SectionHeader heading="Tech Stack" scale="panel" />
       <div className="divide-border-subtle border-border-subtle divide-y border-t">
         {data.features.map((feature) => (
           <Feature key={feature.heading} feature={feature} />
