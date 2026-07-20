@@ -19,7 +19,8 @@ export const OUR_STORY = {
     title: 'About',
     backgroundImage: `${CDN}/our_story_hero_image.jpg`,
     // One secondary CTA — the story page carries no Ember moment (7PA-230).
-    ctas: [{ label: 'Shop', href: STORE_LINKS.shopAll, variant: 'brand-outline' as const }],
+    // Targets the Mountain Mist shorts, not the collection.
+    ctas: [{ label: 'Shop', href: STORE_LINKS.shopShorts, variant: 'brand-outline' as const }],
   },
   // Mission and the making section are two distinct sections: Mission is a
   // full-width statement (no image); the second pairs its heading + body with
