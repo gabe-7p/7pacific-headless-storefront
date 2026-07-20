@@ -18,7 +18,9 @@ export const Recommendations = ({ products }: { products: ReadonlyArray<ProductC
       subtitle="Shop more of what you need to get you through those sessions."
       scale="sub"
     />
-    <Scroller>
+    {/* Four across rather than three: these are a secondary browse row, so the
+        cards sit smaller than the PDP detail cards. */}
+    <Scroller perView={4}>
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
