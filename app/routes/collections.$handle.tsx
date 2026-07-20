@@ -1,13 +1,11 @@
 import { Analytics, getPaginationVariables } from '@shopify/hydrogen';
 import { redirect, useLoaderData } from 'react-router';
 
-import { MarketingSections } from '~/components/collection/MarketingSections';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
 import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
-import { parseMarketingSections } from '~/lib/metafields';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
 
@@ -44,14 +42,11 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
 
   redirectIfHandleIsLocalized(request, { handle, data: collection });
 
-  return {
-    collection,
-    marketingSections: parseMarketingSections(collection.marketingSections?.value),
-  };
+  return { collection };
 }
 
 const Collection = () => {
-  const { collection, marketingSections } = useLoaderData<typeof loader>();
+  const { collection } = useLoaderData<typeof loader>();
 
   return (
     // Near full-bleed with ~20px outer margins so product imagery dominates the
@@ -75,8 +70,6 @@ const Collection = () => {
           <ProductCard key={product.id} product={product} label={product.label?.value} />
         )}
       </PaginatedResourceSection>
-
-      <MarketingSections sections={marketingSections} />
 
       <Analytics.CollectionView
         data={{ collection: { id: collection.id, handle: collection.handle } }}
@@ -102,9 +95,6 @@ const COLLECTION_QUERY = `#graphql
       handle
       title
       description
-      marketingSections: metafield(namespace: "custom", key: "marketing_sections") {
-        value
-      }
       products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
         nodes {
           ...ProductCard
