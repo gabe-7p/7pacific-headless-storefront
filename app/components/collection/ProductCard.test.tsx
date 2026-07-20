@@ -141,7 +141,9 @@ describe('ProductCard signature device (7PA-234)', () => {
       (a) => a.textContent === 'TRACEFIBER TEE'
     );
     expect(nameLink).toBeDefined();
-    expect(nameLink?.className).toContain('font-display');
+    // The product-name tier renders through Heading (brand variant supplies
+    // font-display); the link inherits from the h3 wrapper.
+    expect(nameLink?.closest('h3')?.className).toContain('font-display');
     expect(container.textContent).not.toContain('- WHITE');
   });
 

@@ -1,3 +1,4 @@
+import { Heading } from '~/components/common/Heading';
 import { Scroller } from '~/components/common/Scroller';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { PdpSection } from '~/components/product/PdpSection';
@@ -14,7 +15,9 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
       loading="lazy"
       className="aspect-[32/45] w-full object-cover min-[769px]:aspect-[5/6]"
     />
-    <h3 className="mt-3 text-sm font-bold tracking-wide uppercase">{card.caption}</h3>
+    <Heading as="h3" variant="caps" size="none" className="mt-3 text-sm">
+      {card.caption}
+    </Heading>
     <p className="mt-1 text-sm text-white/70">{card.subcaption}</p>
   </div>
 );

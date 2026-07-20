@@ -64,7 +64,7 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 - **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; `--topbar-h` is derived).
 - **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
 - **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`).
-- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`) and brand `Button` variant.
+- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`). All titles render through `Heading`; all CTAs through `Cta` (label in, chevron + variant handled once) — never hand-roll heading classes or assemble `Button` + icon at a callsite.
 
 ## Domain note: color = separate product
 

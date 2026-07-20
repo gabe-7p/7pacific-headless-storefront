@@ -12,8 +12,8 @@ import {
 } from 'react-router';
 
 import favicon from '~/assets/favicon.svg';
+import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { Button } from '~/components/ui/button';
 import { MICROCOPY } from '~/content/microcopy';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 
@@ -228,16 +228,13 @@ export const ErrorBoundary = () => {
         </p>
       )}
       {isNotFound ? (
-        <Button asChild variant="brand-outline" size="sm" className="mt-6">
-          <a href="/">Homepage</a>
-        </Button>
+        <Cta href="/" size="sm" className="mt-6">
+          Homepage
+        </Cta>
       ) : (
-        <a
-          href="/"
-          className="bg-brand text-brand-text mt-8 inline-block w-fit px-6 py-3 font-mono text-sm font-medium tracking-caps uppercase transition-opacity hover:opacity-90"
-        >
-          [ Back to shopping ]
-        </a>
+        <Cta href="/" variant="brand" size="lg" className="mt-8">
+          Back to shopping
+        </Cta>
       )}
       {!isNotFound && errorMessage && (
         <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-neutral-400">

@@ -1,3 +1,4 @@
+import { Heading } from '~/components/common/Heading';
 import { cn } from '~/lib/cn';
 import type { MarketingSection } from '~/lib/metafields';
 
@@ -25,9 +26,9 @@ export const MarketingSections = ({ sections }: { sections: ReadonlyArray<Market
               section.align === 'left' ? 'md:left-6' : 'md:right-6'
             )}
           >
-            <h3 className="text-lg font-bold tracking-wide uppercase md:text-xl">
+            <Heading as="h3" variant="caps" size="none" className="text-lg md:text-xl">
               {section.heading}
-            </h3>
+            </Heading>
             <p className="mt-3 text-sm leading-6 text-neutral-600">{section.body}</p>
           </div>
         </div>
