@@ -4,6 +4,9 @@ import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '~/components/ui/dialog';
 import { BRAND } from '~/lib/brand';
 
+/** The membership image the production popup uses (Shopify Files). */
+const IMAGE = `${BRAND.filesCdn}/24_121_7pacific_019221_cropped2.png`;
+
 type NewsletterDialogContextValue = { open: () => void };
 
 const NewsletterDialogContext = createContext<NewsletterDialogContextValue | null>(null);
@@ -27,16 +30,27 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
     <NewsletterDialogContext.Provider value={value}>
       {children}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        {/* Carbon ground so the form's light-on-dark styling carries over from
-            the footer unchanged. */}
-        <DialogContent className="bg-carbon text-chalk border-white/15 sm:max-w-md">
-          <DialogTitle className="font-display tracking-header text-2xl font-medium uppercase">
-            {BRAND.newsletter.heading}
-          </DialogTitle>
-          <DialogDescription className="text-sm text-white/80">
-            {BRAND.newsletter.body}
-          </DialogDescription>
-          <NewsletterForm />
+        {/* Production's two-up layout: image left, copy right. Carbon ground on
+            the copy panel so the form's light-on-dark styling carries over from
+            the footer unchanged. The image is hidden on phones, where a
+            half-width crop would read as a sliver. */}
+        <DialogContent className="bg-carbon text-chalk grid max-w-2xl gap-0 overflow-hidden border-white/15 p-0 sm:grid-cols-2">
+          <img
+            src={IMAGE}
+            alt=""
+            width={1372}
+            height={1350}
+            className="hidden size-full object-cover sm:block"
+          />
+          <div className="p-8">
+            <DialogTitle className="font-display tracking-header text-2xl font-medium uppercase">
+              {BRAND.newsletter.heading}
+            </DialogTitle>
+            <DialogDescription className="mt-3 text-sm text-white/80">
+              {BRAND.newsletter.body}
+            </DialogDescription>
+            <NewsletterForm />
+          </div>
         </DialogContent>
       </Dialog>
     </NewsletterDialogContext.Provider>
