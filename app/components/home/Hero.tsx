@@ -26,14 +26,9 @@ export const Hero = () => (
       fetchPriority="high"
       className="absolute inset-0 size-full object-cover"
     />
-    {/* Live's contrast overlay: a flat 10% black wash (.custom-hero-overlay),
-        not a gradient. Anything heavier muddies the photograph. */}
-    <div className="absolute inset-0 bg-black/10" />
-    {/* Legibility scrim, live's --colorImageOverlayTextShadow technique: a
-        local fade behind the type instead of darkening the whole frame. Live
-        centers its radial; our copy is left-aligned, so it runs left-to-right
-        and clears the right half of the image entirely. */}
-    <div className="absolute inset-0 bg-linear-to-r from-black/45 via-black/15 to-transparent to-65%" />
+    {/* No overlay: the photograph runs clean. Pure-white type carries its own
+        contrast here, so neither live's 10% wash nor a legibility scrim is
+        needed (per Gabe, 2026-07-19). */}
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}

@@ -1,22 +1,14 @@
 /**
  * Helpers for the product card's signature two-line device (7PA-234): an
- * Archivo caps short name over a JetBrains Mono spec line
- * (`MINT · 92/8 SHELL · $79`). Raw Shopify titles carry a "//" descriptor and
- * a trailing color ("AIRRAIL™ 6\" // CORE MOTION TRAINING SHORT - MINT") —
- * the device derives the short name instead of rendering the raw string.
+ * Archivo caps short name over a JetBrains Mono strip (`MINT · $79`). Raw
+ * Shopify titles carry a "//" descriptor and a trailing color
+ * ("AIRRAIL™ 6\" // CORE MOTION TRAINING SHORT - MINT"), so the device derives
+ * the short name instead of rendering the raw string.
+ *
+ * The strip used to carry a per-family fabric spec ("92/8 shell", "84/16
+ * mesh"); dropped per Gabe (2026-07-19) — those facts live on the PDP Spec
+ * Card, not the card.
  */
-
-/**
- * Headline spec per product family, keyed by the family noun (the last word
- * of the short title). The strings are product facts sourced from the
- * `custom.tech_stack` metafields — extend when a new family ships.
- */
-const CARD_SPECS: Record<string, string> = {
-  SHORT: '92/8 shell · bonded seams',
-  SHORTS: '92/8 shell · bonded seams',
-  TEE: '84/16 mesh',
-  HAT: 'laser-cut perf',
-};
 
 const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
 
@@ -46,10 +38,4 @@ export const getShortTitle = (title: string, colorName?: string): string => {
   const descriptor = normalize(stripColorSuffix(right, colorName));
   const noun = descriptor.split(' ').at(-1);
   return normalize(noun ? `${left} ${noun}` : left);
-};
-
-/** The family's headline spec for the card's mono line; null when unmapped. */
-export const getCardSpec = (shortTitle: string): string | null => {
-  const noun = shortTitle.split(' ').at(-1)?.toUpperCase();
-  return (noun && CARD_SPECS[noun]) ?? null;
 };

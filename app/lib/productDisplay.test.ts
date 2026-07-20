@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getCardSpec, getShortTitle } from '~/lib/productDisplay';
+import { getShortTitle } from '~/lib/productDisplay';
 
 describe('getShortTitle', () => {
   it('derives the short name from a real shorts title (spaced color dash)', () => {
@@ -27,17 +27,5 @@ describe('getShortTitle', () => {
 
   it('strips an unknown color suffix without a colorName hint', () => {
     expect(getShortTitle('TRACEFIBER TEE - WHITE')).toBe('TRACEFIBER TEE');
-  });
-});
-
-describe('getCardSpec', () => {
-  it('maps each live family noun to its headline spec', () => {
-    expect(getCardSpec('AIRRAIL™ 6" SHORT')).toBe('92/8 shell · bonded seams');
-    expect(getCardSpec('TRACEFIBER™ TEE')).toBe('84/16 mesh');
-    expect(getCardSpec('MOTIONFRAME™ HAT')).toBe('laser-cut perf');
-  });
-
-  it('returns null for unmapped families instead of inventing a spec', () => {
-    expect(getCardSpec('FUTURE™ JACKET')).toBeNull();
   });
 });
