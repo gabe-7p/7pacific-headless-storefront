@@ -1,8 +1,5 @@
 import { Analytics, getPaginationVariables } from '@shopify/hydrogen';
-import type {
-  ProductCollectionSortKeys,
-  ProductFilter,
-} from '@shopify/hydrogen/storefront-api-types';
+import type { ProductFilter } from '@shopify/hydrogen/storefront-api-types';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, redirect, useLoaderData, useSearchParams } from 'react-router';
@@ -19,13 +16,6 @@ import {
   AccordionTrigger,
 } from '~/components/ui/accordion';
 import { Button } from '~/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { parseMarketingSections } from '~/lib/metafields';
@@ -38,25 +28,6 @@ export const meta: Route.MetaFunction = ({ data }) => {
   return buildMeta({ title: data?.collection.title, description: data?.collection.description });
 };
 
-type SortOption = {
-  value: string;
-  label: string;
-  sortKey: ProductCollectionSortKeys;
-  reverse: boolean;
-};
-
-const SORT_OPTIONS: ReadonlyArray<SortOption> = [
-  { value: 'featured', label: 'Featured', sortKey: 'COLLECTION_DEFAULT', reverse: false },
-  { value: 'best-selling', label: 'Best selling', sortKey: 'BEST_SELLING', reverse: false },
-  { value: 'price-asc', label: 'Price: Low to High', sortKey: 'PRICE', reverse: false },
-  { value: 'price-desc', label: 'Price: High to Low', sortKey: 'PRICE', reverse: true },
-  { value: 'newest', label: 'Newest', sortKey: 'CREATED', reverse: true },
-  { value: 'title-asc', label: 'A–Z', sortKey: 'TITLE', reverse: false },
-];
-
-const sortFromParam = (value: string | null): SortOption =>
-  SORT_OPTIONS.find((option) => option.value === value) ?? SORT_OPTIONS[0]!;
-
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
   const { storefront } = context;
@@ -65,7 +36,6 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   if (!handle) throw redirect('/');
 
   const url = new URL(request.url);
-  const sort = sortFromParam(url.searchParams.get('sort'));
   // Each applied filter is a `filter` search param whose value is the JSON
   // `input` the Storefront API gave us for that facet value.
   const filters = url.searchParams.getAll('filter').reduce<Array<ProductFilter>>((acc, raw) => {
@@ -80,11 +50,11 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   const { collection } = await storefront.query(COLLECTION_QUERY, {
     // Product listings change with availability/merchandising: short cache.
     cache: storefront.CacheShort(),
+    // No sortKey: the collection's own merchandised order is the display
+    // order (drag to reorder in the Shopify admin).
     variables: {
       handle,
       filters,
-      sortKey: sort.sortKey,
-      reverse: sort.reverse,
       ...paginationVariables,
     },
   });
@@ -122,8 +92,8 @@ const Collection = () => {
         )}
       </header>
 
-      <div className="mb-6 flex items-center justify-between gap-4 border-y border-neutral-200 py-3">
-        {facets.length > 0 ? (
+      {facets.length > 0 && (
+        <div className="mb-6 flex items-center gap-4 border-y border-neutral-200 py-3">
           <Button
             variant="ghost"
             size="sm"
@@ -132,11 +102,8 @@ const Collection = () => {
           >
             {filtersOpen ? 'Hide filters' : 'Filters'}
           </Button>
-        ) : (
-          <span />
-        )}
-        <SortSelect />
-      </div>
+        </div>
+      )}
 
       {appliedFilters.length > 0 && <AppliedFilters facets={facets} />}
 
@@ -162,35 +129,6 @@ const Collection = () => {
       <Analytics.CollectionView
         data={{ collection: { id: collection.id, handle: collection.handle } }}
       />
-    </div>
-  );
-};
-
-const SortSelect = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const active = sortFromParam(searchParams.get('sort'));
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs tracking-wide text-neutral-500 uppercase">Sort</span>
-      <Select
-        value={active.value}
-        onValueChange={(value) => {
-          const next = new URLSearchParams(searchParams);
-          next.set('sort', value);
-          setSearchParams(next, { preventScrollReset: true });
-        }}
-      >
-        <SelectTrigger size="sm" className="w-44 text-xs">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {SORT_OPTIONS.map((option) => (
-            <SelectItem key={option.value} value={option.value} className="text-xs">
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
     </div>
   );
 };
@@ -306,8 +244,6 @@ const COLLECTION_QUERY = `#graphql
     $country: CountryCode
     $language: LanguageCode
     $filters: [ProductFilter!]
-    $sortKey: ProductCollectionSortKeys!
-    $reverse: Boolean
     $first: Int
     $last: Int
     $startCursor: String
@@ -327,8 +263,6 @@ const COLLECTION_QUERY = `#graphql
         before: $startCursor
         after: $endCursor
         filters: $filters
-        sortKey: $sortKey
-        reverse: $reverse
       ) {
         nodes {
           ...ProductCard
