@@ -2,9 +2,9 @@ import type { MouseEvent } from 'react';
 import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
-import { Button } from '~/components/ui/button';
 import { CONTACT } from '~/content/contact';
 import { buildMeta } from '~/lib/seo';
 
@@ -143,14 +143,9 @@ const Contact = () => {
               {errors?.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
             </div>
             {/* Secondary — the contact page carries no Ember moment (7PA-230). */}
-            <Button
-              type="submit"
-              variant="brand-outline"
-              disabled={submitting}
-              className="w-full sm:w-auto"
-            >
+            <Cta type="submit" disabled={submitting} className="w-full sm:w-auto">
               {submitting ? 'Sending…' : CONTACT.submitLabel}
-            </Button>
+            </Cta>
           </Form>
         )}
       </div>

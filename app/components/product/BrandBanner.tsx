@@ -1,7 +1,5 @@
-import { Link } from 'react-router';
-
+import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { Button } from '~/components/ui/button';
 import { PRODUCT_BRAND_BANNER } from '~/content/product-page';
 
 /**
@@ -36,9 +34,9 @@ export const BrandBanner = () => {
             </Heading>
             <p className="mx-auto mt-4 max-w-sm text-sm text-neutral-600">{body}</p>
             {/* Secondary — the PDP's one Ember moment is Add to Cart (7PA-230). */}
-            <Button asChild variant="brand-outline" className="mt-6">
-              <Link to={cta.href}>{cta.label}</Link>
-            </Button>
+            <Cta to={cta.href} className="mt-6">
+              {cta.label}
+            </Cta>
           </div>
         </div>
       </div>

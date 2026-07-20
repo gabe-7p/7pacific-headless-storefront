@@ -1,7 +1,5 @@
-import { Link } from 'react-router';
-
+import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { Button } from '~/components/ui/button';
 import { HOME_TESTED } from '~/content/home';
 
 /**
@@ -41,9 +39,9 @@ export const TestedInTraining = () => (
         </Heading>
         <p className="mt-6 max-w-md text-sm text-white/85">{HOME_TESTED.body}</p>
         {/* Secondary — the home page's one Ember moment is the hero CTA (7PA-230). */}
-        <Button asChild variant="brand-outline" className="mt-8">
-          <Link to={HOME_TESTED.cta.href}>{HOME_TESTED.cta.label}</Link>
-        </Button>
+        <Cta to={HOME_TESTED.cta.href} className="mt-8">
+          {HOME_TESTED.cta.label}
+        </Cta>
       </div>
     </div>
     <img

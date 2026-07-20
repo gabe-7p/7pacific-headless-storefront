@@ -5,7 +5,7 @@ import type * as React from 'react';
 import { cn } from '~/lib/cn';
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -18,15 +18,15 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
         // 7Pacific primary CTA (7PA-230): the page's ONE Ember moment — mono
-        // caps in the bracket device (`[ LABEL ]`, brackets via pseudo
-        // elements so callers pass plain labels), Chalk on Ember. At most one
-        // `brand` button may render per page; everything else is secondary.
+        // caps with a trailing ChevronRight (callers pass `LABEL <ChevronRight />`
+        // as the child), Chalk on Ember. On hover the chevron nudges right and
+        // grows. At most one `brand` button may render per page.
         brand:
-          "bg-brand text-brand-text hover:bg-carbon hover:text-chalk rounded-[2px] font-mono font-medium uppercase tracking-caps before:content-['['] after:content-[']']",
-        // 7Pacific secondary CTA: same mono-caps bracket device, Fog border,
+          'bg-brand text-brand-text hover:bg-carbon hover:text-chalk rounded-[2px] font-mono font-medium uppercase tracking-caps [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+        // 7Pacific secondary CTA: same mono-caps + chevron device, Fog border,
         // text in the current color so it adapts to dark or light surfaces.
         'brand-outline':
-          "border-fog rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps before:content-['['] after:content-[']'] hover:opacity-70",
+          'border-fog rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

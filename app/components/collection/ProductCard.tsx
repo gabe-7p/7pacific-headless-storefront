@@ -2,6 +2,7 @@ import { Image, Money } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 import type { ProductCardFragment } from 'storefrontapi.generated';
 
+import { Heading } from '~/components/common/Heading';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { getColorSwatches } from '~/lib/colors';
@@ -85,15 +86,13 @@ export const ProductCard = ({
       </div>
 
       <div className="mt-3 flex flex-col gap-1">
-        {/* Line 1 — product-name tier: Archivo Condensed Bold caps, 24px,
-            +0.04em, derived short name (no raw "- COLOR" / "//" strings). */}
-        <Link
-          to={to}
-          prefetch="intent"
-          className="font-display text-2xl leading-[1.15] font-bold tracking-product uppercase"
-        >
-          {shortTitle}
-        </Link>
+        {/* Line 1 — product-name tier (Heading brand variant): 24px, +0.04em,
+            derived short name (no raw "- COLOR" / "//" strings). */}
+        <Heading as="h3" size="none" className="text-2xl leading-[1.15] tracking-product">
+          <Link to={to} prefetch="intent">
+            {shortTitle}
+          </Link>
+        </Heading>
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
             separator), Carbon at 80%, price lives here in mono. The edition
             device (7PA-246) leads it, carrying its own status color. */}

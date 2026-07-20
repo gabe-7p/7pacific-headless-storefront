@@ -4,6 +4,7 @@ import { useFetcher } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout } from '~/components/cart/CartMain';
+import { Cta } from '~/components/common/Cta';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
 
@@ -63,11 +64,9 @@ const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
   return (
     // The cart's one Ember moment (7PA-230) — the primary variant's mono-caps
     // bracket device, full width.
-    <Button asChild variant="brand" size="lg" className="mt-5 w-full">
-      <a href={checkoutUrl} target="_self">
-        Checkout
-      </a>
-    </Button>
+    <Cta href={checkoutUrl} variant="brand" size="lg" className="mt-5 w-full">
+      Checkout
+    </Cta>
   );
 };
 

@@ -1,9 +1,7 @@
-import { Link } from 'react-router';
-
 import { Container } from '~/components/common/Container';
+import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { SectionHeader } from '~/components/common/SectionHeader';
-import { Button } from '~/components/ui/button';
 import { type CoreValue, HOME_CORE_VALUES } from '~/content/home';
 import { cn } from '~/lib/cn';
 
@@ -25,11 +23,9 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
     <p className="mt-4 max-w-[38ch] text-[0.95rem] leading-[1.2] opacity-80 md:text-base">
       {value.body}
     </p>
-    <Button asChild variant="brand-outline" size="xs" className="mt-6">
-      <Link to={value.cta.href} prefetch="intent">
-        {value.cta.label}
-      </Link>
-    </Button>
+    <Cta to={value.cta.href} prefetch="intent" size="xs" className="mt-6">
+      {value.cta.label}
+    </Cta>
   </div>
 );
 
