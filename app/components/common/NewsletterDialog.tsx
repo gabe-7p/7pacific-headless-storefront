@@ -34,7 +34,11 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
             the copy panel so the form's light-on-dark styling carries over from
             the footer unchanged. The image is hidden on phones, where a
             half-width crop would read as a sliver. */}
-        <DialogContent className="bg-carbon text-chalk grid max-w-2xl gap-0 overflow-hidden border-white/15 p-0 sm:grid-cols-2">
+        {/* Width has to be set on the `sm:` variant: the primitive ships
+            `sm:max-w-lg`, which a bare `max-w-*` can't override (different
+            variant, so tailwind-merge keeps both and the sm one wins).
+            rounded-[2px] is the brand radius live uses everywhere. */}
+        <DialogContent className="bg-carbon text-chalk grid gap-0 overflow-hidden rounded-[2px] border-white/15 p-0 sm:max-w-3xl sm:grid-cols-2">
           <img
             src={IMAGE}
             alt=""
