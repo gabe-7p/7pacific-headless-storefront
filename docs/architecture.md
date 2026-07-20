@@ -61,7 +61,7 @@ app/
   styles/        tailwind.css + globals
 ```
 
-Site chrome (announcement/header/footer) is applied globally: `root.tsx`'s `App` wraps every route's `<Outlet/>` in `PageLayout`. A route can opt out with `export const handle: RouteHandle = { chrome: false }` (type exported from `app/root.tsx`) — it then renders bare and owns its full page, including the `main` landmark. Used by one-off chrome-less pages like `routes/amir-smith.tsx`.
+Site chrome (announcement/header/footer) is applied globally: `root.tsx`'s `App` wraps every route's `<Outlet/>` in `PageLayout`. A route can opt out with `export const handle: RouteHandle = { chrome: false }` (type exported from `app/root.tsx`) — it then renders bare and owns its full page, including the `main` landmark. Used by one-off chrome-less pages like the athlete signing pages (`routes/athletes.$handle.tsx`).
 
 ### The module pattern (how features grow)
 

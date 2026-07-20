@@ -176,7 +176,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
  * Route-level layout options. A route opts out of the site chrome
  * (announcement/header/footer) with `export const handle: RouteHandle =
  * { chrome: false }` — it then owns its full page, including a `main`
- * landmark (see routes/amir-smith.tsx).
+ * landmark (see routes/athletes.$handle.tsx).
  */
 export type RouteHandle = { chrome?: boolean };
 
