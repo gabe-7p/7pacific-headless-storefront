@@ -13,7 +13,7 @@ const FULL = {
   seams: 'Bonded',
   pockets: '1 zip (rear) · 1 stash (front)',
   fit: 'Close, not compressive',
-  origin: 'Designed in San Francisco · Made in China',
+  origin: 'Designed in San Francisco',
 };
 
 describe('SpecCard', () => {
