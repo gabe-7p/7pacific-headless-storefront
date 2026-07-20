@@ -100,3 +100,5 @@ CLAUDE.md        conventions + entry point for humans and coding agents
 ```
 
 Full detail in [docs/architecture.md](docs/architecture.md).
+
+<!-- CI smoke test 2026-07-19 — safe to delete -->
