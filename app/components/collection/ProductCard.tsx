@@ -51,7 +51,7 @@ export const ProductCard = ({
       <div className="relative overflow-hidden bg-neutral-100">
         <Link to={to} prefetch="intent" className="block" aria-label={title}>
           {label && (
-            <span className="absolute top-0 right-0 z-10 bg-black px-2 py-1 text-[10px] font-semibold tracking-wide text-white uppercase">
+            <span className="absolute top-0 right-0 z-10 bg-black px-1.5 py-0.5 text-[8px] font-semibold tracking-wide text-white uppercase">
               {label}
             </span>
           )}
@@ -95,11 +95,11 @@ export const ProductCard = ({
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
             separator), Carbon at 80%, price lives here in mono. The edition
             device (7PA-246) leads it, carrying its own status color. */}
-        <span className="text-carbon/80 tracking-spec font-mono text-[11px] uppercase">
+        <span className="text-carbon/80 tracking-spec font-mono text-[9px] uppercase">
           <EditionTag
             number={product.editionNumber?.value}
             status={product.editionStatus?.value}
-            className="text-[11px] tracking-spec"
+            className="tracking-spec text-[9px]"
           />
           {product.editionNumber?.value ? ' · ' : ''}
           {colorName ? `${colorName} · ` : ''}
