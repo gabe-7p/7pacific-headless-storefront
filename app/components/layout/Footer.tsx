@@ -35,7 +35,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                 so opacity here dims the contours without darkening Carbon. */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center opacity-75 brightness-200 mix-blend-screen"
+              className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center opacity-60 brightness-200 mix-blend-screen"
             />
             <Container className="grid gap-0 py-14 min-[769px]:grid-cols-3 min-[769px]:gap-10">
               {/* Live puts the Instagram glyph under the newsletter input in the
