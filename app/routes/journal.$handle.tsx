@@ -10,11 +10,11 @@ import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/journal.$handle';
 
-export const meta: Route.MetaFunction = ({ data }) =>
+export const meta: Route.MetaFunction = ({ loaderData }) =>
   buildMeta({
-    title: data?.article.title,
-    description: data?.article.excerpt ?? undefined,
-    image: data?.article.image?.url,
+    title: loaderData?.article.title,
+    description: loaderData?.article.excerpt ?? undefined,
+    image: loaderData?.article.image?.url,
   });
 
 export async function loader({ context, params }: Route.LoaderArgs) {

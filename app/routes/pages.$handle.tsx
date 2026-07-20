@@ -9,13 +9,13 @@ import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/pages.$handle';
 
-export const meta: Route.MetaFunction = ({ data }) => {
+export const meta: Route.MetaFunction = ({ loaderData }) => {
   // Use the first in-body image (feature/landing pages) as the share image.
-  const ogImage = data?.page.body.match(/<img[^>]+src="([^"]+)"/i)?.[1];
+  const ogImage = loaderData?.page.body.match(/<img[^>]+src="([^"]+)"/i)?.[1];
 
   return buildMeta({
-    title: data?.page.title,
-    description: data?.page.seo?.description,
+    title: loaderData?.page.title,
+    description: loaderData?.page.seo?.description,
     image: ogImage,
   });
 };

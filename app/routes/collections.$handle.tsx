@@ -13,8 +13,11 @@ import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/collections.$handle';
 
-export const meta: Route.MetaFunction = ({ data }) => {
-  return buildMeta({ title: data?.collection.title, description: data?.collection.description });
+export const meta: Route.MetaFunction = ({ loaderData }) => {
+  return buildMeta({
+    title: loaderData?.collection.title,
+    description: loaderData?.collection.description,
+  });
 };
 
 export async function loader({ context, params, request }: Route.LoaderArgs) {

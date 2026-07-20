@@ -14,8 +14,8 @@ type SelectedPolicies = keyof Pick<
   'privacyPolicy' | 'shippingPolicy' | 'termsOfService' | 'refundPolicy'
 >;
 
-export const meta: Route.MetaFunction = ({ data }) => {
-  return buildMeta({ title: data?.policy.title });
+export const meta: Route.MetaFunction = ({ loaderData }) => {
+  return buildMeta({ title: loaderData?.policy.title });
 };
 
 export async function loader({ params, context }: Route.LoaderArgs) {

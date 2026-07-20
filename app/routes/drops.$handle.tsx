@@ -12,10 +12,10 @@ import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/drops.$handle';
 
-export const meta: Route.MetaFunction = ({ data }) =>
+export const meta: Route.MetaFunction = ({ loaderData }) =>
   buildMeta({
-    title: data?.drop.title,
-    description: data?.drop.editorial ?? undefined,
+    title: loaderData?.drop.title,
+    description: loaderData?.drop.editorial ?? undefined,
   });
 
 export async function loader({ context, params }: Route.LoaderArgs) {
