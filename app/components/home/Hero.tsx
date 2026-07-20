@@ -15,7 +15,7 @@ import { HOME_HERO } from '~/content/home';
 export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
   // the announcement bar above it stays opaque.
-  <section className="bg-carbon text-chalk relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden md:min-h-[44rem]">
+  <section className="bg-carbon relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-white md:min-h-[44rem]">
     <Image
       src={HOME_HERO.backgroundImage.url}
       width={HOME_HERO.backgroundImage.width}
@@ -27,8 +27,13 @@ export const Hero = () => (
       className="absolute inset-0 size-full object-cover"
     />
     {/* Live's contrast overlay: a flat 10% black wash (.custom-hero-overlay),
-        not a gradient — anything heavier muddies the photograph. */}
+        not a gradient. Anything heavier muddies the photograph. */}
     <div className="absolute inset-0 bg-black/10" />
+    {/* Legibility scrim, live's --colorImageOverlayTextShadow technique: a
+        local fade behind the type instead of darkening the whole frame. Live
+        centers its radial; our copy is left-aligned, so it runs left-to-right
+        and clears the right half of the image entirely. */}
+    <div className="absolute inset-0 bg-linear-to-r from-black/45 via-black/15 to-transparent to-65%" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}
