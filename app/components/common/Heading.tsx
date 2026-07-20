@@ -12,6 +12,9 @@ const VARIANTS = {
   brand: 'font-display font-medium tracking-header uppercase leading-[1.1]',
   /** Quiet page heading — Inter medium, tight-tracked, sentence case (cart, contact, 404). */
   quiet: 'font-medium tracking-tight',
+  /** Caption title — Inter medium, wide-tracked caps (detail-card captions,
+      PLP marketing blocks, tech-stack row labels). */
+  caps: 'font-medium tracking-wide uppercase',
 } as const;
 
 const SIZES = {

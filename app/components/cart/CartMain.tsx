@@ -1,11 +1,9 @@
 import { type OptimisticCartLine, useOptimisticCart } from '@shopify/hydrogen';
-import { ChevronRight } from 'lucide-react';
-import { Link } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import { type CartLine, CartLineItem } from '~/components/cart/CartLineItem';
+import { Cta } from '~/components/common/Cta';
 import { useAside } from '~/components/layout/Aside';
-import { Button } from '~/components/ui/button';
 import { STORE_LINKS } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
 
@@ -82,12 +80,9 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       {/* Locked microcopy (7PA-243) — verbatim from the guidelines. */}
       <p className="text-sm text-neutral-600">{MICROCOPY.emptyCart}</p>
-      <Button asChild variant="brand-outline" size="sm" className="mt-4">
-        <Link to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport">
-          Shop the drop
-          <ChevronRight />
-        </Link>
-      </Button>
+      <Cta to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport" size="sm" className="mt-4">
+        Shop the drop
+      </Cta>
     </div>
   );
 };

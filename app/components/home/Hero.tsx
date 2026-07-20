@@ -1,9 +1,8 @@
 import { Image } from '@shopify/hydrogen';
-import { ChevronRight } from 'lucide-react';
-import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
-import { Button } from '~/components/ui/button';
+import { Cta } from '~/components/common/Cta';
+import { Heading } from '~/components/common/Heading';
 import { HOME_HERO } from '~/content/home';
 
 /**
@@ -32,16 +31,17 @@ export const Hero = () => (
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}
-      <h1 className="font-display max-w-[16ch] text-5xl leading-[0.95] font-medium tracking-hero uppercase md:text-7xl md:leading-[0.95] xl:text-8xl xl:leading-[0.95]">
+      <Heading
+        as="h1"
+        size="none"
+        className="max-w-[16ch] text-5xl leading-[0.95] tracking-hero md:text-7xl md:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
+      >
         {HOME_HERO.headline}
-      </h1>
+      </Heading>
       <p className="max-w-md text-base md:text-lg">{HOME_HERO.subline}</p>
-      <Button asChild variant="brand" size="lg" className="mt-1">
-        <Link to={HOME_HERO.cta.href}>
-          {HOME_HERO.cta.label}
-          <ChevronRight />
-        </Link>
-      </Button>
+      <Cta to={HOME_HERO.cta.href} variant="brand" size="lg" className="mt-1">
+        {HOME_HERO.cta.label}
+      </Cta>
     </Container>
   </section>
 );

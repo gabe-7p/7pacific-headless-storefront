@@ -1,6 +1,7 @@
 import effortIcon from '~/assets/effort-percents.svg';
 import gripTapeIcon from '~/assets/grip-tape-icon.svg';
 import perforationsIcon from '~/assets/perforations-icon.svg';
+import { Heading } from '~/components/common/Heading';
 import { CareIcon } from '~/components/product/CareIcon';
 import { PdpSection } from '~/components/product/PdpSection';
 import type { TechFeature, TechIcon, TechStack as TechStackData } from '~/lib/productContent';
@@ -20,7 +21,8 @@ const ICONS: Record<TechIcon, string> = {
 const ROW_GRID =
   'grid grid-cols-1 gap-5 py-5 text-center min-[769px]:grid-cols-[1fr_2fr_1fr] min-[769px]:gap-[30px] min-[769px]:py-[25px] min-[769px]:text-left min-[1025px]:grid-cols-[1fr_1.3fr_1fr] min-[1025px]:gap-5 min-[1025px]:py-[30px]';
 
-const ROW_TITLE = 'text-base font-medium tracking-[1px] uppercase min-[1025px]:text-[1.1rem]';
+// Row-title sizing on top of the Heading `caps` variant (weight/caps live there).
+const ROW_TITLE = 'text-base tracking-[1px] min-[1025px]:text-[1.1rem]';
 
 // A column centers its content when the row is stacked (≤768), left-aligns once
 // the row becomes a grid.
@@ -29,7 +31,9 @@ const COL = 'flex justify-center min-[769px]:justify-start';
 const Feature = ({ feature }: { feature: TechFeature }) => (
   <div className={`${ROW_GRID} items-center`}>
     <div className={COL}>
-      <h3 className={ROW_TITLE}>{feature.heading}</h3>
+      <Heading as="h3" variant="caps" size="none" className={ROW_TITLE}>
+        {feature.heading}
+      </Heading>
     </div>
     <div className={COL}>
       <p className="max-w-[400px] text-base leading-normal">{feature.description}</p>
@@ -43,7 +47,9 @@ const Feature = ({ feature }: { feature: TechFeature }) => (
 
 const Column = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="flex flex-col items-center gap-2.5 min-[769px]:items-start">
-    <h4 className={ROW_TITLE}>{label}</h4>
+    <Heading as="h4" variant="caps" size="none" className={ROW_TITLE}>
+      {label}
+    </Heading>
     {children}
   </div>
 );
@@ -65,7 +71,9 @@ export const TechStack = ({ data }: { data: TechStackData }) => {
 
   return (
     <PdpSection>
-      <h2 className="mb-5 text-2xl font-medium">TECH STACK</h2>
+      <Heading as="h2" variant="quiet" size="md" className="mb-5 tracking-normal">
+        TECH STACK
+      </Heading>
       <div className="divide-border-subtle border-border-subtle divide-y border-t">
         {data.features.map((feature) => (
           <Feature key={feature.heading} feature={feature} />

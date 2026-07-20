@@ -23,6 +23,8 @@ pnpm dlx shadcn@latest add <name>   # e.g. dialog, select, accordion, tooltip
 
 It reads [`components.json`](../../components.json) (aliased to `~/*`, base color `neutral`, new-york style) and writes to `app/components/ui/`. Then restyle the generated classes to match the brand. Already scaffolded: `button`, `dialog`, `select`, `accordion`, `sheet`. (Add primitives only when a consumer exists — unused generated files get deleted.)
 
+**Brand CTAs render through [`common/Cta`](../../app/components/common/Cta.tsx), not raw `Button variant="brand"`.** `Cta` owns the CTA anatomy (label + trailing `ChevronRight`; the hover nudge/scale animation lives in the `brand`/`brand-outline` Button variants) and renders a `Link`, `<a>`, or `<button>` from its props — so a device change is one edit, not a per-callsite hunt. The one exception is the PDP `AddToCartButton` (a CartForm submit), which composes `buttonVariants({ variant: 'brand' })` directly. Same principle for titles: every heading renders through `common/Heading` (`brand`/`quiet`/`caps` variants) — never retype heading classes. The one exception is `Prose`, which styles CMS-supplied HTML via `[&_h2]:` selectors and must mirror `Heading`'s weights manually.
+
 ## Rules for `app/components/ui/`
 
 - **Generated, not authored.** These files don't follow the repo's component conventions (they use the `function` keyword and occasional `any`). `app/components/ui/**` is therefore **exempt** in [eslint.config.js](../../eslint.config.js) from `react/function-component-definition` and `@typescript-eslint/no-explicit-any`. Don't "fix" generated files to use const arrows.
