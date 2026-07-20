@@ -10,8 +10,8 @@ import { cn } from '~/lib/cn';
 const SCALES = {
   /** Homepage sections — 48px, 60px on desktop. */
   section: 'text-5xl leading-[1.05] xl:text-6xl xl:leading-[1.05]',
-  /** PDP panel headings (Product Details, Tech Stack) — a modest flat 24px. */
-  panel: 'text-2xl leading-[1.2]',
+  /** PDP panel headings (Product Details, Tech Stack) — a flat 30px. */
+  panel: 'text-3xl leading-[1.2]',
   /** PDP sub-section headings (Recommendations) — a flat 36px. */
   sub: 'text-4xl leading-[1.1]',
   /** Default display scale. */
