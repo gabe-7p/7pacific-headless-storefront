@@ -11,7 +11,7 @@ import { HOME_FIRST_DROP } from '~/content/home';
  * (all live products, ordered by the manual homepage-first-drop collection).
  */
 export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
-  <Container className="py-14 md:py-20">
+  <Container className="py-9 md:py-12">
     <SectionHeader
       heading={HOME_FIRST_DROP.heading}
       subtitle={HOME_FIRST_DROP.subtitle}

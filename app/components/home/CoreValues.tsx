@@ -70,7 +70,7 @@ export const CoreValues = () => {
   ];
 
   return (
-    <Container className="py-14 md:py-20">
+    <Container className="py-9 md:py-12">
       <SectionHeader heading={heading} subtitle={subtitle} scale="section" />
 
       <div className="flex flex-col gap-3">
