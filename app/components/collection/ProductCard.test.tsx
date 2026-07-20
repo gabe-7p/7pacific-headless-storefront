@@ -107,7 +107,9 @@ describe('ProductCard hover ensemble', () => {
     expect(overlay?.className).toContain('absolute');
     expect(overlay?.className).toContain('bottom-0');
     expect(overlay?.className).toContain('translate-y-[110%]');
-    expect(overlay?.className).toContain('group-hover:-translate-y-[10%]');
+    // Slides up into view on hover. The exact offset is a styling detail, so
+    // assert the direction rather than pinning the number.
+    expect(overlay?.className).toMatch(/group-hover:-translate-y-\[\d+%\]/);
     // The overlay lives inside the clipped image box, not the card body.
     expect(overlay?.parentElement?.className).toContain('overflow-hidden');
   });

@@ -43,7 +43,7 @@ export const BRAND = {
    */
   newsletter: {
     heading: 'The Early One',
-    body: 'Drop dates, training days, the occasional film. First word when editions go live. No discounts. We don’t run sales.',
+    body: 'Drop dates, training days, the occasional film. First word when editions go live.',
     placeholder: 'Enter your email',
     submitLabel: 'Sign up',
     successMessage: 'You’re in. See you out there.',

@@ -1,5 +1,5 @@
 import { Mail } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import { useFetcher } from 'react-router';
 
 import { BRAND } from '~/lib/brand';
@@ -18,6 +18,9 @@ type NewsletterFormProps = {
  */
 export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
   const fetcher = useFetcher<NewsletterResponse>();
+  // The footer form and the dialog form can both be mounted, so the input id
+  // has to be per-instance or the label points at the wrong field.
+  const emailId = useId();
   const submitting = fetcher.state !== 'idle';
   const succeeded = fetcher.data?.ok === true;
   const { placeholder, submitLabel, successMessage } = BRAND.newsletter;
@@ -33,11 +36,11 @@ export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
   return (
     <fetcher.Form method="post" action="/api/newsletter" className="mt-5">
       <div className="relative max-w-sm">
-        <label htmlFor="newsletter-email" className="sr-only">
+        <label htmlFor={emailId} className="sr-only">
           {placeholder}
         </label>
         <input
-          id="newsletter-email"
+          id={emailId}
           type="email"
           name="email"
           required

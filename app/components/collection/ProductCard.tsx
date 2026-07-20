@@ -79,7 +79,7 @@ export const ProductCard = ({
         {/* Swatch overlay at the image's bottom edge — a sibling of the image
             link (nested anchors are invalid HTML). Slides up on card hover;
             the swatches themselves cascade in via ColorSwatches. */}
-        <div className="absolute right-0 bottom-0 left-0 flex translate-y-[110%] justify-start px-4 py-1.5 transition-transform duration-200 group-hover:-translate-y-[10%]">
+        <div className="absolute right-0 bottom-0 left-0 flex translate-y-[110%] justify-start px-2.5 py-1.5 transition-transform duration-200 group-hover:-translate-y-[2%]">
           <ColorSwatches swatches={swatches} currentHandle={handle} cascade alwaysRender />
         </div>
       </div>

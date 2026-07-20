@@ -1,8 +1,6 @@
-import { Link } from 'react-router';
-
 import { Container } from '~/components/common/Container';
+import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { Button } from '~/components/ui/button';
 import { OUR_STORY } from '~/content/our-story';
 import { cn } from '~/lib/cn';
 
@@ -42,20 +40,21 @@ export const OurStory = () => {
               {hero.title}
             </Heading>
           </Container>
-          {/* CTA band: compact left-anchored buttons on desktop; inset stacked
-              bars on tablet/mobile. Live sizes them by content — 4px padding,
-              30/31px tall, label and chevron sitting together on the left. */}
+          {/* CTA band: full-width bars on mobile, content-sized on desktop.
+              Renders through Cta so the chevron device and hover animation
+              match every other CTA on the site. */}
           <div className="border-t border-white/25">
             <Container className="flex flex-col gap-5 py-5 lg:flex-row lg:py-4">
               {hero.ctas.map((cta) => (
-                <Button
+                <Cta
                   key={cta.label}
-                  asChild
+                  to={cta.href}
                   variant={cta.variant}
-                  className="h-[30px] w-full justify-start px-2 py-0 text-xs lg:h-[31px] lg:w-auto lg:text-base"
+                  size="sm"
+                  className="w-full lg:w-auto"
                 >
-                  <Link to={cta.href}>{cta.label}</Link>
-                </Button>
+                  {cta.label}
+                </Cta>
               ))}
             </Container>
           </div>

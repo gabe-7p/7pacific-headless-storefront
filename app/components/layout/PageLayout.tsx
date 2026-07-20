@@ -3,6 +3,7 @@ import { Await } from 'react-router';
 import type { CartApiQueryFragment, FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
 import { CartMain } from '~/components/cart/CartMain';
+import { NewsletterDialogProvider } from '~/components/common/NewsletterDialog';
 import { Announcement } from '~/components/layout/Announcement';
 import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
@@ -25,18 +26,20 @@ export const PageLayout = ({
 }: PageLayoutProps) => {
   return (
     <Aside.Provider>
-      <CartAside cart={cart} />
-      <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      {/* Sticky topbar offset by the announcement height: the announcement
-          scrolls away with the page while the header pins — mirrors live. */}
-      <div className="sticky -top-(--announcement-h) z-40">
-        <Announcement />
-        {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
-      </div>
-      <main>{children}</main>
-      {/* The footer signup is the one newsletter per page — the site-wide
-          popup is gone (7PA-241: no interruption modals, no discount bribe). */}
-      <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
+      <NewsletterDialogProvider>
+        <CartAside cart={cart} />
+        <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
+        {/* Sticky topbar offset by the announcement height: the announcement
+            scrolls away with the page while the header pins — mirrors live. */}
+        <div className="sticky -top-(--announcement-h) z-40">
+          <Announcement />
+          {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
+        </div>
+        <main>{children}</main>
+        {/* The footer signup is always present; the membership CTAs open the
+            same form in a dialog (click-triggered only, never on load). */}
+        <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
+      </NewsletterDialogProvider>
     </Aside.Provider>
   );
 };
