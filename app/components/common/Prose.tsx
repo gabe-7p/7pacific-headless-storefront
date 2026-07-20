@@ -24,12 +24,6 @@ const PROSE_VARIANTS = {
    */
   journal:
     'max-w-[65ch] text-lg leading-[1.65] text-neutral-800 [&_a]:text-black [&_a]:underline [&_h2]:mt-10 [&_h2]:font-display [&_h2]:text-3xl [&_h2]:font-medium [&_h2]:tracking-header [&_h2]:uppercase [&_img]:mt-8 [&_img]:w-full [&_li]:mt-2 [&_li]:leading-[1.65] [&_p]:mt-6 [&_strong]:font-semibold [&_ul]:mt-6 [&_ul]:list-disc [&_ul]:pl-5',
-  /**
-   * Shopify policy bodies (`/policies/*`). Live sets both heading levels at
-   * 22px/600 with generous spacing, 12px paragraphs, and real bulleted lists.
-   */
-  policy:
-    '[&_a]:text-black [&_a]:underline [&_h1]:mt-10 [&_h1]:text-[22px] [&_h1]:font-semibold [&_h1:first-child]:mt-0 [&_h2]:mt-10 [&_h2]:text-[22px] [&_h2]:font-semibold [&_li]:mt-1 [&_li]:text-xs [&_li]:leading-6 [&_li]:text-neutral-700 [&_p]:mt-4 [&_p]:text-xs [&_p]:leading-6 [&_p]:text-neutral-700 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-5',
 } as const;
 
 type ProseProps = {
