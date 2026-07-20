@@ -85,9 +85,12 @@ export const ProductForm = ({
                     className={cn(
                       SIZE_CELL,
                       '-ml-px transition-colors first:ml-0',
+                      // The cells overlap by 1px, so a neighbour's pale left
+                      // border paints over this one's darkened right border on
+                      // hover — lift the hovered cell like the selected one.
                       selected
                         ? 'z-10 border-neutral-900 bg-neutral-900 text-white'
-                        : 'border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900',
+                        : 'border-neutral-300 bg-white text-neutral-900 hover:z-10 hover:border-neutral-900 focus-visible:z-10',
                       !available && 'opacity-40',
                       isSingle && 'cursor-default'
                     )}

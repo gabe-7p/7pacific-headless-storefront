@@ -2,7 +2,14 @@ import { ChevronRight } from 'lucide-react';
 import type { ComponentProps, ReactNode } from 'react';
 import { Link } from 'react-router';
 
+import { useNewsletterDialog } from '~/components/common/NewsletterDialog';
 import { Button } from '~/components/ui/button';
+
+/**
+ * Content files mark membership CTAs with this href instead of a real path;
+ * `Cta` turns it into a button that opens the newsletter dialog.
+ */
+export const NEWSLETTER_HREF = '#newsletter';
 
 type CtaProps = {
   /** `brand` is the page's ONE Ember moment; everything else is outline. */
@@ -42,12 +49,30 @@ export const Cta = ({
   disabled,
   onClick,
 }: CtaProps) => {
+  const newsletter = useNewsletterDialog();
+
   const label = (
     <>
       {children}
       <ChevronRight />
     </>
   );
+
+  // Membership CTAs open the signup dialog rather than navigating. Falls
+  // through to a normal link if rendered outside the provider.
+  if ((href === NEWSLETTER_HREF || to === NEWSLETTER_HREF) && newsletter) {
+    return (
+      <Button
+        type="button"
+        variant={variant}
+        size={size}
+        className={className}
+        onClick={newsletter.open}
+      >
+        {label}
+      </Button>
+    );
+  }
 
   if (to !== undefined) {
     return (
