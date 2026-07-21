@@ -95,11 +95,11 @@ export const ProductCard = ({
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
             separator), Carbon at 80%, price lives here in mono. The edition
             device (7PA-246) leads it, carrying its own status color. */}
-        <span className="text-carbon/80 tracking-spec font-mono text-[9px] uppercase">
+        <span className="text-carbon/80 tracking-spec font-mono text-[10px] uppercase">
           <EditionTag
             number={product.editionNumber?.value}
             status={product.editionStatus?.value}
-            className="tracking-spec text-[9px]"
+            className="tracking-spec text-[10px]"
           />
           {product.editionNumber?.value ? ' · ' : ''}
           {colorName ? `${colorName} · ` : ''}
