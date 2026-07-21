@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-7 0 122 122">
   <style>
-    path { fill: #0f1518; } /* Carbon */
+    path { fill: #000; } /* the black the Online Store icon has always used */
     @media (prefers-color-scheme: dark) {
-      path { fill: #e8e9ea; } /* Chalk — keeps the mark visible on dark tab bars */
+      path { fill: #fff; } /* white — keeps the mark visible on dark tab bars */
     }
   </style>
   <path d="M68.1588 0.506836H24.5178L0.861328 121.493H22.8936L64.3455 44.4827H42.8781H40.124L43.3018 28.4214H87.9314L85.3185 41.6772L66.3227 77.9381C92.592 73.8701 107.21 57.5983 107.21 33.6816C107.139 13.1315 92.1683 0.506836 68.1588 0.506836Z"/>
