@@ -5,6 +5,7 @@ import { CoreValues } from '~/components/home/CoreValues';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
+import { HOME_HERO } from '~/content/home';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
@@ -12,7 +13,12 @@ import { buildMeta } from '~/lib/seo';
 import type { Route } from './+types/_index';
 
 export const meta: Route.MetaFunction = () => {
-  return buildMeta({ absoluteTitle: '7Pacific · Lightweight and Breathable Training Gear' });
+  return buildMeta({
+    absoluteTitle: '7Pacific · Lightweight and Breathable Training Gear',
+    // Share previews (iMessage, Slack, …) show the hero; without an explicit
+    // og:image, scrapers grab an arbitrary product shot off the page.
+    image: HOME_HERO.backgroundImage.url,
+  });
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
