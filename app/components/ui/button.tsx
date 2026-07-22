@@ -27,6 +27,11 @@ const buttonVariants = cva(
         // text in the current color so it adapts to dark or light surfaces.
         'brand-outline':
           'border-fog rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+        // 7Pacific text CTA: the quietest tier of the same device — no fill,
+        // no border, just the mono-caps label + chevron. Callers flush it left
+        // with `px-0` (size paddings would otherwise win the merge).
+        'brand-text':
+          'rounded-[2px] bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
