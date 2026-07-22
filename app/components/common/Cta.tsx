@@ -12,8 +12,9 @@ import { Button } from '~/components/ui/button';
 export const NEWSLETTER_HREF = '#newsletter';
 
 type CtaProps = {
-  /** `brand` is the page's ONE Ember moment; everything else is outline. */
-  variant?: 'brand' | 'brand-outline';
+  /** `brand` is the page's ONE Ember moment; everything else is outline or
+      the borderless `brand-text` treatment. */
+  variant?: 'brand' | 'brand-outline' | 'brand-text';
   size?: ComponentProps<typeof Button>['size'];
   className?: string;
   /** The label only — the trailing chevron is added here, once. */

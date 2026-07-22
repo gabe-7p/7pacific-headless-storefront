@@ -12,15 +12,23 @@ import { BRAND } from '~/lib/brand';
 const CDN = BRAND.filesCdn;
 
 export const HOME_HERO = {
+  /** Mono spec-strip label above the headline: drop number + city. */
+  eyebrow: 'Drop 01 · San Francisco',
   /**
    * Locked hero spec (7PA-232): ≤8 words, one sentence, ALL CAPS via CSS.
    * The headline is verbatim from the approved Tone Chart product-line board.
    */
   headline: 'Built for the part of training nobody posts.',
-  subline: 'Laser-cut vents. Bonded seams. Gear for the 6 AM session, fog included.',
-  /** One CTA, mono caps (the page's single Ember moment). Label + target per
+  /** Primary CTA, mono caps (the page's single Ember moment). Label + target per
       Gabe (2026-07-19): the live hero's line, pointed at the Mint shorts. */
   cta: { label: 'Own the Start', href: STORE_LINKS.shopShortsMint },
+  /** Text-treatment secondary CTA per Gabe (2026-07-21) — a deliberate
+      deviation from 7PA-232's single-CTA hero. Renders in chalk, so the
+      one-Ember-moment rule still holds. */
+  secondaryCta: { label: 'Read the Story', href: '/pages/our-story' },
+  /** Mono spec lines under the CTAs: where and when the hero shot was made. */
+  coordinates: '37.78°N · 122.51°W',
+  tagline: 'Lands End · 5:47 AM',
   backgroundImage: {
     url: `${CDN}/24_121_7pacific_03806.jpg`,
     width: 1656,
