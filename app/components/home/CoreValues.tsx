@@ -20,9 +20,7 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
     <Heading as="h3" size="none" className="text-2xl leading-[1.1] md:text-[1.8rem] xl:text-[2rem]">
       {value.title}
     </Heading>
-    <p className="mt-4 max-w-[38ch] text-[0.95rem] leading-[1.2] opacity-80 md:text-base">
-      {value.body}
-    </p>
+    <p className="mt-4 max-w-[38ch] text-[0.95rem] leading-[1.2] md:text-base">{value.body}</p>
     <Cta to={value.cta.href} prefetch="intent" size="xs" className="mt-6">
       {value.cta.label}
     </Cta>
@@ -30,7 +28,7 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
 );
 
 const Media = ({ className, children }: { className?: string; children: React.ReactNode }) => (
-  <div className={cn('overflow-hidden bg-neutral-100', className)}>{children}</div>
+  <div className={cn('overflow-hidden bg-court', className)}>{children}</div>
 );
 
 /**

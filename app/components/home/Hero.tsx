@@ -18,7 +18,7 @@ import { HOME_HERO } from '~/content/home';
 export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
   // the announcement bar above it stays opaque.
-  <section className="bg-carbon relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-white md:min-h-[44rem]">
+  <section className="bg-carbon relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-court md:min-h-[44rem]">
     <Image
       src={HOME_HERO.backgroundImage.url}
       width={HOME_HERO.backgroundImage.width}
