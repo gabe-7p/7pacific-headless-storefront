@@ -23,8 +23,9 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
           ? // Pinned to the drawer's bottom edge, as on live.
             'border-border-subtle mt-auto border-t'
           : // Mobile/tablet: plain full-width rows with a separating top rule (no
-            // card). Desktop: a light-gray panel, no rule.
-            'border-border-subtle border-t lg:w-80 lg:flex-none lg:border-t-0 lg:bg-neutral-50 lg:p-6'
+            // card). Desktop: a Zinc-tinted panel (distinct from the Court page
+            // field), no rule.
+            'border-border-subtle border-t lg:w-80 lg:flex-none lg:border-t-0 lg:bg-panel lg:p-6'
       )}
     >
       <div className="flex items-baseline justify-between">
@@ -51,7 +52,7 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       )}
 
       {/* Live puts the disclaimer above the checkout button. */}
-      <p className="mt-3 text-center text-xs text-neutral-500">
+      <p className="mt-3 text-center text-xs text-graphite">
         Shipping, taxes, and discount codes calculated at checkout.
       </p>
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
@@ -81,7 +82,7 @@ const CartDiscounts = ({
   return (
     <div>
       <dl hidden={!codes.length} className="flex items-center justify-between">
-        <dt className="text-neutral-500">Discount(s)</dt>
+        <dt className="text-graphite">Discount(s)</dt>
         <UpdateDiscountForm>
           <div className="flex items-center gap-2">
             <code>{codes?.join(', ')}</code>
@@ -149,7 +150,7 @@ const CartGiftCard = ({
     <div>
       {giftCardCodes && giftCardCodes.length > 0 && (
         <dl className="space-y-1">
-          <dt className="text-neutral-500">Applied Gift Card(s)</dt>
+          <dt className="text-graphite">Applied Gift Card(s)</dt>
           {giftCardCodes.map((giftCard) => (
             <RemoveGiftCardForm key={giftCard.id} giftCardId={giftCard.id}>
               <div className="flex items-center gap-2">

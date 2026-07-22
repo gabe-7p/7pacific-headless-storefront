@@ -12,7 +12,7 @@ export const TextLink = ({ className, ...props }: ComponentProps<typeof Link>) =
   <Link
     {...props}
     className={cn(
-      'text-sm text-neutral-600 underline underline-offset-4 transition-colors hover:text-black',
+      'text-sm text-graphite underline underline-offset-4 transition-colors hover:text-carbon',
       className
     )}
   />

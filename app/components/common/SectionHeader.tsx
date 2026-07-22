@@ -41,6 +41,6 @@ export const SectionHeader = ({
       {heading}
     </Heading>
     {/* Live subtitle: 12px, 17.6px on desktop. */}
-    {subtitle ? <p className="mt-2 text-xs text-neutral-600 xl:text-[1.1rem]">{subtitle}</p> : null}
+    {subtitle ? <p className="mt-2 text-xs text-graphite xl:text-[1.1rem]">{subtitle}</p> : null}
   </div>
 );
