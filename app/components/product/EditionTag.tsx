@@ -9,9 +9,9 @@ export type EditionStatus = 'live' | 'soon' | 'archived';
  * via `accent` (e.g. a drop-archive row with no other Ember on the page).
  */
 const STATUS_CLASS: Record<EditionStatus, string> = {
-  live: 'text-graphite',
-  soon: 'text-graphite',
-  archived: 'text-graphite',
+  live: 'text-support',
+  soon: 'text-support',
+  archived: 'text-support',
 };
 
 const isEditionStatus = (value: string): value is EditionStatus =>
@@ -41,7 +41,7 @@ export const EditionTag = ({
     <span
       className={cn(
         'font-mono text-xs font-medium tracking-caps uppercase',
-        normalized ? STATUS_CLASS[normalized] : 'text-graphite',
+        normalized ? STATUS_CLASS[normalized] : 'text-support',
         accent && normalized === 'live' && 'text-brand',
         className
       )}

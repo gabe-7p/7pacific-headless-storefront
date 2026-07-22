@@ -163,8 +163,8 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         <Meta />
         <Links />
       </head>
-      {/* bg-court: the brand's Court field — the page ground per Meridian on Carbon. */}
-      <body className="bg-court font-sans text-nav-text antialiased">
+      {/* bg-field: the brand's Court field — the page ground per Meridian on Carbon. */}
+      <body className="bg-field font-sans text-nav-text antialiased">
         {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
@@ -229,7 +229,7 @@ export const ErrorBoundary = () => {
     // (a named `md:` would sort after `min-[1440px]:` and win at 1440).
     <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
       {!isNotFound && (
-        <p className="text-graphite text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
+        <p className="text-support text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
       )}
       <Heading
         as="h1"
@@ -241,7 +241,7 @@ export const ErrorBoundary = () => {
         {isNotFound ? MICROCOPY.notFound : 'Something went wrong'}
       </Heading>
       {!isNotFound && (
-        <p className="mt-4 max-w-md text-sm text-carbon">
+        <p className="mt-4 max-w-md text-sm text-ink">
           An unexpected error occurred. Please try again.
         </p>
       )}
@@ -255,7 +255,7 @@ export const ErrorBoundary = () => {
         </Cta>
       )}
       {!isNotFound && errorMessage && (
-        <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-graphite">
+        <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-support">
           {errorMessage}
         </pre>
       )}

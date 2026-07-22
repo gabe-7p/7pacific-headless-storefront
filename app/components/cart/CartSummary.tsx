@@ -52,7 +52,7 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       )}
 
       {/* Live puts the disclaimer above the checkout button. */}
-      <p className="mt-3 text-center text-xs text-graphite">
+      <p className="mt-3 text-center text-xs text-support">
         Shipping, taxes, and discount codes calculated at checkout.
       </p>
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
@@ -82,7 +82,7 @@ const CartDiscounts = ({
   return (
     <div>
       <dl hidden={!codes.length} className="flex items-center justify-between">
-        <dt className="text-graphite">Discount(s)</dt>
+        <dt className="text-support">Discount(s)</dt>
         <UpdateDiscountForm>
           <div className="flex items-center gap-2">
             <code>{codes?.join(', ')}</code>
@@ -150,7 +150,7 @@ const CartGiftCard = ({
     <div>
       {giftCardCodes && giftCardCodes.length > 0 && (
         <dl className="space-y-1">
-          <dt className="text-graphite">Applied Gift Card(s)</dt>
+          <dt className="text-support">Applied Gift Card(s)</dt>
           {giftCardCodes.map((giftCard) => (
             <RemoveGiftCardForm key={giftCard.id} giftCardId={giftCard.id}>
               <div className="flex items-center gap-2">

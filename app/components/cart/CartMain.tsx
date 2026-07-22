@@ -79,7 +79,7 @@ const CartEmpty = ({ layout }: { layout: CartMainProps['layout'] }) => {
   return (
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       {/* Locked microcopy (7PA-243) — verbatim from the guidelines. */}
-      <p className="text-sm text-graphite">{MICROCOPY.emptyCart}</p>
+      <p className="text-sm text-support">{MICROCOPY.emptyCart}</p>
       <Cta to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport" size="sm" className="mt-4">
         Shop the drop
       </Cta>

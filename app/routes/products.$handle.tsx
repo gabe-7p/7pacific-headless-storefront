@@ -165,7 +165,7 @@ const Product = () => {
           (not a fixed height) so a tall buy card grows the hero instead of
           overflowing it under the header and past the fold; the vertical
           padding keeps the card inset like live's. */}
-      <section className="overflow-hidden bg-court text-carbon min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-court">
+      <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
@@ -194,7 +194,7 @@ const Product = () => {
         <Container className="px-0 sm:px-0 md:px-0 min-[769px]:relative min-[769px]:z-10">
           {/* Live's card is 500px wide with 20px padding (460px of content) —
               the measure the description was authored against. */}
-          <div className="flex flex-col bg-court text-carbon min-[769px]:ml-8 min-[769px]:max-w-[500px]">
+          <div className="flex flex-col bg-field text-ink min-[769px]:ml-8 min-[769px]:max-w-[500px]">
             <div className="p-5">
               {/* Edition device above the name (7PA-246). */}
               <EditionTag
@@ -229,7 +229,7 @@ const Product = () => {
                 </div>
               )}
               <div className="mt-4">
-                <Eyebrow className="mb-2 text-graphite">Color</Eyebrow>
+                <Eyebrow className="mb-2 text-support">Color</Eyebrow>
                 <ColorSwatches
                   swatches={getColorSwatches(product.colorSiblings)}
                   currentHandle={product.handle}
@@ -243,7 +243,7 @@ const Product = () => {
               {/* The fit line moves into the Spec Card's FIT row when a spec
                   card exists — don't render it twice. */}
               {!specCard?.fit && product.fitNote?.value && (
-                <p className="mt-3 text-xs text-graphite italic">{product.fitNote.value}</p>
+                <p className="mt-3 text-xs text-support italic">{product.fitNote.value}</p>
               )}
             </div>
             <AddToCartBar selectedVariant={selectedVariant} />

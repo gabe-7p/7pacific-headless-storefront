@@ -60,7 +60,7 @@ The one-liners every agent must keep in mind: **components are `const` arrows (n
 
 Never hardcode brand values inline — edit the one source and every consumer follows:
 
-- **Colors & font** → `app/styles/tailwind.css` `@theme` (used via `bg-nav`, `text-brand`, `bg-footer`, …).
+- **Colors & font** → `app/styles/tailwind.css` `@theme`. Components reference **role tokens** — `bg-field`, `text-ink`, `text-support`, `border-border-subtle` (+ `-night` variants on dark surfaces) and the chrome tokens (`bg-nav`, `text-brand`, `bg-footer`, …) — **never raw palette names** (`court`/`carbon`/`graphite`/`zinc`/`ember`), so a palette revision edits tailwind.css only. Raw palette utilities are allowed only where the specific color is the point, with a comment at the call site.
 - **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; `--topbar-h` is derived).
 - **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
 - **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`).

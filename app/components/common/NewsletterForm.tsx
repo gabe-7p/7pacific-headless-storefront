@@ -47,7 +47,7 @@ export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
           autoCorrect="off"
           autoCapitalize="off"
           placeholder={placeholder}
-          className="w-full rounded-none border-0 border-b border-zinc bg-transparent px-0 py-2 pr-10 text-court placeholder:text-zinc focus:border-court focus:outline-none"
+          className="w-full rounded-none border-0 border-b border-border-subtle bg-transparent px-0 py-2 pr-10 text-ink-night placeholder:text-support-night focus:border-ink-night focus:outline-none"
         />
         <button
           type="submit"
@@ -58,7 +58,9 @@ export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
           <Mail className="size-5" />
         </button>
       </div>
-      {fetcher.data?.error && <p className="mt-2 text-sm text-zinc">{fetcher.data.error}</p>}
+      {fetcher.data?.error && (
+        <p className="mt-2 text-sm text-support-night">{fetcher.data.error}</p>
+      )}
     </fetcher.Form>
   );
 };

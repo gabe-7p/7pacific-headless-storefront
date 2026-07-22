@@ -11,10 +11,10 @@ export const TestedInTraining = () => (
   // Splits 5:4 (text left) from 640px up rather than live's 1024: the photo is
   // only 696px wide natively, so a full-bleed stacked layout upscales it into
   // visible blur. Holding the split keeps its cell at or under native width.
-  <section className="grid overflow-hidden bg-carbon text-court sm:grid-cols-[5fr_4fr]">
+  <section className="grid overflow-hidden bg-field-night text-ink-night sm:grid-cols-[5fr_4fr]">
     <div className="relative order-2 sm:order-1">
       {/* No scrim over the video — live has none, and the footage is dark enough
-          to carry white text. `bg-carbon` on the section covers the gap
+          to carry white text. `bg-field-night` on the section covers the gap
           until the first frame decodes. */}
       <video
         src={HOME_TESTED.video}
@@ -38,7 +38,7 @@ export const TestedInTraining = () => (
             </span>
           ))}
         </Heading>
-        <p className="mt-6 max-w-md text-sm text-zinc">{HOME_TESTED.body}</p>
+        <p className="mt-6 max-w-md text-sm text-support-night">{HOME_TESTED.body}</p>
         {/* Secondary — the home page's one Ember moment is the hero CTA (7PA-230). */}
         <Cta to={HOME_TESTED.cta.href} className="mt-8">
           {HOME_TESTED.cta.label}

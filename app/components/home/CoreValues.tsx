@@ -28,7 +28,7 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
 );
 
 const Media = ({ className, children }: { className?: string; children: React.ReactNode }) => (
-  <div className={cn('overflow-hidden bg-court', className)}>{children}</div>
+  <div className={cn('overflow-hidden bg-field', className)}>{children}</div>
 );
 
 /**

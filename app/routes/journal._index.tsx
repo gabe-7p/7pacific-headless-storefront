@@ -31,7 +31,7 @@ const Journal = () => {
       <Heading as="h1" size="display">
         Journal
       </Heading>
-      <p className="mt-3 max-w-md text-graphite">
+      <p className="mt-3 max-w-md text-support">
         Training pieces, founder letters, and what the crew is on.
       </p>
 
@@ -44,13 +44,13 @@ const Journal = () => {
               className="block py-6 transition-opacity hover:opacity-70"
             >
               {/* Mono metadata strip — the journal's spec-strip device. */}
-              <span className="tracking-spec font-mono text-xs text-graphite uppercase">
+              <span className="tracking-spec font-mono text-xs text-support uppercase">
                 {formatJournalDate(article.publishedAt)}
               </span>
               <Heading as="h2" size="none" className="mt-2 text-2xl md:text-3xl">
                 {article.title}
               </Heading>
-              {article.excerpt && <p className="mt-2 text-base text-graphite">{article.excerpt}</p>}
+              {article.excerpt && <p className="mt-2 text-base text-support">{article.excerpt}</p>}
             </Link>
           </li>
         ))}

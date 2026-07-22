@@ -18,7 +18,7 @@ import { HOME_HERO } from '~/content/home';
 export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
   // the announcement bar above it stays opaque.
-  <section className="bg-carbon relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-court md:min-h-[44rem]">
+  <section className="bg-field-night relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-ink-night md:min-h-[44rem]">
     <Image
       src={HOME_HERO.backgroundImage.url}
       width={HOME_HERO.backgroundImage.width}
@@ -35,7 +35,9 @@ export const Hero = () => (
     <div className="pointer-events-none absolute inset-0 bg-black/10" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Spec-strip tier (7PA-242): JetBrains Mono caps at +0.1em. */}
-      <p className="text-zinc font-mono text-xs tracking-spec uppercase">{HOME_HERO.eyebrow}</p>
+      <p className="text-support-night font-mono text-xs tracking-spec uppercase">
+        {HOME_HERO.eyebrow}
+      </p>
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}
       <Heading
@@ -53,7 +55,7 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
-      <div className="text-zinc mt-2 flex flex-col gap-1 font-mono text-xs tracking-spec uppercase">
+      <div className="text-support-night mt-2 flex flex-col gap-1 font-mono text-xs tracking-spec uppercase">
         <span>{HOME_HERO.coordinates}</span>
         <span>{HOME_HERO.tagline}</span>
       </div>
