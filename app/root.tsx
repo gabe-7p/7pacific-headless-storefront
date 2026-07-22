@@ -228,7 +228,7 @@ export const ErrorBoundary = () => {
     // (a named `md:` would sort after `min-[1440px]:` and win at 1440).
     <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
       {!isNotFound && (
-        <p className="text-concrete text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
+        <p className="text-graphite text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
       )}
       <Heading
         as="h1"
