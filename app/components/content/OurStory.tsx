@@ -133,7 +133,7 @@ export const OurStory = () => {
               {/* Live signature: 22px brand-orange name over a 14px grey role. */}
               <div className="mt-6">
                 {/* Concrete, not Ember — the accent is rationed (7PA-230). */}
-                <p className="text-concrete text-[1.375rem] leading-[1.2] font-medium">
+                <p className="text-graphite text-[1.375rem] leading-[1.2] font-medium">
                   {story.founder.name}
                 </p>
                 <p className="mt-0.5 text-sm font-medium text-neutral-500">{story.founder.role}</p>

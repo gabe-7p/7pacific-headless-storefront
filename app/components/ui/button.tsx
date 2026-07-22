@@ -19,14 +19,14 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
         // 7Pacific primary CTA (7PA-230): the page's ONE Ember moment — mono
         // caps with a trailing ChevronRight (callers pass `LABEL <ChevronRight />`
-        // as the child), Chalk on Ember. On hover the chevron nudges right and
+        // as the child), Court on Ember. On hover the chevron nudges right and
         // grows. At most one `brand` button may render per page.
         brand:
-          'bg-brand text-brand-text hover:bg-carbon hover:text-chalk rounded-[2px] font-mono font-medium uppercase tracking-caps [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
-        // 7Pacific secondary CTA: same mono-caps + chevron device, Fog border,
+          'bg-brand text-brand-text hover:bg-carbon hover:text-court rounded-[2px] font-mono font-medium uppercase tracking-caps [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+        // 7Pacific secondary CTA: same mono-caps + chevron device, Zinc border,
         // text in the current color so it adapts to dark or light surfaces.
         'brand-outline':
-          'border-fog rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+          'border-zinc rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
         // 7Pacific text CTA: the quietest tier of the same device — no fill,
         // no border, just the mono-caps label + chevron. Callers flush it left
         // with `px-0` (size paddings would otherwise win the merge).

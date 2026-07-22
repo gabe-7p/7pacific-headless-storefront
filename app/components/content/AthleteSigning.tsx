@@ -45,8 +45,8 @@ const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) 
       <Link prefetch="intent" to="/" aria-label={BRAND.name}>
         <Logo tone="light" className="h-5 md:h-6" />
       </Link>
-      <span className={cn(MONO_LABEL, 'text-fog max-md:hidden')}>{chrome.badge}</span>
-      <span className={cn(MONO_LABEL, 'flex items-center gap-2 text-chalk')}>
+      <span className={cn(MONO_LABEL, 'text-zinc max-md:hidden')}>{chrome.badge}</span>
+      <span className={cn(MONO_LABEL, 'flex items-center gap-2 text-court')}>
         <span
           aria-hidden
           className="bg-brand size-1.5 animate-pulse rounded-full motion-reduce:animate-none"
@@ -55,8 +55,8 @@ const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) 
       </span>
     </Container>
     <Container className="border-t border-white/15 py-3 md:hidden">
-      <span className={cn(MONO_LABEL, 'text-fog flex items-center gap-2.5')}>
-        <span aria-hidden className="border-fog/60 size-2.5 border" />
+      <span className={cn(MONO_LABEL, 'text-zinc flex items-center gap-2.5')}>
+        <span aria-hidden className="border-zinc/60 size-2.5 border" />
         {chrome.urlLine}
       </span>
     </Container>
@@ -73,14 +73,14 @@ const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
         className="absolute inset-0 size-full object-cover"
       />
     )}
-    <span className={cn(MONO_LABEL, 'text-fog absolute top-4 left-4')}>{hero.modeLabel}</span>
-    <span className={cn(MONO_LABEL, 'text-fog absolute bottom-4 left-4 max-md:hidden')}>
+    <span className={cn(MONO_LABEL, 'text-zinc absolute top-4 left-4')}>{hero.modeLabel}</span>
+    <span className={cn(MONO_LABEL, 'text-zinc absolute bottom-4 left-4 max-md:hidden')}>
       {hero.locationLine}
     </span>
-    <span className={cn(MONO_LABEL, 'text-fog absolute right-4 bottom-4 max-md:hidden')}>
+    <span className={cn(MONO_LABEL, 'text-zinc absolute right-4 bottom-4 max-md:hidden')}>
       {hero.camLine}
     </span>
-    <span className={cn(MONO_LABEL, 'text-fog absolute right-4 bottom-4 md:hidden')}>
+    <span className={cn(MONO_LABEL, 'text-zinc absolute right-4 bottom-4 md:hidden')}>
       {hero.locationLine}
     </span>
   </div>
@@ -90,21 +90,21 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
   <Container className="py-10 md:py-16 lg:py-20">
     <div className="grid gap-8 md:grid-cols-2 md:grid-rows-[auto_1fr] md:gap-x-12 md:gap-y-10 lg:gap-x-16">
       <div className="md:col-start-1 md:row-start-1">
-        <p className={cn(MONO_LABEL, 'text-fog max-md:hidden')}>{content.transmissionLine}</p>
-        <p className={cn(MONO_LABEL, 'text-fog md:hidden')}>{content.eyebrowLine}</p>
+        <p className={cn(MONO_LABEL, 'text-zinc max-md:hidden')}>{content.transmissionLine}</p>
+        <p className={cn(MONO_LABEL, 'text-zinc md:hidden')}>{content.eyebrowLine}</p>
         <Heading
           as="h1"
           size="none"
           className="mt-5 text-[2.9rem] leading-[1.02] tracking-hero text-white md:mt-8 md:text-6xl lg:text-7xl"
         >
-          {content.headline.lead} <span className="text-fog block">{content.headline.name}</span>
+          {content.headline.lead} <span className="text-zinc block">{content.headline.name}</span>
         </Heading>
       </div>
 
       <div className="md:col-start-2 md:row-span-2 md:row-start-1">
         <HeroPanel hero={content.hero} />
         <div
-          className={cn(MONO_LABEL, 'text-fog mt-3 flex items-center justify-between md:hidden')}
+          className={cn(MONO_LABEL, 'text-zinc mt-3 flex items-center justify-between md:hidden')}
         >
           <span>{content.hero.shotLine}</span>
           <span>{content.hero.camLine}</span>
@@ -112,10 +112,10 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
       </div>
 
       <div className="md:col-start-1 md:row-start-2 md:self-start">
-        <p className="text-chalk/80 max-w-[44ch] text-lg leading-relaxed md:text-xl">
+        <p className="text-court/80 max-w-[44ch] text-lg leading-relaxed md:text-xl">
           {content.body}
         </p>
-        <p className={cn(MONO_LABEL, 'text-fog mt-8 max-md:hidden')}>{content.signedLine}</p>
+        <p className={cn(MONO_LABEL, 'text-zinc mt-8 max-md:hidden')}>{content.signedLine}</p>
       </div>
     </div>
   </Container>
@@ -123,8 +123,8 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
 
 const SectionLabel = ({ number, title }: { number: string; title: string }) => (
   <div className="flex items-center gap-3">
-    <span className="font-display text-fog/70 text-2xl font-medium">{number}</span>
-    <span className={cn(MONO_LABEL, 'text-chalk')}>{title}</span>
+    <span className="font-display text-zinc/70 text-2xl font-medium">{number}</span>
+    <span className={cn(MONO_LABEL, 'text-court')}>{title}</span>
     <span aria-hidden className="ml-2 h-px w-16 bg-white/15 md:w-24" />
   </div>
 );
@@ -241,8 +241,8 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
             />
           )}
           <div className="flex items-center justify-between">
-            <span className={cn(MONO_LABEL, 'text-fog')}>{video.attribution}</span>
-            <span className={cn(MONO_LABEL, 'text-chalk')}>
+            <span className={cn(MONO_LABEL, 'text-zinc')}>{video.attribution}</span>
+            <span className={cn(MONO_LABEL, 'text-court')}>
               {hasVideo && duration > 0
                 ? `${formatTime(currentTime)} / ${formatTime(duration)}`
                 : video.duration}
@@ -256,10 +256,10 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
 
 const CornerBrackets = () => (
   <span aria-hidden>
-    <span className="border-fog/50 absolute top-0 left-0 size-3 border-t border-l" />
-    <span className="border-fog/50 absolute top-0 right-0 size-3 border-t border-r" />
-    <span className="border-fog/50 absolute bottom-0 left-0 size-3 border-b border-l" />
-    <span className="border-fog/50 absolute right-0 bottom-0 size-3 border-r border-b" />
+    <span className="border-zinc/50 absolute top-0 left-0 size-3 border-t border-l" />
+    <span className="border-zinc/50 absolute top-0 right-0 size-3 border-t border-r" />
+    <span className="border-zinc/50 absolute bottom-0 left-0 size-3 border-b border-l" />
+    <span className="border-zinc/50 absolute right-0 bottom-0 size-3 border-r border-b" />
   </span>
 );
 
@@ -270,8 +270,8 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
       <CornerBrackets />
 
       <div className="flex items-baseline justify-between">
-        <span className={cn(MONO_LABEL, 'text-fog')}>{readout.stat.label}</span>
-        {readout.stat.verified && <span className={cn(MONO_LABEL, 'text-chalk')}>Verified</span>}
+        <span className={cn(MONO_LABEL, 'text-zinc')}>{readout.stat.label}</span>
+        {readout.stat.verified && <span className={cn(MONO_LABEL, 'text-court')}>Verified</span>}
       </div>
       <p className="text-brand mt-4 font-mono text-6xl tracking-tight md:text-7xl">
         {readout.stat.value}
@@ -292,7 +292,7 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
         <span
           className={cn(
             MONO_LABEL,
-            'text-fog absolute top-5 -translate-x-1/2 text-[0.6rem] whitespace-nowrap',
+            'text-zinc absolute top-5 -translate-x-1/2 text-[0.6rem] whitespace-nowrap',
             MARKER_LEFT[readout.scale.markerPercent]
           )}
         >
@@ -303,7 +303,7 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
       <dl className="mt-8 grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-2">
         {readout.fields.map((field) => (
           <div key={field.label}>
-            <dt className={cn(MONO_LABEL, 'text-fog text-[0.65rem]')}>{field.label}</dt>
+            <dt className={cn(MONO_LABEL, 'text-zinc text-[0.65rem]')}>{field.label}</dt>
             <dd className="mt-1.5 font-mono text-sm tracking-caps text-white uppercase">
               {field.value}
             </dd>
@@ -318,8 +318,8 @@ const SigningBottomBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] 
   <footer className="border-t border-white/15">
     <Container className="flex flex-col items-center gap-2.5 py-8 text-center md:flex-row md:justify-between md:gap-4 md:py-6 md:text-left">
       <Logo tone="light" className="h-5" />
-      <span className={cn(MONO_LABEL, 'text-fog')}>{chrome.designedLine}</span>
-      <span className={cn(MONO_LABEL, 'text-fog')}>{chrome.existsLine}</span>
+      <span className={cn(MONO_LABEL, 'text-zinc')}>{chrome.designedLine}</span>
+      <span className={cn(MONO_LABEL, 'text-zinc')}>{chrome.existsLine}</span>
     </Container>
   </footer>
 );
@@ -332,7 +332,7 @@ const SigningBottomBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] 
  * renders its own top/bottom bars and `main` landmark.
  */
 export const AthleteSigning = ({ content }: { content: AthleteSigningContent }) => (
-  <div className="bg-carbon text-chalk flex min-h-svh flex-col bg-[image:repeating-linear-gradient(to_right,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px),repeating-linear-gradient(to_bottom,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px)]">
+  <div className="bg-carbon text-court flex min-h-svh flex-col bg-[image:repeating-linear-gradient(to_right,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px),repeating-linear-gradient(to_bottom,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px)]">
     <SigningTopBar chrome={content.chrome} />
     <main className="flex-1">
       <SigningHero content={content} />

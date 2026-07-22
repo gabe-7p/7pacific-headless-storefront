@@ -1,7 +1,7 @@
 /**
  * Care-instruction icons for the PDP TECH STACK section — path data extracted
  * verbatim from the live theme's inline SVGs (24×24). Stroked in Concrete via
- * `text-concrete` + currentColor — the PDP's one Ember moment is Add to Cart
+ * `text-graphite` + currentColor — the PDP's one Ember moment is Add to Cart
  * (7PA-230), so utility iconography stays on the neutral palette.
  * Keyed by the normalized instruction label from the `custom.tech_stack`
  * metafield's `care` array; unknown labels render no icon (text-only).
@@ -29,7 +29,7 @@ export const CareIcon = ({ label }: { label: string }) => {
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden
-      className="text-concrete shrink-0"
+      className="text-graphite shrink-0"
     >
       <path
         d={path}

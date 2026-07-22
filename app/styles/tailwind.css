@@ -118,36 +118,45 @@
   --tracking-caps: 0.08em; /* caps UI: nav, CTAs, edition numbers */
   --tracking-spec: 0.1em; /* JetBrains Mono spec strips */
 
-  /* The six-color brand palette (7PA-229, Brand Guidelines → 03 Color
-   * Palette), with target usage weights: Carbon 49% · Storm 22% · Concrete
-   * 11% · Chalk 9% · Fog 4% · Ember 5%. Ember is strictly rationed — it
-   * appears ONCE per page (enforced surface-by-surface in 7PA-230). New
-   * surfaces must use these names; never invent a hex. */
-  --color-carbon: #0f1518; /* near-black anchor — dominant dark surface */
-  --color-storm: #22303c; /* deep technical navy backing Carbon */
-  --color-concrete: #5c6670; /* urban mid-gray ("Mountain Mist") */
-  --color-chalk: #e8e9ea; /* cool off-white — never warm cream */
-  --color-fog: #9ca3a6; /* light urban gray */
-  --color-ember: #d04d2a; /* the earned moment — 5%, once per page */
+  /* The "Meridian on Carbon" palette (Brand Guidelines → 03 Color Palette,
+   * rev. Jul 2026), with target usage weights: Court 50% · Carbon 27% ·
+   * Graphite 10% · Zinc 8% · Ember 5%. Graphite carries ALL secondary text —
+   * opacity-faded Carbon is banned. Zinc is structure only (hairlines,
+   * dividers, borders, disabled) — never type on a light field. Ember is
+   * strictly rationed — it appears ONCE per page (enforced surface-by-surface
+   * in 7PA-230). New surfaces must use these names; never invent a hex. */
+  --color-court: #f4f5f4; /* bright gallery white field — never warm cream */
+  --color-carbon: #0f1518; /* near-black anchor with a faint blue undertone */
+  --color-graphite: #4e5052; /* ALL secondary text, captions, mono attributes */
+  --color-zinc: #c9cacb; /* hairlines, dividers, borders, disabled — never type */
+  --color-ember: #c8431e; /* the earned moment — clay court, not traffic cone */
 
-  /* Semantic surface tokens, mapped onto the palette above. */
-  --color-announcement: #0f1518; /* Carbon */
-  --color-announcement-text: #e8e9ea; /* Chalk */
-  --color-nav: #e8e9ea; /* Chalk — solid header background */
-  --color-nav-text: #0f1518; /* Carbon */
-  --color-footer: #0f1518; /* Carbon */
-  --color-footer-text: #e8e9ea; /* Chalk */
-  --color-brand: #d04d2a; /* Ember — primary CTA / accent */
-  --color-brand-text: #e8e9ea; /* Chalk */
-  --color-savings: #d04d2a; /* Ember — no separate sale red; we don't run sales */
-  --color-cart-dot: #22303c; /* Storm — the header renders on every page, and Ember is rationed to one moment per page (7PA-230) */
-  --color-border-subtle: color-mix(in srgb, #9ca3a6 40%, transparent); /* Fog @ 40% */
+  /* Night Session (dark surfaces only — drops, campaigns, night content):
+   * Carbon becomes the field, Court becomes type, and these two shift. */
+  --color-graphite-night: #363a3f; /* hairlines/structure on a Carbon field */
+  --color-ember-night: #e14e23; /* Ember burns brighter on Carbon */
+
+  /* Semantic surface tokens — chained onto the palette above so every hex
+   * lives exactly once. */
+  --color-announcement: var(--color-carbon);
+  --color-announcement-text: var(--color-court);
+  --color-nav: var(--color-court); /* solid header background stays light */
+  --color-nav-text: var(--color-carbon);
+  --color-footer: var(--color-carbon);
+  --color-footer-text: var(--color-court);
+  --color-brand: var(--color-ember); /* primary CTA / accent */
+  --color-brand-text: var(--color-court);
+  --color-savings: var(--color-ember); /* no separate sale red; we don't run sales */
+  --color-cart-dot: var(
+    --color-carbon
+  ); /* the header renders on every page, and Ember is rationed to one moment per page (7PA-230) */
+  --color-border-subtle: var(--color-zinc); /* the hairline color */
 
   /* Homepage tenet cards */
-  --color-tenet-dark: #22303c; /* Storm */
-  --color-tenet-dark-text: #e8e9ea; /* Chalk */
-  --color-tenet-light: #e8e9ea; /* Chalk */
-  --color-tenet-light-text: #0f1518; /* Carbon */
+  --color-tenet-dark: var(--color-carbon);
+  --color-tenet-dark-text: var(--color-court);
+  --color-tenet-light: var(--color-court);
+  --color-tenet-light-text: var(--color-carbon);
 
   /* Announcement-bar scrolling marquee (track is duplicated, so -50% loops). */
   --animate-marquee: marquee 45s linear infinite;
@@ -228,7 +237,7 @@
 
   hr {
     border-bottom: none;
-    border-top: 1px solid #000;
+    border-top: 1px solid var(--color-zinc);
     margin: 0;
   }
 
@@ -252,7 +261,7 @@
 
   input {
     border-radius: 4px;
-    border: 1px solid #000;
+    border: 1px solid var(--color-zinc);
     font-size: 1rem;
     margin-bottom: 0.5rem;
     margin-top: 0.25rem;
@@ -279,7 +288,7 @@
   }
 
   code {
-    background: #ddd;
+    background: var(--color-zinc);
     border-radius: 4px;
     font-family: monospace;
     padding: 0.25rem;
@@ -356,7 +365,7 @@
   }
 
   .order-search-fieldset {
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--color-zinc);
     border-radius: 4px;
     padding: 1rem;
   }
@@ -382,7 +391,7 @@
   .order-search-input {
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--color-zinc);
     border-radius: 4px;
     font-size: 1rem;
   }
