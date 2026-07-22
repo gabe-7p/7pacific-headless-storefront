@@ -58,7 +58,7 @@ const Collection = () => {
           {collection.title}
         </Heading>
         {collection.description && (
-          <p className="mt-2 max-w-2xl text-sm text-neutral-600">{collection.description}</p>
+          <p className="mt-2 max-w-2xl text-sm text-graphite">{collection.description}</p>
         )}
       </header>
 

@@ -48,10 +48,10 @@ export const ProductCard = ({
     // sets the native `translate` property, which a `transform` transition
     // list won't animate (the lift would snap).
     <div className="group flex flex-col transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
-      <div className="relative overflow-hidden bg-neutral-100">
+      <div className="relative overflow-hidden bg-court">
         <Link to={to} prefetch="intent" className="block" aria-label={title}>
           {label && (
-            <span className="absolute top-0 right-0 z-10 bg-black px-1.5 py-0.5 text-[8px] font-semibold tracking-wide text-white uppercase">
+            <span className="absolute top-0 right-0 z-10 bg-carbon px-1.5 py-0.5 text-[8px] font-semibold tracking-wide text-court uppercase">
               {label}
             </span>
           )}

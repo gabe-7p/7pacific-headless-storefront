@@ -106,7 +106,7 @@ describe('ColorSwatches cascade mode (card hover)', () => {
   it('uses the card swatch styling (white border; neutral border keeps White visible)', () => {
     renderSwatches({ cascade: true });
     expect(screen.getByRole('link', { name: 'Mint' }).className).toContain('border-white');
-    expect(screen.getByRole('link', { name: 'White' }).className).toContain('border-neutral-300');
+    expect(screen.getByRole('link', { name: 'White' }).className).toContain('border-zinc');
   });
 });
 
