@@ -16,11 +16,11 @@ export const EnvironmentalHero = ({
   image: MetafieldImage;
   caption?: string | null;
 }) => (
-  <section className="bg-white">
+  <section className="bg-court">
     <Image data={image} sizes="100vw" className="h-auto w-full object-cover" />
     {caption && (
       <Container>
-        <p className="tracking-spec py-3 font-mono text-xs text-neutral-500 uppercase">{caption}</p>
+        <p className="tracking-spec py-3 font-mono text-xs text-graphite uppercase">{caption}</p>
       </Container>
     )}
   </section>

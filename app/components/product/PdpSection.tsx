@@ -14,7 +14,7 @@ export const PdpSection = ({
   children: ReactNode;
   className?: string;
 }) => (
-  <section className={cn('bg-neutral-900 py-14 text-white md:py-20', className)}>
+  <section className={cn('bg-carbon py-14 text-court md:py-20', className)}>
     <Container>{children}</Container>
   </section>
 );

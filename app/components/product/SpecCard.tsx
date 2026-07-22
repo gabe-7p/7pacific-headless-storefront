@@ -26,8 +26,8 @@ export const SpecCard = ({ data }: { data: SpecCardData }) => {
     <dl className="border-border-subtle divide-border-subtle divide-y border-y font-mono text-[10px]">
       {rows.map(([label, key]) => (
         <div key={key} className="grid grid-cols-[4.5rem_1fr] items-baseline gap-x-3 py-1">
-          <dt className="tracking-spec text-neutral-500 uppercase">{label}</dt>
-          <dd className="leading-snug text-neutral-900">{data[key]}</dd>
+          <dt className="tracking-spec text-graphite uppercase">{label}</dt>
+          <dd className="leading-snug text-carbon">{data[key]}</dd>
         </div>
       ))}
     </dl>

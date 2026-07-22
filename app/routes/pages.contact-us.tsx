@@ -46,7 +46,7 @@ export async function action({ request }: Route.ActionArgs) {
 }
 
 const fieldClass =
-  'w-full border border-border-subtle bg-white px-4 py-3 text-sm focus:border-black focus:outline-none';
+  'w-full border border-border-subtle bg-court px-4 py-3 text-sm focus:border-carbon focus:outline-none';
 
 const Contact = () => {
   const { page } = useLoaderData<typeof loader>();

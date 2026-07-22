@@ -40,7 +40,7 @@ const MARKER_LEFT: Record<ScaleMarkerPercent, string> = {
 };
 
 const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) => (
-  <header className="border-b border-white/15">
+  <header className="border-b border-graphite-night">
     <Container className="flex h-(--header-h) items-center justify-between gap-4">
       <Link prefetch="intent" to="/" aria-label={BRAND.name}>
         <Logo tone="light" className="h-5 md:h-6" />
@@ -54,7 +54,7 @@ const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) 
         {chrome.privacy} · {chrome.edition}
       </span>
     </Container>
-    <Container className="border-t border-white/15 py-3 md:hidden">
+    <Container className="border-t border-graphite-night py-3 md:hidden">
       <span className={cn(MONO_LABEL, 'text-zinc flex items-center gap-2.5')}>
         <span aria-hidden className="border-zinc/60 size-2.5 border" />
         {chrome.urlLine}
@@ -95,7 +95,7 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
         <Heading
           as="h1"
           size="none"
-          className="mt-5 text-[2.9rem] leading-[1.02] tracking-hero text-white md:mt-8 md:text-6xl lg:text-7xl"
+          className="mt-5 text-[2.9rem] leading-[1.02] tracking-hero text-court md:mt-8 md:text-6xl lg:text-7xl"
         >
           {content.headline.lead} <span className="text-zinc block">{content.headline.name}</span>
         </Heading>
@@ -112,9 +112,7 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
       </div>
 
       <div className="md:col-start-1 md:row-start-2 md:self-start">
-        <p className="text-court/80 max-w-[44ch] text-lg leading-relaxed md:text-xl">
-          {content.body}
-        </p>
+        <p className="text-court max-w-[44ch] text-lg leading-relaxed md:text-xl">{content.body}</p>
         <p className={cn(MONO_LABEL, 'text-zinc mt-8 max-md:hidden')}>{content.signedLine}</p>
       </div>
     </div>
@@ -123,9 +121,9 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
 
 const SectionLabel = ({ number, title }: { number: string; title: string }) => (
   <div className="flex items-center gap-3">
-    <span className="font-display text-zinc/70 text-2xl font-medium">{number}</span>
+    <span className="font-display text-zinc text-2xl font-medium">{number}</span>
     <span className={cn(MONO_LABEL, 'text-court')}>{title}</span>
-    <span aria-hidden className="ml-2 h-px w-16 bg-white/15 md:w-24" />
+    <span aria-hidden className="ml-2 h-px w-16 bg-graphite-night md:w-24" />
   </div>
 );
 
@@ -179,12 +177,12 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
     >
       {isPlaying ? (
         // Stop glyph — filled square, mirrors the mockup's marker.
-        <span aria-hidden className="size-4 bg-white" />
+        <span aria-hidden className="size-4 bg-court" />
       ) : (
         // Play glyph — border-drawn triangle, nudged right to sit optically centered.
         <span
           aria-hidden
-          className="ml-1 border-y-[9px] border-l-[14px] border-y-transparent border-l-white"
+          className="ml-1 border-y-[9px] border-l-[14px] border-y-transparent border-l-court"
         />
       )}
     </span>
@@ -285,7 +283,7 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
         </div>
         <span
           className={cn(
-            'absolute top-0 h-4 w-0.5 -translate-x-1/2 bg-white',
+            'absolute top-0 h-4 w-0.5 -translate-x-1/2 bg-court',
             MARKER_LEFT[readout.scale.markerPercent]
           )}
         />
@@ -304,7 +302,7 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
         {readout.fields.map((field) => (
           <div key={field.label}>
             <dt className={cn(MONO_LABEL, 'text-zinc text-[0.65rem]')}>{field.label}</dt>
-            <dd className="mt-1.5 font-mono text-sm tracking-caps text-white uppercase">
+            <dd className="mt-1.5 font-mono text-sm tracking-caps text-court uppercase">
               {field.value}
             </dd>
           </div>
@@ -315,7 +313,7 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
 );
 
 const SigningBottomBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) => (
-  <footer className="border-t border-white/15">
+  <footer className="border-t border-graphite-night">
     <Container className="flex flex-col items-center gap-2.5 py-8 text-center md:flex-row md:justify-between md:gap-4 md:py-6 md:text-left">
       <Logo tone="light" className="h-5" />
       <span className={cn(MONO_LABEL, 'text-zinc')}>{chrome.designedLine}</span>
@@ -337,7 +335,7 @@ export const AthleteSigning = ({ content }: { content: AthleteSigningContent }) 
     <main className="flex-1">
       <SigningHero content={content} />
       <Container>
-        <div className="border-t border-white/15" />
+        <div className="border-t border-graphite-night" />
       </Container>
       <Container className="py-10 md:py-16">
         <div className="grid gap-12 md:grid-cols-2 md:gap-10 lg:gap-16">

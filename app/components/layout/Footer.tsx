@@ -69,7 +69,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                 href="https://www.shopify.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs tracking-wide text-white/60 transition-opacity hover:opacity-80"
+                className="text-xs tracking-wide text-zinc transition-opacity hover:opacity-80"
               >
                 Powered by Shopify
               </a>
@@ -106,7 +106,7 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
   }, []);
 
   return (
-    <div className="border-t border-white/15 min-[769px]:border-t-0">
+    <div className="border-t border-graphite-night min-[769px]:border-t-0">
       <button
         type="button"
         onClick={() => collapsible && setOpen((prev) => !prev)}
@@ -132,7 +132,7 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
 const Newsletter = () => (
   <div className="min-[769px]:max-w-md">
     {/* Live footer copy and links are 10.2px. */}
-    <p className="text-[10.2px] text-white/80">{BRAND.newsletter.body}</p>
+    <p className="text-[10.2px] text-zinc">{BRAND.newsletter.body}</p>
     <NewsletterForm />
   </div>
 );
@@ -197,7 +197,7 @@ const FooterSupport = ({
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-white/70 transition-colors hover:text-white"
+            className="text-zinc transition-colors hover:text-court"
           >
             {item.title}
           </a>
@@ -206,7 +206,7 @@ const FooterSupport = ({
             key={item.id}
             to={url}
             prefetch="intent"
-            className="text-white/70 transition-colors hover:text-white"
+            className="text-zinc transition-colors hover:text-court"
           >
             {item.title}
           </NavLink>

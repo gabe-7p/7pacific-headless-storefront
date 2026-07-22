@@ -73,7 +73,7 @@ export const ColorSwatches = ({
             {cascade && (
               // Color-name pill above the swatch (live's .color-swatch-tooltip).
               <span
-                className="bg-graphite after:border-t-graphite pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-[2px] px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:content-['']"
+                className="bg-graphite after:border-t-graphite pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-[2px] px-2 py-1 text-xs whitespace-nowrap text-court opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:content-['']"
                 aria-hidden
               >
                 {swatch.name}
@@ -89,10 +89,10 @@ export const ColorSwatches = ({
                 'block rounded-full',
                 cascade
                   ? // Live card swatch: 24px, white border, black outline on
-                    // hover/active (border-neutral-300 keeps White visible).
+                    // hover/active (border-zinc keeps White visible).
                     cn(
                       'size-6 border transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(0,0,0,1)]',
-                      swatch.name === 'White' ? 'border-neutral-300' : 'border-white',
+                      swatch.name === 'White' ? 'border-zinc' : 'border-white',
                       isActive && 'shadow-[0_0_0_1px_rgba(0,0,0,1)]'
                     )
                   : cn(

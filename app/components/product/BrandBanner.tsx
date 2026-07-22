@@ -14,7 +14,7 @@ export const BrandBanner = () => {
     // Live's `.bottom-product-photography`: inside page-width (not full-bleed)
     // with 20px / 60px vertical padding, so the row breathes against the dark
     // Tech Stack above and the recommendations below.
-    <section className="bg-white py-5 text-neutral-900 md:py-15">
+    <section className="bg-court py-5 text-carbon md:py-15">
       <Container>
         {/* Bounded rather than natural height: contained, the source images are
             tall enough that `h-auto` let this one dominate the page. */}
@@ -39,7 +39,7 @@ export const BrandBanner = () => {
                   </span>
                 ))}
               </Heading>
-              <p className="mx-auto mt-4 max-w-sm text-sm text-neutral-600">{body}</p>
+              <p className="mx-auto mt-4 max-w-sm text-sm text-graphite">{body}</p>
               {/* Secondary — the PDP's one Ember moment is Add to Cart (7PA-230). */}
               <Cta to={cta.href} className="mt-6">
                 {cta.label}

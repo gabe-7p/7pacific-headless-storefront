@@ -15,7 +15,7 @@ export const ProductPrice = ({
       {compareAtPrice ? (
         <div className="product-price-on-sale">
           {price ? <Price data={price} /> : null}
-          <s className="text-neutral-400">
+          <s className="text-graphite">
             <Price data={compareAtPrice} />
           </s>
         </div>

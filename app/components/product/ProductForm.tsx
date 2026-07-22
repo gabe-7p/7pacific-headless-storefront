@@ -23,7 +23,7 @@ const SIZE_CELL =
   'flex-1 border py-3 text-center text-[9.6px] font-semibold tracking-[0.3em] uppercase';
 
 const OptionLabel = ({ children }: { children: string }) => (
-  <Eyebrow className="mb-2 text-neutral-500">{children}</Eyebrow>
+  <Eyebrow className="mb-2 text-graphite">{children}</Eyebrow>
 );
 
 /**
@@ -48,9 +48,7 @@ export const ProductForm = ({
       <div>
         <OptionLabel>Size</OptionLabel>
         <div className="flex w-full">
-          <span
-            className={cn(SIZE_CELL, 'cursor-default border-neutral-900 bg-neutral-900 text-white')}
-          >
+          <span className={cn(SIZE_CELL, 'cursor-default border-carbon bg-carbon text-court')}>
             One Size
           </span>
         </div>
@@ -89,8 +87,8 @@ export const ProductForm = ({
                       // border paints over this one's darkened right border on
                       // hover — lift the hovered cell like the selected one.
                       selected
-                        ? 'z-10 border-neutral-900 bg-neutral-900 text-white'
-                        : 'border-neutral-300 bg-white text-neutral-900 hover:z-10 hover:border-neutral-900 focus-visible:z-10',
+                        ? 'z-10 border-carbon bg-carbon text-court'
+                        : 'border-zinc bg-court text-carbon hover:z-10 hover:border-carbon focus-visible:z-10',
                       !available && 'opacity-40',
                       isSingle && 'cursor-default'
                     )}

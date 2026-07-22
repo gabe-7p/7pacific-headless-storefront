@@ -44,7 +44,7 @@ export const CartLineItem = ({
               height={96}
               loading="lazy"
               width={80}
-              className="h-24 w-20 bg-neutral-100 object-cover"
+              className="h-24 w-20 bg-court object-cover"
             />
           </Link>
         )}
@@ -59,11 +59,10 @@ export const CartLineItem = ({
             {product.title}
           </Link>
           {selectedOptions.length > 0 && (
-            <ul className="mt-1 text-sm text-neutral-700">
+            <ul className="mt-1 text-sm text-carbon">
               {selectedOptions.map((option) => (
                 <li key={option.name}>
-                  <span className="font-semibold text-neutral-900">{option.name}:</span>{' '}
-                  {option.value}
+                  <span className="font-semibold text-carbon">{option.name}:</span> {option.value}
                 </li>
               ))}
             </ul>
@@ -158,7 +157,7 @@ const CartLineRemoveButton = ({
       <button
         disabled={disabled}
         type="submit"
-        className="mt-2 text-xs text-neutral-500 transition-colors hover:text-black"
+        className="mt-2 text-xs text-graphite transition-colors hover:text-carbon"
       >
         Remove
       </button>
