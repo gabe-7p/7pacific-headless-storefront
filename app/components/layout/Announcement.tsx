@@ -14,7 +14,7 @@ export const Announcement = () => {
   // Spec-strip type (7PA-242): JetBrains Mono caps at +0.1em — the brand's
   // signature utility device.
   const set = Array.from({ length: 8 }, (_, i) => (
-    <span key={i} className="tracking-spec px-8 font-mono text-[10px] uppercase whitespace-nowrap">
+    <span key={i} className="tracking-spec px-8 font-mono text-[11px] uppercase whitespace-nowrap">
       {message}
     </span>
   ));

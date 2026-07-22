@@ -10,8 +10,8 @@ import { cn } from '~/lib/cn';
  * also set line-height, overriding the one on the Heading brand variant.
  */
 const SECTION_HEADING = 'text-[1.8rem] leading-[1.1] md:text-[1.92rem] xl:text-[2.5rem]';
-/** Live body copy: 16px, 1.4 line-height. */
-const BODY_COPY = 'text-base leading-[1.4] text-carbon';
+/** Body copy: 16px at the brand’s 1.55 body line-height (guideline floor 1.55–1.65). */
+const BODY_COPY = 'text-base leading-[1.55] text-carbon';
 
 /**
  * Our Story page — hero, mission, and founder story. Presentational: renders the

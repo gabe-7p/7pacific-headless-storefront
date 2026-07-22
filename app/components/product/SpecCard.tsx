@@ -23,7 +23,7 @@ export const SpecCard = ({ data }: { data: SpecCardData }) => {
   return (
     // Compact by design: seven rows sit inside the 500px buy card, so the
     // device stays a reference strip rather than dominating the card.
-    <dl className="border-border-subtle divide-border-subtle divide-y border-y font-mono text-[10px]">
+    <dl className="border-border-subtle divide-border-subtle divide-y border-y font-mono text-[11px]">
       {rows.map(([label, key]) => (
         <div key={key} className="grid grid-cols-[4.5rem_1fr] items-baseline gap-x-3 py-1">
           <dt className="tracking-spec text-graphite uppercase">{label}</dt>

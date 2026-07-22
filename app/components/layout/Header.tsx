@@ -112,7 +112,7 @@ export const HeaderMenu = ({
         isMobile
           ? 'border-border-subtle mt-[68px] flex flex-col border-t'
           : // Collapses at live's Impulse breakpoint (769px), not Tailwind's
-            // lg — the 11px nav fits well before 1024.
+            // lg — the 12px nav fits well before 1024.
             'hidden items-center gap-5 min-[769px]:flex'
       )}
       role="navigation"
@@ -135,7 +135,7 @@ export const HeaderMenu = ({
                 ? 'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
                 : // Live's underline wipe (.site-nav__link--underline:after):
                   // a 2px rule that grows left-to-right over 500ms on hover.
-                  'relative py-1 text-[11px] after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:content-[""] hover:after:scale-x-100 motion-reduce:after:transition-none'
+                  'relative py-1 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:content-[""] hover:after:scale-x-100 motion-reduce:after:transition-none'
             )}
           >
             {item.title}
