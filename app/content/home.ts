@@ -36,6 +36,24 @@ export const HOME_HERO = {
   },
 } as const;
 
+/**
+ * The values marquee under the hero (7PA-300). Working-voice reminders, not
+ * the internal values list verbatim — the Strategy Canvas calls publishing
+ * those "wall art". Each line passed the Voice Gate (place/number cue, no
+ * banned words, deadpan). ALL CAPS via CSS; the chevron separator is
+ * presentation and lives in the component.
+ */
+export const HOME_MARQUEE = {
+  items: [
+    'Show up twice',
+    'Fog until noon',
+    'Mile 12 is the point',
+    'No crowd at dawn',
+    'The back half',
+    'Earned, not given',
+  ],
+} as const;
+
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
   // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).

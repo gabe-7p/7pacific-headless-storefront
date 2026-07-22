@@ -5,6 +5,7 @@ import { CoreValues } from '~/components/home/CoreValues';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
+import { ValuesMarquee } from '~/components/home/ValuesMarquee';
 import { HOME_HERO } from '~/content/home';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
@@ -41,6 +42,8 @@ const Homepage = () => {
   return (
     <MotionProvider>
       <Hero />
+      {/* At the fold like the hero — rendered eagerly, no scroll-reveal gate. */}
+      <ValuesMarquee />
       {/* First Drop is the primary above/at-the-fold content — render it
           immediately (no scroll-reveal gate) so it's painted on load rather
           than staying invisible until 30% scrolls into view. The lower

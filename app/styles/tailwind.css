@@ -161,6 +161,21 @@
     }
   }
 
+  /* Homepage values marquee: a slower drift, anchored mid-track — the track
+     holds THREE copies of the set (vs. the announcement bar's two) so the
+     scroll-reactive shift can nudge it either direction without exposing an
+     edge; one full loop travels exactly one set width. */
+  --animate-marquee-slow: marquee-center 60s linear infinite;
+
+  @keyframes marquee-center {
+    from {
+      transform: translateX(-33.333%);
+    }
+    to {
+      transform: translateX(-66.667%);
+    }
+  }
+
   /* Product-card swatch cascade (live theme's cascadeIn) — swatches rise in
      one-by-one; per-swatch stagger comes from animation-delay at the call site. */
   --animate-cascade-in: cascade-in 0.2s ease forwards;
