@@ -163,7 +163,8 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         <Meta />
         <Links />
       </head>
-      <body className="font-sans text-nav-text antialiased">
+      {/* bg-court: the brand's Court field — the page ground per Meridian on Carbon. */}
+      <body className="bg-court font-sans text-nav-text antialiased">
         {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
@@ -240,7 +241,7 @@ export const ErrorBoundary = () => {
         {isNotFound ? MICROCOPY.notFound : 'Something went wrong'}
       </Heading>
       {!isNotFound && (
-        <p className="mt-4 max-w-md text-sm text-neutral-700">
+        <p className="mt-4 max-w-md text-sm text-carbon">
           An unexpected error occurred. Please try again.
         </p>
       )}
@@ -254,7 +255,7 @@ export const ErrorBoundary = () => {
         </Cta>
       )}
       {!isNotFound && errorMessage && (
-        <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-neutral-400">
+        <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-graphite">
           {errorMessage}
         </pre>
       )}

@@ -22,48 +22,53 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* shadcn/ui base color: neutral. These feed the primitives in app/components/ui/. */
+/* shadcn/ui base variables, aligned to the Meridian on Carbon brand palette
+ * (values reference the brand tokens defined in the @theme block below) so the
+ * generated primitives in app/components/ui/ sit on the same field as the rest
+ * of the site. --secondary/--muted/--accent are a Zinc-into-Court mix so
+ * ghost/hover states stay visible on a Court page field. */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: var(--color-court);
+  --foreground: var(--color-carbon);
+  --card: var(--color-court);
+  --card-foreground: var(--color-carbon);
+  --popover: var(--color-court);
+  --popover-foreground: var(--color-carbon);
+  --primary: var(--color-carbon);
+  --primary-foreground: var(--color-court);
+  --secondary: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
+  --secondary-foreground: var(--color-carbon);
+  --muted: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
+  --muted-foreground: var(--color-graphite);
+  --accent: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
+  --accent-foreground: var(--color-carbon);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: var(--color-zinc);
+  --input: var(--color-zinc);
+  --ring: var(--color-graphite);
 }
 
+/* Night Session: Carbon becomes the field, Court becomes type. */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: var(--color-carbon);
+  --foreground: var(--color-court);
+  --card: var(--color-carbon);
+  --card-foreground: var(--color-court);
+  --popover: var(--color-carbon);
+  --popover-foreground: var(--color-court);
+  --primary: var(--color-court);
+  --primary-foreground: var(--color-carbon);
+  --secondary: var(--color-graphite-night);
+  --secondary-foreground: var(--color-court);
+  --muted: var(--color-graphite-night);
+  --muted-foreground: var(--color-zinc);
+  --accent: var(--color-graphite-night);
+  --accent-foreground: var(--color-court);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --border: var(--color-graphite-night);
+  --input: var(--color-graphite-night);
+  --ring: var(--color-zinc);
 }
 
 @theme inline {
@@ -151,11 +156,15 @@
     --color-carbon
   ); /* the header renders on every page, and Ember is rationed to one moment per page (7PA-230) */
   --color-border-subtle: var(--color-zinc); /* the hairline color */
+  /* Subtle Zinc-tinted panel for surfaces that must read as a card ON the
+   * Court page field (light tenet card, desktop cart summary). Composed from
+   * palette tokens — never invent a hex. */
+  --color-panel: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
 
   /* Homepage tenet cards */
   --color-tenet-dark: var(--color-carbon);
   --color-tenet-dark-text: var(--color-court);
-  --color-tenet-light: var(--color-court);
+  --color-tenet-light: var(--color-panel);
   --color-tenet-light-text: var(--color-carbon);
 
   /* Announcement-bar scrolling marquee (track is duplicated, so -50% loops). */
