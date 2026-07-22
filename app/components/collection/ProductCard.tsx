@@ -48,10 +48,10 @@ export const ProductCard = ({
     // sets the native `translate` property, which a `transform` transition
     // list won't animate (the lift would snap).
     <div className="group flex flex-col transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
-      <div className="relative overflow-hidden bg-court">
+      <div className="relative overflow-hidden bg-field">
         <Link to={to} prefetch="intent" className="block" aria-label={title}>
           {label && (
-            <span className="absolute top-0 right-0 z-10 bg-carbon px-1.5 py-0.5 text-[8px] font-semibold tracking-wide text-court uppercase">
+            <span className="absolute top-0 right-0 z-10 bg-field-night px-1.5 py-0.5 text-[8px] font-semibold tracking-wide text-ink-night uppercase">
               {label}
             </span>
           )}
@@ -95,7 +95,7 @@ export const ProductCard = ({
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
             separator), Carbon at 80%, price lives here in mono. The edition
             device (7PA-246) leads it, carrying its own status color. */}
-        <span className="text-graphite tracking-spec font-mono text-[11px] uppercase">
+        <span className="text-support tracking-spec font-mono text-[11px] uppercase">
           <EditionTag
             number={product.editionNumber?.value}
             status={product.editionStatus?.value}

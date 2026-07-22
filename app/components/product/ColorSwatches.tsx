@@ -72,8 +72,11 @@ export const ColorSwatches = ({
           >
             {cascade && (
               // Color-name pill above the swatch (live's .color-swatch-tooltip).
+              // Raw palette (bg-graphite) by design: the pill is specifically a
+              // Graphite chip, not a themed surface — like the functional
+              // border-zinc/border-white swatch frames below.
               <span
-                className="bg-graphite after:border-t-graphite pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-[2px] px-2 py-1 text-xs whitespace-nowrap text-court opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:content-['']"
+                className="bg-graphite after:border-t-graphite pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-[2px] px-2 py-1 text-xs whitespace-nowrap text-ink-night opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:content-['']"
                 aria-hidden
               >
                 {swatch.name}

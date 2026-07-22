@@ -141,6 +141,19 @@
   --color-graphite-night: #363a3f; /* hairlines/structure on a Carbon field */
   --color-ember-night: #e14e23; /* Ember burns brighter on Carbon */
 
+  /* Role tokens — what a color MEANS, chained onto the palette above.
+   * Components reference ROLES (bg-field, text-ink, text-support,
+   * border-subtle, + their -night variants on dark surfaces), never raw
+   * palette names — so a future palette revision edits this file only.
+   * Raw palette utilities are reserved for the rare case where the specific
+   * color is the point (justify with a comment at the call site). */
+  --color-field: var(--color-court); /* the light page ground & light surfaces */
+  --color-field-night: var(--color-carbon); /* dark sections, badges, fills */
+  --color-ink: var(--color-carbon); /* primary type & strong borders on light */
+  --color-ink-night: var(--color-court); /* primary type on dark */
+  --color-support: var(--color-graphite); /* secondary type on light */
+  --color-support-night: var(--color-zinc); /* secondary/muted type on dark */
+
   /* Semantic surface tokens — chained onto the palette above so every hex
    * lives exactly once. */
   --color-announcement: var(--color-carbon);
@@ -155,7 +168,8 @@
   --color-cart-dot: var(
     --color-carbon
   ); /* the header renders on every page, and Ember is rationed to one moment per page (7PA-230) */
-  --color-border-subtle: var(--color-zinc); /* the hairline color */
+  --color-border-subtle: var(--color-zinc); /* the hairline color on light */
+  --color-border-subtle-night: var(--color-graphite-night); /* hairlines on a Carbon field */
   /* Subtle Zinc-tinted panel for surfaces that must read as a card ON the
    * Court page field (light tenet card, desktop cart summary). Composed from
    * palette tokens — never invent a hex. */

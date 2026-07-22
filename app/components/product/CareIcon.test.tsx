@@ -18,7 +18,7 @@ describe('CareIcon', () => {
     // Stroke follows a palette token (currentColor), not a hardcoded hex
     // (7PA-229); Concrete, not Ember — the accent is rationed (7PA-230).
     expect(container.querySelector('svg path')?.getAttribute('stroke')).toBe('currentColor');
-    expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-graphite');
+    expect(container.querySelector('svg')?.getAttribute('class')).toContain('text-support');
   });
 
   it('matches labels case- and whitespace-insensitively', () => {

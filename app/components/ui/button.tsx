@@ -22,11 +22,11 @@ const buttonVariants = cva(
         // as the child), Court on Ember. On hover the chevron nudges right and
         // grows. At most one `brand` button may render per page.
         brand:
-          'bg-brand text-brand-text hover:bg-carbon hover:text-court rounded-[2px] font-mono font-medium uppercase tracking-caps [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+          'bg-brand text-brand-text hover:bg-field-night hover:text-ink-night rounded-[2px] font-mono font-medium uppercase tracking-caps [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
         // 7Pacific secondary CTA: same mono-caps + chevron device, Zinc border,
         // text in the current color so it adapts to dark or light surfaces.
         'brand-outline':
-          'border-zinc rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+          'border-border-subtle rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
         // 7Pacific text CTA: the quietest tier of the same device — no fill,
         // no border, just the mono-caps label + chevron. Callers flush it left
         // with `px-0` (size paddings would otherwise win the merge).

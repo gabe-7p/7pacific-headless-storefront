@@ -18,7 +18,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
     <Heading as="h3" variant="caps" size="none" className="mt-3 text-sm">
       {card.caption}
     </Heading>
-    <p className="mt-1 text-sm text-zinc">{card.subcaption}</p>
+    <p className="mt-1 text-sm text-support-night">{card.subcaption}</p>
   </div>
 );
 

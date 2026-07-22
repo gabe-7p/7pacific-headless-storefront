@@ -49,7 +49,7 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
         // positioned by the sticky topbar wrapper in PageLayout
         'transition-colors duration-300 ease-(--ease-brand)',
         overlay
-          ? 'bg-linear-to-b from-black/30 to-transparent text-court'
+          ? 'bg-linear-to-b from-black/30 to-transparent text-ink-night'
           : 'bg-nav text-nav-text shadow-sm'
       )}
     >
@@ -233,7 +233,7 @@ const CartBadge = ({ count }: { count: number | null }) => {
     >
       <BagIcon className="size-7" />
       {count !== null && count > 0 && (
-        <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-court">
+        <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-ink-night">
           {count}
         </span>
       )}

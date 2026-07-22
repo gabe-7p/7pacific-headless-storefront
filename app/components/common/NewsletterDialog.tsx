@@ -38,7 +38,7 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
             `sm:max-w-lg`, which a bare `max-w-*` can't override (different
             variant, so tailwind-merge keeps both and the sm one wins).
             rounded-[2px] is the brand radius live uses everywhere. */}
-        <DialogContent className="bg-carbon text-court grid gap-0 overflow-hidden rounded-[2px] border-graphite-night p-0 sm:max-w-3xl sm:grid-cols-2">
+        <DialogContent className="bg-field-night text-ink-night grid gap-0 overflow-hidden rounded-[2px] border-border-subtle-night p-0 sm:max-w-3xl sm:grid-cols-2">
           <img
             src={IMAGE}
             alt=""
@@ -50,7 +50,7 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
             <DialogTitle className="font-display tracking-header text-2xl font-medium uppercase">
               {BRAND.newsletter.heading}
             </DialogTitle>
-            <DialogDescription className="mt-3 text-sm text-zinc">
+            <DialogDescription className="mt-3 text-sm text-support-night">
               {BRAND.newsletter.body}
             </DialogDescription>
             <NewsletterForm />

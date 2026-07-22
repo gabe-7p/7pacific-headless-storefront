@@ -47,7 +47,7 @@ const Article = () => {
   return (
     <article className="pb-24">
       <Container className="py-16 md:py-24">
-        <p className="tracking-spec font-mono text-xs text-graphite uppercase">{meta}</p>
+        <p className="tracking-spec font-mono text-xs text-support uppercase">{meta}</p>
         <Heading as="h1" size="none" className="mt-3 max-w-[20ch] text-4xl md:text-6xl">
           {article.title}
         </Heading>

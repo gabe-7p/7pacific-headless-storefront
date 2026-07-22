@@ -11,7 +11,7 @@ import { cn } from '~/lib/cn';
  */
 const SECTION_HEADING = 'text-[1.8rem] leading-[1.1] md:text-[1.92rem] xl:text-[2.5rem]';
 /** Body copy: 16px at the brand’s 1.55 body line-height (guideline floor 1.55–1.65). */
-const BODY_COPY = 'text-base leading-[1.55] text-carbon';
+const BODY_COPY = 'text-base leading-[1.55] text-ink';
 
 /**
  * Our Story page — hero, mission, and founder story. Presentational: renders the
@@ -21,7 +21,7 @@ export const OurStory = () => {
   const { hero, mission, fitness, story } = OUR_STORY;
   return (
     <>
-      <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-carbon text-court">
+      <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-field-night text-ink-night">
         <img
           src={hero.backgroundImage}
           alt=""
@@ -43,7 +43,7 @@ export const OurStory = () => {
           {/* CTA band: full-width bars on mobile, content-sized on desktop.
               Renders through Cta so the chevron device and hover animation
               match every other CTA on the site. */}
-          <div className="border-t border-court/25">
+          <div className="border-t border-ink-night/25">
             <Container className="flex flex-col gap-5 py-5 lg:flex-row lg:py-4">
               {hero.ctas.map((cta) => (
                 <Cta
@@ -102,7 +102,7 @@ export const OurStory = () => {
       </Container>
 
       {/* Full-width black rule separating Fitness from Our Story (matches live). */}
-      <hr className="border-t border-carbon" />
+      <hr className="border-t border-ink" />
 
       {/* STORY — display heading above the grid (left on desktop, centered on
           tablet/mobile); small square image + four-paragraph founder story. */}
@@ -133,10 +133,10 @@ export const OurStory = () => {
               {/* Live signature: 22px brand-orange name over a 14px grey role. */}
               <div className="mt-6">
                 {/* Concrete, not Ember — the accent is rationed (7PA-230). */}
-                <p className="text-graphite text-[1.375rem] leading-[1.2] font-medium">
+                <p className="text-support text-[1.375rem] leading-[1.2] font-medium">
                   {story.founder.name}
                 </p>
-                <p className="mt-0.5 text-sm font-medium text-graphite">{story.founder.role}</p>
+                <p className="mt-0.5 text-sm font-medium text-support">{story.founder.role}</p>
               </div>
             </div>
           </div>
