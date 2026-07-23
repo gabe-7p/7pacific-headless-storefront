@@ -85,6 +85,19 @@ export type AthleteSigningContent = {
     scale: { markerPercent: ScaleMarkerPercent; markerLabel: string };
     fields: Array<{ label: string; value: string }>;
   };
+  /**
+   * The creator module — typed copy only (no CDN assets, no live API data).
+   * `handle` is the bare IG username; the component builds the profile URL.
+   */
+  instagram: {
+    number: string;
+    title: string;
+    handle: string;
+    tagline: string;
+    /** Recurring content series, rendered as SERIES 01/02/… rows. */
+    series: Array<string>;
+    linkLabel: string;
+  };
 };
 
 export const AMIR_SMITH = {
@@ -99,8 +112,9 @@ export const AMIR_SMITH = {
   transmissionLine: 'Los Angeles → San Francisco · 07.20.2026',
   eyebrowLine: 'Official // Athlete Signing · 07.20.2026',
   headline: { lead: 'Welcome to the team,', name: 'Amir Smith.' },
-  body: "This page was built once, for one person. No store, no links, nothing to buy. Just us, saying we're glad to have you on the team. \
-  You have a contagious energy and passion for everything you do. And you already train the way we build. Scroll down below to hear a personal message from us about why we're excited to have you on the team.",
+  body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. You bring a rare mix of passion, \
+  personality, and relentless energy. That’s exactly what we want this team to represent. You already train the way we build: with purpose, \
+  intensity, and zero shortcuts. Scroll down to watch a personal message from us about why we’re fired up to have you on the team.',
   signedLine: 'Signed · Status: Confirmed',
   hero: {
     modeLabel: 'Mode 01 · Action',
@@ -112,13 +126,13 @@ export const AMIR_SMITH = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until the real founder
-    // message is shot; swap src (and add captions) when it's uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // IMG-0004 in Shopify Files (portrait, 39s) — Shopify's 720p transcode;
+    // poster is the custom preview thumbnail set in Shopify admin.
+    src: 'https://cdn.shopify.com/videos/c/vp/4e4b180b71854aeb9ddb8aed88129177/4e4b180b71854aeb9ddb8aed88129177.HD-720p-4.5Mbps-89659002.mp4',
+    poster: `${CDN}/preview_images/Screenshot_2026-07-22_at_11.02.10_PM.png`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:39',
   },
   readout: {
     number: '02',
@@ -131,6 +145,14 @@ export const AMIR_SMITH = {
       { label: 'Reach', value: '375K' },
       { label: 'Series Tagline', value: 'How To Be a Professional Athlete' },
     ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'the.amirsmith',
+    tagline: 'Documenting the making of a professional athlete.',
+    series: ['How To Be a Professional Athlete'],
+    linkLabel: 'Open Instagram',
   },
 } satisfies AthleteSigningContent;
 
@@ -151,8 +173,10 @@ export const JOSH_WYCHE = {
   transmissionLine: 'Richmond → San Francisco · 07.20.2026',
   eyebrowLine: 'Official // Athlete Signing · 07.20.2026',
   headline: { lead: 'Welcome to the team,', name: 'Josh Wyche.' },
-  body: "This page was built once, for one person. No store, no links, nothing to buy. Just us, saying we're glad to have you on the team. \
-  Between Do Hard Things Friday and Recovery Sunday, you already train the way we build. Scroll down to hear a personal message about why we're excited it's you.",
+  body: 'It’s official. We made this page to welcome you to the 7Pacific Athlete Creator team. You bring the kind \
+   of energy people notice. There’s real passion behind everything you do, and that’s exactly what we want this team to represent. \
+    Between Do Hard Things Friday and Recovery Sunday, you already train the way we build. Consistently, intentionally, and always willing \
+    to put in the work. Scroll down for a personal message from us about why we’re so excited to have you on the team.',
   signedLine: 'Signed · Status: Confirmed',
   hero: {
     modeLabel: 'Mode 01 · Action',
@@ -164,13 +188,13 @@ export const JOSH_WYCHE = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until the real founder
-    // message is shot; swap src (and add captions) when it's uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // IMG-0006 in Shopify Files (portrait, 40s) — Shopify's 720p transcode;
+    // poster is the custom preview thumbnail set in Shopify admin.
+    src: 'https://cdn.shopify.com/videos/c/vp/b01389f236234449b4e379bb39620772/b01389f236234449b4e379bb39620772.HD-720p-4.5Mbps-89659216.mp4',
+    poster: `${CDN}/preview_images/Screenshot_2026-07-22_at_11.02.10_PM_0f4117ad-5577-48b3-8fee-1c8c77662097.png`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:40',
   },
   readout: {
     number: '02',
@@ -183,6 +207,14 @@ export const JOSH_WYCHE = {
       { label: 'Reach', value: '4.1K' },
       { label: 'Series Tagline', value: 'Recovery Sundays + Do Hard Things Fridays' },
     ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'joshwyche1',
+    tagline: 'Documenting life as a D1 athlete.',
+    series: ['Do Hard Things Friday', 'Recovery Sunday', 'A Day in the Life at VCU'],
+    linkLabel: 'Open Instagram',
   },
 } satisfies AthleteSigningContent;
 
