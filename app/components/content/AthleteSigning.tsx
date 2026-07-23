@@ -1,3 +1,4 @@
+import { ArrowUpRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
@@ -79,9 +80,13 @@ const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
     <span className={cn(MONO_LABEL, 'text-support-night absolute bottom-4 left-4 max-md:hidden')}>
       {hero.locationLine}
     </span>
-    <span className={cn(MONO_LABEL, 'text-support-night absolute right-4 bottom-4 max-md:hidden')}>
-      {hero.camLine}
-    </span>
+    {hero.camLine && (
+      <span
+        className={cn(MONO_LABEL, 'text-support-night absolute right-4 bottom-4 max-md:hidden')}
+      >
+        {hero.camLine}
+      </span>
+    )}
     <span className={cn(MONO_LABEL, 'text-support-night absolute right-4 bottom-4 md:hidden')}>
       {hero.locationLine}
     </span>
@@ -108,15 +113,17 @@ const SigningHero = ({ content }: { content: AthleteSigningContent }) => (
 
       <div className="md:col-start-2 md:row-span-2 md:row-start-1">
         <HeroPanel hero={content.hero} />
-        <div
-          className={cn(
-            MONO_LABEL,
-            'text-support-night mt-3 flex items-center justify-between md:hidden'
-          )}
-        >
-          <span>{content.hero.shotLine}</span>
-          <span>{content.hero.camLine}</span>
-        </div>
+        {(content.hero.shotLine || content.hero.camLine) && (
+          <div
+            className={cn(
+              MONO_LABEL,
+              'text-support-night mt-3 flex items-center justify-between md:hidden'
+            )}
+          >
+            {content.hero.shotLine && <span>{content.hero.shotLine}</span>}
+            {content.hero.camLine && <span>{content.hero.camLine}</span>}
+          </div>
+        )}
       </div>
 
       <div className="md:col-start-1 md:row-start-2 md:self-start">
@@ -152,14 +159,22 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  // The panel is portrait-native (phone-recorded founder messages). Portrait
+  // sources fill it; a landscape source letterboxes instead of cropping.
+  const [isPortraitSource, setIsPortraitSource] = useState(true);
   const hasVideo = video.src !== '';
+
+  const readMetadata = (el: HTMLVideoElement) => {
+    if (Number.isFinite(el.duration)) setDuration(el.duration);
+    setIsPortraitSource(el.videoHeight >= el.videoWidth);
+  };
 
   // The SSR'd <video> starts loading before React hydrates, so loadedmetadata
   // can fire before the onLoadedMetadata handler is attached — read it back.
   useEffect(() => {
     const el = videoRef.current;
-    if (el && el.readyState >= 1 && Number.isFinite(el.duration)) {
-      setDuration(el.duration);
+    if (el && el.readyState >= 1) {
+      readMetadata(el);
     }
   }, []);
 
@@ -203,7 +218,7 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
   return (
     <section>
       <SectionLabel number={video.number} title={video.title} />
-      <div className="relative mt-6 aspect-video overflow-hidden bg-white/[0.04]">
+      <div className="relative mt-6 aspect-9/16 overflow-hidden bg-white/4">
         {hasVideo && (
           <video
             ref={videoRef}
@@ -214,8 +229,11 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
             onPause={() => setIsPlaying(false)}
             onEnded={() => setIsPlaying(false)}
             onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-            onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
-            className="absolute inset-0 size-full object-cover"
+            onLoadedMetadata={(event) => readMetadata(event.currentTarget)}
+            className={cn(
+              'absolute inset-0 size-full',
+              isPortraitSource ? 'object-cover' : 'object-contain'
+            )}
           >
             <track kind="captions" srcLang="en" label="English" src={video.captions || undefined} />
           </video>
@@ -235,7 +253,8 @@ const FounderVideo = ({ video }: { video: AthleteSigningContent['founderVideo'] 
             {glyph}
           </span>
         )}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-3 p-4">
+        {/* Legibility scrim behind the controls — video runs under them. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-linear-to-t from-black/60 to-transparent p-4 pt-10">
           {hasVideo && (
             <input
               type="range"
@@ -326,6 +345,73 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
   </section>
 );
 
+/** Minimal IG glyph (lucide dropped brand icons) — camera outline + lens + dot. */
+const InstagramGlyph = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    aria-hidden
+    className={className}
+  >
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4.25" />
+    <circle cx="17.2" cy="6.8" r="0.5" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+/**
+ * "The Creator" module — typed copy only: handle, tagline, and the athlete's
+ * recurring series. No embeds, no CDN assets, no live API data (deliberate:
+ * IG profile iframes are login-walled/fragile and off-brand).
+ */
+const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['instagram'] }) => (
+  <section>
+    <SectionLabel number={instagram.number} title={instagram.title} />
+    <div className="border-border-subtle-night mt-6 border p-6 md:p-8">
+      <div className="flex items-center gap-3">
+        <InstagramGlyph className="text-support-night size-5" />
+        <span className="text-ink-night font-mono text-xl tracking-tight md:text-2xl">
+          @{instagram.handle}
+        </span>
+      </div>
+      <p className="text-support-night mt-3 max-w-[40ch] text-base leading-relaxed">
+        {instagram.tagline}
+      </p>
+
+      <dl className="mt-6 flex flex-col">
+        {instagram.series.map((name, index) => (
+          <div
+            key={name}
+            className="border-border-subtle-night flex items-baseline justify-between gap-4 border-t py-3"
+          >
+            <dt className={cn(MONO_LABEL, 'text-support-night shrink-0 text-[0.65rem]')}>
+              Series {String(index + 1).padStart(2, '0')}
+            </dt>
+            <dd className="text-ink-night text-right font-mono text-sm tracking-caps uppercase">
+              {name}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <a
+        href={`https://www.instagram.com/${instagram.handle}/`}
+        target="_blank"
+        rel="noreferrer"
+        className={cn(
+          MONO_LABEL,
+          'text-ink-night mt-6 inline-flex items-center gap-1.5 transition-opacity duration-300 ease-(--ease-brand) hover:opacity-70'
+        )}
+      >
+        {instagram.linkLabel}
+        <ArrowUpRight aria-hidden className="size-3.5" />
+      </a>
+    </div>
+  </section>
+);
+
 const SigningBottomBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) => (
   <footer className="border-t border-border-subtle-night">
     <Container className="flex flex-col items-center gap-2.5 py-8 text-center md:flex-row md:justify-between md:gap-4 md:py-6 md:text-left">
@@ -352,9 +438,14 @@ export const AthleteSigning = ({ content }: { content: AthleteSigningContent }) 
         <div className="border-t border-border-subtle-night" />
       </Container>
       <Container className="py-10 md:py-16">
-        <div className="grid gap-12 md:grid-cols-2 md:gap-10 lg:gap-16">
+        {/* The video column is sized for a portrait (phone) source; readout +
+            creator stack beside it to match its height. */}
+        <div className="grid gap-12 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:gap-10 lg:gap-16">
           <FounderVideo video={content.founderVideo} />
-          <PerformanceReadout readout={content.readout} />
+          <div className="flex flex-col gap-12 md:gap-10">
+            <PerformanceReadout readout={content.readout} />
+            <CreatorPanel instagram={content.instagram} />
+          </div>
         </div>
       </Container>
     </main>
