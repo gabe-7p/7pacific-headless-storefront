@@ -36,6 +36,45 @@ export const HOME_HERO = {
   },
 } as const;
 
+export type NameSpecCell = {
+  /** Product-family name, display face (ALL CAPS via CSS). */
+  name: string;
+  /** Mono spec segments — rendered joined with ' · ' (the locked separator). */
+  spec: ReadonlyArray<string>;
+  /** Price, appended as the spec line's final segment in its own style. */
+  price: string;
+  href: string;
+};
+
+/**
+ * The Name/Spec marquee banner directly below the hero (approved prototype,
+ * Jul 2026): the three live product families as name-over-spec cells plus one
+ * Shop All cell, auto-scrolling. Content is locked — exactly these four cells.
+ */
+export const HOME_NAME_SPEC_BANNER = {
+  cells: [
+    {
+      name: 'AIRRAIL™ 6" // Core Motion Training Short',
+      spec: ['Laser-cut vents', 'Thigh, waistband, core', 'Midnight', 'Mint', 'Mountain Mist'],
+      price: '$79',
+      href: STORE_LINKS.shopShortsMidnight,
+    },
+    {
+      name: 'TRACEFIBER™ // Performance Tech Tee',
+      spec: ['Integrated mesh', 'Shoulder darts', '5 colorways'],
+      price: '$74',
+      href: STORE_LINKS.shopShirtsMidnight,
+    },
+    {
+      name: 'MOTIONFRAME™ // Running Hat',
+      spec: ['Structured, weightless', 'Rear adjuster'],
+      price: '$42',
+      href: STORE_LINKS.shopHat,
+    },
+  ] satisfies ReadonlyArray<NameSpecCell>,
+  cta: { label: 'Shop All //', href: STORE_LINKS.shopAll },
+} as const;
+
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
   // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).

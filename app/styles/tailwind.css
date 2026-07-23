@@ -193,6 +193,20 @@
     }
   }
 
+  /* Homepage Name/Spec banner marquee — rightward (content moves left-to-right,
+     the opposite of the announcement bar). The cell set is duplicated in the
+     track, so -50% → 0 loops seamlessly. 50s is the approved speed. */
+  --animate-marquee-right: marquee-right 50s linear infinite;
+
+  @keyframes marquee-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
   /* Product-card swatch cascade (live theme's cascadeIn) — swatches rise in
      one-by-one; per-swatch stagger comes from animation-delay at the call site. */
   --animate-cascade-in: cascade-in 0.2s ease forwards;

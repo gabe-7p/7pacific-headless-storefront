@@ -4,6 +4,7 @@ import { FadeIn, MotionProvider } from '~/components/common/Motion';
 import { CoreValues } from '~/components/home/CoreValues';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
+import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
 import { HOME_HERO } from '~/content/home';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
@@ -41,6 +42,9 @@ const Homepage = () => {
   return (
     <MotionProvider>
       <Hero />
+      {/* The Name/Spec marquee sits flush below the hero, painted on load
+          (no scroll-reveal gate) so the banner never pops in or shifts. */}
+      <NameSpecBanner />
       {/* First Drop is the primary above/at-the-fold content — render it
           immediately (no scroll-reveal gate) so it's painted on load rather
           than staying invisible until 30% scrolls into view. The lower
