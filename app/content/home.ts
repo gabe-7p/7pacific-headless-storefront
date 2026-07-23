@@ -39,7 +39,7 @@ export const HOME_HERO = {
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
   // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).
-  subtitle: 'Three silhouettes, nine colorways. Tested on the hills we run.',
+  subtitle: 'Three products in nine colors tested on the hills we run.',
   // Grid order is merchant-controlled: the manual `homepage-first-drop`
   // collection in Shopify (see HOMEPAGE_COLLECTION_HANDLE in content/links.ts).
 } as const;
@@ -60,7 +60,7 @@ export type CoreValue = {
  */
 export const HOME_CORE_VALUES = {
   heading: 'What We Stand For',
-  subtitle: 'The reminders we train by. Same ones, every season.',
+  subtitle: 'The reminders we train by. No matter the season.',
   video: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
   images: {
     socialSharing: `${CDN}/social_sharing.jpg`,
@@ -69,27 +69,27 @@ export const HOME_CORE_VALUES = {
   },
   values: [
     {
-      title: 'The Early One',
+      title: 'No Losses, Only Lessons',
       tone: 'dark',
-      body: "Nobody claps at 5:45 AM. That's sort of the point.",
+      body: "When something doesn't work out, we figure out why and come back more experienced.",
       cta: { label: 'Read the story', href: '/pages/our-story' },
     },
     {
-      title: 'Earned, Not Given',
+      title: 'Love The Journey',
       tone: 'light',
-      body: 'The work is the reward. The gear just has to keep up.',
+      body: 'The peak is a moment. The climb is the life. Most of the fun and memories are in the journey.',
       cta: { label: 'Sign up', href: '#newsletter' },
     },
     {
-      title: 'Set 4 of 5',
+      title: 'Not Too Serious',
       tone: 'dark',
-      body: 'Built for the part of training nobody posts.',
+      body: "The training is serious. We're not. We hit our numbers, laugh between sets, and leave the tough-guy act to everyone else.",
       cta: { label: 'Shop tees', href: STORE_LINKS.shopShirts },
     },
     {
-      title: 'See You Out There',
+      title: 'Play The Long Game',
       tone: 'light',
-      body: 'Fog until noon. Perfect conditions, depending who you ask.',
+      body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
       cta: { label: 'Shop shorts', href: STORE_LINKS.shopShorts },
     },
   ] satisfies ReadonlyArray<CoreValue>,
