@@ -50,23 +50,25 @@ export type NameSpecCell = {
  * The Name/Spec marquee banner directly below the hero (approved prototype,
  * Jul 2026): the three live product families as name-over-spec cells plus one
  * Shop All cell, auto-scrolling. Content is locked — exactly these four cells.
+ * Names use the product cards' short-title device (family + noun, no "//"
+ * descriptor) per Gabe (2026-07-24), so the banner and grid read as one system.
  */
 export const HOME_NAME_SPEC_BANNER = {
   cells: [
     {
-      name: 'AIRRAIL™ 6" // Core Motion Training Short',
+      name: 'AIRRAIL™ 6" Short',
       spec: ['Laser-cut vents', 'Thigh, waistband, core', 'Midnight', 'Mint', 'Mountain Mist'],
       price: '$79',
       href: STORE_LINKS.shopShortsMidnight,
     },
     {
-      name: 'TRACEFIBER™ // Performance Tech Tee',
+      name: 'TRACEFIBER™ Tee',
       spec: ['Integrated mesh', 'Shoulder darts', '5 colorways'],
       price: '$74',
       href: STORE_LINKS.shopShirtsMidnight,
     },
     {
-      name: 'MOTIONFRAME™ // Running Hat',
+      name: 'MOTIONFRAME™ Hat',
       spec: ['Structured, weightless', 'Rear adjuster'],
       price: '$42',
       href: STORE_LINKS.shopHat,

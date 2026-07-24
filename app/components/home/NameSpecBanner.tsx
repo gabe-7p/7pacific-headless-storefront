@@ -25,14 +25,15 @@ const CellSet = ({
           key={cell.href}
           to={cell.href}
           tabIndex={tabIndex}
-          className="border-border-subtle flex flex-col gap-[5px] border-r px-9 py-[13px]"
+          className="border-border-subtle flex flex-col gap-1 border-r px-9 py-2.5"
         >
-          {/* Product-name tier, but at the banner's own scale: Archivo
+          {/* Product-name tier at the card-title scale (18px, 20px from 860 —
+              one step under the prototype's 24px per Gabe 2026-07-24): Archivo
               Condensed BOLD (700) per the approved prototype — the banner's
               one deliberate deviation from the site's 500-only display weight.
               Not a Heading: these are marquee cells (duplicated, aria-hidden
               copy included), not document headings. */}
-          <span className="font-display text-ink tracking-product text-xl leading-[1.15] font-bold whitespace-nowrap uppercase min-[860px]:text-2xl min-[860px]:leading-[1.15]">
+          <span className="font-display text-ink tracking-product text-lg leading-[1.15] font-bold whitespace-nowrap uppercase min-[860px]:text-xl min-[860px]:leading-[1.15]">
             {cell.name}
           </span>
           <span className="font-mono text-support tracking-spec text-[10px] whitespace-nowrap uppercase">
