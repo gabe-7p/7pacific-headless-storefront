@@ -181,23 +181,11 @@
   --color-tenet-light: var(--color-panel);
   --color-tenet-light-text: var(--color-carbon);
 
-  /* Announcement-bar scrolling marquee (track is duplicated, so -50% loops). */
-  --animate-marquee: marquee 45s linear infinite;
-
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
-  /* Homepage Name/Spec banner marquee — rightward (content moves left-to-right,
-     the opposite of the announcement bar). The cell set is duplicated in the
-     track, so -50% → 0 loops seamlessly. 55s = the approved 50s slowed 10%
+  /* Homepage Name/Spec banner marquee — rightward (content moves
+     left-to-right). The cell set is duplicated in the track, so -50% → 0
+     loops seamlessly. 66.5s = the approved 50s slowed 10% three times
      (Gabe 2026-07-24). */
-  --animate-marquee-right: marquee-right 55s linear infinite;
+  --animate-marquee-right: marquee-right 85s linear infinite;
 
   @keyframes marquee-right {
     from {
@@ -235,7 +223,7 @@
 :root {
   --page-max: 1400px;
   --header-h: 4.5rem; /* 72px — trimmed from live's 92px Impulse header; the rebrand nav wants a tighter bar */
-  --announcement-h: 1.5rem; /* 24px — trimmed from live's 28px bar */
+  --announcement-h: 1.75rem; /* 28px — bumped back to live's height for the static bar (Gabe 2026-07-24) */
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
