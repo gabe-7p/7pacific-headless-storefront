@@ -25,7 +25,7 @@ const CellSet = ({
           key={cell.href}
           to={cell.href}
           tabIndex={tabIndex}
-          className="border-border-subtle flex flex-col gap-1 border-r px-9 py-2.5"
+          className="border-border-subtle flex flex-col gap-1 border-r px-6 py-2"
         >
           {/* Product-name tier at the card-title scale (18px, 20px from 860 —
               one step under the prototype's 24px per Gabe 2026-07-24): Archivo
@@ -49,7 +49,7 @@ const CellSet = ({
       <Link
         to={HOME_NAME_SPEC_BANNER.cta.href}
         tabIndex={tabIndex}
-        className="border-border-subtle text-brand tracking-caps flex items-center border-r px-9 font-mono text-[11px] font-medium uppercase"
+        className="border-border-subtle text-brand tracking-caps flex items-center border-r px-6 font-mono text-[11px] font-medium uppercase"
       >
         {HOME_NAME_SPEC_BANNER.cta.label}
       </Link>
