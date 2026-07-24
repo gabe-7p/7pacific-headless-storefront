@@ -250,13 +250,14 @@ export const KENNETH_PIERCE = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Kenneth's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // FullSizeRender in Shopify Files (portrait, 25s) — Shopify's 720p
+    // transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/41d3555453a64e79b9a45343f800b0ed/41d3555453a64e79b9a45343f800b0ed.HD-720p-4.5Mbps-89804130.mp4',
+    poster: `${CDN}/preview_images/41d3555453a64e79b9a45343f800b0ed.thumbnail.0000000000.jpg`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:24',
   },
   readout: {
     number: '02',
