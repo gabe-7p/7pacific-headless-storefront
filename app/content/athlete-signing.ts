@@ -245,7 +245,7 @@ export const KENNETH_PIERCE = {
     locationLine: 'Austin · 30.27N',
     camLine: '',
     shotLine: 'Shot.01 — First Session',
-    image: { src: '', alt: 'Kenneth Pierce mid-run' },
+    image: { src: `${CDN}/kenneth-pierce-signing.png`, alt: 'Kenneth Pierce mid-run' },
   },
   founderVideo: {
     number: '01',
