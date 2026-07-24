@@ -6,7 +6,6 @@ import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
-import { HOME_HERO } from '~/content/home';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
@@ -16,9 +15,10 @@ import type { Route } from './+types/_index';
 export const meta: Route.MetaFunction = () => {
   return buildMeta({
     absoluteTitle: '7Pacific · Lightweight and Breathable Training Gear',
-    // Share previews (iMessage, Slack, …) show the hero; without an explicit
-    // og:image, scrapers grab an arbitrary product shot off the page.
-    image: HOME_HERO.backgroundImage.url,
+    // Share previews (iMessage, Slack, …) show a dedicated 1200×630 card:
+    // the hero shot with the black wordmark overlaid (public/og-home.jpg).
+    // Must be an absolute URL — scrapers don't resolve relative paths.
+    image: 'https://7pacificapparel.com/og-home.jpg',
   });
 };
 
