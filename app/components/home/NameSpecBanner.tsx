@@ -4,8 +4,10 @@ import { HOME_NAME_SPEC_BANNER } from '~/content/home';
 import { cn } from '~/lib/cn';
 
 /**
- * One full set of the four cells. Rendered twice in the track so the -50% → 0
- * marquee loops seamlessly; the second copy is aria-hidden and untabbable so
+ * One full set of the four cells. The track renders it 2×SETS_PER_HALF times
+ * so each -50% half is wider than any viewport (one set alone is ~1000px, so
+ * a bare pair left a visible gap on wide screens at the animation's start
+ * offset); all copies after the first are aria-hidden and untabbable so
  * assistive tech and keyboard users see each link once. Every cell carries a
  * border-r, so the wrap point gets the same 1px Zinc divider as the interior
  * joins — no visible seam.
@@ -57,13 +59,16 @@ const CellSet = ({
   );
 };
 
+/** Sets per -50% half — 4 sets ≈ 4000px, covering up to 4K viewports. */
+const SETS_PER_HALF = 4;
+
 /**
  * The Name/Spec product banner (approved prototype, Jul 2026): a full-bleed,
  * one-row marquee directly below the homepage hero — three product-family
  * cells (display name over a mono spec line) plus a Shop All cell, scrolling
  * rightward on a 50s loop that keeps rolling under the cursor (no hover-pause,
  * per Gabe 2026-07-24); reduced-motion users get a static, horizontally
- * scrollable strip instead (the duplicate set is dropped so nothing repeats).
+ * scrollable strip instead (the duplicate sets are dropped so nothing repeats).
  */
 export const NameSpecBanner = () => (
   <section
@@ -72,7 +77,13 @@ export const NameSpecBanner = () => (
   >
     <div className="animate-marquee-right flex w-max will-change-transform motion-reduce:animate-none">
       <CellSet />
-      <CellSet ariaHidden className="motion-reduce:hidden" />
+      {/* 2×SETS_PER_HALF sets total: the content repeats identically every
+          set, so the keyframes' -50% shift (= SETS_PER_HALF sets) lands on
+          the same pixels. Hidden under reduced motion, leaving the single
+          accessible set as the static scrollable strip. */}
+      {Array.from({ length: SETS_PER_HALF * 2 - 1 }, (_, i) => (
+        <CellSet key={i} ariaHidden className="motion-reduce:hidden" />
+      ))}
     </div>
   </section>
 );
