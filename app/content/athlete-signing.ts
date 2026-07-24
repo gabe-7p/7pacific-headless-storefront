@@ -218,10 +218,73 @@ export const JOSH_WYCHE = {
   },
 } satisfies AthleteSigningContent;
 
+/**
+ * Kenneth Pierce — hybrid athlete (strength x endurance) in Austin, TX;
+ * three marathons with a 3:37 PR, Hyrox Dallas next. Creator/model on IG
+ * (@kennethpiercejr, "Runner Knowledge" series), ~25.6K followers.
+ */
+export const KENNETH_PIERCE = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/kenneth-pierce',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/kenneth-pierce',
+  },
+  transmissionLine: 'Austin → San Francisco · 07.24.2026',
+  eyebrowLine: 'Official // Athlete Signing · 07.24.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Kenneth Pierce.' },
+  body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. Strength and endurance, \
+  three marathons deep, and the next start line already circled — you turn hard seasons into PRs and make the work itself \
+  the story. That’s exactly how we build. Scroll down to watch a personal message from us about why we’re fired up to have \
+  you on the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Austin · 30.27N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: { src: '', alt: 'Kenneth Pierce mid-run' },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // PLACEHOLDER — the Golden Gate homepage video until Kenneth's founder
+    // message is recorded; swap src/poster (and captions) when uploaded.
+    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+    poster: '',
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:30',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    stat: { label: 'Marathon PR', value: '3:37', verified: true },
+    scale: { markerPercent: 85, markerLabel: '26.2 ×3' },
+    fields: [
+      { label: 'Discipline', value: 'Strength x Endurance' },
+      { label: 'Base', value: 'Austin' },
+      { label: 'Reach', value: '25.6K' },
+      { label: 'Next', value: 'Hyrox Dallas' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'kennethpiercejr',
+    tagline: 'Strength x Endurance · Creator · Model · Faith.',
+    series: ['Runner Knowledge', 'Road to Hyrox Dallas'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
 /** URL handle → signing page content. Adding an athlete = one line here. */
 export const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
   'josh-wyche': JOSH_WYCHE,
+  'kenneth-pierce': KENNETH_PIERCE,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
