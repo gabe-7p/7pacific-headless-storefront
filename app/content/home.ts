@@ -57,13 +57,13 @@ export const HOME_NAME_SPEC_BANNER = {
   cells: [
     {
       name: 'AIRRAIL™ 6" Short',
-      spec: ['Laser-cut vents', 'Thigh, waistband, core', 'Midnight', 'Mint', 'Mountain Mist'],
+      spec: ['Laser-cut vents', 'Thigh, waistband, core'],
       price: '$79',
       href: STORE_LINKS.shopShortsMidnight,
     },
     {
       name: 'TRACEFIBER™ Tee',
-      spec: ['Integrated mesh', 'Shoulder darts', '5 colorways'],
+      spec: ['Integrated mesh', 'Shoulder darts'],
       price: '$74',
       href: STORE_LINKS.shopShirtsMidnight,
     },

@@ -61,17 +61,16 @@ const CellSet = ({
  * The Name/Spec product banner (approved prototype, Jul 2026): a full-bleed,
  * one-row marquee directly below the homepage hero — three product-family
  * cells (display name over a mono spec line) plus a Shop All cell, scrolling
- * rightward on a 50s loop. Hovering anywhere on the banner pauses the track so
- * cells can be read and clicked; reduced-motion users get a static,
- * horizontally scrollable strip instead (the duplicate set is dropped so
- * nothing repeats).
+ * rightward on a 50s loop that keeps rolling under the cursor (no hover-pause,
+ * per Gabe 2026-07-24); reduced-motion users get a static, horizontally
+ * scrollable strip instead (the duplicate set is dropped so nothing repeats).
  */
 export const NameSpecBanner = () => (
   <section
     aria-label="Featured products"
-    className="group bg-field border-border-subtle overflow-hidden border-y motion-reduce:overflow-x-auto"
+    className="bg-field border-border-subtle overflow-hidden border-y motion-reduce:overflow-x-auto"
   >
-    <div className="animate-marquee-right flex w-max will-change-transform group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+    <div className="animate-marquee-right flex w-max will-change-transform motion-reduce:animate-none">
       <CellSet />
       <CellSet ariaHidden className="motion-reduce:hidden" />
     </div>
