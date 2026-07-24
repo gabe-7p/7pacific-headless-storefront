@@ -19,3 +19,6 @@ yarn-error.log*
 .pnpm-debug.log*
 .playwright-mcp/
 .firecrawl/
+
+# Local agent worktrees (contain a .git file — a blanket `git add .` records them as phantom submodules)
+.claude/worktrees/

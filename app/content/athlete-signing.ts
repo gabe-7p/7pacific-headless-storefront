@@ -236,7 +236,7 @@ export const KENNETH_PIERCE = {
   eyebrowLine: 'Official // Athlete Signing · 07.24.2026',
   headline: { lead: 'Welcome to the team,', name: 'Kenneth Pierce.' },
   body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. Strength and endurance, \
-  three marathons deep, and the next start line already circled — you turn hard seasons into PRs and make the work itself \
+  three marathons deep, and the next start line already circled. You turn hard seasons into PRs and make the work itself \
   the story. That’s exactly how we build. Scroll down to watch a personal message from us about why we’re fired up to have \
   you on the team.',
   signedLine: 'Signed · Status: Confirmed',
