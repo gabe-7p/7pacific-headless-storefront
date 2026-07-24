@@ -25,7 +25,7 @@ export const BRAND = {
    * nothing else (per Gabe, 2026-07-19).
    */
   announcement: {
-    message: 'FREE SHIPPING OVER $200',
+    message: 'FREE SHIPPING ON ORDERS $200+',
     href: '',
   },
 
