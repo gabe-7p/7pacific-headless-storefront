@@ -26,7 +26,12 @@ export default async function handleRequest(
     // default-src, which blocks the homepage Spotify embed. Setting it here
     // replaces (not merges with) that fallback, so the default-src hosts are
     // repeated alongside the one allowed third-party frame host.
-    frameSrc: ["'self'", 'https://cdn.shopify.com', 'https://shopify.com', 'https://open.spotify.com'],
+    frameSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'https://shopify.com',
+      'https://open.spotify.com',
+    ],
   });
 
   const body = await renderToReadableStream(
