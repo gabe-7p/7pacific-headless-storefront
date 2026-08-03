@@ -9,24 +9,45 @@ import { getTimeLeft, pad2, type TimeLeft } from '~/lib/countdown';
 
 const DROP_TARGET_MS = Date.parse(HOME_DROP_TWO.dropIso);
 
+/** Display order of the countdown units, leftmost first. */
+const UNIT_KEYS = ['days', 'hours', 'minutes', 'seconds'] as const;
+
 /**
  * Live countdown to the drop. State starts null so the server render and the
  * first client render agree (the `useScrolledPast` SSR pattern); real values
  * land on mount and tick every second. The row is always fully laid out —
  * two-character placeholders + tabular-nums mean no shift when values arrive.
+ *
+ * Each tick also records which unit changed furthest to the left, and ONE
+ * macOS-style Ember insertion caret renders to that number's left: seconds
+ * most ticks, but a minute rollover moves the caret to MIN, and so on.
  */
 const Countdown = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+  const [state, setState] = useState<{ timeLeft: TimeLeft | null; caretIndex: number }>({
+    timeLeft: null,
+    caretIndex: 0,
+  });
 
   useEffect(() => {
-    const tick = () => setTimeLeft(getTimeLeft(DROP_TARGET_MS, Date.now()));
+    const tick = () =>
+      setState((prev) => {
+        const timeLeft = getTimeLeft(DROP_TARGET_MS, Date.now());
+        const prevTimeLeft = prev.timeLeft;
+        const changed = prevTimeLeft
+          ? UNIT_KEYS.findIndex((unit) => timeLeft[unit] !== prevTimeLeft[unit])
+          : 0;
+        // Nothing changed (the countdown is holding at zero): keep the old
+        // index — the caret's key stays the same, so it doesn't replay.
+        return { timeLeft, caretIndex: changed === -1 ? prev.caretIndex : changed };
+      });
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
 
+  const { timeLeft, caretIndex } = state;
   const values = timeLeft
-    ? [timeLeft.days, timeLeft.hours, timeLeft.minutes, timeLeft.seconds].map(pad2)
+    ? UNIT_KEYS.map((unit) => pad2(timeLeft[unit]))
     : HOME_DROP_TWO.countdownLabels.map(() => '--');
 
   return (
@@ -39,17 +60,19 @@ const Countdown = () => {
             </span>
           )}
           <div className="flex flex-col gap-1">
-            <span className="font-mono text-2xl leading-none text-ink tabular-nums md:text-3xl md:leading-none">
+            <span className="relative font-mono text-2xl leading-none text-ink tabular-nums md:text-3xl md:leading-none">
+              {/* The single insertion caret, keyed on position + value so a
+                  change re-mounts it and replays one flick, then it rests
+                  hidden. Absolutely positioned so it never shifts the digits.
+                  Ember on the countdown is deliberate, per Gabe (2026-08-03). */}
+              {index === caretIndex && timeLeft && (
+                <span
+                  key={`${caretIndex}-${values[caretIndex]}`}
+                  aria-hidden
+                  className="bg-brand animate-caret-blink absolute top-1/2 -left-1.5 h-[0.85em] w-0.5 -translate-y-1/2 opacity-0 motion-reduce:animate-none"
+                />
+              )}
               {values[index]}
-              {/* macOS-style insertion caret: keyed on the value so a change
-                  re-mounts it and replays the blink, then it rests hidden.
-                  Always rendered (fixed 2px) so nothing shifts. Ember accent
-                  on the countdown is deliberate, per Gabe (2026-08-03). */}
-              <span
-                key={values[index]}
-                aria-hidden
-                className="bg-brand animate-caret-blink ml-1 inline-block h-[0.85em] w-0.5 opacity-0 motion-reduce:animate-none"
-              />
             </span>
             <span className="font-mono text-[10px] tracking-spec text-ink uppercase">{label}</span>
           </div>
@@ -63,10 +86,9 @@ type TeaserCard = (typeof HOME_DROP_TWO.cards)[keyof typeof HOME_DROP_TWO.cards]
 
 /**
  * One teaser card: photo with a centered overlay — mono eyebrow, display
- * title, and a solid `brand-inverse` CTA (a transparent outline was too easy
- * to lose against the photo). The shared aspect ratio (not natural image
- * height) is what keeps the two opposite-orientation photos rendering as
- * equal cards.
+ * title, and the same xs outline Cta the tenet cards use. The shared aspect
+ * ratio (not natural image height) is what keeps the two opposite-orientation
+ * photos rendering as equal cards.
  */
 const Card = ({ card, children }: { card: TeaserCard; children: React.ReactNode }) => (
   <div className="relative overflow-hidden">
