@@ -12,13 +12,11 @@ const { eyebrow, heading, description, playlist } = HOME_TRAINING_FREQUENCIES;
 export const TrainingFrequencies = () => (
   <Container className="py-9 text-center md:py-12">
     <p className="text-support font-mono text-xs tracking-spec uppercase">{eyebrow}</p>
-    <SectionHeader
-      heading={heading}
-      subtitle={description}
-      align="center"
-      scale="section"
-      className="mt-2"
-    />
+    <SectionHeader heading={heading} align="center" scale="section" className="mt-2 mb-0" />
+    {/* Rendered outside SectionHeader's subtitle slot: its xl:text-[1.1rem]
+        bump reads too large under this centered lockup, so the description
+        holds the pre-xl 12px at every width. */}
+    <p className="text-support mt-2 text-xs">{description}</p>
     <iframe
       title={playlist.title}
       src={playlist.src}
@@ -27,7 +25,7 @@ export const TrainingFrequencies = () => (
       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
       allowFullScreen
       loading="lazy"
-      className="mx-auto block w-full max-w-3xl rounded-xl"
+      className="mx-auto mt-8 block w-full max-w-3xl rounded-xl"
     />
   </Container>
 );
