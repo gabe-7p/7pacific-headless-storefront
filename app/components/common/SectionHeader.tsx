@@ -23,6 +23,9 @@ type SectionHeaderProps = {
   align?: 'left' | 'center';
   scale?: keyof typeof SCALES;
   className?: string;
+  /** Opt-in ember-wipe reveal: a brand block sweeps over the text width, then
+      retreats to unveil it. Load-triggered — for above-the-fold titles only. */
+  reveal?: boolean;
 };
 
 /**
@@ -35,10 +38,22 @@ export const SectionHeader = ({
   align = 'left',
   scale = 'display',
   className,
+  reveal = false,
 }: SectionHeaderProps) => (
   <div className={cn('mb-8', align === 'center' && 'text-center', className)}>
     <Heading as="h2" size={scale === 'display' ? 'display' : 'none'} className={SCALES[scale]}>
-      {heading}
+      {reveal ? (
+        // The outer span is inline-block so the inset-0 cover spans exactly
+        // the text width; the text fades on an inner span because opacity on
+        // the cover's own element would hide the ::after cover with it. Base
+        // state (text visible, cover scale-x-0) is what motion-reduce users
+        // get — the animations override it while running.
+        <span className="relative inline-block after:absolute after:inset-0 after:origin-left after:scale-x-0 after:animate-title-wipe-cover after:bg-brand motion-reduce:after:animate-none">
+          <span className="animate-title-wipe-text motion-reduce:animate-none">{heading}</span>
+        </span>
+      ) : (
+        heading
+      )}
     </Heading>
     {/* Live subtitle: 12px, 17.6px on desktop. */}
     {subtitle ? <p className="mt-2 text-xs text-support xl:text-[1.1rem]">{subtitle}</p> : null}

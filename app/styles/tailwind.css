@@ -210,6 +210,48 @@
       transform: translateY(0);
     }
   }
+
+  /* Section-title reveal ("Our First Drop") — an Ember block wipes in from the
+     left to the text's width, then its left edge retreats rightward to unveil
+     the heading. The two animations share one timeline: the cover holds full
+     width 45–55% (the origin swap at 55% is invisible while scaleX is 1) and
+     the text flips visible underneath at the 50% midpoint. `both` keeps the
+     0% frame during the delay so the text never flashes before the cover. */
+  --animate-title-wipe-cover: title-wipe-cover 1.1s var(--ease-brand) 0.15s both;
+  --animate-title-wipe-text: title-wipe-text 1.1s linear 0.15s both;
+
+  /* Animates the `scale` property (not `transform`) because the cover's
+     at-rest hidden state is Tailwind's scale-x-0, which compiles to `scale:`
+     in v4 — animating `transform` would never override it. */
+  @keyframes title-wipe-cover {
+    0% {
+      scale: 0 1;
+      transform-origin: 0% 50%;
+    }
+    45% {
+      scale: 1 1;
+      transform-origin: 0% 50%;
+    }
+    55% {
+      scale: 1 1;
+      transform-origin: 100% 50%;
+    }
+    100% {
+      scale: 0 1;
+      transform-origin: 100% 50%;
+    }
+  }
+
+  @keyframes title-wipe-text {
+    0%,
+    50% {
+      opacity: 0;
+    }
+    51%,
+    100% {
+      opacity: 1;
+    }
+  }
 }
 
 /**
