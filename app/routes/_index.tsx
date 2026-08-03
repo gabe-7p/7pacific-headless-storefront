@@ -6,6 +6,7 @@ import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
+import { TrainingFrequencies } from '~/components/home/TrainingFrequencies';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
@@ -52,6 +53,9 @@ const Homepage = () => {
       <FirstDrop products={products} />
       <FadeIn>
         <CoreValues />
+      </FadeIn>
+      <FadeIn>
+        <TrainingFrequencies />
       </FadeIn>
       <FadeIn>
         <TestedInTraining />
