@@ -77,6 +77,56 @@ export const HOME_NAME_SPEC_BANNER = {
   cta: { label: 'Shop All //', href: STORE_LINKS.shopAll },
 } as const;
 
+/**
+ * "Drop 02: FW26" teaser — the First Light collection (DAYBREAK™ quarterzips +
+ * FRONTRUNNER™ joggers), directly below the Name/Spec banner. A live countdown
+ * to the drop plus two teaser cards: Fall Gear (links to the collection) and
+ * Coming Soon (opens the waitlist dialog). Photos are Shopify Files uploads
+ * picked by Gabe (2026-08-03).
+ */
+export const HOME_DROP_TWO = {
+  heading: 'Drop 02: FW26',
+  /**
+   * Countdown target: Sept 13 2026, midnight America/Los_Angeles (PDT ⇒ -07:00;
+   * the explicit offset keeps Date.parse deterministic on server and client).
+   */
+  dropIso: '2026-09-13T00:00:00-07:00',
+  countdownLabels: ['Days', 'Hrs', 'Min', 'Sec'],
+  cards: {
+    fallGear: {
+      // Same date as the timer (aligned from the mock's 09.10.26 per Gabe).
+      eyebrow: 'Drops 09.13.26',
+      title: 'Fall Gear',
+      cta: { label: 'Discover', href: STORE_LINKS.firstLight },
+      image: {
+        url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`,
+        width: 2048,
+        height: 1638,
+      },
+    },
+    comingSoon: {
+      eyebrow: 'DAYBREAK™ & FRONTRUNNER™',
+      title: 'Coming Soon',
+      /** No href — the card CTA opens the waitlist dialog instead. */
+      cta: { label: 'Get on the List' },
+      image: {
+        url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
+        width: 1638,
+        height: 2048,
+      },
+    },
+  },
+  /** Copy for the waitlist dialog the Coming Soon card opens. */
+  waitlist: {
+    heading: 'Get on the List',
+    body: 'DAYBREAK™ and FRONTRUNNER™ land 09.13.26. Leave your name and we’ll tell you the moment they do.',
+    namePlaceholder: 'Name',
+    emailPlaceholder: 'Email address',
+    submitLabel: 'Get on the List',
+    successMessage: 'You’re on it. See you at first light.',
+  },
+} as const;
+
 export const HOME_FIRST_DROP = {
   heading: 'Our First Drop',
   // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).

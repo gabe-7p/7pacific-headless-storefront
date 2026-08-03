@@ -15,6 +15,8 @@ export const STORE_LINKS = {
   shopShortsMidnight: '/products/airrail-6-performance-shorts-midnight',
   shopShirtsMidnight: '/products/tracefiber-performance-tech-tee-midnight',
   shopHat: '/products/motionframe-running-hat-white',
+  /** Drop 02 teaser card target — the FW26 "First Light" collection. */
+  firstLight: '/collections/first-light',
 } as const;
 
 /**

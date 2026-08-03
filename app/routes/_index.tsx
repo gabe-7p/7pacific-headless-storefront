@@ -2,6 +2,7 @@ import { useLoaderData } from 'react-router';
 
 import { FadeIn, MotionProvider } from '~/components/common/Motion';
 import { CoreValues } from '~/components/home/CoreValues';
+import { DropTwo } from '~/components/home/DropTwo';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
@@ -45,6 +46,9 @@ const Homepage = () => {
       {/* The Name/Spec marquee sits flush below the hero, painted on load
           (no scroll-reveal gate) so the banner never pops in or shifts. */}
       <NameSpecBanner />
+      {/* Drop 02 teaser sits right under the banner, near the fold — painted
+          on load (no scroll-reveal gate) so the countdown never pops in. */}
+      <DropTwo />
       {/* First Drop is the primary above/at-the-fold content — render it
           immediately (no scroll-reveal gate) so it's painted on load rather
           than staying invisible until 30% scrolls into view. The lower
