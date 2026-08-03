@@ -41,6 +41,15 @@ const Countdown = () => {
           <div className="flex flex-col gap-1">
             <span className="font-mono text-2xl leading-none text-ink tabular-nums md:text-3xl md:leading-none">
               {values[index]}
+              {/* macOS-style insertion caret: keyed on the value so a change
+                  re-mounts it and replays the blink, then it rests hidden.
+                  Always rendered (fixed 2px) so nothing shifts. Ember accent
+                  on the countdown is deliberate, per Gabe (2026-08-03). */}
+              <span
+                key={values[index]}
+                aria-hidden
+                className="bg-brand animate-caret-blink ml-1 inline-block h-[0.85em] w-0.5 opacity-0 motion-reduce:animate-none"
+              />
             </span>
             <span className="font-mono text-[10px] tracking-spec text-ink uppercase">{label}</span>
           </div>

@@ -210,6 +210,30 @@
       transform: translateY(0);
     }
   }
+
+  /* Drop countdown caret — a macOS-style text-insertion cursor that blinks
+     twice when a number redraws, then rests hidden until the next change
+     (the caller re-mounts the element, keyed on the value, to replay it). */
+  --animate-caret-blink: caret-blink 1.1s ease-out forwards;
+
+  @keyframes caret-blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    46%,
+    60% {
+      opacity: 0;
+    }
+    61%,
+    85% {
+      opacity: 1;
+    }
+    86%,
+    100% {
+      opacity: 0;
+    }
+  }
 }
 
 /**
