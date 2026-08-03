@@ -139,7 +139,8 @@ export const HOME_CORE_VALUES = {
 export const HOME_TRAINING_FREQUENCIES = {
   eyebrow: '7PA·FM — Vol. 01',
   heading: 'Training Frequencies',
-  description: 'The rotation for long climbs and early starts. Updated when the block changes.',
+  description:
+    "Keep the vibes high when training. You'll push it a little harder when you listen to this.",
   playlist: {
     title: 'Training Frequencies — a 7Pacific playlist on Spotify',
     src: 'https://open.spotify.com/embed/playlist/3kQxW6vE7G46GZseYwpJ42?utm_source=generator&si=f7403fc11da84051',
