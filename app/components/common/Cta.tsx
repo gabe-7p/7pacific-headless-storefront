@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 
 import { useNewsletterDialog } from '~/components/common/NewsletterDialog';
 import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/cn';
 
 /**
  * Content files mark membership CTAs with this href instead of a real path;
@@ -12,48 +11,26 @@ import { cn } from '~/lib/cn';
  */
 export const NEWSLETTER_HREF = '#newsletter';
 
-type CtaSize = ComponentProps<typeof Button>['size'];
-
-// Slide distance = icon width + flex gap for the Button size, so the leading
-// arrow starts exactly one slot left of the clip edge and the trailing arrow
-// exits exactly past it (default/lg: 16+8, sm: 16+6, xs: 12+4).
-const trackBySize: Partial<Record<NonNullable<CtaSize>, string>> = {
-  default: 'gap-2 group-hover/cta:translate-x-6 group-focus-visible/cta:translate-x-6',
-  lg: 'gap-2 group-hover/cta:translate-x-6 group-focus-visible/cta:translate-x-6',
-  sm: 'gap-1.5 group-hover/cta:translate-x-[22px] group-focus-visible/cta:translate-x-[22px]',
-  xs: 'gap-1 group-hover/cta:translate-x-4 group-focus-visible/cta:translate-x-4',
-};
-const leadingArrowBySize: Partial<Record<NonNullable<CtaSize>, string>> = {
-  default: '-ml-6',
-  lg: '-ml-6',
-  sm: '-ml-[22px]',
-  xs: '-ml-4',
-};
-
 /**
  * The brand CTA label device: text + trailing ArrowRight. On hover (or
  * focus-visible) of the enclosing `group/cta` button, the whole track slides
  * right by one icon+gap slot — a second arrow enters from the left edge while
  * the trailing arrow exits past the right one, both clipped by the
  * overflow-hidden wrapper. One transform, no opacity fades.
+ *
+ * Size-agnostic by design: the slide distance reads the `--cta-slide` var and
+ * the gap inherits from the button, both published per size by the Button
+ * `size` variants (ui/button.tsx) — sizing facts live there, in one place.
  */
-export const CtaLabel = ({ size, children }: { size?: CtaSize; children: ReactNode }) => {
-  const key = size ?? 'default';
-  return (
-    <span data-cta-label className="inline-flex overflow-hidden">
-      <span
-        className={cn(
-          'inline-flex items-center transition-transform duration-500 ease-(--ease-brand) motion-reduce:transition-none',
-          trackBySize[key] ?? trackBySize.default
-        )}
-      >
-        <ArrowRight aria-hidden className={leadingArrowBySize[key] ?? leadingArrowBySize.default} />
-        {children}
-        <ArrowRight aria-hidden />
-      </span>
+export const CtaLabel = ({ children }: { children: ReactNode }) => (
+  <span data-cta-label className="inline-flex [gap:inherit] overflow-hidden">
+    <span className="inline-flex items-center [gap:inherit] transition-transform duration-500 ease-(--ease-brand) group-hover/cta:translate-x-(--cta-slide) group-focus-visible/cta:translate-x-(--cta-slide) motion-reduce:transition-none">
+      <ArrowRight aria-hidden className="-ml-(--cta-slide)" />
+      {children}
+      <ArrowRight aria-hidden />
     </span>
-  );
-};
+  </span>
+);
 
 type CtaProps = {
   /** `brand` is the page's ONE Ember moment; everything else is outline or
@@ -96,7 +73,7 @@ export const Cta = ({
 }: CtaProps) => {
   const newsletter = useNewsletterDialog();
 
-  const label = <CtaLabel size={size}>{children}</CtaLabel>;
+  const label = <CtaLabel>{children}</CtaLabel>;
 
   // Membership CTAs open the signup dialog rather than navigating. Falls
   // through to a normal link if rendered outside the provider.

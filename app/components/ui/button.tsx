@@ -36,12 +36,14 @@ const buttonVariants = cva(
         'brand-text': `${brandCta} bg-transparent hover:opacity-70`,
       },
       size: {
-        // The `has-[>[data-cta-label]]` twins keep the icon padding when the
-        // svg sits inside CtaLabel's clip wrapper instead of being a direct child.
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3 has-[>[data-cta-label]]:px-3',
-        xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 has-[>[data-cta-label]]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: 'h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5 has-[>[data-cta-label]]:px-2.5',
-        lg: 'h-9 rounded-md px-6 has-[>svg]:px-4 has-[>[data-cta-label]]:px-4',
+        // Label sizes own every per-size CTA fact on their one line: gap, icon
+        // padding (the has-[...] selector matches the svg directly OR inside
+        // CtaLabel's clip wrapper), and `--cta-slide` — the arrow-slide travel
+        // (icon width + gap) consumed by CtaLabel (~/components/common/Cta.tsx).
+        default: 'h-9 px-4 py-2 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-3',
+        xs: "h-6 gap-1 rounded-md px-2 text-xs [--cta-slide:--spacing(4)] has-[>svg,>[data-cta-label]]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: 'h-8 gap-1.5 rounded-md px-3 [--cta-slide:--spacing(5.5)] has-[>svg,>[data-cta-label]]:px-2.5',
+        lg: 'h-9 rounded-md px-6 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-4',
         icon: 'size-9',
         'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8',
