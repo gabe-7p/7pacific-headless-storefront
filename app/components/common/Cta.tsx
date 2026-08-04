@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { ComponentProps, ReactNode } from 'react';
 import { Link } from 'react-router';
 
@@ -11,13 +11,34 @@ import { Button } from '~/components/ui/button';
  */
 export const NEWSLETTER_HREF = '#newsletter';
 
+/**
+ * The brand CTA label device: text + trailing ArrowRight. On hover (or
+ * focus-visible) of the enclosing `group/cta` button, the whole track slides
+ * right by one icon+gap slot — a second arrow enters from the left edge while
+ * the trailing arrow exits past the right one, both clipped by the
+ * overflow-hidden wrapper. One transform, no opacity fades.
+ *
+ * Size-agnostic by design: the slide distance reads the `--cta-slide` var and
+ * the gap inherits from the button, both published per size by the Button
+ * `size` variants (ui/button.tsx) — sizing facts live there, in one place.
+ */
+export const CtaLabel = ({ children }: { children: ReactNode }) => (
+  <span data-cta-label className="inline-flex [gap:inherit] overflow-hidden">
+    <span className="inline-flex items-center [gap:inherit] transition-transform duration-500 ease-(--ease-brand) group-hover/cta:translate-x-(--cta-slide) group-focus-visible/cta:translate-x-(--cta-slide) motion-reduce:transition-none">
+      <ArrowRight aria-hidden className="-ml-(--cta-slide)" />
+      {children}
+      <ArrowRight aria-hidden />
+    </span>
+  </span>
+);
+
 type CtaProps = {
   /** `brand` is the page's ONE Ember moment; everything else is outline or
       the borderless `brand-text` treatment. */
   variant?: 'brand' | 'brand-outline' | 'brand-text';
   size?: ComponentProps<typeof Button>['size'];
   className?: string;
-  /** The label only — the trailing chevron is added here, once. */
+  /** The label only — the arrow device (`CtaLabel`) is added here, once. */
   children: ReactNode;
   /** Internal link (renders a react-router <Link>). */
   to?: ComponentProps<typeof Link>['to'];
@@ -31,12 +52,12 @@ type CtaProps = {
 };
 
 /**
- * The brand CTA — mono caps label + trailing ChevronRight (which nudges right
- * and grows on hover; the animation lives in the `brand`/`brand-outline`
- * Button variants). ALL link/button CTAs render through this so the icon and
- * its behavior are defined once — don't hand-assemble `Button` + chevron at
- * callsites. The one exception is the PDP `AddToCartButton` (a CartForm
- * submit), which composes `buttonVariants` directly.
+ * The brand CTA — mono caps label + trailing ArrowRight (on hover the whole
+ * label slides right: a second arrow enters from the left while the trailing
+ * one exits, via `CtaLabel`). ALL link/button CTAs render through this so the
+ * icon and its behavior are defined once — don't hand-assemble `Button` +
+ * arrow at callsites. The one exception is the PDP `AddToCartButton` (a
+ * CartForm submit), which composes `buttonVariants` + `CtaLabel` directly.
  */
 export const Cta = ({
   variant = 'brand-outline',
@@ -52,12 +73,7 @@ export const Cta = ({
 }: CtaProps) => {
   const newsletter = useNewsletterDialog();
 
-  const label = (
-    <>
-      {children}
-      <ChevronRight />
-    </>
-  );
+  const label = <CtaLabel>{children}</CtaLabel>;
 
   // Membership CTAs open the signup dialog rather than navigating. Falls
   // through to a normal link if rendered outside the provider.

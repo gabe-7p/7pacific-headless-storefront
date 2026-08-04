@@ -127,10 +127,10 @@ export const HeaderMenu = ({
             prefetch="intent"
             to={toInternalPath(item.url)}
             // Live never marks the current page in the nav, so no active state.
-            // Caps-UI tier: Inter Medium, ALL CAPS, +0.08em — the tracked-caps
-            // treatment the brand type rules call the most important UI move.
+            // Caps-UI tier: Archivo Condensed Medium (Gabe's override of the
+            // Inter caps-UI rule), ALL CAPS, +0.08em tracking.
             className={cn(
-              'font-medium tracking-caps uppercase',
+              'font-display font-medium tracking-caps uppercase',
               isMobile
                 ? 'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
                 : // Live's underline wipe (.site-nav__link--underline:after):

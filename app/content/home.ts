@@ -64,7 +64,7 @@ export const HOME_NAME_SPEC_BANNER = {
     {
       name: 'TRACEFIBER™ Tee',
       spec: ['Integrated mesh', 'Shoulder darts'],
-      price: '$74',
+      price: '$72',
       href: STORE_LINKS.shopShirtsMidnight,
     },
     {
