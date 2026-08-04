@@ -43,7 +43,7 @@ export const CtaLabel = ({ size, children }: { size?: CtaSize; children: ReactNo
     <span data-cta-label className="inline-flex overflow-hidden">
       <span
         className={cn(
-          'inline-flex items-center transition-transform duration-300 ease-(--ease-brand) motion-reduce:transition-none',
+          'inline-flex items-center transition-transform duration-500 ease-(--ease-brand) motion-reduce:transition-none',
           trackBySize[key] ?? trackBySize.default
         )}
       >
