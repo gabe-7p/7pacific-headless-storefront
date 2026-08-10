@@ -17,7 +17,7 @@ const CDN = BRAND.filesCdn;
 export const OUR_STORY = {
   hero: {
     title: 'About',
-    backgroundImage: `${CDN}/our_story_hero_image.jpg`,
+    backgroundImage: { url: `${CDN}/our_story_hero_image.jpg`, width: 4000, height: 2667 },
     // One secondary CTA — the story page carries no Ember moment (7PA-230).
     // Targets the Mountain Mist shorts, not the collection.
     ctas: [{ label: 'Shop', href: STORE_LINKS.shopShorts, variant: 'brand-outline' as const }],
@@ -33,7 +33,7 @@ export const OUR_STORY = {
   },
   fitness: {
     heading: 'For training, not errands',
-    image: `${CDN}/our_mission2.jpg`,
+    image: { url: `${CDN}/our_mission2.jpg`, width: 1639, height: 1365 },
     body: [
       'We make shorts, tees, and hats that remove specific frictions: heat, weight, chafe. Designed in San Francisco, tested on the hills we actually run, before sunrise more often than not.',
       "A lot of brands try to be many things to many people: clothes built to do everything okay and nothing great. We're not that brand. Every piece here earns its place in a session first.",
@@ -42,7 +42,7 @@ export const OUR_STORY = {
   },
   story: {
     heading: 'Our Story',
-    image: `${CDN}/our_founder.jpg`,
+    image: { url: `${CDN}/our_founder.jpg`, width: 2724, height: 1816 },
     founder: { name: 'Gabriel Dalessandro', role: 'Founder' },
     body: [
       "Training brought me to California to play football. It introduced me to my fiancée on a volleyball court. It's taken me up ski lines I had no business looking at, and it built most of the friendships I count on: groups big and small that showed up, trained hard, and pushed each other further.",

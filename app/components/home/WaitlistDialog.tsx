@@ -1,5 +1,6 @@
-import { WaitlistForm } from '~/components/home/WaitlistForm';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '~/components/ui/dialog';
+import { BrandDialogContent, BrandDialogTitle } from '~/components/common/BrandDialog';
+import { WaitlistForm } from '~/components/common/WaitlistForm';
+import { Dialog, DialogDescription } from '~/components/ui/dialog';
 import { HOME_DROP_TWO } from '~/content/home';
 
 /**
@@ -16,16 +17,19 @@ export const WaitlistDialog = ({
   onOpenChange: (open: boolean) => void;
 }) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
-    {/* sm:max-w-* — same primitive-width trap as NewsletterDialog (see the
-        note there). rounded-[2px] is the brand radius. */}
-    <DialogContent className="bg-field-night text-ink-night rounded-[2px] border-border-subtle-night p-8 sm:max-w-md">
-      <DialogTitle className="font-display tracking-header text-2xl font-medium uppercase">
-        {HOME_DROP_TWO.waitlist.heading}
-      </DialogTitle>
+    <BrandDialogContent className="p-8 sm:max-w-md">
+      <BrandDialogTitle>{HOME_DROP_TWO.waitlist.heading}</BrandDialogTitle>
       <DialogDescription className="mt-3 text-sm text-support-night">
         {HOME_DROP_TWO.waitlist.body}
       </DialogDescription>
-      <WaitlistForm />
-    </DialogContent>
+      {/* Night-tier underline fields — the footer/newsletter input recipe. */}
+      <WaitlistForm
+        copy={HOME_DROP_TWO.waitlist}
+        className="mt-5 space-y-4"
+        fieldClassName="w-full rounded-none border-0 border-b border-border-subtle bg-transparent px-0 py-2 text-ink-night placeholder:text-support-night focus:border-ink-night focus:outline-none"
+        errorClassName="mt-1 text-xs text-support-night"
+        ctaClassName="mt-2"
+      />
+    </BrandDialogContent>
   </Dialog>
 );

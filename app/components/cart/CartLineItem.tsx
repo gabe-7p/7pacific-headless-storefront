@@ -4,7 +4,7 @@ import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
-import type { CartLayout, LineItemChildrenMap } from '~/components/cart/CartMain';
+import type { CartLayout } from '~/components/cart/CartMain';
 import { useAside } from '~/components/layout/Aside';
 import { useVariantUrl } from '~/lib/variants';
 
@@ -12,24 +12,13 @@ export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
 
 /**
  * A single cart line: product image, title, options, price, a quantity stepper,
- * and a remove control. Child component lines (warranties, gift wrapping) render
- * nested below the parent.
+ * and a remove control.
  */
-export const CartLineItem = ({
-  layout,
-  line,
-  childrenMap,
-}: {
-  layout: CartLayout;
-  line: CartLine;
-  childrenMap: LineItemChildrenMap;
-}) => {
+export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartLine }) => {
   const { id, merchandise } = line;
   const { product, title, image, selectedOptions } = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
   const { close } = useAside();
-  const lineItemChildren = childrenMap[id];
-  const childrenLabelId = `cart-line-children-${id}`;
   const closeIfAside = () => layout === 'aside' && close();
 
   return (
@@ -82,24 +71,6 @@ export const CartLineItem = ({
           )}
         </div>
       </div>
-
-      {lineItemChildren ? (
-        <div>
-          <p id={childrenLabelId} className="sr-only">
-            Line items with {product.title}
-          </p>
-          <ul aria-labelledby={childrenLabelId} className="mt-2 ml-24">
-            {lineItemChildren.map((childLine) => (
-              <CartLineItem
-                childrenMap={childrenMap}
-                key={childLine.id}
-                line={childLine}
-                layout={layout}
-              />
-            ))}
-          </ul>
-        </div>
-      ) : null}
     </li>
   );
 };

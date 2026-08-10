@@ -1,3 +1,5 @@
+import { Image } from '@shopify/hydrogen';
+
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { HOME_TESTED } from '~/content/home';
@@ -30,14 +32,9 @@ export const TestedInTraining = () => (
         <Heading
           as="h2"
           size="none"
+          lines={HOME_TESTED.headingLines}
           className="text-2xl leading-[1.2] md:text-[2.5rem] xl:text-[4.05rem]"
-        >
-          {HOME_TESTED.headingLines.map((line) => (
-            <span key={line} className="block">
-              {line}
-            </span>
-          ))}
-        </Heading>
+        />
         <p className="mt-6 max-w-md text-sm text-support-night">{HOME_TESTED.body}</p>
         {/* Secondary — the home page's one Ember moment is the hero CTA (7PA-230). */}
         <Cta to={HOME_TESTED.cta.href} className="mt-8">
@@ -45,10 +42,13 @@ export const TestedInTraining = () => (
         </Cta>
       </div>
     </div>
-    <img
-      src={HOME_TESTED.image}
+    <Image
+      src={HOME_TESTED.image.url}
+      width={HOME_TESTED.image.width}
+      height={HOME_TESTED.image.height}
       alt=""
       loading="lazy"
+      sizes="(min-width: 640px) 45vw, 100vw"
       className="order-1 aspect-[351/367] w-full object-cover sm:order-2 sm:aspect-auto sm:h-full"
     />
   </section>

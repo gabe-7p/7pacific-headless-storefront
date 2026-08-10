@@ -104,10 +104,11 @@
  */
 @theme {
   /* The three-face brand stack (7PA-228, Brand Guidelines → 03 Typography):
-   * display = Archivo Condensed Bold (ALL CAPS, the only display weight),
-   * sans = Inter (body + UI), mono = JetBrains Mono (every number, price,
-   * spec, and edition device). Hierarchy comes from size contrast (4:1–5:1),
-   * never weight. */
+   * display = Archivo Condensed Medium — 500 is the only display weight
+   * (Gabe's override of the guidelines' Bold), ALL CAPS; sans = Inter
+   * (body + UI); mono = JetBrains Mono (every number, price, spec, and
+   * edition device). Hierarchy comes from size contrast (4:1–5:1), never
+   * weight. */
   --font-display: 'Archivo Variable', 'Archivo', 'Arial Narrow', sans-serif;
   --font-display--font-variation-settings: 'wdth' 75; /* Archivo Condensed */
   --font-sans: 'Inter Variable', 'Inter', sans-serif;
@@ -122,6 +123,17 @@
   --tracking-product: 0.04em; /* product names */
   --tracking-caps: 0.08em; /* caps UI: nav, CTAs, edition numbers */
   --tracking-spec: 0.1em; /* JetBrains Mono spec strips */
+
+  /* Live's Impulse theme breaks at 769/1025 (its media queries use max-width,
+   * so 768/1024 belong to the SMALLER tier — iPad portrait stacks), one past
+   * Tailwind's md/lg. `impulse:`/`impulse-lg:` are those tiers; don't reach
+   * for md:/lg: on surfaces that must flip exactly where live does. Named
+   * breakpoints sort by width, so these interleave correctly with md/lg/xl.
+   * NB: routes/products.$handle.tsx deliberately keeps arbitrary
+   * `min-[769px]:` variants — its chains rely on named-beats-arbitrary emit
+   * order (see the comments there) and need visual re-verification to move. */
+  --breakpoint-impulse: 769px;
+  --breakpoint-impulse-lg: 1025px;
 
   /* The "Meridian on Carbon" palette (Brand Guidelines → 03 Color Palette,
    * rev. Jul 2026), with target usage weights: Court 50% · Carbon 27% ·

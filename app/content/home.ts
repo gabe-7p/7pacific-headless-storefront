@@ -139,6 +139,10 @@ export type CoreValue = {
   cta: { label: string; href: string };
   /** Card background tone — live alternates dark charcoal and light gray. */
   tone: 'dark' | 'light';
+  /** The media panel paired with the card in its row. */
+  media:
+    | { kind: 'video'; src: string }
+    | { kind: 'image'; url: string; width: number; height: number };
 };
 
 /**
@@ -150,36 +154,37 @@ export type CoreValue = {
 export const HOME_CORE_VALUES = {
   heading: 'What We Stand For',
   subtitle: 'The reminders we train by. No matter the season.',
-  video: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-  images: {
-    socialSharing: `${CDN}/social_sharing.jpg`,
-    paulScreaming: `${CDN}/paul_screaming.jpg`,
-    digitalMap: `${CDN}/digital_map.png`,
-  },
   values: [
     {
       title: 'No Losses, Only Lessons',
       tone: 'dark',
       body: "When something doesn't work out, we figure out why and come back more experienced.",
       cta: { label: 'Read the story', href: '/pages/our-story' },
+      media: {
+        kind: 'video',
+        src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+      },
     },
     {
       title: 'Love The Journey',
       tone: 'light',
       body: 'The peak is a moment. The climb is the life. Most of the fun and memories are in the journey.',
       cta: { label: 'Sign up', href: '#newsletter' },
+      media: { kind: 'image', url: `${CDN}/social_sharing.jpg`, width: 1656, height: 1104 },
     },
     {
       title: 'Not Too Serious',
       tone: 'dark',
       body: "The training is serious. We're not. We hit our numbers, laugh between sets, and leave the tough-guy act to everyone else.",
       cta: { label: 'Shop tees', href: STORE_LINKS.shopShirts },
+      media: { kind: 'image', url: `${CDN}/paul_screaming.jpg`, width: 1656, height: 1104 },
     },
     {
       title: 'Play The Long Game',
       tone: 'light',
       body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
       cta: { label: 'Shop shorts', href: STORE_LINKS.shopShorts },
+      media: { kind: 'image', url: `${CDN}/digital_map.png`, width: 1536, height: 1024 },
     },
   ] satisfies ReadonlyArray<CoreValue>,
 } as const;
@@ -189,5 +194,5 @@ export const HOME_TESTED = {
   body: MEMBERSHIP_PITCH.body,
   cta: MEMBERSHIP_PITCH.cta,
   video: 'https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4',
-  image: `${CDN}/two_walking_to_workout_cropped.png`,
+  image: { url: `${CDN}/two_walking_to_workout_cropped.png`, width: 696, height: 728 },
 } as const;

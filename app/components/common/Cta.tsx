@@ -32,10 +32,12 @@ export const CtaLabel = ({ children }: { children: ReactNode }) => (
   </span>
 );
 
+/** `brand` is the page's ONE Ember moment; everything else is outline or
+    the borderless `brand-text` treatment. */
+export type CtaVariant = 'brand' | 'brand-outline' | 'brand-text';
+
 type CtaProps = {
-  /** `brand` is the page's ONE Ember moment; everything else is outline or
-      the borderless `brand-text` treatment. */
-  variant?: 'brand' | 'brand-outline' | 'brand-text';
+  variant?: CtaVariant;
   size?: ComponentProps<typeof Button>['size'];
   className?: string;
   /** The label only — the arrow device (`CtaLabel`) is added here, once. */

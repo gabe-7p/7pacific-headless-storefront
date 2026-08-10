@@ -13,7 +13,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
       src={card.imageUrl}
       alt=""
       loading="lazy"
-      className="aspect-[32/45] w-full object-cover min-[769px]:aspect-[5/6]"
+      className="aspect-[32/45] w-full object-cover impulse:aspect-[5/6]"
     />
     <Heading as="h3" variant="caps" size="none" className="mt-3 text-sm">
       {card.caption}

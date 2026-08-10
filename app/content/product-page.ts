@@ -14,8 +14,8 @@ export const PRODUCT_BRAND_BANNER = {
   body: MEMBERSHIP_PITCH.body,
   cta: MEMBERSHIP_PITCH.cta,
   images: {
-    hero: `${CDN}/running.png`,
-    bottomLeft: `${CDN}/core_values_picture.png`,
-    bottomRight: `${CDN}/single_running.png`,
+    hero: { url: `${CDN}/running.png`, width: 1486, height: 990 },
+    bottomLeft: { url: `${CDN}/core_values_picture.png`, width: 986, height: 1147 },
+    bottomRight: { url: `${CDN}/single_running.png`, width: 738, height: 850 },
   },
 } as const;

@@ -1,9 +1,12 @@
+import { Image } from '@shopify/hydrogen';
 import { useState } from 'react';
 
 import { Container } from '~/components/common/Container';
 import { Countdown } from '~/components/common/Countdown';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { SectionHeader } from '~/components/common/SectionHeader';
+import { SpecLine } from '~/components/common/SpecLine';
 import { WaitlistDialog } from '~/components/home/WaitlistDialog';
 import { HOME_DROP_TWO } from '~/content/home';
 
@@ -17,12 +20,13 @@ type TeaserCard = (typeof HOME_DROP_TWO.cards)[keyof typeof HOME_DROP_TWO.cards]
  */
 const Card = ({ card, children }: { card: TeaserCard; children: React.ReactNode }) => (
   <div className="relative overflow-hidden">
-    <img
+    <Image
       src={card.image.url}
-      alt=""
-      loading="lazy"
       width={card.image.width}
       height={card.image.height}
+      alt=""
+      loading="lazy"
+      sizes="(min-width: 768px) 50vw, 100vw"
       className="aspect-[4/5] w-full object-cover md:aspect-[10/13]"
     />
     {/* Legibility wash over the photo — same device as the Hero's, a touch
@@ -31,7 +35,7 @@ const Card = ({ card, children }: { card: TeaserCard; children: React.ReactNode 
     {/* text-ink-night on the wrapper so the outline CTA inherits it, the same
         way the tenet cards color their Cta through the card surface. */}
     <div className="text-ink-night absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-      <p className="font-mono text-xs tracking-spec uppercase">{card.eyebrow}</p>
+      <SpecLine>{card.eyebrow}</SpecLine>
       <Heading as="h3" size="none" className="mt-2 text-4xl md:text-5xl">
         {card.title}
       </Heading>
@@ -51,13 +55,7 @@ export const DropTwo = () => {
 
   return (
     <Container className="py-9 md:py-12">
-      <Heading
-        as="h2"
-        size="none"
-        className="text-5xl leading-[1.05] xl:text-6xl xl:leading-[1.05]"
-      >
-        {HOME_DROP_TWO.heading}
-      </Heading>
+      <SectionHeader heading={HOME_DROP_TWO.heading} scale="section" className="mb-0" />
       <Countdown
         dropIso={HOME_DROP_TWO.dropIso}
         labels={HOME_DROP_TWO.countdownLabels}

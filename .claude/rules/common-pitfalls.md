@@ -76,6 +76,8 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 <Heading className="text-4xl leading-[1.1]" />
 ```
 
+**Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does. Named breakpoints sort by width, so they interleave correctly with `md`/`lg`/`xl`. The one holdout is `routes/products.$handle.tsx`, which keeps arbitrary `min-[769px]:` variants on purpose — its chains rely on named-beats-arbitrary emit order (see the next trap) and need visual re-verification to move.
+
 **Named and arbitrary breakpoints don't interleave.** Tailwind emits named variants (`md:`) after arbitrary ones (`min-[1440px]:`), so the named one wins at the larger width regardless of intent. Use one form or the other in a chain:
 
 ```tsx
