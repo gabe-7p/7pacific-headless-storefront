@@ -20,7 +20,6 @@ const VARIANTS = {
 const SIZES = {
   /** No size — the caller owns the full responsive scale via className. */
   none: '',
-  sm: 'text-lg',
   md: 'text-2xl',
   lg: 'text-2xl md:text-3xl',
   xl: 'text-3xl md:text-4xl',

@@ -36,7 +36,7 @@ export const HOME_HERO = {
   },
 } as const;
 
-export type NameSpecCell = {
+type NameSpecCell = {
   /** Product-family name, display face (ALL CAPS via CSS). */
   name: string;
   /** Mono spec segments — rendered joined with ' · ' (the locked separator). */

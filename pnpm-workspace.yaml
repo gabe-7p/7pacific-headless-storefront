@@ -1,13 +1,11 @@
-allowBuilds:
-  esbuild: false
-  unrs-resolver: false
-  workerd: false
-# Single-package repo: this file exists only to hold pnpm settings (the new home
-# for them in pnpm v10+). No `packages:` list — this is not a monorepo.
+# Single-package repo: this file exists only to hold pnpm settings (their home
+# in pnpm v10+). No `packages:` list — this is not a monorepo.
 #
-# Allow these native dependencies to run their install/build scripts. pnpm blocks
-# build scripts by default; these binaries are required by Hydrogen/Oxygen/Vite.
-onlyBuiltDependencies:
-  - esbuild
-  - unrs-resolver
-  - workerd
+# Allow these native dependencies to run their install/build scripts. pnpm
+# blocks build scripts by default; these binaries are required by
+# Hydrogen/Oxygen/Vite. `allowBuilds` is the pnpm 11 setting (a package→boolean
+# map); an entry set to `false` would explicitly BLOCK that package's scripts.
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+  workerd: true

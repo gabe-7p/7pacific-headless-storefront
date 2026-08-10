@@ -100,7 +100,7 @@ export type AthleteSigningContent = {
   };
 };
 
-export const AMIR_SMITH = {
+const AMIR_SMITH = {
   chrome: {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',
@@ -161,7 +161,7 @@ export const AMIR_SMITH = {
  * life as a D1 athlete on IG (@joshwyche1): "Do Hard Things Friday" and
  * "Recovery Sunday" training series. Base: Richmond, VA.
  */
-export const JOSH_WYCHE = {
+const JOSH_WYCHE = {
   chrome: {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',
@@ -223,7 +223,7 @@ export const JOSH_WYCHE = {
  * three marathons with a 3:37 PR, Hyrox Dallas next. Creator/model on IG
  * (@kennethpiercejr, "Runner Knowledge" series), ~25.6K followers.
  */
-export const KENNETH_PIERCE = {
+const KENNETH_PIERCE = {
   chrome: {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',
@@ -282,7 +282,7 @@ export const KENNETH_PIERCE = {
 } satisfies AthleteSigningContent;
 
 /** URL handle → signing page content. Adding an athlete = one line here. */
-export const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
+const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
   'josh-wyche': JOSH_WYCHE,
   'kenneth-pierce': KENNETH_PIERCE,
