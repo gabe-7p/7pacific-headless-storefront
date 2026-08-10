@@ -91,6 +91,8 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 
 `app/styles/tailwind.css` has `form { max-width: 400px }` from `md` up (a Hydrogen skeleton leftover). Any full-width form control — the PDP add-to-cart bar, a sticky bar — needs to opt out (`[&>form]:max-w-none` on a wrapper). Check rendered width, not just the classes on the button.
 
+The same skeleton block also styles every bare `input` (`margin-top: 0.25rem`, `margin-bottom: 0.5rem`, border, radius, padding). Utility classes on the input override the ones you set — but any you _don't_ set leak through: a custom-styled input needs `m-0` (and `rounded-none` if square) or it sits 4px lower than the button beside it. Measure the rendered row, not the classes.
+
 ## No `any`
 
 `no-explicit-any` is a warning we treat as a defect — it hides type mismatches. Use `unknown` + narrowing, generics, or the generated types instead.

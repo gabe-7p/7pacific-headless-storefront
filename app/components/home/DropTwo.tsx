@@ -1,86 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Container } from '~/components/common/Container';
+import { Countdown } from '~/components/common/Countdown';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { WaitlistDialog } from '~/components/home/WaitlistDialog';
 import { HOME_DROP_TWO } from '~/content/home';
-import { getTimeLeft, pad2, type TimeLeft } from '~/lib/countdown';
-
-const DROP_TARGET_MS = Date.parse(HOME_DROP_TWO.dropIso);
-
-/** Display order of the countdown units, leftmost first. */
-const UNIT_KEYS = ['days', 'hours', 'minutes', 'seconds'] as const;
-
-/**
- * Live countdown to the drop. State starts null so the server render and the
- * first client render agree (the `useScrolledPast` SSR pattern); real values
- * land on mount and tick every second. The row is always fully laid out —
- * two-character placeholders + tabular-nums mean no shift when values arrive.
- *
- * Each tick also records which unit changed furthest to the left, and ONE
- * macOS-style Ember insertion caret renders to that number's left: seconds
- * most ticks, but a minute rollover moves the caret to MIN, and so on.
- */
-const Countdown = () => {
-  const [state, setState] = useState<{ timeLeft: TimeLeft | null; caretIndex: number }>({
-    timeLeft: null,
-    caretIndex: 0,
-  });
-
-  useEffect(() => {
-    const tick = () =>
-      setState((prev) => {
-        const timeLeft = getTimeLeft(DROP_TARGET_MS, Date.now());
-        const prevTimeLeft = prev.timeLeft;
-        const changed = prevTimeLeft
-          ? UNIT_KEYS.findIndex((unit) => timeLeft[unit] !== prevTimeLeft[unit])
-          : 0;
-        // Nothing changed (the countdown is holding at zero): keep the old
-        // index — the caret's key stays the same, so it doesn't replay.
-        return { timeLeft, caretIndex: changed === -1 ? prev.caretIndex : changed };
-      });
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const { timeLeft, caretIndex } = state;
-  const values = timeLeft
-    ? UNIT_KEYS.map((unit) => pad2(timeLeft[unit]))
-    : HOME_DROP_TWO.countdownLabels.map(() => '--');
-
-  return (
-    <div className="mt-3 flex items-start gap-4 md:gap-6" aria-label="Countdown to the drop">
-      {HOME_DROP_TWO.countdownLabels.map((label, index) => (
-        <div key={label} className="flex items-start gap-4 md:gap-6">
-          {index > 0 && (
-            <span aria-hidden className="font-mono text-2xl text-ink md:text-3xl">
-              ·
-            </span>
-          )}
-          <div className="flex flex-col gap-1">
-            <span className="relative font-mono text-2xl leading-none text-ink tabular-nums md:text-3xl md:leading-none">
-              {/* The single insertion caret, keyed on position + value so a
-                  change re-mounts it and replays one flick, then it rests
-                  hidden. Absolutely positioned so it never shifts the digits.
-                  Ember on the countdown is deliberate, per Gabe (2026-08-03). */}
-              {index === caretIndex && timeLeft && (
-                <span
-                  key={`${caretIndex}-${values[caretIndex]}`}
-                  aria-hidden
-                  className="bg-brand animate-caret-blink absolute top-1/2 -left-1.5 h-[0.85em] w-0.5 -translate-y-1/2 opacity-0 motion-reduce:animate-none"
-                />
-              )}
-              {values[index]}
-            </span>
-            <span className="font-mono text-[10px] tracking-spec text-ink uppercase">{label}</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 type TeaserCard = (typeof HOME_DROP_TWO.cards)[keyof typeof HOME_DROP_TWO.cards];
 
@@ -132,7 +57,11 @@ export const DropTwo = () => {
       >
         {HOME_DROP_TWO.heading}
       </Heading>
-      <Countdown />
+      <Countdown
+        dropIso={HOME_DROP_TWO.dropIso}
+        labels={HOME_DROP_TWO.countdownLabels}
+        className="mt-3"
+      />
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
         <Card card={fallGear}>
           <Cta to={fallGear.cta.href} prefetch="intent" size="xs" className="mt-4">
