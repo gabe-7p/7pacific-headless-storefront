@@ -1,62 +1,13 @@
-import { useEffect, useId, useState } from 'react';
+import { useId } from 'react';
 import { useFetcher } from 'react-router';
 
 import { Container } from '~/components/common/Container';
+import { Countdown } from '~/components/common/Countdown';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { MediaSlot } from '~/components/common/MediaSlot';
 import { FIRST_LIGHT } from '~/content/first-light';
-import { getTimeLeft, pad2, type TimeLeft } from '~/lib/countdown';
 import type { WaitlistResponse } from '~/routes/api.waitlist';
-
-const DROP_TARGET_MS = Date.parse(FIRST_LIGHT.countdown.dropIso);
-
-/** Display order of the countdown units, leftmost first. */
-const UNIT_KEYS = ['days', 'hours', 'minutes', 'seconds'] as const;
-
-/**
- * Live countdown to the drop, sized up for the closing backdrop. Same SSR
- * pattern as the homepage DropTwo countdown: state starts null so the server
- * render and the first client render agree; real values land on mount and
- * tick every second. `getTimeLeft` clamps at zero, so past the drop the
- * timer holds at 00 · 00 · 00 · 00 (the page is updated by hand on drop day).
- */
-const Countdown = () => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
-
-  useEffect(() => {
-    const tick = () => setTimeLeft(getTimeLeft(DROP_TARGET_MS, Date.now()));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const values = timeLeft
-    ? UNIT_KEYS.map((unit) => pad2(timeLeft[unit]))
-    : FIRST_LIGHT.countdown.labels.map(() => '--');
-
-  return (
-    <div className="flex items-start gap-5 md:gap-8" aria-label="Countdown to the drop">
-      {FIRST_LIGHT.countdown.labels.map((label, index) => (
-        <div key={label} className="flex items-start gap-5 md:gap-8">
-          {index > 0 && (
-            <span aria-hidden className="font-mono text-3xl text-ink md:text-5xl">
-              ·
-            </span>
-          )}
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-4xl leading-none text-ink tabular-nums md:text-6xl md:leading-none">
-              {values[index]}
-            </span>
-            <span className="font-mono text-[10px] tracking-spec text-ink uppercase md:text-xs">
-              {label}
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
     the placeholder pseudo-element, so typed values stay as entered). */
@@ -199,7 +150,11 @@ const CountdownSection = () => (
   <section className="relative">
     <MediaSlot media={FIRST_LIGHT.countdown.media} ratio="backdrop" />
     <div className="absolute inset-0 flex justify-center pt-16 md:pt-32">
-      <Countdown />
+      <Countdown
+        dropIso={FIRST_LIGHT.countdown.dropIso}
+        labels={FIRST_LIGHT.countdown.labels}
+        size="xl"
+      />
     </div>
   </section>
 );
