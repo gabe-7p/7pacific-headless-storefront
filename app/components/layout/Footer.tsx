@@ -5,10 +5,12 @@ import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { InstagramIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
+import { toInternalPath } from '~/lib/urls';
 
 type FooterProps = {
   footer: Promise<FooterQuery | null>;
@@ -144,21 +146,12 @@ const SocialIcons = () => (
           title={social.platform}
           className="inline-flex transition-opacity hover:opacity-70"
         >
-          {social.platform === 'Instagram' && <InstagramIcon />}
+          {social.platform === 'Instagram' && <InstagramIcon className="size-[22px]" />}
           <span className="sr-only">{social.platform}</span>
         </a>
       </li>
     ))}
   </ul>
-);
-
-// lucide-react v1 dropped brand/logo icons, so the one social glyph is inline.
-const InstagramIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
-  </svg>
 );
 
 const FooterSupport = ({
@@ -174,18 +167,11 @@ const FooterSupport = ({
     menu?.items?.map((item) => ({ id: item.id, title: item.title, url: item.url ?? '' })) ??
     BRAND.footerLinks.map((link) => ({ id: link.url, title: link.title, url: link.url }));
 
-  const toInternalPath = (itemUrl: string) =>
-    itemUrl.includes('myshopify.com') ||
-    itemUrl.includes(publicStoreDomain) ||
-    itemUrl.includes(primaryDomainUrl)
-      ? new URL(itemUrl).pathname
-      : itemUrl;
-
   return (
     <nav className="flex flex-col gap-2 text-[10.2px]" role="navigation">
       {items.map((item) => {
         if (!item.url) return null;
-        const url = toInternalPath(item.url);
+        const url = toInternalPath(item.url, { publicStoreDomain, primaryDomainUrl });
         const isExternal = !url.startsWith('/');
         return isExternal ? (
           <a

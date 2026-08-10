@@ -27,14 +27,10 @@ import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { getColorSwatches } from '~/lib/colors';
-import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
-import type {
-  ProductDetailCard,
-  SpecCardData,
-  TechStack as TechStackData,
-} from '~/lib/productContent';
+import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
 
@@ -347,21 +343,7 @@ const PRODUCT_FRAGMENT = `#graphql
     fitNote: metafield(namespace: "custom", key: "fit_note") {
       value
     }
-    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
-      references(first: 10) {
-        nodes {
-          ... on Product {
-            handle
-            colorName: metafield(namespace: "custom", key: "color_name") {
-              value
-            }
-            colorHex: metafield(namespace: "custom", key: "color_hex") {
-              value
-            }
-          }
-        }
-      }
-    }
+    ...ColorSiblings
     productDetails: metafield(namespace: "custom", key: "product_details") {
       value
     }
@@ -384,15 +366,7 @@ const PRODUCT_FRAGMENT = `#graphql
     # Imagery lands with the photography program (7PA-236); renders if present.
     environmentalHero: metafield(namespace: "custom", key: "environmental_hero") {
       reference {
-        ... on MediaImage {
-          image {
-            id
-            url
-            altText
-            width
-            height
-          }
-        }
+        ...MediaImageRef
       }
     }
     environmentalHeroCaption: metafield(namespace: "custom", key: "environmental_hero_caption") {
@@ -402,32 +376,26 @@ const PRODUCT_FRAGMENT = `#graphql
     # per product. Falls back to the variant image when unset.
     heroImage: metafield(namespace: "custom", key: "hero_image") {
       reference {
-        ... on MediaImage {
-          image {
-            id
-            url
-            altText
-            width
-            height
-          }
-        }
+        ...MediaImageRef
       }
     }
     heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {
       reference {
-        ... on MediaImage {
-          image {
-            id
-            url
-            altText
-            width
-            height
-          }
-        }
+        ...MediaImageRef
       }
     }
   }
+  fragment MediaImageRef on MediaImage {
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
   ${PRODUCT_VARIANT_FRAGMENT}
+  ${COLOR_SIBLINGS_FRAGMENT}
 ` as const;
 
 const PRODUCT_QUERY = `#graphql

@@ -11,7 +11,7 @@
  */
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
-import { HOME_DROP_TWO } from '~/content/home';
+import { DROP_TWO_LAUNCH } from '~/content/drop-two';
 
 const PLACEHOLDER_IMAGE = { kind: 'placeholder', type: 'image' } satisfies MediaSlotSource;
 
@@ -49,9 +49,9 @@ intensity picks up.',
 products once it’s live so it’s fresh in your mind when you come back.',
   },
   countdown: {
-    /** The same Drop 02 target and unit labels the homepage teaser uses — one source. */
-    dropIso: HOME_DROP_TWO.dropIso,
-    labels: HOME_DROP_TWO.countdownLabels,
+    /** The shared Drop 02 target and unit labels (content/drop-two.ts) — one source. */
+    dropIso: DROP_TWO_LAUNCH.dropIso,
+    labels: DROP_TWO_LAUNCH.countdownLabels,
     /** Full-bleed backdrop the countdown overlays. */
     media: PLACEHOLDER_IMAGE,
   },

@@ -4,11 +4,12 @@ import { Await, NavLink, useAsyncValue, useLocation } from 'react-router';
 import type { CartApiQueryFragment, HeaderQuery } from 'storefrontapi.generated';
 
 import { Container } from '~/components/common/Container';
-import { BagIcon, HamburgerIcon, UserIcon } from '~/components/common/icons';
+import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
+import { toInternalPath } from '~/lib/urls';
 
 type HeaderProps = {
   header: HeaderQuery;
@@ -96,13 +97,6 @@ export const HeaderMenu = ({
   const { close } = useAside();
   const isMobile = viewport === 'mobile';
 
-  const toInternalPath = (itemUrl: string) =>
-    itemUrl.includes('myshopify.com') ||
-    itemUrl.includes(publicStoreDomain) ||
-    itemUrl.includes(primaryDomainUrl)
-      ? new URL(itemUrl).pathname
-      : itemUrl;
-
   return (
     <nav
       // Live's mobile drawer clears the close button before the first link and
@@ -124,7 +118,7 @@ export const HeaderMenu = ({
             end
             onClick={close}
             prefetch="intent"
-            to={toInternalPath(item.url)}
+            to={toInternalPath(item.url, { publicStoreDomain, primaryDomainUrl })}
             // Live never marks the current page in the nav, so no active state.
             // Caps-UI tier: Archivo Condensed Medium (Gabe's override of the
             // Inter caps-UI rule), ALL CAPS, +0.08em tracking.
@@ -155,22 +149,12 @@ export const HeaderMenu = ({
               aria-label={social.platform}
               className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
             >
-              <InstagramGlyph />
+              <InstagramIcon className="size-5" />
             </a>
           ))}
     </nav>
   );
 };
-
-// lucide-react v1 dropped brand/logo icons, so the Instagram glyph is inline
-// (mirrors the footer's icon).
-const InstagramGlyph = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
-  </svg>
-);
 
 const HeaderCtas = ({
   cart,

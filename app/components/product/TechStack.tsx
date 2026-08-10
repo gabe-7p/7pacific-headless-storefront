@@ -5,7 +5,8 @@ import { Heading } from '~/components/common/Heading';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { CareIcon } from '~/components/product/CareIcon';
 import { PdpSection } from '~/components/product/PdpSection';
-import type { TechFeature, TechIcon, TechStack as TechStackData } from '~/lib/productContent';
+import { cn } from '~/lib/cn';
+import type { TechFeature, TechIcon, TechStackData } from '~/lib/productContent';
 
 const ICONS: Record<TechIcon, string> = {
   perforations: perforationsIcon,
@@ -30,7 +31,7 @@ const ROW_TITLE = 'text-sm tracking-[1px] min-[1025px]:text-base';
 const COL = 'flex justify-center min-[769px]:justify-start';
 
 const Feature = ({ feature }: { feature: TechFeature }) => (
-  <div className={`${ROW_GRID} items-center`}>
+  <div className={cn(ROW_GRID, 'items-center')}>
     <div className={COL}>
       <Heading as="h3" variant="caps" size="none" className={ROW_TITLE}>
         {feature.heading}
@@ -77,7 +78,7 @@ export const TechStack = ({ data }: { data: TechStackData }) => {
         {data.features.map((feature) => (
           <Feature key={feature.heading} feature={feature} />
         ))}
-        <div className={`${ROW_GRID} items-start`}>
+        <div className={cn(ROW_GRID, 'items-start')}>
           <Column label="Materials">
             {data.materials.map((line) => (
               <p key={line} className="text-[0.72rem] leading-normal">

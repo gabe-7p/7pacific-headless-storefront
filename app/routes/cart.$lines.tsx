@@ -50,8 +50,7 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   }
 }
 
-const Component = () => {
-  return null;
-};
+// Loader always redirects; nothing renders.
+const CartLinesPage = () => null;
 
-export default Component;
+export default CartLinesPage;
