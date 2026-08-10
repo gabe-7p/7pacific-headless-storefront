@@ -10,9 +10,12 @@ import { FIRST_LIGHT } from '~/content/first-light';
 import type { WaitlistResponse } from '~/routes/api.waitlist';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
-    the placeholder pseudo-element, so typed values stay as entered). */
+    the placeholder pseudo-element, so typed values stay as entered). h-9
+    matches the Button default height exactly and m-0 clears the base
+    layer's stray input margins (see common-pitfalls.md), so the boxes and
+    the SIGN UP CTA read as one row. */
 const fieldClass =
-  'w-full rounded-none border border-ink bg-transparent px-4 py-3 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
+  'm-0 block h-9 w-full rounded-none border border-ink bg-transparent px-4 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
 
 /**
  * The Early Access signup (name + email). Posts to the same /api/waitlist
