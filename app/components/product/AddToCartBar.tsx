@@ -1,7 +1,7 @@
-import { ChevronRight } from 'lucide-react';
 import type { ProductFragment } from 'storefrontapi.generated';
 
 import { AddToCartButton } from '~/components/cart/AddToCartButton';
+import { CtaLabel } from '~/components/common/Cta';
 import { useAside } from '~/components/layout/Aside';
 import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
@@ -24,7 +24,7 @@ export const AddToCartBar = ({
     // its card (and the full viewport when sticky), so opt this one out.
     <div className="[&>form]:max-w-none">
       {/* The PDP's one Ember moment (7PA-230) — the `brand` CTA device
-          (mono caps, trailing chevron, pointer cursor) shared via
+          (mono caps, arrow-slide label via CtaLabel, pointer cursor) shared via
           buttonVariants; only the bar's dimensions are local. This is the one
           CTA that can't render through <Cta> (it's a CartForm submit). */}
       <AddToCartButton
@@ -37,14 +37,7 @@ export const AddToCartBar = ({
             : []
         }
       >
-        {selectedVariant?.availableForSale ? (
-          <>
-            Add to cart
-            <ChevronRight />
-          </>
-        ) : (
-          'Sold out'
-        )}
+        {selectedVariant?.availableForSale ? <CtaLabel>Add to cart</CtaLabel> : 'Sold out'}
       </AddToCartButton>
     </div>
   );

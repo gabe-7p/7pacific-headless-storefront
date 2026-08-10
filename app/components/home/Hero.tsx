@@ -26,7 +26,12 @@ export const Hero = () => (
       alt=""
       sizes="100vw"
       loading="eager"
-      fetchPriority="high"
+      // React 18's runtime doesn't implement the camelCase fetchPriority DOM
+      // prop (that's React 19; @types/react declares it early, so TS allowed
+      // it). Spread the lowercase attribute instead — React forwards unknown
+      // lowercase attributes to the DOM as-is, and HTML attribute names are
+      // case-insensitive, so the browser still gets the LCP priority hint.
+      {...{ fetchpriority: 'high' }}
       className="absolute inset-0 size-full object-cover"
     />
     {/* Live's .custom-hero-overlay verbatim: a flat rgba(0,0,0,0.10) wash over

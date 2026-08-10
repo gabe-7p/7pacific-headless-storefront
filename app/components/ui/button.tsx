@@ -4,6 +4,11 @@ import type * as React from 'react';
 
 import { cn } from '~/lib/cn';
 
+// Shared ramp for the three 7Pacific brand CTA variants + the `group/cta`
+// hook that drives the CtaLabel arrow-slide animation
+// (see ~/components/common/Cta.tsx).
+const brandCta = 'group/cta rounded-[2px] font-mono font-medium uppercase tracking-caps';
+
 const buttonVariants = cva(
   "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -18,26 +23,27 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
         // 7Pacific primary CTA (7PA-230): the page's ONE Ember moment — mono
-        // caps with a trailing ChevronRight (callers pass `LABEL <ChevronRight />`
-        // as the child), Court on Ember. On hover the chevron nudges right and
-        // grows. At most one `brand` button may render per page.
-        brand:
-          'bg-brand text-brand-text hover:bg-field-night hover:text-ink-night rounded-[2px] font-mono font-medium uppercase tracking-caps [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
-        // 7Pacific secondary CTA: same mono-caps + chevron device, Zinc border,
+        // caps with a trailing ArrowRight (callers pass label through CtaLabel,
+        // which owns the hover arrow-slide), Court on Ember. At most one
+        // `brand` button may render per page.
+        brand: `${brandCta} bg-brand text-brand-text hover:bg-field-night hover:text-ink-night`,
+        // 7Pacific secondary CTA: same mono-caps + arrow device, Zinc border,
         // text in the current color so it adapts to dark or light surfaces.
-        'brand-outline':
-          'border-border-subtle rounded-[2px] border bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+        'brand-outline': `${brandCta} border-border-subtle border bg-transparent hover:opacity-70`,
         // 7Pacific text CTA: the quietest tier of the same device — no fill,
-        // no border, just the mono-caps label + chevron. Callers flush it left
+        // no border, just the mono-caps label + arrow. Callers flush it left
         // with `px-0` (size paddings would otherwise win the merge).
-        'brand-text':
-          'rounded-[2px] bg-transparent font-mono font-medium uppercase tracking-caps hover:opacity-70 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-0.5 hover:[&_svg]:scale-110',
+        'brand-text': `${brandCta} bg-transparent hover:opacity-70`,
       },
       size: {
-        default: 'h-9 px-4 py-2 has-[>svg]:px-3',
-        xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: 'h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
+        // Label sizes own every per-size CTA fact on their one line: gap, icon
+        // padding (the has-[...] selector matches the svg directly OR inside
+        // CtaLabel's clip wrapper), and `--cta-slide` — the arrow-slide travel
+        // (icon width + gap) consumed by CtaLabel (~/components/common/Cta.tsx).
+        default: 'h-9 px-4 py-2 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-3',
+        xs: "h-6 gap-1 rounded-md px-2 text-xs [--cta-slide:--spacing(4)] has-[>svg,>[data-cta-label]]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: 'h-8 gap-1.5 rounded-md px-3 [--cta-slide:--spacing(5.5)] has-[>svg,>[data-cta-label]]:px-2.5',
+        lg: 'h-9 rounded-md px-6 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-4',
         icon: 'size-9',
         'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8',
