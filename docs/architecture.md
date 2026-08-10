@@ -49,16 +49,16 @@ Today the code is organized by **domain folders**:
 app/
   routes/        one file per route (React Router flat convention)
   components/
-    layout/      Header, Footer, PageLayout, Aside, NewsletterPopup, Announcement
+    layout/      Header, Footer, PageLayout, Aside, Announcement
     cart/        cart UI
     product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
     collection/  ProductCard, MarketingSections
     home/        homepage sections
-    content/     static-page compositions (OurStory)
-    common/      shared primitives (Container, Heading, Prose, TextLink, Eyebrow, …)
+    content/     static-page compositions (OurStory, AthleteSigning, FirstLightTeaser)
+    common/      shared primitives (Container, Heading, Cta, Prose, NewsletterDialog, …)
   content/       typed marketing copy + store links (links.ts)
   lib/           fragments.ts, context.ts, session.ts, colors.ts, metafields.ts, seo.ts, … (+ colocated *.test.ts)
-  styles/        tailwind.css + globals
+  styles/        tailwind.css — the single stylesheet (no separate globals)
 ```
 
 Site chrome (announcement/header/footer) is applied globally: `root.tsx`'s `App` wraps every route's `<Outlet/>` in `PageLayout`. A route can opt out with `export const handle: RouteHandle = { chrome: false }` (type exported from `app/root.tsx`) — it then renders bare and owns its full page, including the `main` landmark. Used by one-off chrome-less pages like the athlete signing pages (`routes/athletes.$handle.tsx`).
@@ -106,4 +106,4 @@ CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality ga
 
 ## Migration context
 
-This repo replaces a customized **Impulse v8** Liquid theme. We migrate **live pages only** (home, product, collection, our-story, contact, cart, search), English-only, with marketing copy as typed TS constants. The full migration plan lives in Linear epic **GD-1** ("Refactor" project); each ticket maps _what exists now → what it becomes_ and ships independently.
+This repo replaces a customized **Impulse v8** Liquid theme. The migration shipped **live pages only** (home, product, collection, our-story, contact, cart — no search route), English-only, with marketing copy as typed TS constants; post-migration surfaces (journal, drops teaser, athlete signing pages) have since been added on top. The original migration plan lives in Linear epic **GD-1** ("Refactor" project); each ticket maps _what exists now → what it becomes_ and ships independently.

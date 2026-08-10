@@ -57,9 +57,11 @@ export const BRAND = {
   ] satisfies Array<NavLink>,
 
   /**
-   * Fallback header nav, used only if the Storefront `main-menu` is empty.
-   * Contact lives in the footer only. (The locked nav's Drops entry is gone
-   * with the Drops routes; Journal stays until that section is linked.)
+   * Fallback header nav, used only if the Storefront `main-menu` is empty —
+   * mirrors the locked nav (7PA-235); Contact lives in the footer only.
+   * NB: `/account` has no local route (guest checkout) — the live menu's
+   * entry points at Shopify's hosted portal, so this fallback link only
+   * matters in the degraded no-menu case.
    */
   headerLinks: [
     { title: 'Shop', url: STORE_LINKS.shopAll },

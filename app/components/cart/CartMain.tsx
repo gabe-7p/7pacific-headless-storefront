@@ -18,7 +18,6 @@ export type CartMainProps = {
 
 export type LineItemChildrenMap = { [parentId: string]: Array<CartLine> };
 
-/** Returns a map of all line items and their children. */
 const getLineItemChildrenMap = (lines: Array<CartLine>): LineItemChildrenMap => {
   const children: LineItemChildrenMap = {};
   for (const line of lines) {

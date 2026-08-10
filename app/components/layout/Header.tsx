@@ -46,7 +46,6 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
   return (
     <header
       className={cn(
-        // positioned by the sticky topbar wrapper in PageLayout
         'transition-colors duration-300 ease-(--ease-brand)',
         overlay
           ? 'bg-linear-to-b from-black/30 to-transparent text-ink-night'
@@ -73,7 +72,7 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
         >
           <Logo
             tone={overlay ? 'light' : 'dark'}
-            className={cn('h-5 lg:h-8', overlay && 'opacity-70')}
+            className={cn('h-4.5 lg:h-7', overlay && 'opacity-70')}
           />
         </NavLink>
 
@@ -182,7 +181,8 @@ const HeaderCtas = ({
       {/* Customer login lives on Shopify's hosted account portal, not this headless
           storefront (we don't use the Customer Account API). `{store-domain}/account`
           302-redirects to it; the myshopify domain is always Shopify-served, so this
-          link survives the custom-domain cutover. Desktop-only, mirroring the cart. */}
+          link survives the custom-domain cutover. Desktop-only (the cart shows at
+          every width). */}
       <a
         href={`https://${publicStoreDomain}/account`}
         className="hidden items-center transition-opacity hover:opacity-70 min-[769px]:inline-flex"

@@ -55,8 +55,6 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
             <Image
               data={featuredImage}
               sizes={IMAGE_SIZES}
-              // Eager-load the first visible row (above the fold) so the grid
-              // paints immediately; the rest lazy-load on scroll.
               loading={priority ? 'eager' : 'lazy'}
               className="aspect-square w-full object-cover"
             />

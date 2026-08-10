@@ -2,8 +2,8 @@ import { BRAND } from '~/lib/brand';
 
 /**
  * SEO defaults — single source for the page-title format and fallback meta.
- * Use `pageTitle()` in every route's `meta` so the title format changes in one
- * place.
+ * Routes build their `meta` through `buildMeta()` below; `pageTitle` is its
+ * title formatter (exported for tests).
  */
 export const DEFAULT_DESCRIPTION =
   'Lightweight, breathable training gear built for performance. Free shipping on orders over $200.';

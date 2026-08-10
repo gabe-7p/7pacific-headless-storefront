@@ -3,18 +3,11 @@ import * as serverBuild from 'virtual:react-router/server-build';
 
 import { createHydrogenRouterContext } from '~/lib/context';
 
-/**
- * Export a fetch handler in module format.
- */
 export default {
   async fetch(request: Request, env: Env, executionContext: ExecutionContext): Promise<Response> {
     try {
       const hydrogenContext = await createHydrogenRouterContext(request, env, executionContext);
 
-      /**
-       * Create a Hydrogen request handler that internally
-       * delegates to React Router for routing and rendering.
-       */
       const handleRequest = createRequestHandler({
         build: serverBuild,
         mode: process.env.NODE_ENV,
@@ -28,11 +21,7 @@ export default {
       }
 
       if (response.status === 404) {
-        /**
-         * Check for redirects only when there's a 404 from the app.
-         * If the redirect doesn't exist, then `storefrontRedirect`
-         * will pass through the 404 response.
-         */
+        // Shopify-configured URL redirects; passes the 404 through when none match.
         return storefrontRedirect({
           request,
           response,

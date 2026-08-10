@@ -31,11 +31,13 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 
 ```
 app/
+  routes.ts      route config (flat-routes convention + Hydrogen's virtual routes)
   routes/        one file per route (React Router flat convention); loader/action live here
   components/    presentational only — layout/ cart/ product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + store links (links.ts = the ONE place product/collection handles live)
   lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
-  styles/        tailwind.css + minimal globals
+  assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
+  styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico)
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
@@ -54,16 +56,16 @@ Full detail in [.claude/rules/](.claude/rules/) — read the relevant file befor
 - [common-pitfalls.md](.claude/rules/common-pitfalls.md) — nullable Storefront fields, no waterfalls, never expose `PRIVATE_*`, no `any`.
 - [ui-components.md](.claude/rules/ui-components.md) — when to reach for a shadcn/ui primitive vs. hand-build, how to add/restyle one, the `components/ui/` lint exemption.
 
-The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
+The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
 ## Brand single-sources (change once, applies everywhere)
 
 Never hardcode brand values inline — edit the one source and every consumer follows:
 
 - **Colors & font** → `app/styles/tailwind.css` `@theme`. Components reference **role tokens** — `bg-field`, `text-ink`, `text-support`, `border-border-subtle` (+ `-night` variants on dark surfaces) and the chrome tokens (`bg-nav`, `text-brand`, `bg-footer`, …) — **never raw palette names** (`court`/`carbon`/`graphite`/`zinc`/`ember`), so a palette revision edits tailwind.css only. Raw palette utilities are allowed only where the specific color is the point, with a comment at the call site.
-- **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; `--topbar-h` is derived).
+- **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; the sticky topbar offsets itself by `-top-(--announcement-h)`).
 - **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
-- **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`).
+- **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`buildMeta()`).
 - **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`). All titles render through `Heading`; all CTAs through `Cta` (label in, arrow + variant handled once) — never hand-roll heading classes or assemble `Button` + icon at a callsite.
 
 ## Domain note: color = separate product

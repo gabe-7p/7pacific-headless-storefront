@@ -2,11 +2,11 @@
  * Configure Tailwind v4 in this file using CSS variables and directives:
  * https://tailwindcss.com/docs/v4-beta#css-first-configuration
  *
- * Brand design tokens (colors, fonts) are added in their own `@theme` block by
- * the brand-migration work. The blocks below are the shadcn/ui primitive tokens
- * (see ADR 0006 / .claude/rules/ui-components.md) — they back the generated
- * components in app/components/ui/ and don't collide with the `--color-*` brand
- * names. Keep both; don't clobber one with the other.
+ * Brand design tokens (colors, fonts) live in their own `@theme` block below.
+ * The blocks right below this are the shadcn/ui primitive tokens (see ADR 0006
+ * / .claude/rules/ui-components.md) — they back the generated components in
+ * app/components/ui/ and don't collide with the `--color-*` brand names. Keep
+ * both; don't clobber one with the other.
  */
 
 @import 'tailwindcss';
@@ -185,8 +185,8 @@
 
   /* Homepage Name/Spec banner marquee — rightward (content moves
      left-to-right). The cell set is duplicated in the track, so -50% → 0
-     loops seamlessly. 66.5s = the approved 50s slowed 10% three times
-     (Gabe 2026-07-24). */
+     loops seamlessly. 85s per loop — slowed by eye from the original 50s
+     until it read right (Gabe 2026-07-24). */
   --animate-marquee-right: marquee-right 85s linear infinite;
 
   @keyframes marquee-right {
@@ -253,15 +253,15 @@
 
 /**
  * Brand layout & motion constants — the single source of truth for page width,
- * the top-bar heights, and the signature easing. Consumed via Tailwind
- * arbitrary values, e.g. `max-w-[var(--page-max)]`, `h-[var(--header-h)]`,
- * `top-[var(--announcement-h)]`, `ease-[var(--ease-brand)]`. Change a value here
- * and every consumer follows — the sticky topbar offsets itself by
+ * the top-bar heights, and the signature easing. Consumed via Tailwind's v4
+ * CSS-variable shorthand, e.g. `max-w-(--page-max)`, `h-(--header-h)`,
+ * `-top-(--announcement-h)`, `ease-(--ease-brand)`. Change a value here and
+ * every consumer follows — the sticky topbar offsets itself by
  * `--announcement-h` so the announcement scrolls away while the header pins.
  */
 :root {
   --page-max: 1400px;
-  --header-h: 4.5rem; /* 72px — trimmed from live's 92px Impulse header; the rebrand nav wants a tighter bar */
+  --header-h: 3.375rem; /* 54px — 25% off the previous 72px bar for a sleeker nav (Gabe 2026-08-10) */
   --announcement-h: 1.75rem; /* 28px — bumped back to live's height for the static bar (Gabe 2026-07-24) */
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
 }

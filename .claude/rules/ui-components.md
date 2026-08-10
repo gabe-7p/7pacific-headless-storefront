@@ -21,9 +21,11 @@ It is **not a runtime UI kit**. The CLI copies component _source_ into `app/comp
 pnpm dlx shadcn@latest add <name>   # e.g. dialog, select, accordion, tooltip
 ```
 
-It reads [`components.json`](../../components.json) (aliased to `~/*`, base color `neutral`, new-york style) and writes to `app/components/ui/`. Then restyle the generated classes to match the brand. Already scaffolded: `button`, `dialog`, `select`, `accordion`, `sheet`. (Add primitives only when a consumer exists — unused generated files get deleted.)
+It reads [`components.json`](../../components.json) (aliased to `~/*`, base color `neutral`, new-york style) and writes to `app/components/ui/`. Then restyle the generated classes to match the brand. Already scaffolded: `button`, `dialog`, `sheet`. (Add primitives only when a consumer exists — unused generated files get deleted, which is how `select` and `accordion` went.)
 
 **Brand CTAs render through [`common/Cta`](../../app/components/common/Cta.tsx), not raw `Button variant="brand"`.** `Cta` owns the CTA anatomy via `CtaLabel` (label + trailing `ArrowRight`; on hover/focus-visible the whole label slides right — a second arrow enters from the left edge while the trailing one exits, both clipped by the label's overflow-hidden wrapper; one transform, no opacity fades, `motion-reduce` swaps instantly. `CtaLabel` is size-agnostic: each Button `size` variant publishes the slide travel as `[--cta-slide:…]` (icon width + gap) and the label inherits the button's gap, so every per-size CTA fact lives on that one line in `button.tsx`). `Cta` renders a `Link`, `<a>`, or `<button>` from its props — so a device change is one edit, not a per-callsite hunt. The one exception is the PDP `AddToCartButton` (a CartForm submit), which composes `buttonVariants({ variant: 'brand' })` + `CtaLabel` directly. Same principle for titles: every heading renders through `common/Heading` (`brand`/`quiet`/`caps` variants) — never retype heading classes. The one exception is `Prose`, which styles CMS-supplied HTML via `[&_h2]:` selectors and must mirror `Heading`'s weights manually.
+
+**Terminology (keep comments consistent):** the CTA glyph is an **ArrowRight arrow-slide** — not a "chevron" (retired Aug 2026) and not a "bracket device". The display weight is **500 (Medium)** everywhere — the type system has no Bold display tier.
 
 ## Rules for `app/components/ui/`
 

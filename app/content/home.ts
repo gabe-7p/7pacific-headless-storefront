@@ -1,9 +1,9 @@
 /**
  * Homepage marketing copy + section asset URLs (typed constants, not JSX).
- * Mirrors the live Impulse homepage sections: custom-hero-image, main-collection,
- * core-values-homepage-v2, black-text-image-split. Asset URLs are the same Shopify
- * Files / CDN assets the live theme uses (hero image, the two looping videos, and
- * the core-values photography) — change a value here, the homepage follows.
+ * The Impulse-parity sections (hero, first drop, core values, brand banner)
+ * mirror the live theme; the Name/Spec marquee and Drop 02 teaser are
+ * post-migration additions. Asset URLs are the same Shopify Files / CDN assets
+ * the live theme uses — change a value here, the homepage follows.
  */
 
 import { STORE_LINKS } from '~/content/links';
@@ -48,8 +48,8 @@ type NameSpecCell = {
 
 /**
  * The Name/Spec marquee banner directly below the hero (approved prototype,
- * Jul 2026): the three live product families as name-over-spec cells plus one
- * Shop All cell, auto-scrolling. Content is locked — exactly these four cells.
+ * Jul 2026): the three live product families as name-over-spec cells plus the
+ * Shop All CTA cell, auto-scrolling. Content is locked — exactly these cells.
  * Names use the product cards' short-title device (family + noun, no "//"
  * descriptor) per Gabe (2026-07-24), so the banner and grid read as one system.
  */

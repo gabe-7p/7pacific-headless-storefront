@@ -69,6 +69,7 @@ On boot you should see `[storefront] Connected to "<your shop>"` — confirmatio
 | Type check                   | `pnpm type-check`                       |
 | Lint                         | `pnpm lint`                             |
 | Format / check formatting    | `pnpm prettier` / `pnpm prettier:check` |
+| Unit tests (Vitest)          | `pnpm test`                             |
 | Regenerate GraphQL types     | `pnpm graphql:generate`                 |
 | Dependency-boundary check    | `pnpm depcruise`                        |
 | Full pre-PR gate (in Claude) | the `/check` command — mirrors CI       |

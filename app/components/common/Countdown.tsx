@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { cn } from '~/lib/cn';
 import { getTimeLeft, pad2, type TimeLeft } from '~/lib/countdown';
 
-/** Display order of the countdown units, leftmost first. */
 const UNIT_KEYS = ['days', 'hours', 'minutes', 'seconds'] as const;
 
 /**
