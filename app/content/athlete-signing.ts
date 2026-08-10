@@ -309,7 +309,10 @@ export const OWEN_PLATT = {
     locationLine: 'Indianapolis · 39.77N',
     camLine: '',
     shotLine: 'Shot.01 — First Session',
-    image: { src: '', alt: 'Owen Platt in a defensive stance' },
+    image: {
+      src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/owen-platt-athlete.png?v=1786383745',
+      alt: 'Owen Platt in a defensive stance',
+    },
   },
   founderVideo: {
     number: '01',
