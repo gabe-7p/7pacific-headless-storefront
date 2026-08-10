@@ -42,6 +42,8 @@ const MARKER_LEFT: Record<ScaleMarkerPercent, string> = {
 
 const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) => (
   <header className="border-b border-border-subtle-night">
+    {/* h-(--header-h) is deliberate: the page opts out of site chrome but its
+        bar tracks the site header's height so the two never drift. */}
     <Container className="flex h-(--header-h) items-center justify-between gap-4">
       <Link prefetch="intent" to="/" aria-label={BRAND.name}>
         <Logo tone="light" className="h-5 md:h-6" />

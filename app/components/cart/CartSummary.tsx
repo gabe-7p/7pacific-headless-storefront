@@ -63,8 +63,8 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
 const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
   if (!checkoutUrl) return null;
   return (
-    // The cart's one Ember moment (7PA-230) — the primary variant's mono-caps
-    // bracket device, full width.
+    // The cart's one Ember moment (7PA-230) — the brand variant's mono-caps
+    // arrow-slide device, full width.
     <Cta href={checkoutUrl} variant="brand" size="lg" className="mt-5 w-full">
       Checkout
     </Cta>

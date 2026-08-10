@@ -26,7 +26,7 @@ export const TestedInTraining = () => (
       />
       <div className="relative z-10 px-6 py-11 md:px-10 lg:px-16 lg:py-16">
         {/* 24px, 40px tablet, 64.8px desktop — face/weight/tracking from the
-            Heading brand variant (display is always Bold in the type system). */}
+            Heading brand variant (500, the only display weight in the system). */}
         <Heading
           as="h2"
           size="none"

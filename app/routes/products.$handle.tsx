@@ -54,19 +54,13 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
 };
 
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return { ...deferredData, ...criticalData };
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
+/** Awaited before first byte — a failure here errors the whole page. */
 async function loadCriticalData({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
   const { storefront } = context;
@@ -75,20 +69,16 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
     throw notFound('Product not found');
   }
 
-  const [{ product }] = await Promise.all([
-    storefront.query(PRODUCT_QUERY, {
-      variables: { handle, selectedOptions: getSelectedProductOptions(request) },
-      // Price/availability-sensitive: keep the cache window short.
-      cache: storefront.CacheShort(),
-    }),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
+  const { product } = await storefront.query(PRODUCT_QUERY, {
+    variables: { handle, selectedOptions: getSelectedProductOptions(request) },
+    // Price/availability-sensitive: keep the cache window short.
+    cache: storefront.CacheShort(),
+  });
 
   if (!product?.id) {
     throw notFound('Product not found');
   }
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, { handle, data: product });
 
   return {
@@ -99,11 +89,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
+/** Returned as promises and awaited in-component — must never throw. */
 function loadDeferredData({ context, params }: Route.LoaderArgs) {
   const { handle } = params;
 
@@ -134,17 +120,13 @@ const Product = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
 
-  // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
     getAdjacentAndFirstAvailableVariants(product)
   );
 
-  // Sets the search param to the selected variant without navigation
-  // only when no search params are set in the url
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
 
-  // Get the product options array
   const productOptions = getProductOptions({
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,

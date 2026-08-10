@@ -24,15 +24,11 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
           <footer className="bg-footer text-footer-text relative isolate overflow-hidden">
             {/* SF topography plate. `isolate` scopes the -z-10 so the layer
                 sits behind the footer's own content but never behind the page.
-
-                mix-blend-screen rather than plain opacity: the source is a
-                near-black frame with faint light contours, so screen drops the
-                black out entirely (Carbon stays the ground colour) and adds
-                only the lines. Opacity alone dimmed the lines and the blacks
-                together, which is why the contours were hard to read.
-                brightness pushes the lines further up, and opacity pulls them
-                back down a notch — under screen the black contributes nothing,
-                so opacity here dims the contours without darkening Carbon. */}
+                mix-blend-screen, not plain opacity: the source is a near-black
+                frame with faint light contours, so screen drops the black and
+                adds only the lines — opacity alone dimmed lines and blacks
+                together. brightness/opacity then tune contour strength without
+                darkening Carbon. */}
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center opacity-60 brightness-200 mix-blend-screen"

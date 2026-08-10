@@ -25,7 +25,8 @@ const Card = ({ card, children }: { card: TeaserCard; children: React.ReactNode 
       height={card.image.height}
       className="aspect-[4/5] w-full object-cover md:aspect-[10/13]"
     />
-    {/* Legibility wash over the photo (Hero uses the same device). */}
+    {/* Legibility wash over the photo — same device as the Hero's, a touch
+        stronger (15% vs 10%) for the busier archive shots. */}
     <div className="pointer-events-none absolute inset-0 bg-black/15" />
     {/* text-ink-night on the wrapper so the outline CTA inherits it, the same
         way the tenet cards color their Cta through the card surface. */}

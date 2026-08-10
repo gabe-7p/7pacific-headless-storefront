@@ -16,9 +16,8 @@ export const WaitlistDialog = ({
   onOpenChange: (open: boolean) => void;
 }) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
-    {/* Width must be overridden on the `sm:` variant — the primitive ships
-        `sm:max-w-lg`, which a bare `max-w-*` can't beat in the merge.
-        rounded-[2px] is the brand radius. */}
+    {/* sm:max-w-* — same primitive-width trap as NewsletterDialog (see the
+        note there). rounded-[2px] is the brand radius. */}
     <DialogContent className="bg-field-night text-ink-night rounded-[2px] border-border-subtle-night p-8 sm:max-w-md">
       <DialogTitle className="font-display tracking-header text-2xl font-medium uppercase">
         {HOME_DROP_TWO.waitlist.heading}

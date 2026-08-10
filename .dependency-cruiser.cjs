@@ -46,7 +46,7 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: 'node_modules' },
-    // Treat these bare specifiers (codegen output resolved via tsconfig baseUrl) as resolvable.
+    // tsconfig paths/baseUrl make `~/*` and the codegen output resolvable.
     tsConfig: { fileName: 'tsconfig.json' },
     tsPreCompilationDeps: true,
     enhancedResolveOptions: {

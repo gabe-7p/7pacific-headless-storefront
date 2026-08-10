@@ -1,5 +1,11 @@
 # Migration Status & Conventions Audit
 
+> **Historical record — accurate as of the GD-32 audit (Jul 2026), not
+> maintained since.** Several rows reference modules that were later renamed or
+> removed (e.g. `routes/search` was never shipped; `BottomPhotography` is now
+> `EnvironmentalHero`; `RelatedProducts` is now `Recommendations`). For the
+> current layout, see [architecture.md](architecture.md).
+
 Tracks the Impulse Liquid → Hydrogen migration (Linear epic **GD-1**) and the
 conventions audit (**GD-32**). Each unit was built via the
 [migration playbook](migration-playbook.md) and ships as its own PR.

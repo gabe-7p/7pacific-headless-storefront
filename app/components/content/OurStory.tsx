@@ -41,7 +41,7 @@ export const OurStory = () => {
             </Heading>
           </Container>
           {/* CTA band: full-width bars on mobile, content-sized on desktop.
-              Renders through Cta so the chevron device and hover animation
+              Renders through Cta so the arrow-slide device and hover animation
               match every other CTA on the site. */}
           <div className="border-t border-ink-night/25">
             <Container className="flex flex-col gap-5 py-5 lg:flex-row lg:py-4">

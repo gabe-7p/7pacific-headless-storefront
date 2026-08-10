@@ -46,7 +46,7 @@ const CellSet = ({
         </Link>
       ))}
       {/* Deliberately not `Cta`: the approved banner CTA is the bare mono
-          "Shop All //" device with no chevron. text-brand (Ember) is allowed
+          "Shop All //" device with no arrow. text-brand (Ember) is allowed
           here and ONLY here on the banner — hard brand rule. */}
       <Link
         to={HOME_NAME_SPEC_BANNER.cta.href}

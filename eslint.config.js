@@ -132,7 +132,7 @@ export default [
       'react/no-array-index-key': 'warn',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
-      // brooklyn standard: components are `const` arrow functions, never the `function` keyword.
+      // House rule (.claude/rules/naming-conventions.md): components are `const` arrow functions, never the `function` keyword.
       'react/function-component-definition': [
         'error',
         { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' },
@@ -216,7 +216,7 @@ export default [
         'error',
         { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
       ],
-      // Prefer `type` over `interface` (brooklyn convention).
+      // Prefer `type` over `interface` (.claude/rules/naming-conventions.md).
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
