@@ -6,7 +6,9 @@
  * the live theme uses — change a value here, the homepage follows.
  */
 
+import { DROP_TWO_LAUNCH } from '~/content/drop-two';
 import { STORE_LINKS } from '~/content/links';
+import { MEMBERSHIP_PITCH } from '~/content/membership';
 import { BRAND } from '~/lib/brand';
 
 const CDN = BRAND.filesCdn;
@@ -86,12 +88,8 @@ export const HOME_NAME_SPEC_BANNER = {
  */
 export const HOME_DROP_TWO = {
   heading: 'Drop 02: FW26',
-  /**
-   * Countdown target: Sept 13 2026, midnight America/Los_Angeles (PDT ⇒ -07:00;
-   * the explicit offset keeps Date.parse deterministic on server and client).
-   */
-  dropIso: '2026-09-13T00:00:00-07:00',
-  countdownLabels: ['Days', 'Hrs', 'Min', 'Sec'],
+  dropIso: DROP_TWO_LAUNCH.dropIso,
+  countdownLabels: DROP_TWO_LAUNCH.countdownLabels,
   cards: {
     fallGear: {
       // Same date as the timer (aligned from the mock's 09.10.26 per Gabe).
@@ -188,8 +186,8 @@ export const HOME_CORE_VALUES = {
 
 export const HOME_TESTED = {
   headingLines: ['Tested In Training.', 'Refined By Community.'],
-  body: 'We think everyone builds a stronger version of themselves and of their community when you sweat together.',
-  cta: { label: 'Join The Membership', href: '#newsletter' },
+  body: MEMBERSHIP_PITCH.body,
+  cta: MEMBERSHIP_PITCH.cta,
   video: 'https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4',
   image: `${CDN}/two_walking_to_workout_cropped.png`,
 } as const;

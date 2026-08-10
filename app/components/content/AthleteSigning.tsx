@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { InstagramIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import type { AthleteSigningContent, ScaleMarkerPercent } from '~/content/athlete-signing';
 import { BRAND } from '~/lib/brand';
@@ -67,7 +68,7 @@ const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) 
 );
 
 const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
-  <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/[0.04] md:aspect-auto md:h-full md:min-h-[560px]">
+  <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/4 md:aspect-auto md:h-full md:min-h-[560px]">
     {hero.image.src && (
       <img
         src={hero.image.src}
@@ -347,22 +348,6 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
   </section>
 );
 
-/** Minimal IG glyph (lucide dropped brand icons) — camera outline + lens + dot. */
-const InstagramGlyph = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    aria-hidden
-    className={className}
-  >
-    <rect x="3" y="3" width="18" height="18" rx="5" />
-    <circle cx="12" cy="12" r="4.25" />
-    <circle cx="17.2" cy="6.8" r="0.5" fill="currentColor" stroke="none" />
-  </svg>
-);
-
 /**
  * "The Creator" module — typed copy only: handle, tagline, and the athlete's
  * recurring series. No embeds, no CDN assets, no live API data (deliberate:
@@ -373,7 +358,7 @@ const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['instagr
     <SectionLabel number={instagram.number} title={instagram.title} />
     <div className="border-border-subtle-night mt-6 border p-6 md:p-8">
       <div className="flex items-center gap-3">
-        <InstagramGlyph className="text-support-night size-5" />
+        <InstagramIcon className="text-support-night size-5" />
         <span className="text-ink-night font-mono text-xl tracking-tight md:text-2xl">
           @{instagram.handle}
         </span>

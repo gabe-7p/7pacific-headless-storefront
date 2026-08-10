@@ -27,16 +27,21 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   // Grid order is merchant-controlled: the manual homepage collection's
   // product order IS the display order (reorder in Shopify admin).
-  const { collection, products } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
+  const { collection } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
     variables: { handle: HOMEPAGE_COLLECTION_HANDLE },
     cache: context.storefront.CacheLong(),
   });
 
-  // Fall back to all products if the collection is missing/empty, so a
-  // misconfigured collection never blanks the homepage.
-  const nodes = collection?.products.nodes.length ? collection.products.nodes : products.nodes;
+  if (collection?.products.nodes.length) {
+    return { products: collection.products.nodes };
+  }
 
-  return { products: nodes };
+  // Fall back to all products only if the collection is missing/empty, so a
+  // misconfigured collection never blanks the homepage.
+  const { products } = await context.storefront.query(HOME_PRODUCTS_FALLBACK_QUERY, {
+    cache: context.storefront.CacheLong(),
+  });
+  return { products: products.nodes };
 }
 
 const Homepage = () => {
@@ -77,6 +82,13 @@ const HOME_PRODUCTS_QUERY = `#graphql
         }
       }
     }
+  }
+` as const;
+
+const HOME_PRODUCTS_FALLBACK_QUERY = `#graphql
+  ${PRODUCT_CARD_FRAGMENT}
+  query HomeProductsFallback($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
     products(first: 12) {
       nodes {
         ...ProductCard

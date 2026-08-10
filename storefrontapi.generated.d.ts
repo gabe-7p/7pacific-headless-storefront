@@ -5,7 +5,7 @@ import type * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
 export type MoneyFragment = Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
 
-export type CartLineFragment = Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
+type BaseCartLineFields_CartLine_Fragment = Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
   attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
   cost: {
     totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
@@ -26,10 +26,9 @@ export type CartLineFragment = Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> &
     product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
     selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
   };
-  parentRelationship?: StorefrontAPI.Maybe<{ parent: Pick<StorefrontAPI.CartLine, 'id'> }>;
 };
 
-export type CartLineComponentFragment = Pick<
+type BaseCartLineFields_ComponentizableCartLine_Fragment = Pick<
   StorefrontAPI.ComponentizableCartLine,
   'id' | 'quantity'
 > & {
@@ -53,8 +52,43 @@ export type CartLineComponentFragment = Pick<
     product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
     selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
   };
+};
+
+export type BaseCartLineFieldsFragment =
+  | BaseCartLineFields_CartLine_Fragment
+  | BaseCartLineFields_ComponentizableCartLine_Fragment;
+
+export type CartLineFragment = Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
+  parentRelationship?: StorefrontAPI.Maybe<{ parent: Pick<StorefrontAPI.CartLine, 'id'> }>;
+  attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
+  cost: {
+    totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+    amountPerQuantity: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+    compareAtAmountPerQuantity?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+    >;
+  };
+  merchandise: Pick<
+    StorefrontAPI.ProductVariant,
+    'id' | 'availableForSale' | 'requiresShipping' | 'title'
+  > & {
+    compareAtPrice?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>>;
+    price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+    image?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+    >;
+    product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
+    selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
+  };
+};
+
+export type CartLineComponentFragment = Pick<
+  StorefrontAPI.ComponentizableCartLine,
+  'id' | 'quantity'
+> & {
   lineComponents: Array<
     Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
+      parentRelationship?: StorefrontAPI.Maybe<{ parent: Pick<StorefrontAPI.CartLine, 'id'> }>;
       attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
       cost: {
         totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
@@ -77,9 +111,28 @@ export type CartLineComponentFragment = Pick<
         product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
         selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
       };
-      parentRelationship?: StorefrontAPI.Maybe<{ parent: Pick<StorefrontAPI.CartLine, 'id'> }>;
     }
   >;
+  attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
+  cost: {
+    totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+    amountPerQuantity: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+    compareAtAmountPerQuantity?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+    >;
+  };
+  merchandise: Pick<
+    StorefrontAPI.ProductVariant,
+    'id' | 'availableForSale' | 'requiresShipping' | 'title'
+  > & {
+    compareAtPrice?: StorefrontAPI.Maybe<Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>>;
+    price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+    image?: StorefrontAPI.Maybe<
+      Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+    >;
+    product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
+    selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
+  };
 };
 
 export type CartApiQueryFragment = Pick<
@@ -99,6 +152,7 @@ export type CartApiQueryFragment = Pick<
   lines: {
     nodes: Array<
       | (Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
+          parentRelationship?: StorefrontAPI.Maybe<{ parent: Pick<StorefrontAPI.CartLine, 'id'> }>;
           attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
           cost: {
             totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
@@ -121,33 +175,13 @@ export type CartApiQueryFragment = Pick<
             product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
             selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
           };
-          parentRelationship?: StorefrontAPI.Maybe<{ parent: Pick<StorefrontAPI.CartLine, 'id'> }>;
         })
       | (Pick<StorefrontAPI.ComponentizableCartLine, 'id' | 'quantity'> & {
-          attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
-          cost: {
-            totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
-            amountPerQuantity: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
-            compareAtAmountPerQuantity?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
-            >;
-          };
-          merchandise: Pick<
-            StorefrontAPI.ProductVariant,
-            'id' | 'availableForSale' | 'requiresShipping' | 'title'
-          > & {
-            compareAtPrice?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
-            >;
-            price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
-            image?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-            >;
-            product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
-            selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
-          };
           lineComponents: Array<
             Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
+              parentRelationship?: StorefrontAPI.Maybe<{
+                parent: Pick<StorefrontAPI.CartLine, 'id'>;
+              }>;
               attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
               cost: {
                 totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
@@ -170,11 +204,30 @@ export type CartApiQueryFragment = Pick<
                 product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
                 selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
               };
-              parentRelationship?: StorefrontAPI.Maybe<{
-                parent: Pick<StorefrontAPI.CartLine, 'id'>;
-              }>;
             }
           >;
+          attributes: Array<Pick<StorefrontAPI.Attribute, 'key' | 'value'>>;
+          cost: {
+            totalAmount: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+            amountPerQuantity: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+            compareAtAmountPerQuantity?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+            >;
+          };
+          merchandise: Pick<
+            StorefrontAPI.ProductVariant,
+            'id' | 'availableForSale' | 'requiresShipping' | 'title'
+          > & {
+            compareAtPrice?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>
+            >;
+            price: Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+            >;
+            product: Pick<StorefrontAPI.Product, 'handle' | 'title' | 'id' | 'vendor'>;
+            selectedOptions: Array<Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>>;
+          };
         })
     >;
   };
@@ -270,6 +323,19 @@ export type FooterQuery = {
   >;
 };
 
+export type ColorSiblingsFragment = {
+  colorSiblings?: StorefrontAPI.Maybe<{
+    references?: StorefrontAPI.Maybe<{
+      nodes: Array<
+        Pick<StorefrontAPI.Product, 'handle'> & {
+          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        }
+      >;
+    }>;
+  }>;
+};
+
 export type ProductCardFragment = Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
   featuredImage?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
@@ -333,6 +399,14 @@ export type HomeProductsQuery = {
       >;
     };
   }>;
+};
+
+export type HomeProductsFallbackQueryVariables = StorefrontAPI.Exact<{
+  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+}>;
+
+export type HomeProductsFallbackQuery = {
   products: {
     nodes: Array<
       Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
@@ -563,16 +637,6 @@ export type ProductFragment = Pick<
   >;
   seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
   fitNote?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-  colorSiblings?: StorefrontAPI.Maybe<{
-    references?: StorefrontAPI.Maybe<{
-      nodes: Array<
-        Pick<StorefrontAPI.Product, 'handle'> & {
-          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-        }
-      >;
-    }>;
-  }>;
   productDetails?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
   techStack?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
   specCard?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
@@ -600,6 +664,22 @@ export type ProductFragment = Pick<
       >;
     }>;
   }>;
+  colorSiblings?: StorefrontAPI.Maybe<{
+    references?: StorefrontAPI.Maybe<{
+      nodes: Array<
+        Pick<StorefrontAPI.Product, 'handle'> & {
+          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        }
+      >;
+    }>;
+  }>;
+};
+
+export type MediaImageRefFragment = {
+  image?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+  >;
 };
 
 export type ProductQueryVariables = StorefrontAPI.Exact<{
@@ -692,16 +772,6 @@ export type ProductQuery = {
       >;
       seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
       fitNote?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-      colorSiblings?: StorefrontAPI.Maybe<{
-        references?: StorefrontAPI.Maybe<{
-          nodes: Array<
-            Pick<StorefrontAPI.Product, 'handle'> & {
-              colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-              colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-            }
-          >;
-        }>;
-      }>;
       productDetails?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
       techStack?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
       specCard?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
@@ -726,6 +796,16 @@ export type ProductQuery = {
         reference?: StorefrontAPI.Maybe<{
           image?: StorefrontAPI.Maybe<
             Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+          >;
+        }>;
+      }>;
+      colorSiblings?: StorefrontAPI.Maybe<{
+        references?: StorefrontAPI.Maybe<{
+          nodes: Array<
+            Pick<StorefrontAPI.Product, 'handle'> & {
+              colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+              colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+            }
           >;
         }>;
       }>;
@@ -786,11 +866,15 @@ interface GeneratedQueryTypes {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query HomeProducts($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      products(first: 12) {\n        nodes {\n          ...ProductCard\n        }\n      }\n    }\n    products(first: 12) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    ...ColorSiblings\n  }\n  #graphql\n  fragment ColorSiblings on Product {\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n\n  query HomeProducts($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      products(first: 12) {\n        nodes {\n          ...ProductCard\n        }\n      }\n    }\n  }\n': {
     return: HomeProductsQuery;
     variables: HomeProductsQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n        nodes {\n          ...ProductCard\n          label: metafield(namespace: "theme", key: "label") {\n            value\n          }\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    ...ColorSiblings\n  }\n  #graphql\n  fragment ColorSiblings on Product {\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n\n  query HomeProductsFallback($country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    products(first: 12) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n': {
+    return: HomeProductsFallbackQuery;
+    variables: HomeProductsFallbackQueryVariables;
+  };
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    ...ColorSiblings\n  }\n  #graphql\n  fragment ColorSiblings on Product {\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n        nodes {\n          ...ProductCard\n          label: metafield(namespace: "theme", key: "label") {\n            value\n          }\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
     return: CollectionQuery;
     variables: CollectionQueryVariables;
   };
@@ -810,11 +894,11 @@ interface GeneratedQueryTypes {
     return: ContactPageQuery;
     variables: ContactPageQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n    fitNote: metafield(namespace: "custom", key: "fit_note") {\n      value\n    }\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n    productDetails: metafield(namespace: "custom", key: "product_details") {\n      value\n    }\n    techStack: metafield(namespace: "custom", key: "tech_stack") {\n      value\n    }\n    # The Spec Card (7PA-231) — the locked seven-field JSON device\n    # (fabric/weight/use/seams/pockets/fit/origin); see lib/productContent.\n    specCard: metafield(namespace: "custom", key: "spec_card") {\n      value\n    }\n    # Edition device (7PA-246) — rendered above the product name.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Below-the-fold environmental hero + caption (locked PDP order step 6).\n    # Imagery lands with the photography program (7PA-236); renders if present.\n    environmentalHero: metafield(namespace: "custom", key: "environmental_hero") {\n      reference {\n        ... on MediaImage {\n          image {\n            id\n            url\n            altText\n            width\n            height\n          }\n        }\n      }\n    }\n    environmentalHeroCaption: metafield(namespace: "custom", key: "environmental_hero_caption") {\n      value\n    }\n    # Dedicated PDP hero images (the theme\'s "Background Image" / "…Mobile"),\n    # per product. Falls back to the variant image when unset.\n    heroImage: metafield(namespace: "custom", key: "hero_image") {\n      reference {\n        ... on MediaImage {\n          image {\n            id\n            url\n            altText\n            width\n            height\n          }\n        }\n      }\n    }\n    heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {\n      reference {\n        ... on MediaImage {\n          image {\n            id\n            url\n            altText\n            width\n            height\n          }\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    encodedVariantExistence\n    encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant {\n          ...ProductVariant\n        }\n        swatch {\n          color\n          image {\n            previewImage {\n              url\n            }\n          }\n        }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants (selectedOptions: $selectedOptions) {\n      ...ProductVariant\n    }\n    seo {\n      description\n      title\n    }\n    fitNote: metafield(namespace: "custom", key: "fit_note") {\n      value\n    }\n    ...ColorSiblings\n    productDetails: metafield(namespace: "custom", key: "product_details") {\n      value\n    }\n    techStack: metafield(namespace: "custom", key: "tech_stack") {\n      value\n    }\n    # The Spec Card (7PA-231) — the locked seven-field JSON device\n    # (fabric/weight/use/seams/pockets/fit/origin); see lib/productContent.\n    specCard: metafield(namespace: "custom", key: "spec_card") {\n      value\n    }\n    # Edition device (7PA-246) — rendered above the product name.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Below-the-fold environmental hero + caption (locked PDP order step 6).\n    # Imagery lands with the photography program (7PA-236); renders if present.\n    environmentalHero: metafield(namespace: "custom", key: "environmental_hero") {\n      reference {\n        ...MediaImageRef\n      }\n    }\n    environmentalHeroCaption: metafield(namespace: "custom", key: "environmental_hero_caption") {\n      value\n    }\n    # Dedicated PDP hero images (the theme\'s "Background Image" / "…Mobile"),\n    # per product. Falls back to the variant image when unset.\n    heroImage: metafield(namespace: "custom", key: "hero_image") {\n      reference {\n        ...MediaImageRef\n      }\n    }\n    heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {\n      reference {\n        ...MediaImageRef\n      }\n    }\n  }\n  fragment MediaImageRef on MediaImage {\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n  #graphql\n  fragment ColorSiblings on Product {\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    # Color = separate product: the ordered color family lives in the\n    # custom.color_siblings metafield (each sibling carries its own name/hex).\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n  query ProductRecommendations($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      recommended: metafield(namespace: "custom", key: "recommended_products") {\n        references(first: 10) {\n          nodes {\n            ... on Product {\n              ...ProductCard\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductCard on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      url\n      altText\n      width\n      height\n    }\n    # First two images: [0] is the resting card image, [1] crossfades in on\n    # hover (matches the live card\'s product-image-hover behavior).\n    images(first: 2) {\n      nodes {\n        id\n        url\n        altText\n        width\n        height\n      }\n    }\n    priceRange {\n      minVariantPrice {\n        amount\n        currencyCode\n      }\n    }\n    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card\'s mono\n    # spec strip.\n    editionNumber: metafield(namespace: "custom", key: "edition_number") {\n      value\n    }\n    editionStatus: metafield(namespace: "custom", key: "edition_status") {\n      value\n    }\n    ...ColorSiblings\n  }\n  #graphql\n  fragment ColorSiblings on Product {\n    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {\n      references(first: 10) {\n        nodes {\n          ... on Product {\n            handle\n            colorName: metafield(namespace: "custom", key: "color_name") {\n              value\n            }\n            colorHex: metafield(namespace: "custom", key: "color_hex") {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n\n\n  query ProductRecommendations($handle: String!, $country: CountryCode, $language: LanguageCode)\n    @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      recommended: metafield(namespace: "custom", key: "recommended_products") {\n        references(first: 10) {\n          nodes {\n            ... on Product {\n              ...ProductCard\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: ProductRecommendationsQuery;
     variables: ProductRecommendationsQueryVariables;
   };

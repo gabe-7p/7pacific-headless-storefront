@@ -1,8 +1,8 @@
 import { data } from 'react-router';
 
-import type { Route } from './+types/api.waitlist';
+import { EMAIL_RE, INVALID_EMAIL_MESSAGE } from '~/lib/validation';
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import type { Route } from './+types/api.waitlist';
 
 export type WaitlistResponse =
   | { ok: true }
@@ -32,7 +32,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const errors: { name?: string; email?: string } = {};
   if (!name) errors.name = 'Please enter your name.';
-  if (!EMAIL_RE.test(email)) errors.email = 'Please enter a valid email address.';
+  if (!EMAIL_RE.test(email)) errors.email = INVALID_EMAIL_MESSAGE;
 
   if (errors.name || errors.email) {
     return data<WaitlistResponse>({ ok: false, errors }, { status: 400 });
