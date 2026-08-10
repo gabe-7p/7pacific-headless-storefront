@@ -65,5 +65,5 @@ export const MediaSlot = ({ media, ratio, loading = 'lazy', className }: MediaSl
     );
   }
 
-  return <div aria-hidden data-media={media.type} className={cn(box, 'bg-panel')} />;
+  return <div aria-hidden data-media={media.type} className={cn(box, 'bg-media-placeholder')} />;
 };
