@@ -33,7 +33,7 @@ export const PageLayout = ({
             scrolls away with the page while the header pins — mirrors live. */}
         <div className="sticky -top-(--announcement-h) z-40">
           <Announcement />
-          {header && <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />}
+          <Header header={header} cart={cart} publicStoreDomain={publicStoreDomain} />
         </div>
         <main>{children}</main>
         {/* The footer signup is always present; the membership CTAs open the

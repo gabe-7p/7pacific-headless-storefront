@@ -25,8 +25,8 @@
 /* shadcn/ui base variables, aligned to the Meridian on Carbon brand palette
  * (values reference the brand tokens defined in the @theme block below) so the
  * generated primitives in app/components/ui/ sit on the same field as the rest
- * of the site. --secondary/--muted/--accent are a Zinc-into-Court mix so
- * ghost/hover states stay visible on a Court page field. */
+ * of the site. --secondary/--muted/--accent share --color-panel (a Zinc-into-
+ * Court mix) so ghost/hover states stay visible on a Court page field. */
 :root {
   --radius: 0.625rem;
   --background: var(--color-court);
@@ -37,11 +37,11 @@
   --popover-foreground: var(--color-carbon);
   --primary: var(--color-carbon);
   --primary-foreground: var(--color-court);
-  --secondary: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
+  --secondary: var(--color-panel);
   --secondary-foreground: var(--color-carbon);
-  --muted: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
+  --muted: var(--color-panel);
   --muted-foreground: var(--color-graphite);
-  --accent: color-mix(in srgb, var(--color-zinc) 35%, var(--color-court));
+  --accent: var(--color-panel);
   --accent-foreground: var(--color-carbon);
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--color-zinc);
@@ -137,9 +137,8 @@
   --color-ember: #c8431e; /* the earned moment — clay court, not traffic cone */
 
   /* Night Session (dark surfaces only — drops, campaigns, night content):
-   * Carbon becomes the field, Court becomes type, and these two shift. */
+   * Carbon becomes the field, Court becomes type, and Graphite shifts. */
   --color-graphite-night: #363a3f; /* hairlines/structure on a Carbon field */
-  --color-ember-night: #e14e23; /* Ember burns brighter on Carbon */
 
   /* Role tokens — what a color MEANS, chained onto the palette above.
    * Components reference ROLES (bg-field, text-ink, text-support,
@@ -164,7 +163,6 @@
   --color-footer-text: var(--color-court);
   --color-brand: var(--color-ember); /* primary CTA / accent */
   --color-brand-text: var(--color-court);
-  --color-savings: var(--color-ember); /* no separate sale red; we don't run sales */
   --color-cart-dot: var(
     --color-carbon
   ); /* the header renders on every page, and Ember is rationed to one moment per page (7PA-230) */
@@ -268,33 +266,17 @@
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* ============================================================================
- * Migrated base + component styles (was reset.css + app.css)
- *
- * These now live INSIDE Tailwind layers (`@layer base` / `@layer components`)
- * so utilities always win. They were unlayered originally, which let element
- * rules (h1/h2/p sizes, `a { color }`, `body > main` margins, `section`
- * padding, `img { border-radius }`) silently override Tailwind classes and
- * caused visual-parity bugs vs the live theme (7PA-122 et al.) — those rules
- * were deleted outright. Only rules whose elements/classes are still
- * referenced were kept.
- *
- * Long-term these legacy classes should migrate to Tailwind utilities in the
- * components that use them (product-*, order-search-*), at which point this
- * block shrinks away.
- *
- * NB: don't set `font-family` here — Tailwind owns it via `font-sans` (Inter)
- * on <body>; display/mono faces come from `font-display`/`font-mono`.
- * ========================================================================== */
-
 /* --- base element defaults (was reset.css) ---
- * Now inside @layer base so any Tailwind utility wins. The old unlayered
- * versions silently beat utilities site-wide and caused live-parity bugs:
- * h1/h2/p font-size rules shrank hero + section headings, `a { color:#000 }`
- * made CTAs on dark cards invisible, `body > main` margins produced white
- * gutters around full-bleed sections, `section { padding }` added stray white
- * strips, and `img { border-radius: 4px }` rounded every image. Those rules
- * are deleted — Tailwind preflight + per-component utilities own them now. */
+ * Kept INSIDE @layer base so any Tailwind utility wins. The old unlayered
+ * versions silently beat utilities site-wide and caused live-parity bugs
+ * (7PA-122 et al.): h1/h2/p font-size rules shrank hero + section headings,
+ * `a { color:#000 }` made CTAs on dark cards invisible, `body > main` margins
+ * produced white gutters around full-bleed sections, `section { padding }`
+ * added stray white strips, and `img { border-radius: 4px }` rounded every
+ * image. Those rules are deleted — Tailwind preflight + per-component
+ * utilities own them now. Don't re-add unlayered element rules here, and
+ * don't set `font-family` — Tailwind owns it via `font-sans` (Inter) on
+ * <body>; display/mono faces come from `font-display`/`font-mono`. */
 @layer base {
   body {
     display: flex;
@@ -312,13 +294,6 @@
     white-space: pre-wrap;
   }
 
-  fieldset {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.5rem;
-    padding: 1rem;
-  }
-
   form {
     max-width: 100%;
     @media (min-width: 768px) {
@@ -333,11 +308,6 @@
     margin-bottom: 0.5rem;
     margin-top: 0.25rem;
     padding: 0.5rem;
-  }
-
-  legend {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
   }
 
   ul {
@@ -359,113 +329,5 @@
     border-radius: 4px;
     font-family: monospace;
     padding: 0.25rem;
-  }
-}
-
-/* --- component styles still referenced by JSX (was app.css) ---
- * Layered for the same reason as the base block: utilities must win. */
-@layer components {
-  /* routes/products.$handle.tsx */
-  .product {
-    display: grid;
-    @media (min-width: 45em) {
-      grid-template-columns: 1fr 1fr;
-      grid-gap: 4rem;
-    }
-  }
-
-  .product h1 {
-    margin-top: 0;
-  }
-
-  .product-image img {
-    height: auto;
-    width: 100%;
-  }
-
-  .product-main {
-    align-self: start;
-    position: sticky;
-    top: 6rem;
-  }
-
-  .product-price-on-sale {
-    display: flex;
-    grid-gap: 0.5rem;
-  }
-
-  .product-price-on-sale s {
-    opacity: 0.5;
-  }
-
-  .product-options-grid {
-    display: flex;
-    flex-wrap: wrap;
-    grid-gap: 0.75rem;
-  }
-
-  .product-options-item,
-  .product-options-item:disabled {
-    padding: 0.25rem 0.5rem;
-    background-color: transparent;
-    font-size: 1rem;
-    font-family: inherit;
-  }
-
-  .product-option-label-swatch {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin: 0.25rem 0;
-  }
-
-  .product-option-label-swatch img {
-    width: 100%;
-  }
-
-  /* routes/account */
-  .account-logout {
-    display: inline-block;
-  }
-
-  .order-search-form {
-    margin-bottom: 1.5rem;
-  }
-
-  .order-search-fieldset {
-    border: 1px solid var(--color-zinc);
-    border-radius: 4px;
-    padding: 1rem;
-  }
-
-  .order-search-legend {
-    font-weight: 600;
-    padding: 0 0.5rem;
-  }
-
-  .order-search-inputs {
-    display: grid;
-    gap: 1rem;
-    margin: 0.25rem 0 1rem;
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 640px) {
-    .order-search-inputs {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .order-search-input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--color-zinc);
-    border-radius: 4px;
-    font-size: 1rem;
-  }
-
-  .order-search-buttons {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
   }
 }

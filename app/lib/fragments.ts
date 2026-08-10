@@ -40,7 +40,6 @@ export const CART_QUERY_FRAGMENT = `#graphql
           altText
           width
           height
-
         }
         product {
           handle
@@ -262,7 +261,6 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     id
     handle
     title
-    vendor
     featuredImage {
       id
       url

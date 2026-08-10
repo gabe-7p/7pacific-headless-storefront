@@ -2,22 +2,11 @@ import { redirect } from 'react-router';
 
 export const redirectIfHandleIsLocalized = (
   request: Request,
-  ...localizedResources: Array<{
-    handle: string;
-    data: { handle: string } & unknown;
-  }>
+  { handle, data }: { handle: string; data: { handle: string } }
 ) => {
-  const url = new URL(request.url);
-  let shouldRedirect = false;
-
-  localizedResources.forEach(({ handle, data }) => {
-    if (handle !== data.handle) {
-      url.pathname = url.pathname.replace(handle, data.handle);
-      shouldRedirect = true;
-    }
-  });
-
-  if (shouldRedirect) {
+  if (handle !== data.handle) {
+    const url = new URL(request.url);
+    url.pathname = url.pathname.replace(handle, data.handle);
     throw redirect(url.toString());
   }
 };

@@ -33,7 +33,7 @@ export const CartLineItem = ({
   const closeIfAside = () => layout === 'aside' && close();
 
   return (
-    <li key={id} className="py-4">
+    <li className="py-4">
       <div className="flex gap-4">
         {image && (
           <Link prefetch="intent" to={lineItemUrl} onClick={closeIfAside} className="flex-none">
@@ -73,7 +73,7 @@ export const CartLineItem = ({
               {/* Raw <Money> ("$79.00") to match the cart's subtotal, not the
                   brand <Price> ("$79 USD") the PDP and product cards use.
                   Mono face per the numbers-live-in-mono rule. */}
-              {line?.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
+              {line.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
             </div>
           </div>
           {/* Live's drawer removes via the stepper; the /cart page has the link. */}
@@ -104,12 +104,10 @@ export const CartLineItem = ({
   );
 };
 
-/** Quantity stepper (−/value/+). */
 const QuantityStepper = ({ line }: { line: CartLine }) => {
-  if (!line || typeof line?.quantity === 'undefined') return null;
   const { id: lineId, quantity, isOptimistic } = line;
-  const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
-  const nextQuantity = Number((quantity + 1).toFixed(0));
+  const prevQuantity = Math.max(0, quantity - 1);
+  const nextQuantity = quantity + 1;
 
   return (
     <div className="border-border-subtle inline-flex items-center border">

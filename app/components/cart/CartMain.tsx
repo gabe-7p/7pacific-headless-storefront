@@ -42,13 +42,14 @@ const getLineItemChildrenMap = (lines: Array<CartLine>): LineItemChildrenMap => 
  * The cart contents, shared by the /cart route (`page`) and the drawer (`aside`).
  */
 export const CartMain = ({ layout, cart: originalCart }: CartMainProps) => {
-  // useOptimisticCart applies pending actions so the UI updates immediately.
   const cart = useOptimisticCart(originalCart);
-  const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
+  const hasLines = (cart?.lines?.nodes?.length ?? 0) > 0;
+  // totalQuantity (not line count) gates the summary: optimistically-removed
+  // lines can still be rendering while the quantity is already 0.
   const cartHasItems = (cart?.totalQuantity ?? 0) > 0;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
 
-  if (!linesCount) return <CartEmpty layout={layout} />;
+  if (!hasLines) return <CartEmpty layout={layout} />;
 
   const lines = (
     <ul aria-labelledby="cart-lines" className="divide-border-subtle divide-y">

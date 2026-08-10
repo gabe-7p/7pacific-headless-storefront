@@ -28,11 +28,8 @@ export default [
       '**/node_modules/',
       '**/build/',
       '**/dist/',
-      '**/*.graphql.d.ts',
-      '**/*.graphql.ts',
       '**/*.generated.d.ts',
       '**/.react-router/',
-      '**/packages/hydrogen/dist/',
     ],
   },
   ...fixupConfigRules(
@@ -231,25 +228,11 @@ export default [
     },
   },
   {
-    files: ['**/.eslintrc.cjs'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
-  {
     files: ['**/*.{js,jsx,ts,tsx,cjs,mjs}'],
     plugins: { 'simple-import-sort': simpleImportSort },
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-    },
-  },
-  {
-    files: ['**/*.server.*'],
-    rules: {
-      'react-hooks/rules-of-hooks': 'off',
     },
   },
   {

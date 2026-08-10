@@ -12,11 +12,12 @@ type ProductCardProps = {
   product: ProductCardFragment;
   /** Optional badge text (e.g. the `theme.label` metafield, "Sold out"). */
   label?: string | null;
-  /** Responsive `sizes` hint for the image. */
-  imageSizes?: string;
   /** Eager-load the featured image (for above-the-fold cards). Default lazy. */
   priority?: boolean;
 };
+
+/** Responsive `sizes` hint matching the 2-col mobile / 3-col desktop grid. */
+const IMAGE_SIZES = '(min-width: 768px) 33vw, 50vw';
 
 /**
  * Grid product card, matching the live card's hover ensemble: the card lifts
@@ -26,12 +27,7 @@ type ProductCardProps = {
  * Presentational: renders the typed `ProductCardFragment` it's given and
  * fetches nothing.
  */
-export const ProductCard = ({
-  product,
-  label,
-  imageSizes = '(min-width: 768px) 33vw, 50vw',
-  priority = false,
-}: ProductCardProps) => {
+export const ProductCard = ({ product, label, priority = false }: ProductCardProps) => {
   const { handle, title, featuredImage, priceRange } = product;
   // Second Shopify image crossfades in on hover (live's product-image-hover).
   const hoverImage = product.images.nodes[1];
@@ -58,7 +54,7 @@ export const ProductCard = ({
           {featuredImage && (
             <Image
               data={featuredImage}
-              sizes={imageSizes}
+              sizes={IMAGE_SIZES}
               // Eager-load the first visible row (above the fold) so the grid
               // paints immediately; the rest lazy-load on scroll.
               loading={priority ? 'eager' : 'lazy'}
@@ -70,7 +66,7 @@ export const ProductCard = ({
             // on first hover, which reads as flicker instead of a crossfade.
             <Image
               data={hoverImage}
-              sizes={imageSizes}
+              sizes={IMAGE_SIZES}
               loading="eager"
               className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
