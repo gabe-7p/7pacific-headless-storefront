@@ -281,11 +281,76 @@ export const KENNETH_PIERCE = {
   },
 } satisfies AthleteSigningContent;
 
+/**
+ * Owen Platt — basketball defense-training creator (@defensewithowen,
+ * "defensewithowen™"): lockdown-defender drills, the 30-Second Lockdown
+ * Test, "how to work out without a trainer." Base: Indianapolis, ~11.2K
+ * followers.
+ */
+export const OWEN_PLATT = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/owen-platt',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/owen-platt',
+  },
+  transmissionLine: 'Indianapolis → San Francisco · 07.24.2026',
+  eyebrowLine: 'Official // Athlete Signing · 07.24.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Owen Platt.' },
+  body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. You made defense the whole \
+  story — the footwork, the discipline, the unglamorous reps that win possessions — and you teach players to put in that work \
+  without anyone watching. That’s exactly how we build. Scroll down to watch a personal message from us about why we’re fired \
+  up to have you on the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Indianapolis · 39.77N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: { src: '', alt: 'Owen Platt in a defensive stance' },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // PLACEHOLDER — the Golden Gate homepage video until Owen's founder
+    // message is recorded; swap src/poster (and captions) when uploaded.
+    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+    poster: '',
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:30',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    // His signature drill, not a measured PR — so no VERIFIED tag.
+    stat: { label: 'The Lockdown Test', value: '0:30', verified: false },
+    scale: { markerPercent: 90, markerLabel: 'Lockdown' },
+    fields: [
+      { label: 'Specialty', value: 'Lockdown Defense' },
+      { label: 'Base', value: 'Indianapolis' },
+      { label: 'Reach', value: '11.2K' },
+      { label: 'Series Tagline', value: 'How to Work Out Without a Trainer' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'defensewithowen',
+    tagline: 'How to work out without a trainer.',
+    series: ['The 30-Second Lockdown Test', 'Lockdown Defender Drills'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
 /** URL handle → signing page content. Adding an athlete = one line here. */
 export const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
   'josh-wyche': JOSH_WYCHE,
   'kenneth-pierce': KENNETH_PIERCE,
+  'owen-platt': OWEN_PLATT,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
