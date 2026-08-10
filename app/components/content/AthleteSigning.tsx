@@ -1,3 +1,4 @@
+import { Image } from '@shopify/hydrogen';
 import { ArrowUpRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
@@ -6,12 +7,13 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { InstagramIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent, ScaleMarkerPercent } from '~/content/athlete-signing';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
 
-/** The page's recurring readout-label treatment (JetBrains Mono spec strip). */
-const MONO_LABEL = 'font-mono text-xs tracking-spec uppercase';
+/** The page's recurring readout-label treatment — the shared spec-strip class. */
+const MONO_LABEL = SPEC_LINE_CLASS;
 
 /**
  * Static map for the readout-scale marker — `markerPercent` is a 5%-step
@@ -70,10 +72,13 @@ const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) 
 const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
   <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/4 md:aspect-auto md:h-full md:min-h-[560px]">
     {hero.image.src && (
-      <img
+      <Image
         src={hero.image.src}
+        width={hero.image.width}
+        height={hero.image.height}
         alt={hero.image.alt}
         loading="lazy"
+        sizes="(min-width: 768px) 50vw, 100vw"
         className="absolute inset-0 size-full object-cover"
       />
     )}

@@ -3,9 +3,7 @@ export const CART_QUERY_FRAGMENT = `#graphql
     currencyCode
     amount
   }
-  # CartLine and ComponentizableCartLine both implement BaseCartLine — the
-  # shared field block lives here once instead of being repeated per type.
-  fragment BaseCartLineFields on BaseCartLine {
+  fragment CartLine on CartLine {
     id
     quantity
     attributes {
@@ -55,20 +53,6 @@ export const CART_QUERY_FRAGMENT = `#graphql
       }
     }
   }
-  fragment CartLine on CartLine {
-    ...BaseCartLineFields
-    parentRelationship {
-      parent {
-        id
-      }
-    }
-  }
-  fragment CartLineComponent on ComponentizableCartLine {
-    ...BaseCartLineFields
-    lineComponents {
-      ...CartLine
-    }
-  }
   fragment CartApiQuery on Cart {
     updatedAt
     id
@@ -96,7 +80,6 @@ export const CART_QUERY_FRAGMENT = `#graphql
     lines(first: $numCartLines) {
       nodes {
         ...CartLine
-        ...CartLineComponent
       }
     }
     cost {

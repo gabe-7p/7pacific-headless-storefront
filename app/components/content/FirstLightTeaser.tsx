@@ -1,13 +1,10 @@
-import { useId } from 'react';
-import { useFetcher } from 'react-router';
-
 import { Container } from '~/components/common/Container';
 import { Countdown } from '~/components/common/Countdown';
-import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { MediaSlot } from '~/components/common/MediaSlot';
+import { SpecLine } from '~/components/common/SpecLine';
+import { WaitlistForm } from '~/components/common/WaitlistForm';
 import { FIRST_LIGHT } from '~/content/first-light';
-import type { WaitlistResponse } from '~/routes/api.waitlist';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
     the placeholder pseudo-element, so typed values stay as entered). h-9
@@ -18,75 +15,25 @@ const fieldClass =
   'm-0 block h-9 w-full rounded-none border border-ink bg-transparent px-4 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
 
 /**
- * The Early Access signup (name + email). Posts to the same /api/waitlist
- * endpoint as the homepage waitlist dialog — one list, two doors. On success
- * the form is replaced by the confirmation line.
+ * The Early Access signup — the shared drop-waitlist form (one list, two
+ * doors with the homepage dialog) in the mock's boxed-mono, single-row
+ * treatment. max-w-none opts the row out of the base layer's
+ * form { max-width: 400px } cap.
  */
-const EarlyAccessForm = () => {
-  const fetcher = useFetcher<WaitlistResponse>();
-  const nameId = useId();
-  const emailId = useId();
-  const submitting = fetcher.state !== 'idle';
-  const succeeded = fetcher.data?.ok === true;
-  const errors = fetcher.data?.ok === false ? fetcher.data.errors : undefined;
-  const { namePlaceholder, emailPlaceholder, submitLabel, successMessage } =
-    FIRST_LIGHT.earlyAccess;
-
-  if (succeeded) {
-    return <p className="mt-6 text-sm font-medium text-ink">{successMessage}</p>;
-  }
-
-  return (
-    <fetcher.Form
-      method="post"
-      action="/api/waitlist"
-      noValidate
-      // max-w-none opts out of the base layer's form { max-width: 400px } cap.
-      className="mt-6 grid max-w-none grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
-    >
-      <div>
-        <label htmlFor={nameId} className="sr-only">
-          {namePlaceholder}
-        </label>
-        <input
-          id={nameId}
-          type="text"
-          name="name"
-          required
-          autoComplete="name"
-          placeholder={namePlaceholder}
-          className={fieldClass}
-        />
-        {errors?.name && <p className="mt-1 text-xs text-support">{errors.name}</p>}
-      </div>
-      <div>
-        <label htmlFor={emailId} className="sr-only">
-          {emailPlaceholder}
-        </label>
-        <input
-          id={emailId}
-          type="email"
-          name="email"
-          required
-          autoComplete="email"
-          autoCorrect="off"
-          autoCapitalize="off"
-          placeholder={emailPlaceholder}
-          className={fieldClass}
-        />
-        {errors?.email && <p className="mt-1 text-xs text-support">{errors.email}</p>}
-      </div>
-      <Cta type="submit" variant="brand" disabled={submitting}>
-        {submitLabel}
-      </Cta>
-    </fetcher.Form>
-  );
-};
+const EarlyAccessForm = () => (
+  <WaitlistForm
+    copy={FIRST_LIGHT.earlyAccess}
+    className="mt-6 grid max-w-none grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+    fieldClassName={fieldClass}
+    successClassName="mt-6 text-sm font-medium text-ink"
+    ctaVariant="brand"
+  />
+);
 
 /** Ember eyebrow dot + edition line, then the page headline and intro. */
 const Intro = () => (
   <Container className="pt-10 pb-8 md:pt-14 md:pb-10">
-    <p className="flex items-center gap-3 font-mono text-sm tracking-spec text-ink uppercase">
+    <SpecLine className="flex items-center gap-3 text-sm text-ink">
       {/* bg-brand dot — the mock pairs the Ember accent with the SIGN UP CTA
           below. The radar ping says "signal live" while the countdown runs;
           the dot itself never moves, and the ring sits out under
@@ -96,7 +43,7 @@ const Intro = () => (
         <span className="bg-brand absolute inset-0 rounded-full" />
       </span>
       {FIRST_LIGHT.eyebrow}
-    </p>
+    </SpecLine>
     <Heading as="h1" size="none" className="mt-4 text-5xl md:text-6xl">
       {FIRST_LIGHT.headline}
     </Heading>

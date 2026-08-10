@@ -19,7 +19,7 @@ export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFra
     />
     {/* Three across down to live's Impulse breakpoint (769px) rather than
         Tailwind's lg — the cards hold their proportions well below 1024. */}
-    <div className="grid grid-cols-2 gap-x-4 gap-y-10 min-[769px]:grid-cols-3">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-10 impulse:grid-cols-3">
       {products.map((product, index) => (
         // Eager-load the first visible row (2 on mobile, 3 on desktop) so the
         // grid paints on load; the rest lazy-load on scroll.

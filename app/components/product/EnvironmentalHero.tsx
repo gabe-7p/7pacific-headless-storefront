@@ -1,6 +1,7 @@
 import { Image } from '@shopify/hydrogen';
 
 import { Container } from '~/components/common/Container';
+import { SpecLine } from '~/components/common/SpecLine';
 import type { MetafieldImage } from '~/lib/metafields';
 
 /**
@@ -20,7 +21,7 @@ export const EnvironmentalHero = ({
     <Image data={image} sizes="100vw" className="h-auto w-full object-cover" />
     {caption && (
       <Container>
-        <p className="tracking-spec py-3 font-mono text-xs text-support uppercase">{caption}</p>
+        <SpecLine className="py-3 text-support">{caption}</SpecLine>
       </Container>
     )}
   </section>

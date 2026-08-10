@@ -21,14 +21,14 @@ const ICONS: Record<TechIcon, string> = {
 //   769-1024  grid 1fr / 2fr / 1fr, left-aligned, gap 30
 //   ≥1025  grid 1fr / 1.3fr / 1fr, gap 20
 const ROW_GRID =
-  'grid grid-cols-1 gap-5 py-5 text-center min-[769px]:grid-cols-[1fr_2fr_1fr] min-[769px]:gap-[30px] min-[769px]:py-[25px] min-[769px]:text-left min-[1025px]:grid-cols-[1fr_1.3fr_1fr] min-[1025px]:gap-5 min-[1025px]:py-[30px]';
+  'grid grid-cols-1 gap-5 py-5 text-center impulse:grid-cols-[1fr_2fr_1fr] impulse:gap-[30px] impulse:py-[25px] impulse:text-left impulse-lg:grid-cols-[1fr_1.3fr_1fr] impulse-lg:gap-5 impulse-lg:py-[30px]';
 
 // Row-title sizing on top of the Heading `caps` variant (weight/caps live there).
-const ROW_TITLE = 'text-sm tracking-[1px] min-[1025px]:text-base';
+const ROW_TITLE = 'text-sm tracking-[1px] impulse-lg:text-base';
 
 // A column centers its content when the row is stacked (≤768), left-aligns once
 // the row becomes a grid.
-const COL = 'flex justify-center min-[769px]:justify-start';
+const COL = 'flex justify-center impulse:justify-start';
 
 const Feature = ({ feature }: { feature: TechFeature }) => (
   <div className={cn(ROW_GRID, 'items-center')}>
@@ -48,7 +48,7 @@ const Feature = ({ feature }: { feature: TechFeature }) => (
 );
 
 const Column = ({ label, children }: { label: string; children: React.ReactNode }) => (
-  <div className="flex flex-col items-center gap-2.5 min-[769px]:items-start">
+  <div className="flex flex-col items-center gap-2.5 impulse:items-start">
     <Heading as="h4" variant="caps" size="none" className={ROW_TITLE}>
       {label}
     </Heading>
@@ -90,7 +90,7 @@ export const TechStack = ({ data }: { data: TechStackData }) => {
             <p className="text-[0.72rem] leading-normal">{data.details}</p>
           </Column>
           <Column label="Care">
-            <div className="flex flex-col gap-2 min-[769px]:flex-row min-[769px]:gap-[30px]">
+            <div className="flex flex-col gap-2 impulse:flex-row impulse:gap-[30px]">
               {careColumns.map((column) => (
                 <div key={column[0]} className="flex flex-col gap-2">
                   {column.map((line) => (

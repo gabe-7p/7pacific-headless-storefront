@@ -35,20 +35,20 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
               aria-hidden
               className="pointer-events-none absolute inset-0 -z-10 bg-[url(/topography.jpg)] bg-cover bg-center opacity-60 brightness-200 mix-blend-screen"
             />
-            <Container className="grid gap-0 py-14 min-[769px]:grid-cols-3 min-[769px]:gap-10">
+            <Container className="grid gap-0 py-14 impulse:grid-cols-3 impulse:gap-10">
               {/* Live puts the Instagram glyph under the newsletter input in the
                   centre column, not under the wordmark. */}
-              <div className="flex flex-col gap-6 pb-8 min-[769px]:pb-0">
+              <div className="flex flex-col gap-6 pb-8 impulse:pb-0">
                 <NavLink to="/" prefetch="intent" aria-label={header.shop.name}>
-                  <Logo tone="light" className="h-8 min-[769px]:h-[47px]" />
+                  <Logo tone="light" className="h-8 impulse:h-[47px]" />
                 </NavLink>
-                <div className="min-[769px]:hidden">
+                <div className="impulse:hidden">
                   <SocialIcons />
                 </div>
               </div>
               <FooterCollapsible title={BRAND.newsletter.heading}>
                 <Newsletter />
-                <div className="mt-6 hidden min-[769px]:block">
+                <div className="mt-6 hidden impulse:block">
                   <SocialIcons />
                 </div>
               </FooterCollapsible>
@@ -82,7 +82,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
 /**
  * Footer section that collapses into a tap-to-expand accordion row on mobile
  * AND tablet (matching live, which switches to columns at 769px — one past
- * Tailwind's `md`, hence the `min-[769px]:` variants) but renders as a plain,
+ * Tailwind's `md`, hence the `impulse:` variants) but renders as a plain,
  * always-open column above that. The heading lives here so the same title
  * doubles as the accordion trigger. Opens by default so SSR/desktop show
  * content; collapses only once mounted on a narrow viewport.
@@ -92,7 +92,7 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
   const [collapsible, setCollapsible] = useState(false);
 
   useEffect(() => {
-    // Must mirror the `min-[769px]:` CSS breakpoint above.
+    // Must mirror the `impulse:` CSS breakpoint above.
     const mq = window.matchMedia('(max-width: 768px)');
     const apply = () => {
       setCollapsible(mq.matches);
@@ -104,23 +104,23 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
   }, []);
 
   return (
-    <div className="border-t border-border-subtle-night min-[769px]:border-t-0">
+    <div className="border-t border-border-subtle-night impulse:border-t-0">
       <button
         type="button"
         onClick={() => collapsible && setOpen((prev) => !prev)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between py-4 min-[769px]:pointer-events-none min-[769px]:py-0"
+        className="flex w-full items-center justify-between py-4 impulse:pointer-events-none impulse:py-0"
       >
         {/* 14px / 0.3em — weight comes from the Heading brand variant. */}
         <Heading as="h3" size="none" className="text-sm tracking-[0.3em]">
           {title}
         </Heading>
         <ChevronDown
-          className={cn('size-5 transition-transform min-[769px]:hidden', open && 'rotate-180')}
+          className={cn('size-5 transition-transform impulse:hidden', open && 'rotate-180')}
           aria-hidden
         />
       </button>
-      <div className={cn('pb-5 min-[769px]:block min-[769px]:pb-0', open ? 'block' : 'hidden')}>
+      <div className={cn('pb-5 impulse:block impulse:pb-0', open ? 'block' : 'hidden')}>
         {children}
       </div>
     </div>
@@ -128,7 +128,7 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
 };
 
 const Newsletter = () => (
-  <div className="min-[769px]:max-w-md">
+  <div className="impulse:max-w-md">
     {/* Live footer copy and links are 10.2px. */}
     <p className="text-[10.2px] text-support-night">{BRAND.newsletter.body}</p>
     <NewsletterForm />

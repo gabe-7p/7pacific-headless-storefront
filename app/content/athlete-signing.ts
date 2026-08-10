@@ -66,7 +66,7 @@ export type AthleteSigningContent = {
     camLine: string;
     /** Mobile-only caption row under the panel. */
     shotLine: string;
-    image: { src: string; alt: string };
+    image: { src: string; alt: string; width: number; height: number };
   };
   founderVideo: {
     number: string;
@@ -121,7 +121,12 @@ const AMIR_SMITH = {
     locationLine: 'Los Angeles · 34.05N',
     camLine: '',
     shotLine: 'Shot.01 — First Session',
-    image: { src: `${CDN}/amir-smith-athlete.png`, alt: 'Amir Smith mid-dunk, first session' },
+    image: {
+      src: `${CDN}/amir-smith-athlete.png`,
+      alt: 'Amir Smith mid-dunk, first session',
+      width: 1920,
+      height: 1080,
+    },
   },
   founderVideo: {
     number: '01',
@@ -183,7 +188,12 @@ const JOSH_WYCHE = {
     locationLine: 'Richmond · 37.54N',
     camLine: '',
     shotLine: 'Shot.01 — First Session',
-    image: { src: `${CDN}/josh-wyche-athlete.png`, alt: 'Josh Wyche on the court' },
+    image: {
+      src: `${CDN}/josh-wyche-athlete.png`,
+      alt: 'Josh Wyche on the court',
+      width: 1920,
+      height: 1080,
+    },
   },
   founderVideo: {
     number: '01',
@@ -245,7 +255,12 @@ const KENNETH_PIERCE = {
     locationLine: 'Austin · 30.27N',
     camLine: '',
     shotLine: 'Shot.01 — First Session',
-    image: { src: `${CDN}/kenneth-pierce-signing.png`, alt: 'Kenneth Pierce mid-run' },
+    image: {
+      src: `${CDN}/kenneth-pierce-signing.png`,
+      alt: 'Kenneth Pierce mid-run',
+      width: 1010,
+      height: 1031,
+    },
   },
   founderVideo: {
     number: '01',

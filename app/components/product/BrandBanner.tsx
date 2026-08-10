@@ -1,3 +1,5 @@
+import { Image } from '@shopify/hydrogen';
+
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
@@ -19,10 +21,13 @@ export const BrandBanner = () => {
         {/* Bounded rather than natural height: contained, the source images are
             tall enough that `h-auto` let this one dominate the page. */}
         <div className="relative mb-4 md:mb-5">
-          <img
-            src={images.hero}
+          <Image
+            src={images.hero.url}
+            width={images.hero.width}
+            height={images.hero.height}
             alt=""
             loading="lazy"
+            sizes="(min-width: 1400px) 1360px, 100vw"
             className="h-[22rem] w-full object-cover md:h-[30rem] lg:h-[34rem]"
           />
           <div className="absolute inset-0 flex justify-center px-6 pt-10 text-center md:justify-end md:pt-14 lg:pr-[6%]">
@@ -31,14 +36,9 @@ export const BrandBanner = () => {
               <Heading
                 as="h2"
                 size="none"
+                lines={headingLines}
                 className="text-[2.25rem] leading-[1.1] tracking-[-0.02em] md:text-[3.4rem]"
-              >
-                {headingLines.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </Heading>
+              />
               <p className="mx-auto mt-4 max-w-sm text-sm text-support">{body}</p>
               {/* Secondary — the PDP's one Ember moment is Add to Cart (7PA-230). */}
               <Cta to={cta.href} className="mt-6">
@@ -50,16 +50,22 @@ export const BrandBanner = () => {
         {/* Live's 20px gutter (15px on mobile). The desktop crop is 4:3 rather
             than the old 4:5 so the pair reads as a band, not two tall panels. */}
         <div className="grid grid-cols-2 gap-4 md:gap-5">
-          <img
-            src={images.bottomLeft}
+          <Image
+            src={images.bottomLeft.url}
+            width={images.bottomLeft.width}
+            height={images.bottomLeft.height}
             alt=""
             loading="lazy"
+            sizes="(min-width: 1400px) 670px, 50vw"
             className="aspect-square w-full object-cover md:aspect-[4/3]"
           />
-          <img
-            src={images.bottomRight}
+          <Image
+            src={images.bottomRight.url}
+            width={images.bottomRight.width}
+            height={images.bottomRight.height}
             alt=""
             loading="lazy"
+            sizes="(min-width: 1400px) 670px, 50vw"
             className="aspect-square w-full object-cover md:aspect-[4/3]"
           />
         </div>

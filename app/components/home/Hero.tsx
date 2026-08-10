@@ -3,7 +3,9 @@ import { Image } from '@shopify/hydrogen';
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
 import { HOME_HERO } from '~/content/home';
+import { cn } from '~/lib/cn';
 
 /**
  * Full-bleed homepage hero. Structure per the drop-01 mockup (Gabe,
@@ -40,9 +42,7 @@ export const Hero = () => (
     <div className="pointer-events-none absolute inset-0 bg-black/10" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Spec-strip tier (7PA-242): JetBrains Mono caps at +0.1em. */}
-      <p className="text-support-night font-mono text-xs tracking-spec uppercase">
-        {HOME_HERO.eyebrow}
-      </p>
+      <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>
       {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
           (leading repeats per size — text-* utilities reset line-height). */}
       <Heading
@@ -60,7 +60,7 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
-      <div className="text-support-night mt-2 flex flex-col gap-1 font-mono text-xs tracking-spec uppercase">
+      <div className={cn(SPEC_LINE_CLASS, 'text-support-night mt-2 flex flex-col gap-1')}>
         <span>{HOME_HERO.coordinates}</span>
         <span>{HOME_HERO.tagline}</span>
       </div>
