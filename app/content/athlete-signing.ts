@@ -296,13 +296,13 @@ export const OWEN_PLATT = {
     designedLine: 'Designed in San Francisco',
     existsLine: 'Exists only at /athletes/owen-platt',
   },
-  transmissionLine: 'Indianapolis → San Francisco · 07.24.2026',
-  eyebrowLine: 'Official // Athlete Signing · 07.24.2026',
+  transmissionLine: 'Indianapolis → San Francisco · 08.06.2026',
+  eyebrowLine: 'Official // Athlete Signing · 08.06.2026',
   headline: { lead: 'Welcome to the team,', name: 'Owen Platt.' },
-  body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. You made defense the whole \
-  story — the footwork, the discipline, the unglamorous reps that win possessions — and you teach players to put in that work \
-  without anyone watching. That’s exactly how we build. Scroll down to watch a personal message from us about why we’re fired \
-  up to have you on the team.',
+  body: "It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. You made defense the whole \
+  story: the footwork, the speed drills, all the technique that wins possessions, and now, you're teaching players to put in that work \
+  to elevate their game. What you're doing is the foundation for our brand as well. Scroll down to watch a personal message from us about why we’re fired \
+  up to have you on the team.",
   signedLine: 'Signed · Status: Confirmed',
   hero: {
     modeLabel: 'Mode 01 · Action',
@@ -326,7 +326,7 @@ export const OWEN_PLATT = {
     number: '02',
     title: 'Performance Readout',
     // His signature drill, not a measured PR — so no VERIFIED tag.
-    stat: { label: 'The Lockdown Test', value: '0:30', verified: false },
+    stat: { label: 'The Lockdown Challenge', value: '0:30', verified: false },
     scale: { markerPercent: 90, markerLabel: 'Lockdown' },
     fields: [
       { label: 'Specialty', value: 'Lockdown Defense' },
