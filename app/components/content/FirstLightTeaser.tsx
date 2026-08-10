@@ -133,8 +133,14 @@ const EarlyAccessForm = () => {
 const Intro = () => (
   <Container className="pt-10 pb-8 md:pt-14 md:pb-10">
     <p className="flex items-center gap-3 font-mono text-sm tracking-spec text-ink uppercase">
-      {/* bg-brand dot — the mock pairs the Ember accent with the SIGN UP CTA below. */}
-      <span aria-hidden className="bg-brand size-2.5 shrink-0 rounded-full" />
+      {/* bg-brand dot — the mock pairs the Ember accent with the SIGN UP CTA
+          below. The radar ping says "signal live" while the countdown runs;
+          the dot itself never moves, and the ring sits out under
+          motion-reduce. */}
+      <span aria-hidden className="relative size-2.5 shrink-0">
+        <span className="animate-radar-ping border-brand absolute inset-0 rounded-full border motion-reduce:hidden" />
+        <span className="bg-brand absolute inset-0 rounded-full" />
+      </span>
       {FIRST_LIGHT.eyebrow}
     </p>
     <Heading as="h1" size="none" className="mt-4 text-5xl md:text-6xl">

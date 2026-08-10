@@ -232,6 +232,25 @@
       opacity: 0;
     }
   }
+
+  /* Live-status dot ping — a thin ring expands out of the dot and dissolves,
+     then rests until the next sweep ("signal live", e.g. the FIRST LIGHT
+     eyebrow dot while its countdown runs). Goes on an absolutely-positioned
+     ring element over a static dot; the dot itself never moves. Hide the
+     ring under motion-reduce. */
+  --animate-radar-ping: radar-ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+
+  @keyframes radar-ping {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    60%,
+    100% {
+      opacity: 0;
+      transform: scale(2.5);
+    }
+  }
 }
 
 /**
