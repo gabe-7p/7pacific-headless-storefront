@@ -126,7 +126,7 @@ export const HOME_DROP_TWO = {
 } as const;
 
 export const HOME_FIRST_DROP = {
-  heading: 'Our First Drop',
+  heading: 'Baseline: The Starting Nine',
   // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).
   subtitle: 'Three products in nine colors tested on the hills we run.',
   // Grid order is merchant-controlled: the manual `homepage-first-drop`

@@ -6,7 +6,7 @@ import { SectionHeader } from '~/components/common/SectionHeader';
 import { HOME_FIRST_DROP } from '~/content/home';
 
 /**
- * "Our First Drop" — heading + the full-catalog product grid. Mirrors the live
+ * "BASELINE: The Starting Nine" — heading + the full-catalog product grid. Mirrors the live
  * `main-collection` section; renders the typed products the loader fetched
  * (all live products, ordered by the manual homepage-first-drop collection).
  */

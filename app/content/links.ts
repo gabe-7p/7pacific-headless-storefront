@@ -5,8 +5,8 @@
  * Shopify menus; these are the marketing-CTA targets baked into page content.)
  */
 export const STORE_LINKS = {
-  /** The shop-all collection — hero CTA, cart "Continue shopping". */
-  shopAll: '/collections/summer-25',
+  /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue shopping". */
+  shopAll: '/collections/baseline',
   /** Core Values card CTAs ("Shop tees" / "Shop shorts"). */
   shopShirts: '/products/tracefiber-performance-tech-tee-mountain-mist',
   shopShorts: '/products/airrail-6-performance-shorts-mountain-mist',
@@ -23,7 +23,7 @@ export const STORE_LINKS = {
 
 /**
  * Manual Shopify collection whose product order drives the homepage
- * "Our First Drop" grid — reorder it in the Shopify admin to reorder the
+ * homepage BASELINE grid — reorder it in the Shopify admin to reorder the
  * homepage. Not linked in any navigation.
  */
 export const HOMEPAGE_COLLECTION_HANDLE = 'homepage-first-drop';
