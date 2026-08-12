@@ -16,10 +16,12 @@ type TeaserCard = (typeof HOME_DROP_TWO.cards)[keyof typeof HOME_DROP_TWO.cards]
  * One teaser card: photo with a centered overlay — mono eyebrow, display
  * title, and the same xs outline Cta the tenet cards use. The shared aspect
  * ratio (not natural image height) is what keeps the two opposite-orientation
- * photos rendering as equal cards.
+ * photos rendering as equal cards. It lives on the WRAPPER, with the image
+ * absolutely filling it — Hydrogen's <Image> sets an inline aspect-ratio from
+ * its width/height props, which beats any aspect-* class on the img itself.
  */
 const Card = ({ card, children }: { card: TeaserCard; children: React.ReactNode }) => (
-  <div className="relative overflow-hidden">
+  <div className="relative aspect-[4/5] overflow-hidden md:aspect-[10/13]">
     <Image
       src={card.image.url}
       width={card.image.width}
@@ -27,7 +29,7 @@ const Card = ({ card, children }: { card: TeaserCard; children: React.ReactNode 
       alt=""
       loading="lazy"
       sizes="(min-width: 768px) 50vw, 100vw"
-      className="aspect-[4/5] w-full object-cover md:aspect-[10/13]"
+      className="absolute inset-0 h-full w-full object-cover"
     />
     {/* Legibility wash over the photo — same device as the Hero's, a touch
         stronger (15% vs 10%) for the busier archive shots. */}
