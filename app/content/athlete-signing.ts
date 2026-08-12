@@ -325,20 +325,22 @@ export const OWEN_PLATT = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/owen-platt-athlete.png?v=1786383745',
+      src: `${CDN}/owen-platt-athlete.png`,
       alt: 'Owen Platt in a defensive stance',
+      width: 776,
+      height: 773,
     },
   },
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Owen's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // Owen's founder message in Shopify Files (portrait, 28s) — Shopify's
+    // 720p transcode; poster is the custom thumbnail set in Shopify admin.
+    src: 'https://cdn.shopify.com/videos/c/vp/4e59f563e64348948ba8e23ccbdddd1e/4e59f563e64348948ba8e23ccbdddd1e.HD-720p-4.5Mbps-91367435.mp4',
+    poster: `${CDN}/preview_images/Screenshot_2026-08-11_at_5.17.33_PM.png`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:28',
   },
   readout: {
     number: '02',
