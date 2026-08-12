@@ -1,3 +1,5 @@
+import { Image } from '@shopify/hydrogen';
+
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
@@ -22,9 +24,13 @@ export const OurStory = () => {
   return (
     <>
       <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-field-night text-ink-night">
-        <img
-          src={hero.backgroundImage}
+        <Image
+          src={hero.backgroundImage.url}
+          width={hero.backgroundImage.width}
+          height={hero.backgroundImage.height}
           alt=""
+          sizes="100vw"
+          loading="eager"
           className="absolute inset-0 size-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
@@ -41,7 +47,7 @@ export const OurStory = () => {
             </Heading>
           </Container>
           {/* CTA band: full-width bars on mobile, content-sized on desktop.
-              Renders through Cta so the chevron device and hover animation
+              Renders through Cta so the arrow-slide device and hover animation
               match every other CTA on the site. */}
           <div className="border-t border-ink-night/25">
             <Container className="flex flex-col gap-5 py-5 lg:flex-row lg:py-4">
@@ -65,13 +71,12 @@ export const OurStory = () => {
           orange rule, larger statement copy. */}
       <section className="py-16 md:py-24">
         <Container>
-          <Heading as="h2" size="none" className={SECTION_HEADING}>
-            {mission.heading.split(' ').map((word) => (
-              <span key={word} className="block">
-                {word}
-              </span>
-            ))}
-          </Heading>
+          <Heading
+            as="h2"
+            size="none"
+            lines={mission.heading.split(' ')}
+            className={SECTION_HEADING}
+          />
         </Container>
         <div className="border-brand mt-6 border-t-2" />
         <Container>
@@ -87,10 +92,13 @@ export const OurStory = () => {
         </Heading>
         <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
           {/* Live: 6:5 crop up to tablet, 8:7 (400x350) on desktop. */}
-          <img
-            src={fitness.image}
+          <Image
+            src={fitness.image.url}
+            width={fitness.image.width}
+            height={fitness.image.height}
             alt=""
             loading="lazy"
+            sizes="400px"
             className="order-1 mx-auto aspect-[6/5] w-full max-w-[400px] object-cover lg:order-2 lg:mx-0 lg:aspect-[8/7] lg:w-[400px] lg:max-w-none lg:flex-none"
           />
           <div className={cn(BODY_COPY, 'order-2 space-y-4 lg:order-1 lg:flex-1')}>
@@ -118,10 +126,13 @@ export const OurStory = () => {
           </Heading>
           <div className="mt-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
             {/* Live: 3:2 at every breakpoint, 375x250 on desktop. */}
-            <img
-              src={story.image}
+            <Image
+              src={story.image.url}
+              width={story.image.width}
+              height={story.image.height}
               alt={story.founder.name}
               loading="lazy"
+              sizes="400px"
               className="mx-auto aspect-[3/2] w-full max-w-[400px] object-cover lg:mx-0 lg:w-[375px] lg:max-w-none lg:flex-none"
             />
             <div className="lg:flex-1">

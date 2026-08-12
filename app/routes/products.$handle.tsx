@@ -27,14 +27,10 @@ import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { getColorSwatches } from '~/lib/colors';
-import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
-import type {
-  ProductDetailCard,
-  SpecCardData,
-  TechStack as TechStackData,
-} from '~/lib/productContent';
+import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/productContent';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
 
@@ -54,19 +50,13 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
 };
 
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return { ...deferredData, ...criticalData };
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
+/** Awaited before first byte — a failure here errors the whole page. */
 async function loadCriticalData({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
   const { storefront } = context;
@@ -75,20 +65,16 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
     throw notFound('Product not found');
   }
 
-  const [{ product }] = await Promise.all([
-    storefront.query(PRODUCT_QUERY, {
-      variables: { handle, selectedOptions: getSelectedProductOptions(request) },
-      // Price/availability-sensitive: keep the cache window short.
-      cache: storefront.CacheShort(),
-    }),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
+  const { product } = await storefront.query(PRODUCT_QUERY, {
+    variables: { handle, selectedOptions: getSelectedProductOptions(request) },
+    // Price/availability-sensitive: keep the cache window short.
+    cache: storefront.CacheShort(),
+  });
 
   if (!product?.id) {
     throw notFound('Product not found');
   }
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, { handle, data: product });
 
   return {
@@ -99,11 +85,7 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
+/** Returned as promises and awaited in-component — must never throw. */
 function loadDeferredData({ context, params }: Route.LoaderArgs) {
   const { handle } = params;
 
@@ -134,17 +116,13 @@ const Product = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
 
-  // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
     getAdjacentAndFirstAvailableVariants(product)
   );
 
-  // Sets the search param to the selected variant without navigation
-  // only when no search params are set in the url
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
 
-  // Get the product options array
   const productOptions = getProductOptions({
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,
@@ -365,21 +343,7 @@ const PRODUCT_FRAGMENT = `#graphql
     fitNote: metafield(namespace: "custom", key: "fit_note") {
       value
     }
-    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
-      references(first: 10) {
-        nodes {
-          ... on Product {
-            handle
-            colorName: metafield(namespace: "custom", key: "color_name") {
-              value
-            }
-            colorHex: metafield(namespace: "custom", key: "color_hex") {
-              value
-            }
-          }
-        }
-      }
-    }
+    ...ColorSiblings
     productDetails: metafield(namespace: "custom", key: "product_details") {
       value
     }
@@ -402,15 +366,7 @@ const PRODUCT_FRAGMENT = `#graphql
     # Imagery lands with the photography program (7PA-236); renders if present.
     environmentalHero: metafield(namespace: "custom", key: "environmental_hero") {
       reference {
-        ... on MediaImage {
-          image {
-            id
-            url
-            altText
-            width
-            height
-          }
-        }
+        ...MediaImageRef
       }
     }
     environmentalHeroCaption: metafield(namespace: "custom", key: "environmental_hero_caption") {
@@ -420,32 +376,26 @@ const PRODUCT_FRAGMENT = `#graphql
     # per product. Falls back to the variant image when unset.
     heroImage: metafield(namespace: "custom", key: "hero_image") {
       reference {
-        ... on MediaImage {
-          image {
-            id
-            url
-            altText
-            width
-            height
-          }
-        }
+        ...MediaImageRef
       }
     }
     heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {
       reference {
-        ... on MediaImage {
-          image {
-            id
-            url
-            altText
-            width
-            height
-          }
-        }
+        ...MediaImageRef
       }
     }
   }
+  fragment MediaImageRef on MediaImage {
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
   ${PRODUCT_VARIANT_FRAGMENT}
+  ${COLOR_SIBLINGS_FRAGMENT}
 ` as const;
 
 const PRODUCT_QUERY = `#graphql

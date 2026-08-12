@@ -11,9 +11,9 @@ export const ProductPrice = ({
 }) => {
   // font-medium, not bold — mono runs Regular/Medium only in the type system.
   return (
-    <div className="product-price font-medium">
+    <div className="font-medium">
       {compareAtPrice ? (
-        <div className="product-price-on-sale">
+        <div className="flex gap-2 [&_s]:opacity-50">
           {price ? <Price data={price} /> : null}
           <s className="text-support">
             <Price data={compareAtPrice} />

@@ -1,5 +1,4 @@
-import type { MouseEvent } from 'react';
-import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from 'react-router';
+import { Form, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
@@ -7,6 +6,7 @@ import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { CONTACT } from '~/content/contact';
 import { buildMeta } from '~/lib/seo';
+import { EMAIL_RE, INVALID_EMAIL_MESSAGE } from '~/lib/validation';
 
 import type { Route } from './+types/pages.contact-us';
 
@@ -24,8 +24,6 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { page };
 }
 
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-
 type ContactErrors = Partial<Record<'name' | 'email' | 'message', string>>;
 
 export async function action({ request }: Route.ActionArgs) {
@@ -36,7 +34,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const errors: ContactErrors = {};
   if (!name) errors.name = 'Please enter your name.';
-  if (!EMAIL_RE.test(email)) errors.email = 'Please enter a valid email address.';
+  if (!EMAIL_RE.test(email)) errors.email = INVALID_EMAIL_MESSAGE;
   if (!message) errors.message = 'Please enter a message.';
   if (Object.keys(errors).length > 0) return { ok: false as const, errors };
 
@@ -52,21 +50,8 @@ const Contact = () => {
   const { page } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
-  const navigate = useNavigate();
   const submitting = navigation.state !== 'idle';
   const errors = actionData && !actionData.ok ? actionData.errors : undefined;
-
-  // Route internal links inside the static content (e.g. the Returns & Exchanges
-  // block's link to /pages/returns) through the client router instead of a full
-  // page reload.
-  const handleContentClick = (event: MouseEvent<HTMLDivElement>) => {
-    const link = (event.target as HTMLElement).closest('a');
-    const href = link?.getAttribute('href');
-    if (href?.startsWith('/')) {
-      event.preventDefault();
-      void navigate(href);
-    }
-  };
 
   return (
     <Container className="py-16 md:py-24">
@@ -76,12 +61,7 @@ const Contact = () => {
           Contact Us
         </Heading>
 
-        {page?.body && (
-          // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-          <div onClick={handleContentClick} className="mt-6">
-            <Prose html={page.body} variant="compact" />
-          </div>
-        )}
+        {page?.body && <Prose html={page.body} variant="compact" className="mt-6" />}
 
         <Heading as="h2" size="md" className="mt-12">
           Send Us a Message

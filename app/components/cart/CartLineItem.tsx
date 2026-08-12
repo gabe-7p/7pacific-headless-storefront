@@ -4,7 +4,7 @@ import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
-import type { CartLayout, LineItemChildrenMap } from '~/components/cart/CartMain';
+import type { CartLayout } from '~/components/cart/CartMain';
 import { useAside } from '~/components/layout/Aside';
 import { useVariantUrl } from '~/lib/variants';
 
@@ -12,28 +12,17 @@ export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
 
 /**
  * A single cart line: product image, title, options, price, a quantity stepper,
- * and a remove control. Child component lines (warranties, gift wrapping) render
- * nested below the parent.
+ * and a remove control.
  */
-export const CartLineItem = ({
-  layout,
-  line,
-  childrenMap,
-}: {
-  layout: CartLayout;
-  line: CartLine;
-  childrenMap: LineItemChildrenMap;
-}) => {
+export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartLine }) => {
   const { id, merchandise } = line;
   const { product, title, image, selectedOptions } = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
   const { close } = useAside();
-  const lineItemChildren = childrenMap[id];
-  const childrenLabelId = `cart-line-children-${id}`;
   const closeIfAside = () => layout === 'aside' && close();
 
   return (
-    <li key={id} className="py-4">
+    <li className="py-4">
       <div className="flex gap-4">
         {image && (
           <Link prefetch="intent" to={lineItemUrl} onClick={closeIfAside} className="flex-none">
@@ -73,7 +62,7 @@ export const CartLineItem = ({
               {/* Raw <Money> ("$79.00") to match the cart's subtotal, not the
                   brand <Price> ("$79 USD") the PDP and product cards use.
                   Mono face per the numbers-live-in-mono rule. */}
-              {line?.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
+              {line.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
             </div>
           </div>
           {/* Live's drawer removes via the stepper; the /cart page has the link. */}
@@ -82,34 +71,14 @@ export const CartLineItem = ({
           )}
         </div>
       </div>
-
-      {lineItemChildren ? (
-        <div>
-          <p id={childrenLabelId} className="sr-only">
-            Line items with {product.title}
-          </p>
-          <ul aria-labelledby={childrenLabelId} className="mt-2 ml-24">
-            {lineItemChildren.map((childLine) => (
-              <CartLineItem
-                childrenMap={childrenMap}
-                key={childLine.id}
-                line={childLine}
-                layout={layout}
-              />
-            ))}
-          </ul>
-        </div>
-      ) : null}
     </li>
   );
 };
 
-/** Quantity stepper (−/value/+). */
 const QuantityStepper = ({ line }: { line: CartLine }) => {
-  if (!line || typeof line?.quantity === 'undefined') return null;
   const { id: lineId, quantity, isOptimistic } = line;
-  const prevQuantity = Number(Math.max(0, quantity - 1).toFixed(0));
-  const nextQuantity = Number((quantity + 1).toFixed(0));
+  const prevQuantity = Math.max(0, quantity - 1);
+  const nextQuantity = quantity + 1;
 
   return (
     <div className="border-border-subtle inline-flex items-center border">

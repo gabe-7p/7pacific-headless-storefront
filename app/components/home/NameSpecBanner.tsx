@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 
+import { SpecLine } from '~/components/common/SpecLine';
 import { HOME_NAME_SPEC_BANNER } from '~/content/home';
 import { cn } from '~/lib/cn';
 
@@ -38,15 +39,15 @@ const CellSet = ({
           <span className="font-display text-ink tracking-product text-lg leading-[1.15] font-bold whitespace-nowrap uppercase min-[860px]:text-xl min-[860px]:leading-[1.15]">
             {cell.name}
           </span>
-          <span className="font-mono text-support tracking-spec text-[10px] whitespace-nowrap uppercase">
+          <SpecLine as="span" className="text-support text-[10px] whitespace-nowrap">
             {cell.spec.join(' · ')}
             {' · '}
             <span className="text-ink font-medium">{cell.price}</span>
-          </span>
+          </SpecLine>
         </Link>
       ))}
       {/* Deliberately not `Cta`: the approved banner CTA is the bare mono
-          "Shop All //" device with no chevron. text-brand (Ember) is allowed
+          "Shop All //" device with no arrow. text-brand (Ember) is allowed
           here and ONLY here on the banner — hard brand rule. */}
       <Link
         to={HOME_NAME_SPEC_BANNER.cta.href}

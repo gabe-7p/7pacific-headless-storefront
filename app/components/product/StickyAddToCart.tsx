@@ -40,7 +40,7 @@ export const StickyAddToCart = ({
       <div ref={sentinelRef} aria-hidden className="h-0" />
       <div
         className={cn(
-          'fixed inset-x-0 bottom-0 z-40 transition-transform duration-300 min-[769px]:hidden',
+          'fixed inset-x-0 bottom-0 z-40 transition-transform duration-300 impulse:hidden',
           pinned ? 'translate-y-0' : 'translate-y-full'
         )}
       >

@@ -2,6 +2,7 @@ import { Link, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { JOURNAL } from '~/content/journal';
 import { notFound } from '~/lib/http';
 import { formatJournalDate } from '~/lib/journal';
 import { buildMeta } from '~/lib/seo';
@@ -9,10 +10,7 @@ import { buildMeta } from '~/lib/seo';
 import type { Route } from './+types/journal._index';
 
 export const meta: Route.MetaFunction = () =>
-  buildMeta({
-    title: 'Journal',
-    description: 'Training pieces, founder letters, and what the crew is on.',
-  });
+  buildMeta({ title: JOURNAL.title, description: JOURNAL.tagline });
 
 export async function loader({ context }: Route.LoaderArgs) {
   const { blog } = await context.storefront.query(JOURNAL_QUERY, {
@@ -29,11 +27,9 @@ const Journal = () => {
   return (
     <Container className="py-16 md:py-24">
       <Heading as="h1" size="display">
-        Journal
+        {JOURNAL.title}
       </Heading>
-      <p className="mt-3 max-w-md text-support">
-        Training pieces, founder letters, and what the crew is on.
-      </p>
+      <p className="mt-3 max-w-md text-support">{JOURNAL.tagline}</p>
 
       <ul className="mt-12 flex max-w-[65ch] flex-col">
         {articles.map((article) => (

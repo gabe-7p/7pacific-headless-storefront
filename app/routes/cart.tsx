@@ -43,10 +43,8 @@ export async function action({ request, context }: Route.ActionArgs) {
     case CartForm.ACTIONS.DiscountCodesUpdate: {
       const formDiscountCode = inputs.discountCode;
 
-      // User inputted discount code
+      // The submitted code plus any codes already applied on the cart.
       const discountCodes = (formDiscountCode ? [formDiscountCode] : []) as Array<string>;
-
-      // Combine discount codes already applied on cart
       discountCodes.push(...inputs.discountCodes);
 
       result = await cart.updateDiscountCodes(discountCodes);

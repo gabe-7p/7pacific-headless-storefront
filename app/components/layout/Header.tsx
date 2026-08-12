@@ -4,11 +4,12 @@ import { Await, NavLink, useAsyncValue, useLocation } from 'react-router';
 import type { CartApiQueryFragment, HeaderQuery } from 'storefrontapi.generated';
 
 import { Container } from '~/components/common/Container';
-import { BagIcon, HamburgerIcon, UserIcon } from '~/components/common/icons';
+import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
+import { toInternalPath } from '~/lib/urls';
 
 type HeaderProps = {
   header: HeaderQuery;
@@ -46,7 +47,6 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
   return (
     <header
       className={cn(
-        // positioned by the sticky topbar wrapper in PageLayout
         'transition-colors duration-300 ease-(--ease-brand)',
         overlay
           ? 'bg-linear-to-b from-black/30 to-transparent text-ink-night'
@@ -73,7 +73,7 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
         >
           <Logo
             tone={overlay ? 'light' : 'dark'}
-            className={cn('h-5 lg:h-8', overlay && 'opacity-70')}
+            className={cn('h-4.5 lg:h-7', overlay && 'opacity-70')}
           />
         </NavLink>
 
@@ -97,13 +97,6 @@ export const HeaderMenu = ({
   const { close } = useAside();
   const isMobile = viewport === 'mobile';
 
-  const toInternalPath = (itemUrl: string) =>
-    itemUrl.includes('myshopify.com') ||
-    itemUrl.includes(publicStoreDomain) ||
-    itemUrl.includes(primaryDomainUrl)
-      ? new URL(itemUrl).pathname
-      : itemUrl;
-
   return (
     <nav
       // Live's mobile drawer clears the close button before the first link and
@@ -113,7 +106,7 @@ export const HeaderMenu = ({
           ? 'border-border-subtle mt-[68px] flex flex-col border-t'
           : // Collapses at live's Impulse breakpoint (769px), not Tailwind's
             // lg — the 12px nav fits well before 1024.
-            'hidden items-center gap-5 min-[769px]:flex'
+            'hidden items-center gap-5 impulse:flex'
       )}
       role="navigation"
     >
@@ -125,7 +118,7 @@ export const HeaderMenu = ({
             end
             onClick={close}
             prefetch="intent"
-            to={toInternalPath(item.url)}
+            to={toInternalPath(item.url, { publicStoreDomain, primaryDomainUrl })}
             // Live never marks the current page in the nav, so no active state.
             // Caps-UI tier: Archivo Condensed Medium (Gabe's override of the
             // Inter caps-UI rule), ALL CAPS, +0.08em tracking.
@@ -156,22 +149,12 @@ export const HeaderMenu = ({
               aria-label={social.platform}
               className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
             >
-              <InstagramGlyph />
+              <InstagramIcon className="size-5" />
             </a>
           ))}
     </nav>
   );
 };
-
-// lucide-react v1 dropped brand/logo icons, so the Instagram glyph is inline
-// (mirrors the footer's icon).
-const InstagramGlyph = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-    <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
-    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
-  </svg>
-);
 
 const HeaderCtas = ({
   cart,
@@ -182,10 +165,11 @@ const HeaderCtas = ({
       {/* Customer login lives on Shopify's hosted account portal, not this headless
           storefront (we don't use the Customer Account API). `{store-domain}/account`
           302-redirects to it; the myshopify domain is always Shopify-served, so this
-          link survives the custom-domain cutover. Desktop-only, mirroring the cart. */}
+          link survives the custom-domain cutover. Desktop-only (the cart shows at
+          every width). */}
       <a
         href={`https://${publicStoreDomain}/account`}
-        className="hidden items-center transition-opacity hover:opacity-70 min-[769px]:inline-flex"
+        className="hidden items-center transition-opacity hover:opacity-70 impulse:inline-flex"
         title="Log in"
       >
         <UserIcon className="size-7" />
@@ -202,7 +186,7 @@ const HeaderMenuMobileToggle = () => {
     <button
       type="button"
       // Must flip at the same width the desktop nav appears (769px).
-      className="transition-opacity hover:opacity-70 min-[769px]:hidden"
+      className="transition-opacity hover:opacity-70 impulse:hidden"
       aria-label="Open menu"
       onClick={() => open('mobile')}
     >

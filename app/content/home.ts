@@ -1,12 +1,14 @@
 /**
  * Homepage marketing copy + section asset URLs (typed constants, not JSX).
- * Mirrors the live Impulse homepage sections: custom-hero-image, main-collection,
- * core-values-homepage-v2, black-text-image-split. Asset URLs are the same Shopify
- * Files / CDN assets the live theme uses (hero image, the two looping videos, and
- * the core-values photography) — change a value here, the homepage follows.
+ * The Impulse-parity sections (hero, first drop, core values, brand banner)
+ * mirror the live theme; the Name/Spec marquee and Drop 02 teaser are
+ * post-migration additions. Asset URLs are the same Shopify Files / CDN assets
+ * the live theme uses — change a value here, the homepage follows.
  */
 
+import { DROP_TWO_LAUNCH } from '~/content/drop-two';
 import { STORE_LINKS } from '~/content/links';
+import { MEMBERSHIP_PITCH } from '~/content/membership';
 import { BRAND } from '~/lib/brand';
 
 const CDN = BRAND.filesCdn;
@@ -36,7 +38,7 @@ export const HOME_HERO = {
   },
 } as const;
 
-export type NameSpecCell = {
+type NameSpecCell = {
   /** Product-family name, display face (ALL CAPS via CSS). */
   name: string;
   /** Mono spec segments — rendered joined with ' · ' (the locked separator). */
@@ -48,8 +50,8 @@ export type NameSpecCell = {
 
 /**
  * The Name/Spec marquee banner directly below the hero (approved prototype,
- * Jul 2026): the three live product families as name-over-spec cells plus one
- * Shop All cell, auto-scrolling. Content is locked — exactly these four cells.
+ * Jul 2026): the three live product families as name-over-spec cells plus the
+ * Shop All CTA cell, auto-scrolling. Content is locked — exactly these cells.
  * Names use the product cards' short-title device (family + noun, no "//"
  * descriptor) per Gabe (2026-07-24), so the banner and grid read as one system.
  */
@@ -77,8 +79,54 @@ export const HOME_NAME_SPEC_BANNER = {
   cta: { label: 'Shop All //', href: STORE_LINKS.shopAll },
 } as const;
 
+/**
+ * "Drop 02: FW26" teaser — the First Light collection (DAYBREAK™ quarterzips +
+ * FRONTRUNNER™ joggers), directly below the Name/Spec banner. A live countdown
+ * to the drop plus two teaser cards: Fall Gear (links to the collection) and
+ * Coming Soon (opens the waitlist dialog). Photos are Shopify Files uploads
+ * picked by Gabe (2026-08-03).
+ */
+export const HOME_DROP_TWO = {
+  heading: 'Drop 02: FW26',
+  dropIso: DROP_TWO_LAUNCH.dropIso,
+  countdownLabels: DROP_TWO_LAUNCH.countdownLabels,
+  cards: {
+    fallGear: {
+      // Same date as the timer (aligned from the mock's 09.10.26 per Gabe).
+      eyebrow: 'Drops 09.13.26',
+      title: 'Fall Gear',
+      cta: { label: 'Discover', href: STORE_LINKS.firstLight },
+      image: {
+        url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`,
+        width: 2048,
+        height: 1638,
+      },
+    },
+    comingSoon: {
+      eyebrow: 'DAYBREAK™ & FRONTRUNNER™',
+      title: 'Coming Soon',
+      /** No href — the card CTA opens the waitlist dialog instead. */
+      cta: { label: 'Get on the List' },
+      image: {
+        url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
+        width: 1638,
+        height: 2048,
+      },
+    },
+  },
+  /** Copy for the waitlist dialog the Coming Soon card opens. */
+  waitlist: {
+    heading: 'Get on the List',
+    body: 'DAYBREAK™ and FRONTRUNNER™ land 09.13.26. Leave your name and we’ll tell you the moment they do.',
+    namePlaceholder: 'Name',
+    emailPlaceholder: 'Email address',
+    submitLabel: 'Get on the List',
+    successMessage: 'You’re on it. See you at first light.',
+  },
+} as const;
+
 export const HOME_FIRST_DROP = {
-  heading: 'Our First Drop',
+  heading: 'Baseline: The Starting Nine',
   // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).
   subtitle: 'Three products in nine colors tested on the hills we run.',
   // Grid order is merchant-controlled: the manual `homepage-first-drop`
@@ -91,6 +139,10 @@ export type CoreValue = {
   cta: { label: string; href: string };
   /** Card background tone — live alternates dark charcoal and light gray. */
   tone: 'dark' | 'light';
+  /** The media panel paired with the card in its row. */
+  media:
+    | { kind: 'video'; src: string }
+    | { kind: 'image'; url: string; width: number; height: number };
 };
 
 /**
@@ -102,44 +154,45 @@ export type CoreValue = {
 export const HOME_CORE_VALUES = {
   heading: 'What We Stand For',
   subtitle: 'The reminders we train by. No matter the season.',
-  video: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-  images: {
-    socialSharing: `${CDN}/social_sharing.jpg`,
-    paulScreaming: `${CDN}/paul_screaming.jpg`,
-    digitalMap: `${CDN}/digital_map.png`,
-  },
   values: [
     {
       title: 'No Losses, Only Lessons',
       tone: 'dark',
       body: "When something doesn't work out, we figure out why and come back more experienced.",
       cta: { label: 'Read the story', href: '/pages/our-story' },
+      media: {
+        kind: 'video',
+        src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+      },
     },
     {
       title: 'Love The Journey',
       tone: 'light',
       body: 'The peak is a moment. The climb is the life. Most of the fun and memories are in the journey.',
       cta: { label: 'Sign up', href: '#newsletter' },
+      media: { kind: 'image', url: `${CDN}/social_sharing.jpg`, width: 1656, height: 1104 },
     },
     {
       title: 'Not Too Serious',
       tone: 'dark',
       body: "The training is serious. We're not. We hit our numbers, laugh between sets, and leave the tough-guy act to everyone else.",
       cta: { label: 'Shop tees', href: STORE_LINKS.shopShirts },
+      media: { kind: 'image', url: `${CDN}/paul_screaming.jpg`, width: 1656, height: 1104 },
     },
     {
       title: 'Play The Long Game',
       tone: 'light',
       body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
       cta: { label: 'Shop shorts', href: STORE_LINKS.shopShorts },
+      media: { kind: 'image', url: `${CDN}/digital_map.png`, width: 1536, height: 1024 },
     },
   ] satisfies ReadonlyArray<CoreValue>,
 } as const;
 
 export const HOME_TESTED = {
   headingLines: ['Tested In Training.', 'Refined By Community.'],
-  body: 'We think everyone builds a stronger version of themselves and of their community when you sweat together.',
-  cta: { label: 'Join The Membership', href: '#newsletter' },
+  body: MEMBERSHIP_PITCH.body,
+  cta: MEMBERSHIP_PITCH.cta,
   video: 'https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4',
-  image: `${CDN}/two_walking_to_workout_cropped.png`,
+  image: { url: `${CDN}/two_walking_to_workout_cropped.png`, width: 696, height: 728 },
 } as const;

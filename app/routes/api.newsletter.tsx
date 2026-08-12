@@ -1,10 +1,10 @@
 import { data } from 'react-router';
 
+import { EMAIL_RE, INVALID_EMAIL_MESSAGE } from '~/lib/validation';
+
 import type { Route } from './+types/api.newsletter';
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-export type NewsletterResponse = { ok: boolean; error?: string };
+export type NewsletterResponse = { ok: true } | { ok: false; error: string };
 
 /**
  * Newsletter signup endpoint (POST /api/newsletter).
@@ -26,10 +26,7 @@ export async function action({ request }: Route.ActionArgs) {
   const email = String(form.get('email') ?? '').trim();
 
   if (!EMAIL_RE.test(email)) {
-    return data<NewsletterResponse>(
-      { ok: false, error: 'Please enter a valid email address.' },
-      { status: 400 }
-    );
+    return data<NewsletterResponse>({ ok: false, error: INVALID_EMAIL_MESSAGE }, { status: 400 });
   }
 
   return data<NewsletterResponse>({ ok: true });

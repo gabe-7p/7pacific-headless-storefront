@@ -6,7 +6,6 @@ import { AppSession } from '~/lib/session';
 // Extra loader/action context (CMS clients, 3P SDKs, …) — none needed yet.
 const additionalContext = {} as const;
 
-// Automatically augment HydrogenAdditionalContext with the additional context type
 type AdditionalContextType = typeof additionalContext;
 
 declare global {
@@ -15,18 +14,12 @@ declare global {
   interface HydrogenAdditionalContext extends AdditionalContextType {}
 }
 
-/**
- * Creates Hydrogen context for React Router 7.9.x
- * Returns HydrogenRouterContextProvider with hybrid access patterns
- * */
+/** Builds the per-request Hydrogen context (storefront client, cart, session). */
 export async function createHydrogenRouterContext(
   request: Request,
   env: Env,
   executionContext: ExecutionContext
 ) {
-  /**
-   * Open a cache instance in the worker and a custom session instance.
-   */
   if (!env?.SESSION_SECRET) {
     throw new Error('SESSION_SECRET environment variable is not set');
   }
@@ -44,7 +37,7 @@ export async function createHydrogenRouterContext(
       cache,
       waitUntil,
       session,
-      // Or detect from URL path based on locale subpath, cookies, or any other strategy
+      // English/US only for v1 — no locale detection.
       i18n: { language: 'EN', country: 'US' },
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,

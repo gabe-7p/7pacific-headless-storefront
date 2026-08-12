@@ -76,6 +76,8 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 <Heading className="text-4xl leading-[1.1]" />
 ```
 
+**Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does. Named breakpoints sort by width, so they interleave correctly with `md`/`lg`/`xl`. The one holdout is `routes/products.$handle.tsx`, which keeps arbitrary `min-[769px]:` variants on purpose — its chains rely on named-beats-arbitrary emit order (see the next trap) and need visual re-verification to move.
+
 **Named and arbitrary breakpoints don't interleave.** Tailwind emits named variants (`md:`) after arbitrary ones (`min-[1440px]:`), so the named one wins at the larger width regardless of intent. Use one form or the other in a chain:
 
 ```tsx
@@ -90,6 +92,8 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 ## The base layer caps every `form` at 400px
 
 `app/styles/tailwind.css` has `form { max-width: 400px }` from `md` up (a Hydrogen skeleton leftover). Any full-width form control — the PDP add-to-cart bar, a sticky bar — needs to opt out (`[&>form]:max-w-none` on a wrapper). Check rendered width, not just the classes on the button.
+
+The same skeleton block also styles every bare `input` (`margin-top: 0.25rem`, `margin-bottom: 0.5rem`, border, radius, padding). Utility classes on the input override the ones you set — but any you _don't_ set leak through: a custom-styled input needs `m-0` (and `rounded-none` if square) or it sits 4px lower than the button beside it. Measure the rendered row, not the classes.
 
 ## No `any`
 

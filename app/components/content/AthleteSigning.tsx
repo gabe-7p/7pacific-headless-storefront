@@ -1,16 +1,19 @@
+import { Image } from '@shopify/hydrogen';
 import { ArrowUpRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { InstagramIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent, ScaleMarkerPercent } from '~/content/athlete-signing';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
 
-/** The page's recurring readout-label treatment (JetBrains Mono spec strip). */
-const MONO_LABEL = 'font-mono text-xs tracking-spec uppercase';
+/** The page's recurring readout-label treatment — the shared spec-strip class. */
+const MONO_LABEL = SPEC_LINE_CLASS;
 
 /**
  * Static map for the readout-scale marker — `markerPercent` is a 5%-step
@@ -42,6 +45,8 @@ const MARKER_LEFT: Record<ScaleMarkerPercent, string> = {
 
 const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) => (
   <header className="border-b border-border-subtle-night">
+    {/* h-(--header-h) is deliberate: the page opts out of site chrome but its
+        bar tracks the site header's height so the two never drift. */}
     <Container className="flex h-(--header-h) items-center justify-between gap-4">
       <Link prefetch="intent" to="/" aria-label={BRAND.name}>
         <Logo tone="light" className="h-5 md:h-6" />
@@ -65,12 +70,15 @@ const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) 
 );
 
 const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
-  <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/[0.04] md:aspect-auto md:h-full md:min-h-[560px]">
+  <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/4 md:aspect-auto md:h-full md:min-h-[560px]">
     {hero.image.src && (
-      <img
+      <Image
         src={hero.image.src}
+        width={hero.image.width}
+        height={hero.image.height}
         alt={hero.image.alt}
         loading="lazy"
+        sizes="(min-width: 768px) 50vw, 100vw"
         className="absolute inset-0 size-full object-cover"
       />
     )}
@@ -345,22 +353,6 @@ const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent['reado
   </section>
 );
 
-/** Minimal IG glyph (lucide dropped brand icons) — camera outline + lens + dot. */
-const InstagramGlyph = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    aria-hidden
-    className={className}
-  >
-    <rect x="3" y="3" width="18" height="18" rx="5" />
-    <circle cx="12" cy="12" r="4.25" />
-    <circle cx="17.2" cy="6.8" r="0.5" fill="currentColor" stroke="none" />
-  </svg>
-);
-
 /**
  * "The Creator" module — typed copy only: handle, tagline, and the athlete's
  * recurring series. No embeds, no CDN assets, no live API data (deliberate:
@@ -371,7 +363,7 @@ const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['instagr
     <SectionLabel number={instagram.number} title={instagram.title} />
     <div className="border-border-subtle-night mt-6 border p-6 md:p-8">
       <div className="flex items-center gap-3">
-        <InstagramGlyph className="text-support-night size-5" />
+        <InstagramIcon className="text-support-night size-5" />
         <span className="text-ink-night font-mono text-xl tracking-tight md:text-2xl">
           @{instagram.handle}
         </span>

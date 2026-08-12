@@ -23,6 +23,7 @@ export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
   const emailId = useId();
   const submitting = fetcher.state !== 'idle';
   const succeeded = fetcher.data?.ok === true;
+  const error = fetcher.data && !fetcher.data.ok ? fetcher.data.error : undefined;
   const { placeholder, submitLabel, successMessage } = BRAND.newsletter;
 
   useEffect(() => {
@@ -58,9 +59,7 @@ export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
           <Mail className="size-5" />
         </button>
       </div>
-      {fetcher.data?.error && (
-        <p className="mt-2 text-sm text-support-night">{fetcher.data.error}</p>
-      )}
+      {error && <p className="mt-2 text-sm text-support-night">{error}</p>}
     </fetcher.Form>
   );
 };

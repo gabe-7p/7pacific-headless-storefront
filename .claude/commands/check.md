@@ -1,6 +1,6 @@
 ---
 name: check
-description: Run the full pre-PR quality gate (format, lint, types, deps, build)
+description: Run the full pre-PR quality gate (format, lint, types, deps, tests, build)
 ---
 
 Run these checks in sequence — the same gate CI enforces ([.github/workflows/ci.yml](../../.github/workflows/ci.yml)). Stop on the first failure and report what failed.
@@ -10,7 +10,8 @@ Run these checks in sequence — the same gate CI enforces ([.github/workflows/c
 3. **Type check**: `pnpm type-check`
 4. **Lint**: `pnpm lint`
 5. **Dependency rules**: `pnpm depcruise`
-6. **Build**: `pnpm build`
+6. **Unit tests**: `pnpm test`
+7. **Build**: `pnpm build`
 
 After all checks complete (or one fails), print a summary:
 
@@ -21,6 +22,7 @@ After all checks complete (or one fails), print a summary:
 - Type check: PASS/FAIL
 - Lint:       PASS/FAIL
 - Deps:       PASS/FAIL
+- Tests:      PASS/FAIL
 - Build:      PASS/FAIL
 ```
 

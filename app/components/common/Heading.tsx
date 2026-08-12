@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 
 import { cn } from '~/lib/cn';
 
@@ -20,7 +20,6 @@ const VARIANTS = {
 const SIZES = {
   /** No size — the caller owns the full responsive scale via className. */
   none: '',
-  sm: 'text-lg',
   md: 'text-2xl',
   lg: 'text-2xl md:text-3xl',
   xl: 'text-3xl md:text-4xl',
@@ -33,13 +32,21 @@ type HeadingProps = {
   size?: keyof typeof SIZES;
   variant?: keyof typeof VARIANTS;
   className?: string;
-  children: ReactNode;
-};
+} & Omit<HTMLAttributes<HTMLHeadingElement>, 'children'> &
+  (
+    | { children: ReactNode; lines?: never }
+    | {
+        /** Stacked heading lines, one block-level span per entry. */
+        lines: ReadonlyArray<string>;
+        children?: never;
+      }
+  );
 
 /**
  * Page/section heading. Use instead of retyping heading class strings —
  * every h1/h2 on the site should render through this (weight/tracking
- * one-offs go in className; cn resolves the conflict).
+ * one-offs go in className; cn resolves the conflict). Multi-line headings
+ * pass `lines` instead of children.
  *
  * A preset `size` also sets responsive steps (`md:`/`xl:`), which className
  * can't override at those breakpoints — pass `size="none"` when a page needs
@@ -50,5 +57,17 @@ export const Heading = ({
   size = 'md',
   variant = 'brand',
   className,
+  lines,
   children,
-}: HeadingProps) => <Tag className={cn(VARIANTS[variant], SIZES[size], className)}>{children}</Tag>;
+  ...rest
+}: HeadingProps) => (
+  <Tag {...rest} className={cn(VARIANTS[variant], SIZES[size], className)}>
+    {lines
+      ? lines.map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))
+      : children}
+  </Tag>
+);

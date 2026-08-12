@@ -25,7 +25,6 @@ const TEE: ProductCardFragment = {
   id: 'gid://shopify/Product/1',
   handle: 'tee-white',
   title: 'TRACEFIBER TEE - WHITE',
-  vendor: '7Pacific',
   featuredImage: image('front'),
   images: { nodes: [image('front'), image('back')] },
   priceRange: { minVariantPrice: { amount: '74.0', currencyCode: 'USD' } },

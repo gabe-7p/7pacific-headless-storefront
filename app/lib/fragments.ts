@@ -1,4 +1,3 @@
-// NOTE: https://shopify.dev/docs/api/storefront/latest/queries/cart
 export const CART_QUERY_FRAGMENT = `#graphql
   fragment Money on MoneyV2 {
     currencyCode
@@ -40,7 +39,6 @@ export const CART_QUERY_FRAGMENT = `#graphql
           altText
           width
           height
-
         }
         product {
           handle
@@ -53,64 +51,6 @@ export const CART_QUERY_FRAGMENT = `#graphql
           value
         }
       }
-    }
-    parentRelationship {
-      parent {
-        id
-      }
-    }
-  }
-  fragment CartLineComponent on ComponentizableCartLine {
-    id
-    quantity
-    attributes {
-      key
-      value
-    }
-    cost {
-      totalAmount {
-        ...Money
-      }
-      amountPerQuantity {
-        ...Money
-      }
-      compareAtAmountPerQuantity {
-        ...Money
-      }
-    }
-    merchandise {
-      ... on ProductVariant {
-        id
-        availableForSale
-        compareAtPrice {
-          ...Money
-        }
-        price {
-          ...Money
-        }
-        requiresShipping
-        title
-        image {
-          id
-          url
-          altText
-          width
-          height
-        }
-        product {
-          handle
-          title
-          id
-          vendor
-        }
-        selectedOptions {
-          name
-          value
-        }
-      }
-    }
-    lineComponents {
-      ...CartLine
     }
   }
   fragment CartApiQuery on Cart {
@@ -140,9 +80,6 @@ export const CART_QUERY_FRAGMENT = `#graphql
     lines(first: $numCartLines) {
       nodes {
         ...CartLine
-      }
-      nodes {
-        ...CartLineComponent
       }
     }
     cost {
@@ -254,6 +191,32 @@ export const FOOTER_QUERY = `#graphql
 // ---------------------------------------------------------------------------
 
 /**
+ * Color = separate product: the ordered color family lives in the
+ * custom.color_siblings metafield (each sibling carries its own name/hex).
+ * Spread `...ColorSiblings` on a Product selection and interpolate this
+ * string once per query/fragment that uses it.
+ */
+export const COLOR_SIBLINGS_FRAGMENT = `#graphql
+  fragment ColorSiblings on Product {
+    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
+      references(first: 10) {
+        nodes {
+          ... on Product {
+            handle
+            colorName: metafield(namespace: "custom", key: "color_name") {
+              value
+            }
+            colorHex: metafield(namespace: "custom", key: "color_hex") {
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+` as const;
+
+/**
  * The minimal product shape for grids, carousels, and recommendation rows.
  * Spread into a query alongside `${PRODUCT_CARD_FRAGMENT}`.
  */
@@ -262,7 +225,6 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     id
     handle
     title
-    vendor
     featuredImage {
       id
       url
@@ -295,22 +257,7 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     editionStatus: metafield(namespace: "custom", key: "edition_status") {
       value
     }
-    # Color = separate product: the ordered color family lives in the
-    # custom.color_siblings metafield (each sibling carries its own name/hex).
-    colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
-      references(first: 10) {
-        nodes {
-          ... on Product {
-            handle
-            colorName: metafield(namespace: "custom", key: "color_name") {
-              value
-            }
-            colorHex: metafield(namespace: "custom", key: "color_hex") {
-              value
-            }
-          }
-        }
-      }
-    }
+    ...ColorSiblings
   }
+  ${COLOR_SIBLINGS_FRAGMENT}
 ` as const;

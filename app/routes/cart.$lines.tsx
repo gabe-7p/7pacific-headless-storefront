@@ -3,22 +3,9 @@ import { redirect } from 'react-router';
 import type { Route } from './+types/cart.$lines';
 
 /**
- * Automatically creates a new cart based on the URL and redirects straight to checkout.
- * Expected URL structure:
- * ```js
- * /cart/<variant_id>:<quantity>
- *
- * ```
- *
- * More than one `<variant_id>:<quantity>` separated by a comma, can be supplied in the URL, for
- * carts with more than one product variant.
- *
- * @example
- * Example path creating a cart with two product variants, different quantities, and a discount code in the querystring:
- * ```js
- * /cart/41007289663544:1,41007289696312:2?discount=HYDROBOARD
- *
- * ```
+ * Creates a cart from the URL and redirects straight to checkout.
+ * URL grammar: `/cart/<variant_id>:<qty>[,<variant_id>:<qty>…][?discount=CODE]`
+ * e.g. `/cart/41007289663544:1,41007289696312:2?discount=SUMMER`.
  */
 export async function loader({ request, context, params }: Route.LoaderArgs) {
   const { cart } = context;
@@ -41,7 +28,6 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   const discount = searchParams.get('discount');
   const discountArray = discount ? [discount] : [];
 
-  // create a cart
   const result = await cart.create({
     lines: linesMap,
     discountCodes: discountArray,
@@ -55,10 +41,8 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
     });
   }
 
-  // Update cart id in cookie
   const headers = cart.setCartId(cartResult.id);
 
-  // redirect to checkout
   if (cartResult.checkoutUrl) {
     return redirect(cartResult.checkoutUrl, { headers });
   } else {
@@ -66,8 +50,7 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   }
 }
 
-const Component = () => {
-  return null;
-};
+// Loader always redirects; nothing renders.
+const CartLinesPage = () => null;
 
-export default Component;
+export default CartLinesPage;

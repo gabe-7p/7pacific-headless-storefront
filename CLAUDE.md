@@ -31,11 +31,13 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 
 ```
 app/
+  routes.ts      route config (flat-routes convention + Hydrogen's virtual routes)
   routes/        one file per route (React Router flat convention); loader/action live here
   components/    presentational only — layout/ cart/ product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + store links (links.ts = the ONE place product/collection handles live)
   lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
-  styles/        tailwind.css + minimal globals
+  assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
+  styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico)
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
@@ -54,17 +56,17 @@ Full detail in [.claude/rules/](.claude/rules/) — read the relevant file befor
 - [common-pitfalls.md](.claude/rules/common-pitfalls.md) — nullable Storefront fields, no waterfalls, never expose `PRIVATE_*`, no `any`.
 - [ui-components.md](.claude/rules/ui-components.md) — when to reach for a shadcn/ui primitive vs. hand-build, how to add/restyle one, the `components/ui/` lint exemption.
 
-The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
+The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
 ## Brand single-sources (change once, applies everywhere)
 
 Never hardcode brand values inline — edit the one source and every consumer follows:
 
 - **Colors & font** → `app/styles/tailwind.css` `@theme`. Components reference **role tokens** — `bg-field`, `text-ink`, `text-support`, `border-border-subtle` (+ `-night` variants on dark surfaces) and the chrome tokens (`bg-nav`, `text-brand`, `bg-footer`, …) — **never raw palette names** (`court`/`carbon`/`graphite`/`zinc`/`ember`), so a palette revision edits tailwind.css only. Raw palette utilities are allowed only where the specific color is the point, with a comment at the call site.
-- **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; `--topbar-h` is derived).
+- **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; the sticky topbar offsets itself by `-top-(--announcement-h)`).
 - **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
-- **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`pageTitle()`).
-- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`). All titles render through `Heading`; all CTAs through `Cta` (label in, arrow + variant handled once) — never hand-roll heading classes or assemble `Button` + icon at a callsite.
+- **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`buildMeta()`).
+- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`, `SpecLine`, `BrandDialog`). All titles render through `Heading` (multi-line via its `lines` prop); all CTAs through `Cta` (label in, arrow + variant handled once); mono spec-strip labels through `SpecLine`; night-tier modals through the `BrandDialog` shell — never hand-roll these class recipes at a callsite.
 
 ## Domain note: color = separate product
 
@@ -77,7 +79,7 @@ The 9 live products are **separate Shopify products per color**, not variants. T
 3. **Update every sibling's `custom.color_siblings`** to include the new product (the list is the swatch row, in display order).
 4. **Set the PDP content metafields**: `custom.hero_image` + `custom.hero_image_mobile` (file_reference — the desktop/mobile PDP hero, falls back to the variant image if unset), `custom.spec_card` (JSON — the locked seven-key Spec Card: `fabric`/`weight`/`use`/`seams`/`pockets`/`fit`/`origin`; omit a key rather than invent a value, the row is skipped), optionally `custom.environmental_hero` (file_reference) + `custom.environmental_hero_caption` (the below-fold in-use shot; section hidden until set), and if it's a new product type also `custom.fit_note`, `custom.product_details` (JSON), `custom.tech_stack` (JSON), `custom.recommended_products`.
    - ⚠️ **`custom.product_details` is per-color, not per-product-type.** Its `imageUrl`s are absolute CDN URLs, so copying a sibling's JSON verbatim (the captions ARE shared) silently ships another color's photos on the PDP. Swap every `imageUrl` to that color's own shot; keep `caption`/`subcaption`. Nothing in code can catch this — product images carry no alt text, so there's no way to map a photo to a caption automatically.
-5. **Add it to collections**: `summer-25` (the shop-all collection page) and `homepage-first-drop` (drag into position — its order IS the homepage grid order).
+5. **Add it to collections**: `baseline` (the shop-all collection page, titled BASELINE) and `homepage-first-drop` (drag into position — its order IS the homepage grid order).
 6. Only if a CTA should target it: update [app/content/links.ts](app/content/links.ts) — the one place product/collection handles appear in code.
 
 ## Documentation discipline

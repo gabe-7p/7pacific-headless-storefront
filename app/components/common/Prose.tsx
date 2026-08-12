@@ -1,3 +1,6 @@
+import type { MouseEvent } from 'react';
+import { useNavigate } from 'react-router';
+
 import { cn } from '~/lib/cn';
 
 /**
@@ -33,9 +36,25 @@ type ProseProps = {
   className?: string;
 };
 
-export const Prose = ({ html, variant = 'page', className }: ProseProps) => (
-  <div
-    className={cn(PROSE_VARIANTS[variant], className)}
-    dangerouslySetInnerHTML={{ __html: html }}
-  />
-);
+export const Prose = ({ html, variant = 'page', className }: ProseProps) => {
+  const navigate = useNavigate();
+
+  // Shopify-authored HTML carries plain <a href="/..."> links; route the
+  // internal ones through the client router instead of a full page reload.
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    const href = (event.target as HTMLElement).closest('a')?.getAttribute('href');
+    if (href?.startsWith('/')) {
+      event.preventDefault();
+      void navigate(href);
+    }
+  };
+
+  return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- click delegation for links inside CMS HTML; the links themselves stay keyboard-accessible
+    <div
+      onClick={handleClick}
+      className={cn(PROSE_VARIANTS[variant], className)}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+};

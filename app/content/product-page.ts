@@ -4,17 +4,18 @@
  * "For Intensity. Not Errands." brand section.
  */
 
+import { MEMBERSHIP_PITCH } from '~/content/membership';
 import { BRAND } from '~/lib/brand';
 
 const CDN = BRAND.filesCdn;
 
 export const PRODUCT_BRAND_BANNER = {
   headingLines: ['For Intensity.', 'Not Errands.'],
-  body: 'We think everyone builds a stronger version of themselves and of their community when you sweat together.',
-  cta: { label: 'Join The Membership', href: '#newsletter' },
+  body: MEMBERSHIP_PITCH.body,
+  cta: MEMBERSHIP_PITCH.cta,
   images: {
-    hero: `${CDN}/running.png`,
-    bottomLeft: `${CDN}/core_values_picture.png`,
-    bottomRight: `${CDN}/single_running.png`,
+    hero: { url: `${CDN}/running.png`, width: 1486, height: 990 },
+    bottomLeft: { url: `${CDN}/core_values_picture.png`, width: 986, height: 1147 },
+    bottomRight: { url: `${CDN}/single_running.png`, width: 738, height: 850 },
   },
 } as const;

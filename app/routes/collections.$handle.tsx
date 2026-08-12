@@ -78,7 +78,6 @@ const Collection = () => {
   );
 };
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/collection
 const COLLECTION_QUERY = `#graphql
   ${PRODUCT_CARD_FRAGMENT}
   query Collection(

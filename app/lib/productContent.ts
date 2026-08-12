@@ -18,7 +18,7 @@ export type SpecCardData = Partial<
 
 export type TechIcon = 'perforations' | 'grip-tape' | 'effort';
 export type TechFeature = { heading: string; description: string; icon: TechIcon };
-export type TechStack = {
+export type TechStackData = {
   features: ReadonlyArray<TechFeature>;
   materials: ReadonlyArray<string>;
   details: string;

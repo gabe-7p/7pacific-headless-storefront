@@ -2,10 +2,12 @@ import { useLoaderData } from 'react-router';
 
 import { FadeIn, MotionProvider } from '~/components/common/Motion';
 import { CoreValues } from '~/components/home/CoreValues';
+import { DropTwo } from '~/components/home/DropTwo';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { TestedInTraining } from '~/components/home/TestedInTraining';
+import { FEATURE_FLAGS } from '~/content/flags';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
@@ -25,16 +27,21 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   // Grid order is merchant-controlled: the manual homepage collection's
   // product order IS the display order (reorder in Shopify admin).
-  const { collection, products } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
+  const { collection } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
     variables: { handle: HOMEPAGE_COLLECTION_HANDLE },
     cache: context.storefront.CacheLong(),
   });
 
-  // Fall back to all products if the collection is missing/empty, so a
-  // misconfigured collection never blanks the homepage.
-  const nodes = collection?.products.nodes.length ? collection.products.nodes : products.nodes;
+  if (collection?.products.nodes.length) {
+    return { products: collection.products.nodes };
+  }
 
-  return { products: nodes };
+  // Fall back to all products only if the collection is missing/empty, so a
+  // misconfigured collection never blanks the homepage.
+  const { products } = await context.storefront.query(HOME_PRODUCTS_FALLBACK_QUERY, {
+    cache: context.storefront.CacheLong(),
+  });
+  return { products: products.nodes };
 }
 
 const Homepage = () => {
@@ -45,6 +52,10 @@ const Homepage = () => {
       {/* The Name/Spec marquee sits flush below the hero, painted on load
           (no scroll-reveal gate) so the banner never pops in or shifts. */}
       <NameSpecBanner />
+      {/* Drop 02 teaser sits right under the banner, near the fold — painted
+          on load (no scroll-reveal gate) so the countdown never pops in.
+          Toggled by FEATURE_FLAGS.dropTwoTeaser (content/flags.ts). */}
+      {FEATURE_FLAGS.dropTwoTeaser && <DropTwo />}
       {/* First Drop is the primary above/at-the-fold content — render it
           immediately (no scroll-reveal gate) so it's painted on load rather
           than staying invisible until 30% scrolls into view. The lower
@@ -71,6 +82,13 @@ const HOME_PRODUCTS_QUERY = `#graphql
         }
       }
     }
+  }
+` as const;
+
+const HOME_PRODUCTS_FALLBACK_QUERY = `#graphql
+  ${PRODUCT_CARD_FRAGMENT}
+  query HomeProductsFallback($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
     products(first: 12) {
       nodes {
         ...ProductCard
