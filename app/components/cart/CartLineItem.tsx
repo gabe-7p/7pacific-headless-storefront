@@ -65,10 +65,15 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
               {line.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
             </div>
           </div>
-          {/* Live's drawer removes via the stepper; the /cart page has the link. */}
-          {layout === 'page' && (
-            <CartLineRemoveButton lineIds={[id]} disabled={!!line.isOptimistic} />
-          )}
+          <CartLineRemoveForm lineIds={[id]}>
+            <button
+              disabled={!!line.isOptimistic}
+              type="submit"
+              className="mt-2 cursor-pointer text-xs text-support transition-colors hover:text-ink disabled:cursor-default"
+            >
+              Remove
+            </button>
+          </CartLineRemoveForm>
         </div>
       </div>
     </li>
@@ -80,19 +85,27 @@ const QuantityStepper = ({ line }: { line: CartLine }) => {
   const prevQuantity = Math.max(0, quantity - 1);
   const nextQuantity = quantity + 1;
 
+  const decreaseButton = (
+    <button
+      aria-label={quantity <= 1 ? 'Remove item' : 'Decrease quantity'}
+      disabled={!!isOptimistic}
+      name="decrease-quantity"
+      value={prevQuantity}
+      className="flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30"
+    >
+      <Minus className="size-3.5" />
+    </button>
+  );
+
   return (
     <div className="border-border-subtle inline-flex items-center border">
-      <CartLineUpdateButton lines={[{ id: lineId, quantity: prevQuantity }]}>
-        <button
-          aria-label="Decrease quantity"
-          disabled={quantity <= 1 || !!isOptimistic}
-          name="decrease-quantity"
-          value={prevQuantity}
-          className="flex size-8 items-center justify-center transition-opacity hover:opacity-60 disabled:opacity-30"
-        >
-          <Minus className="size-3.5" />
-        </button>
-      </CartLineUpdateButton>
+      {quantity <= 1 ? (
+        <CartLineRemoveForm lineIds={[lineId]}>{decreaseButton}</CartLineRemoveForm>
+      ) : (
+        <CartLineUpdateButton lines={[{ id: lineId, quantity: prevQuantity }]}>
+          {decreaseButton}
+        </CartLineUpdateButton>
+      )}
       <span className="min-w-8 text-center font-mono text-sm tabular-nums">{quantity}</span>
       <CartLineUpdateButton lines={[{ id: lineId, quantity: nextQuantity }]}>
         <button
@@ -100,7 +113,7 @@ const QuantityStepper = ({ line }: { line: CartLine }) => {
           name="increase-quantity"
           value={nextQuantity}
           disabled={!!isOptimistic}
-          className="flex size-8 items-center justify-center transition-opacity hover:opacity-60 disabled:opacity-30"
+          className="flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30"
         >
           <Plus className="size-3.5" />
         </button>
@@ -109,12 +122,14 @@ const QuantityStepper = ({ line }: { line: CartLine }) => {
   );
 };
 
-const CartLineRemoveButton = ({
+/** Wraps a submit button in a LinesRemove form. Shares the update fetcher key
+    so a pending quantity update and a remove cancel rather than race. */
+const CartLineRemoveForm = ({
   lineIds,
-  disabled,
+  children,
 }: {
   lineIds: Array<string>;
-  disabled: boolean;
+  children: React.ReactNode;
 }) => {
   return (
     <CartForm
@@ -123,13 +138,7 @@ const CartLineRemoveButton = ({
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{ lineIds }}
     >
-      <button
-        disabled={disabled}
-        type="submit"
-        className="mt-2 text-xs text-support transition-colors hover:text-ink"
-      >
-        Remove
-      </button>
+      {children}
     </CartForm>
   );
 };
