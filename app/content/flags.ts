@@ -9,5 +9,5 @@ export const FEATURE_FLAGS: {
       dialog; the /api/waitlist endpoint stays live either way. */
   dropTwoTeaser: boolean;
 } = {
-  dropTwoTeaser: true,
+  dropTwoTeaser: false,
 };
