@@ -43,7 +43,7 @@ export const OUR_STORY = {
   story: {
     heading: 'Our Story',
     image: { url: `${CDN}/our_founder.jpg`, width: 2724, height: 1816 },
-    founder: { name: 'Gabriel Dalessandro', role: 'Founder' },
+    founder: { name: 'Gabriel Dalessandro', role: 'Founder and CEO' },
     body: [
       "Training brought me to California to play football. It introduced me to my fiancée on a volleyball court. It's taken me up ski lines I had no business looking at, and it built most of the friendships I count on: groups big and small that showed up, trained hard, and pushed each other further.",
       "Somewhere in there the point changed. Results come and go in an afternoon; the early sessions before them are where the actual living happens. 7Pacific exists to build gear for that part, and to remind you, mid-effort, that it's the part you came for.",
