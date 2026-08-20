@@ -213,6 +213,7 @@ const Product = () => {
                   currentHandle={product.handle}
                   size="lg"
                   alwaysRender
+                  selectedOptions={selectedVariant.selectedOptions}
                 />
               </div>
               <div className="mt-4">
