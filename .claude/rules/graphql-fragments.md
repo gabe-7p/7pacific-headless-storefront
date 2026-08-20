@@ -1,6 +1,6 @@
 # GraphQL & Fragments
 
-How we write Storefront API operations. The whole approach is the Hydrogen-native one: co-located tagged-template strings + `@shopify/hydrogen-codegen`. No Apollo, no client cache, no separate `.graphql` files.
+How we write Storefront API operations. The whole approach is the Hydrogen-native one: co-located tagged-template strings + `@shopify/hydrogen-codegen`. No Apollo, no client cache, no separate `.graphql` files — with one deliberate exception, the IDE mirror below.
 
 ## The pattern
 
@@ -48,6 +48,19 @@ const { product } = await context.storefront.query(PRODUCT_QUERY, {
   | (none)         | Mutations and `context.cart` (Hydrogen manages cart freshness itself)            | cart action                                                  |
 
 - **No GraphQL in components** — see [module-boundaries.md](module-boundaries.md).
+
+## The IDE mirror: `app/lib/fragments.ide.graphql`
+
+The editor's GraphQL extension (vscode-graphql) indexes project documents with `graphql-tag-pluck`, which **cannot see** our `` `#graphql …` as const `` template strings (no `gql` tag; `as const` detaches the `/* GraphQL */` magic comment it would otherwise recognize). With nothing indexed, every cross-file spread — `...ProductCard` in `_index.tsx`, `collections.$handle.tsx`, `products.$handle.tsx` — shows a false `Unknown fragment` error in the IDE, even though codegen, type-check, and the build are all fine.
+
+The fix is `app/lib/fragments.ide.graphql`: a **byte-for-byte mirror of `PRODUCT_CARD_FRAGMENT`'s runtime value** (which interpolates `ColorSiblings`), listed in `.graphqlrc.ts` `documents` so the LSP loads it as a plain GraphQL file — no plucking involved. Rules:
+
+- **It exists for the IDE only.** Don't import it, don't add operations to it, don't format it (`.prettierignore` excludes it — prettier would break the byte-match).
+- **`app/lib/fragments.ide.test.ts` fails when it drifts** from `PRODUCT_CARD_FRAGMENT`. To regenerate after editing the fragment: bundle `app/lib/fragments.ts` with the repo's esbuild (`node_modules/.pnpm/esbuild@*/node_modules/esbuild/bin/esbuild app/lib/fragments.ts --bundle --format=cjs --platform=node --outfile=/tmp/fragments.cjs`), then `node -e "require('fs').writeFileSync('app/lib/fragments.ide.graphql', require('/tmp/fragments.cjs').PRODUCT_CARD_FRAGMENT)"`.
+- **Add a new shared fragment to the mirror only when another file's query spreads it.** Fragments spread solely inside `fragments.ts`'s own templates (Money, CartLine, Menu…) don't need mirroring — the LSP parses open files with its own `#graphql`-aware parser.
+- Codegen also reads the mirror (documents come from `.graphqlrc.ts`) and dedupes the fragment types by name — that's expected and harmless; don't "fix" the resulting ordering of `storefrontapi.generated.d.ts`.
+
+Don't restructure the TS fragment constants to appease the IDE instead: a `(/* GraphQL */ \`…\`) as const`wrapper satisfies the plucker but **breaks`@shopify/graphql-codegen`'s `${FRAGMENT}` interpolation lookup** (`Variable "X" not found`), and dropping `as const` breaks codegen typing. The mirror is the only shape that keeps both tools working.
 
 ## Fragment naming
 
