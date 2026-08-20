@@ -5,7 +5,7 @@ export const useVariantUrl = (handle: string, selectedOptions?: Array<SelectedOp
   return useMemo(() => getVariantUrl({ handle, selectedOptions }), [handle, selectedOptions]);
 };
 
-const getVariantUrl = ({
+export const getVariantUrl = ({
   handle,
   selectedOptions,
 }: {

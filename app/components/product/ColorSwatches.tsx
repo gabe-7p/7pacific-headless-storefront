@@ -1,7 +1,9 @@
+import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import { Link } from 'react-router';
 
 import { cn } from '~/lib/cn';
 import type { ColorSwatch } from '~/lib/colors';
+import { getVariantUrl } from '~/lib/variants';
 
 /**
  * Per-index stagger for the card-hover cascade — matches the live theme's
@@ -37,6 +39,14 @@ type ColorSwatchesProps = {
    * color-name tooltip pill above each. The PDP row leaves this off.
    */
   cascade?: boolean;
+  /**
+   * Carried into each swatch link as search params so the sibling PDP keeps
+   * the shopper's size (color = separate product, so a color change is a
+   * navigation). Safe when a sibling doesn't stock the size — the PDP query
+   * resolves with `ignoreUnknownOptions` and falls back gracefully. Grid
+   * callers omit it and keep bare product paths.
+   */
+  selectedOptions?: Array<SelectedOption>;
   className?: string;
 };
 
@@ -51,6 +61,7 @@ export const ColorSwatches = ({
   size = 'sm',
   alwaysRender = false,
   cascade = false,
+  selectedOptions,
   className,
 }: ColorSwatchesProps) => {
   if (swatches.length < (alwaysRender ? 1 : 2)) return null;
@@ -83,7 +94,7 @@ export const ColorSwatches = ({
               </span>
             )}
             <Link
-              to={`/products/${swatch.handle}`}
+              to={getVariantUrl({ handle: swatch.handle, selectedOptions })}
               prefetch="intent"
               title={cascade ? undefined : swatch.name}
               aria-label={swatch.name}

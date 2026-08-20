@@ -34,6 +34,22 @@ describe('ColorSwatches (shared behavior)', () => {
     }
   });
 
+  it('preserves the given selected options in every swatch link (PDP size hold)', () => {
+    renderSwatches({ selectedOptions: [{ name: 'Size', value: 'Medium' }] });
+    for (const swatch of TEE_FAMILY) {
+      const link = screen.getByRole('link', { name: swatch.name });
+      expect(link).toHaveProperty('pathname', `/products/${swatch.handle}`);
+      expect(link).toHaveProperty('search', '?Size=Medium');
+    }
+  });
+
+  it('links bare product paths when no selected options are given (grid behavior)', () => {
+    renderSwatches();
+    for (const swatch of TEE_FAMILY) {
+      expect(screen.getByRole('link', { name: swatch.name })).toHaveProperty('search', '');
+    }
+  });
+
   it('marks only the current color as active', () => {
     renderSwatches();
     expect(screen.getByRole('link', { name: 'White' }).getAttribute('aria-current')).toBe('true');
