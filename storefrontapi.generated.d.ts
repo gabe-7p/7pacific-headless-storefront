@@ -3,6 +3,41 @@
 /* eslint-disable */
 import type * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
+export type ProductCardFragment = Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+  featuredImage?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+  >;
+  images: {
+    nodes: Array<Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>>;
+  };
+  priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
+  editionNumber?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  editionStatus?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+  colorSiblings?: StorefrontAPI.Maybe<{
+    references?: StorefrontAPI.Maybe<{
+      nodes: Array<
+        Pick<StorefrontAPI.Product, 'handle'> & {
+          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        }
+      >;
+    }>;
+  }>;
+};
+
+export type ColorSiblingsFragment = {
+  colorSiblings?: StorefrontAPI.Maybe<{
+    references?: StorefrontAPI.Maybe<{
+      nodes: Array<
+        Pick<StorefrontAPI.Product, 'handle'> & {
+          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
+        }
+      >;
+    }>;
+  }>;
+};
+
 export type MoneyFragment = Pick<StorefrontAPI.MoneyV2, 'currencyCode' | 'amount'>;
 
 export type CartLineFragment = Pick<StorefrontAPI.CartLine, 'id' | 'quantity'> & {
@@ -160,41 +195,6 @@ export type FooterQuery = {
       >;
     }
   >;
-};
-
-export type ColorSiblingsFragment = {
-  colorSiblings?: StorefrontAPI.Maybe<{
-    references?: StorefrontAPI.Maybe<{
-      nodes: Array<
-        Pick<StorefrontAPI.Product, 'handle'> & {
-          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-        }
-      >;
-    }>;
-  }>;
-};
-
-export type ProductCardFragment = Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
-  featuredImage?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
-  >;
-  images: {
-    nodes: Array<Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>>;
-  };
-  priceRange: { minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'> };
-  editionNumber?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-  editionStatus?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-  colorSiblings?: StorefrontAPI.Maybe<{
-    references?: StorefrontAPI.Maybe<{
-      nodes: Array<
-        Pick<StorefrontAPI.Product, 'handle'> & {
-          colorName?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-          colorHex?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Metafield, 'value'>>;
-        }
-      >;
-    }>;
-  }>;
 };
 
 export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
