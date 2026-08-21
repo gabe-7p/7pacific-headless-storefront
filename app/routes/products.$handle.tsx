@@ -18,7 +18,6 @@ import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
-import { EnvironmentalHero } from '~/components/product/EnvironmentalHero';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
@@ -134,7 +133,6 @@ const Product = () => {
   // falling back to the variant image when a product has none.
   const heroDesktop = getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
   const heroMobile = getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
-  const environmentalHero = getMetafieldImage(product.environmentalHero);
 
   return (
     <>
@@ -230,14 +228,6 @@ const Product = () => {
         </Container>
       </section>
       <StickyAddToCart selectedVariant={selectedVariant} />
-      {/* Locked order step 6: single environmental hero + one caption, first
-          thing below the fold. Renders once 7PA-236 supplies the imagery. */}
-      {environmentalHero && (
-        <EnvironmentalHero
-          image={environmentalHero}
-          caption={product.environmentalHeroCaption?.value}
-        />
-      )}
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
@@ -361,16 +351,6 @@ const PRODUCT_FRAGMENT = `#graphql
       value
     }
     editionStatus: metafield(namespace: "custom", key: "edition_status") {
-      value
-    }
-    # Below-the-fold environmental hero + caption (locked PDP order step 6).
-    # Imagery lands with the photography program (7PA-236); renders if present.
-    environmentalHero: metafield(namespace: "custom", key: "environmental_hero") {
-      reference {
-        ...MediaImageRef
-      }
-    }
-    environmentalHeroCaption: metafield(namespace: "custom", key: "environmental_hero_caption") {
       value
     }
     # Dedicated PDP hero images (the theme's "Background Image" / "…Mobile"),

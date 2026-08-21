@@ -2,8 +2,8 @@
 
 > **Historical record — accurate as of the GD-32 audit (Jul 2026), not
 > maintained since.** Several rows reference modules that were later renamed or
-> removed (e.g. `routes/search` was never shipped; `BottomPhotography` is now
-> `EnvironmentalHero`; `RelatedProducts` is now `Recommendations`). For the
+> removed (e.g. `routes/search` was never shipped; `BottomPhotography` became
+> `EnvironmentalHero`, since removed entirely; `RelatedProducts` is now `Recommendations`). For the
 > current layout, see [architecture.md](architecture.md).
 
 Tracks the Impulse Liquid → Hydrogen migration (Linear epic **GD-1**) and the
