@@ -177,11 +177,11 @@ const PieceCell = ({
   <div className={className}>
     <MediaSlot media={piece.media} ratio="product" />
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-3 pt-2.5 pb-4 md:px-4.5 md:pt-3.5 md:pb-5">
-      <SpecLine as="span" className="text-[10px] text-ink md:text-[11px]">
-        {piece.name}
-        {' '}
-        <span className="text-support">{piece.price}</span>
-      </SpecLine>
+      {/* Product names ride the campaign Archivo, not the mono spec strip
+          (Gabe 2026-08-25). */}
+      <span className="font-archivo text-[11px] tracking-caps text-ink uppercase md:text-xs">
+        {piece.name} <span className="text-support">{piece.price}</span>
+      </span>
       <Cta to={piece.href} variant="brand-text" size="xs" className="px-0 text-brand">
         Shop
       </Cta>
