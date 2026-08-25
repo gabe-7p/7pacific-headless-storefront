@@ -73,9 +73,9 @@ athletes before it earned a spot with us.',
   },
 
   standard: {
-    heading: 'Built for how athletes train',
+    heading: 'Built for how athletes actually train.',
     subtitle:
-      'We didn’t design these for just anyone. These are for the athletes who train dynamically for all kinds of situations.',
+      'Not one sport. Not one speed. Gear that keeps up whether the session is intervals, iron, or open runs.',
     /** Extra-wide band under the header. */
     banner: PLACEHOLDER_IMAGE, // wide: sled push or turf sprint, full body, full bleed
     bannerBadge: '05:47 AM — Nobody’s watching. The gear still has to work.',
