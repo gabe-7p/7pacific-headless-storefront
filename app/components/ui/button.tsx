@@ -7,10 +7,13 @@ import { cn } from '~/lib/cn';
 // Shared ramp for the three 7Pacific brand CTA variants + the `group/cta`
 // hook that drives the CtaLabel arrow-slide animation
 // (see ~/components/common/Cta.tsx).
-const brandCta = 'group/cta rounded-[2px] font-mono font-medium uppercase tracking-caps';
+const brandCta = 'group/cta font-mono font-medium uppercase tracking-caps';
 
+// The base's `rounded-[2px]` is the ONE corner radius for every button — no
+// variant or size line may declare its own (a `shadcn add` regenerate would
+// restore stock `rounded-md` here and on the size lines; strip them again).
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[2px] text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -41,11 +44,11 @@ const buttonVariants = cva(
         // CtaLabel's clip wrapper), and `--cta-slide` — the arrow-slide travel
         // (icon width + gap) consumed by CtaLabel (~/components/common/Cta.tsx).
         default: 'h-9 px-4 py-2 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-3',
-        xs: "h-6 gap-1 rounded-md px-2 text-xs [--cta-slide:--spacing(4)] has-[>svg,>[data-cta-label]]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: 'h-8 gap-1.5 rounded-md px-3 [--cta-slide:--spacing(5.5)] has-[>svg,>[data-cta-label]]:px-2.5',
-        lg: 'h-9 rounded-md px-6 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-4',
+        xs: "h-6 gap-1 px-2 text-xs [--cta-slide:--spacing(4)] has-[>svg,>[data-cta-label]]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
+        sm: 'h-8 gap-1.5 px-3 [--cta-slide:--spacing(5.5)] has-[>svg,>[data-cta-label]]:px-2.5',
+        lg: 'h-9 px-6 [--cta-slide:--spacing(6)] has-[>svg,>[data-cta-label]]:px-4',
         icon: 'size-9',
-        'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
+        'icon-xs': "size-6 [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8',
         'icon-lg': 'size-10',
       },
