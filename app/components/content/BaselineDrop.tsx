@@ -83,7 +83,7 @@ const Film = () => (
     />
     <div className="absolute bottom-4 left-4 md:bottom-8 md:left-10">
       {/* White campaign Archivo, per Gabe (2026-08-25). */}
-      <p className="font-archivo text-[10px] tracking-caps text-ink-night uppercase md:text-xs">
+      <p className="font-archivo text-[11px] font-medium tracking-caps text-ink-night uppercase md:text-sm">
         {BASELINE_DROP.filmOverlay.label}
       </p>
       <Cta
