@@ -102,8 +102,9 @@ athletes before it earned a spot with us.',
   },
 
   pieces: {
-    heading: 'Three pieces. Nothing else.',
-    subtitle: 'The Air Rail Short, the Training Tee, the Hat — no filler, no colorway spam.',
+    heading: 'Three pieces. On purpose.',
+    subtitle:
+      'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. No filler, no colorway spam.',
     /** `price` stays the mock's placeholder until Gabe locks drop pricing —
         swap for the real figure (or a fetched Money) here. */
     products: [
