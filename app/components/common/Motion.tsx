@@ -1,4 +1,4 @@
-import { domAnimation, LazyMotion, m } from 'motion/react';
+import { domAnimation, LazyMotion, m, MotionConfig } from 'motion/react';
 import type { ReactNode } from 'react';
 
 /**
@@ -15,9 +15,15 @@ import type { ReactNode } from 'react';
 /** Easing pulled to one place; same curve as the CSS `--ease-brand` token. */
 const EASE_BRAND = [0.165, 0.84, 0.44, 1] as const;
 
+/**
+ * reducedMotion="user" is what actually makes the primitives' "respects
+ * reduced-motion" promise true — Motion's default is to ignore the OS
+ * setting; with it, transform tweens are dropped for those users while
+ * opacity fades still run, so nothing arrives with movement.
+ */
 export const MotionProvider = ({ children }: { children: ReactNode }) => (
   <LazyMotion features={domAnimation} strict>
-    {children}
+    <MotionConfig reducedMotion="user">{children}</MotionConfig>
   </LazyMotion>
 );
 
@@ -45,6 +51,32 @@ export const FadeIn = ({ children, delay = 0, className }: FadeInProps) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 'some' }}
     transition={{ duration: 0.6, delay, ease: EASE_BRAND }}
+  >
+    {children}
+  </m.div>
+);
+
+type SettleInProps = {
+  children: ReactNode;
+  /** Seconds to delay the settle. */
+  delay?: number;
+  className?: string;
+};
+
+/**
+ * Fade + slow scale-settle for photography: starts a touch large (1.04) and
+ * eases to rest over 1.2s on the brand curve — one slow exhale, then
+ * stillness (the 404's Lands End photograph). Fires on mount and ends at
+ * rest by design: no loops. The scale overshoots the element's box, so give
+ * the parent `overflow-hidden` when the bleed would touch a neighbor. Must
+ * render inside a `<MotionProvider>`.
+ */
+export const SettleIn = ({ children, delay = 0, className }: SettleInProps) => (
+  <m.div
+    className={className}
+    initial={{ opacity: 0, scale: 1.04 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 1.2, delay, ease: EASE_BRAND }}
   >
     {children}
   </m.div>

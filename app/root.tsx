@@ -15,7 +15,7 @@ import {
 import favicon from '~/assets/favicon.svg';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { MICROCOPY } from '~/content/microcopy';
+import { NotFound } from '~/components/content/NotFound';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 
 import type { Route } from './+types/root';
@@ -188,41 +188,23 @@ export const ErrorBoundary = () => {
 
   const isNotFound = errorStatus === 404;
 
-  const content = (
-    // Live doesn't centre the 404 vertically — it sits a fixed distance below
-    // the header, flush with the page gutter.
-    // Past --page-max the centring margin is the gutter, so the padding drops
-    // to zero — that's what puts live's text 20px from the viewport edge.
-    // Both gutters use arbitrary min-widths so Tailwind orders them by width
-    // (a named `md:` would sort after `min-[1440px]:` and win at 1440).
+  const content = isNotFound ? (
+    <NotFound />
+  ) : (
+    // Same offset/gutter treatment as the 404 (see components/content/NotFound
+    // for the live-parity rationale) so both error surfaces sit identically.
     <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
-      {!isNotFound && (
-        <p className="text-support text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
-      )}
-      <Heading
-        as="h1"
-        size={isNotFound ? 'none' : 'xl'}
-        variant={isNotFound ? 'quiet' : 'brand'}
-        className={isNotFound ? 'max-w-md text-[18.7px] font-semibold md:text-[22px]' : 'mt-3'}
-      >
-        {/* 404 copy is locked microcopy (7PA-243) — verbatim. */}
-        {isNotFound ? MICROCOPY.notFound : 'Something went wrong'}
+      <p className="text-support text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
+      <Heading as="h1" size="xl" className="mt-3">
+        Something went wrong
       </Heading>
-      {!isNotFound && (
-        <p className="mt-4 max-w-md text-sm text-ink">
-          An unexpected error occurred. Please try again.
-        </p>
-      )}
-      {isNotFound ? (
-        <Cta href="/" size="sm" className="mt-6">
-          Homepage
-        </Cta>
-      ) : (
-        <Cta href="/" variant="brand" size="lg" className="mt-8">
-          Back to shopping
-        </Cta>
-      )}
-      {!isNotFound && errorMessage && (
+      <p className="mt-4 max-w-md text-sm text-ink">
+        An unexpected error occurred. Please try again.
+      </p>
+      <Cta href="/" variant="brand" size="lg" className="mt-8">
+        Back to shopping
+      </Cta>
+      {errorMessage && (
         <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-support">
           {errorMessage}
         </pre>

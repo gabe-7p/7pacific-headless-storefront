@@ -261,6 +261,23 @@
       transform: scale(2.5);
     }
   }
+
+  /* Mono-readout type-on — the line reveals left-to-right in character steps
+     (a GPS acquiring its fix), then rests (the 404 coordinates line).
+     clip-path, not width, so the line's space is reserved and nothing below
+     shifts. The step count approximates the string length so the reveal reads
+     per-character; a few characters' drift is invisible. Pair with
+     motion-reduce:animate-none — the un-animated state is fully visible. */
+  --animate-type-on: type-on 0.6s steps(30, end) both;
+
+  @keyframes type-on {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
 }
 
 /**
