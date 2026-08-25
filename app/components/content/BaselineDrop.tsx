@@ -239,9 +239,6 @@ const Closer = () => (
     <Cta to={BASELINE_DROP.closer.cta.href} variant="brand" size="lg" className="mt-6 md:mt-8">
       {BASELINE_DROP.closer.cta.label}
     </Cta>
-    <SpecLine className="mt-3.5 text-[9px] text-support-night md:mt-4 md:text-[10px]">
-      {BASELINE_DROP.closer.microline}
-    </SpecLine>
   </section>
 );
 

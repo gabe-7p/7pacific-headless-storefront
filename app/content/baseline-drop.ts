@@ -134,6 +134,5 @@ athletes before it earned a spot with us.',
     headingLines: ['Set your baseline.', 'Then beat it.'],
     body: 'Height, pace, load, rounds. Whatever number you’re chasing, chase it in gear that was tested chasing the same thing.',
     cta: { label: 'Shop the drop', href: STORE_LINKS.shopAll },
-    microline: 'Free shipping over $200 · Free returns',
   },
 } as const;
