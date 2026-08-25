@@ -217,16 +217,10 @@ const Pieces = () => {
     `brand` button. */
 const Closer = () => (
   <section className="bg-field-night px-4 py-13 text-center text-ink-night md:px-8 md:py-20">
-    <div className="flex items-center justify-center gap-3 md:gap-4">
-      <span aria-hidden className="h-px w-9 bg-border-subtle-night md:w-16" />
-      <SpecLine
-        as="span"
-        className="text-[9px] tracking-[0.34em] text-support-night md:text-[11px]"
-      >
-        {BASELINE_DROP.closer.eyebrow}
-      </SpecLine>
-      <span aria-hidden className="h-px w-9 bg-border-subtle-night md:w-16" />
-    </div>
+    {/* Campaign Archivo, matching the stat labels (Gabe 2026-08-25). */}
+    <p className="font-archivo text-[9px] tracking-[0.34em] text-support-night uppercase md:text-[11px]">
+      {BASELINE_DROP.closer.eyebrow}
+    </p>
     <Heading
       as="h2"
       size="none"
