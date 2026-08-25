@@ -99,17 +99,6 @@ athletes before it earned a spot with us.',
         media: PLACEHOLDER_IMAGE, // long run, heat haze or early light
       },
     ],
-    traits: [
-      {
-        label: 'Lightweight',
-        body: 'Fabric weights picked per piece — never heavier than the session needs.',
-      },
-      { label: 'Breathable', body: 'Cool when the intensity picks up. Tested at 103°.' },
-      {
-        label: 'Durable',
-        body: '50+ washes and 15 months of sessions without giving anything up.',
-      },
-    ],
   },
 
   pieces: {

@@ -120,8 +120,8 @@ const Receipts = () => (
   </Container>
 );
 
-/** "THE WORK" — header, wide training band, the three day cards, and the
-    lightweight/breathable/durable trait row. */
+/** BUILT FOR HOW ATHLETES TRAIN — header, wide training band, and the
+    three day cards. */
 const Standard = () => (
   <section>
     <Container className="pt-12 pb-6 md:pt-18 md:pb-11">
@@ -162,21 +162,6 @@ const Standard = () => (
           </div>
         </div>
       ))}
-    </div>
-    <div className="border-t border-border-subtle">
-      <Container className="grid gap-4 py-5 pb-9 md:grid-cols-3 md:gap-0 md:py-0 md:pb-16">
-        {BASELINE_DROP.standard.traits.map((trait) => (
-          <div
-            key={trait.label}
-            className="md:border-r md:border-border-subtle md:px-8 md:pt-7 md:first:pl-0 md:last:border-r-0 md:last:pr-0"
-          >
-            <SpecLine className="text-[10px] text-ink md:text-[11px]">{trait.label}</SpecLine>
-            <p className="mt-1.5 text-xs leading-relaxed text-support md:mt-2 md:text-[0.8rem]">
-              {trait.body}
-            </p>
-          </div>
-        ))}
-      </Container>
     </div>
   </section>
 );
