@@ -212,38 +212,6 @@ const Pieces = () => {
   );
 };
 
-/** "FIELD NOTES" — the three test-team voices. */
-const FieldNotes = () => (
-  <div className="border-t border-border-subtle">
-    <Container className="py-12 md:py-16">
-      <DropSectionHeader
-        heading={BASELINE_DROP.fieldNotes.heading}
-        subtitle={BASELINE_DROP.fieldNotes.subtitle}
-      />
-      <div className="mt-7 grid gap-6 md:mt-10 md:grid-cols-3 md:gap-7">
-        {BASELINE_DROP.fieldNotes.testers.map((tester) => (
-          <div key={tester.name} className="border-t-2 border-ink pt-4 md:pt-5">
-            <div className="flex items-center gap-3.5">
-              <div className="relative size-11 shrink-0 overflow-hidden rounded-full md:size-14">
-                <MediaSlot media={tester.photo} ratio="fill" />
-              </div>
-              <div>
-                <Heading as="h3" variant="caps" size="none" className="text-sm">
-                  {tester.name}
-                </Heading>
-                <SpecLine className="mt-0.5 text-[9px] text-support md:text-[10px]">
-                  {tester.pursuit}
-                </SpecLine>
-              </div>
-            </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-support md:mt-4">{tester.quote}</p>
-          </div>
-        ))}
-      </div>
-    </Container>
-  </div>
-);
-
 /** The dark centered closer — the mock keeps this one centered while the
     content sections above are left-aligned. Its CTA is the page's one Ember
     `brand` button. */
@@ -278,9 +246,8 @@ const Closer = () => (
 );
 
 /**
- * The ED. 01 "BASELINE" drop page (/drops/baseline), mock order: intro →
- * drop film → receipts → the athlete's standard → the pieces → field notes →
- * closer.
+ * The ED. 01 "BASELINE" drop page (/drops/baseline): intro → drop film →
+ * receipts → built for how athletes train → the pieces → closer.
  */
 export const BaselineDrop = () => (
   <div>
@@ -289,7 +256,6 @@ export const BaselineDrop = () => (
     <Receipts />
     <Standard />
     <Pieces />
-    <FieldNotes />
     <Closer />
   </div>
 );

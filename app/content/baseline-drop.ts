@@ -129,36 +129,6 @@ athletes before it earned a spot with us.',
     ],
   },
 
-  fieldNotes: {
-    heading: 'Voices from the test team',
-    subtitle:
-      'The athletes who wore the prototypes for fifteen months — chasing very different numbers.',
-    /** Quotes are the mock's stand-ins — replace with the testers' real words. */
-    testers: [
-      {
-        name: 'Tester 01',
-        pursuit: 'Hyrox · Chasing sub-70',
-        quote:
-          '“Quote from your tester — what they train for, and the moment the gear proved itself. Real words, not marketing.”',
-        photo: PLACEHOLDER_IMAGE,
-      },
-      {
-        name: 'Tester 02',
-        pursuit: 'Vertical · Chasing 40"',
-        quote:
-          '“Quote from your tester — e.g. how the short moves at the top of a max jump, or surviving the 103° block.”',
-        photo: PLACEHOLDER_IMAGE,
-      },
-      {
-        name: 'Tester 03',
-        pursuit: 'Running · Chasing sub-18 5K',
-        quote:
-          '“Quote from your tester — the wash-count, the miles, why they kept reaching for the same tee.”',
-        photo: PLACEHOLDER_IMAGE,
-      },
-    ],
-  },
-
   closer: {
     eyebrow: 'ED. 01 · Live now',
     headingLines: ['Set your baseline.', 'Then beat it.'],
