@@ -71,8 +71,32 @@ const Intro = () => (
   </Container>
 );
 
-/** The full-bleed 16:9 drop film. */
-const Film = () => <MediaSlot media={BASELINE_DROP.film} ratio="video" loading="eager" />;
+/** The full-bleed 16:9 drop film, with the full-video pointer pinned to
+    its lower-left corner over a soft scrim (the footage runs light, so the
+    white label needs the ground). */
+const Film = () => (
+  <section className="relative">
+    <MediaSlot media={BASELINE_DROP.film} ratio="video" loading="eager" />
+    <div
+      aria-hidden
+      className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-field-night/60 to-transparent"
+    />
+    <div className="absolute bottom-4 left-4 md:bottom-8 md:left-10">
+      {/* White campaign Archivo, per Gabe (2026-08-25). */}
+      <p className="font-archivo text-[10px] tracking-caps text-ink-night uppercase md:text-xs">
+        {BASELINE_DROP.filmOverlay.label}
+      </p>
+      <Cta
+        href={BASELINE_DROP.filmOverlay.cta.href}
+        target="_blank"
+        size="xs"
+        className="mt-2 border-ink-night/60 text-ink-night md:mt-2.5"
+      >
+        {BASELINE_DROP.filmOverlay.cta.label}
+      </Cta>
+    </div>
+  </section>
+);
 
 /** One dark 3:4 stat card — BG photo (fill slot) under a scrim, with the
     figure and its label pinned to the bottom. The fixed aspect ratio keeps

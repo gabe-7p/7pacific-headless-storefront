@@ -39,6 +39,12 @@ athletes before it earned a spot with us.',
     poster:
       'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/preview_images/002c07ce613b4b15893c9fdf493295c9.thumbnail.0000000000.jpg?v=1787638763',
   } satisfies MediaSlotSource,
+  /** Lower-left overlay on the film — points at the full drop film on
+      YouTube (opens in a new tab). */
+  filmOverlay: {
+    label: 'The why behind our first collection',
+    cta: { label: 'Watch full video', href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE' },
+  },
 
   receipts: {
     heading: 'Proving the performance',
