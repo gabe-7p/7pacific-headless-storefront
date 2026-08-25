@@ -22,9 +22,12 @@ export const BASELINE_DROP = {
   headline: 'Baseline',
   /** Mobile stacks the date under the headline; desktop joins them inline. */
   date: 'LIVE NOW',
+  // "Lghtweight" is verbatim from Gabe's copy (2026-08-25) — flagged as a
+  // likely typo ("Lightweight"); fix here once confirmed.
   intro:
-    'Our first collection: the Air Rail Short, the Training Tee, and the Hat. Fifteen months \
-of testing, nine prototypes, and one rule — if it can’t survive real training, it doesn’t ship.',
+    'Our first collection. The kit you start with plus a few innovations for athletes. \
+Lghtweight, breathable, durable, and stands out just enough. Tested for months by real \
+athletes before it earned a spot with us.',
 
   /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop (Shopify
       file 52942265516349, HD-1080p rendition + its CDN poster frame). The
