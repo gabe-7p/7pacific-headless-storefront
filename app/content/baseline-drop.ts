@@ -132,7 +132,7 @@ athletes before it earned a spot with us.',
   closer: {
     eyebrow: 'ED. 01 · Live now',
     headingLines: ['Set your baseline.', 'Then beat it.'],
-    body: 'Whatever number you’re chasing — height, pace, load, rounds — this is the gear that shows up for all of it.',
+    body: 'Height, pace, load, rounds. Whatever number you’re chasing, chase it in gear that was tested chasing the same thing.',
     cta: { label: 'Shop the drop', href: STORE_LINKS.shopAll },
     microline: 'Free shipping over $200 · Free returns',
   },
