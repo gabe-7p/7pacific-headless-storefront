@@ -111,6 +111,15 @@
    * weight. */
   --font-display: 'Archivo Variable', 'Archivo', 'Arial Narrow', sans-serif;
   --font-display--font-variation-settings: 'wdth' 75; /* Archivo Condensed */
+  /* Campaign display face — "Archivo Narrow" cut from the same variable file
+   * (wdth 87.5), used by drop-page section titles at Medium (Gabe
+   * 2026-08-24/25). */
+  --font-display-narrow: 'Archivo Variable', 'Archivo', 'Arial Narrow', sans-serif;
+  --font-display-narrow--font-variation-settings: 'wdth' 87.5;
+  /* Full-width Archivo (wdth 100 — the variable file's default), used at
+   * Light for the drop-page stat figures (Gabe 2026-08-25) — a sanctioned
+   * campaign exception to numbers-render-in-mono. */
+  --font-archivo: 'Archivo Variable', 'Archivo', sans-serif;
   --font-sans: 'Inter Variable', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 

@@ -14,6 +14,17 @@ const RATIOS = {
   portrait: 'aspect-[3/4]',
   /** Full-bleed backdrop a section overlays content on. */
   backdrop: 'aspect-[4/5] md:aspect-video',
+  /** 16:9 film band at every width (the BASELINE drop film). */
+  video: 'aspect-video',
+  /** Extra-wide cinematic band — 16:9 on mobile, 21:8 from sm. */
+  wide: 'aspect-video sm:aspect-[21/8]',
+  /** Landscape grid cell — 16:10 stacked on mobile, 4:3 from sm. */
+  landscape: 'aspect-[16/10] sm:aspect-[4/3]',
+  /** Product tile (matches the PLP card crop). */
+  product: 'aspect-[4/5]',
+  /** Fills a `relative` parent (background photo behind overlaid content) —
+      the parent owns the aspect ratio. */
+  fill: 'absolute inset-0 h-full',
 } as const;
 
 export type MediaSlotRatio = keyof typeof RATIOS;
@@ -65,5 +76,7 @@ export const MediaSlot = ({ media, ratio, loading = 'lazy', className }: MediaSl
     );
   }
 
-  return <div aria-hidden data-media={media.type} className={cn(box, 'bg-media-placeholder')} />;
+  // Placeholder tint FIRST so a caller's className can override it (a `fill`
+  // slot inside an already-dark card passes `bg-transparent`).
+  return <div aria-hidden data-media={media.type} className={cn('bg-media-placeholder', box)} />;
 };
