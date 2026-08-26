@@ -111,12 +111,12 @@ athletes before it earned a spot with us.',
     heading: 'Three pieces. On purpose.',
     subtitle:
       'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. No filler, no colorway spam.',
-    /** `price` stays the mock's placeholder until Gabe locks drop pricing —
-        swap for the real figure (or a fetched Money) here. */
+    /** Names and prices mirror the live Shopify products (2026-08-25) —
+        update here if pricing changes. */
     products: [
       {
-        name: 'Air Rail Short',
-        price: '$ —',
+        name: 'AirRail™ short',
+        price: '$79',
         href: STORE_LINKS.shopShorts,
         media: {
           kind: 'image',
@@ -125,8 +125,8 @@ athletes before it earned a spot with us.',
         },
       },
       {
-        name: 'Training Tee',
-        price: '$ —',
+        name: 'TraceFiber™ tee',
+        price: '$72',
         href: STORE_LINKS.shopShirts,
         media: {
           kind: 'image',
@@ -135,8 +135,8 @@ athletes before it earned a spot with us.',
         },
       },
       {
-        name: 'The Hat',
-        price: '$ —',
+        name: 'MotionFrame™ hat',
+        price: '$42',
         href: STORE_LINKS.shopHat,
         // Same worn shot the MOTIONFRAME hat PDP leads with.
         media: {
