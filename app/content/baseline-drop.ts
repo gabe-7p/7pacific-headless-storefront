@@ -19,12 +19,10 @@ export const BASELINE_DROP = {
   status: 'LIVE NOW',
   /** Browser-tab / og title (buildMeta adds the brand suffix). */
   seoTitle: 'Baseline · ED. 01',
-  // "Lghtweight" is verbatim from Gabe's copy (2026-08-25) — flagged as a
-  // likely typo ("Lightweight"); fix here once confirmed.
   intro:
-    'Our first collection. The kit you start with plus a few innovations for athletes. \
-Lghtweight, breathable, durable, and stands out just enough. Tested for months by real \
-athletes before it earned a spot with us.',
+    'Our first collection. The kit you start with, plus a few innovations for athletes. \
+It’s lightweight, breathable, durable, and stands out just enough. We tested it for \
+months with real athletes before it earned a spot with us.',
 
   /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop (Shopify
       file 52942265516349 + its CDN poster frame). 720p rendition, the repo's
@@ -45,7 +43,10 @@ athletes before it earned a spot with us.',
 
   receipts: {
     heading: 'Proving the performance',
-    subtitle: 'These are the numbers our gear went through before we let you buy them.',
+    subtitle:
+      'We logged months of testing before we let you buy anything. Here’s what the \
+process looked like in numbers. Don’t believe us? Send us a message and we’ll send \
+you the receipts.',
     /** Dark stat tiles; `accent` is the mock's Ember-set trailing glyph. */
     stats: [
       {
@@ -72,7 +73,9 @@ athletes before it earned a spot with us.',
   standard: {
     heading: 'Built for how athletes actually train.',
     subtitle:
-      'Not one sport. Not one speed. Gear that keeps up whether the session is intervals, iron, or open runs.',
+      'You take training seriously. So do we, just with fabric. This was built for \
+athletes who train with intent: speed work, intervals, iron, even the run you swore \
+would be easy on Saturday. We got you.',
     /** Extra-wide band under the header. */
     banner: {
       kind: 'image',
@@ -118,7 +121,8 @@ athletes before it earned a spot with us.',
   pieces: {
     heading: 'Three pieces. On purpose.',
     subtitle:
-      'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. No filler, no colorway spam.',
+      'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. These are the \
+only three pieces you need to get to work.',
     /** Names and prices mirror the live Shopify products (2026-08-25) —
         update here if pricing changes. */
     products: [
