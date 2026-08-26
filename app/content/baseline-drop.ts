@@ -82,7 +82,6 @@ athletes before it earned a spot with us.',
       src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_03806.jpg?v=1759043281&width=1600',
       alt: 'Athlete driving battle ropes on a foggy clifftop',
     } satisfies MediaSlotSource,
-    bannerBadge: '05:47 AM — Nobody’s watching. The gear still has to work.',
     days: [
       {
         index: '01',

@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react';
-
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
@@ -40,16 +38,6 @@ const MediaGrade = () => (
     aria-hidden
     className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
   />
-);
-
-/** Mono caption badge pinned over full-bleed media (film credit, band caption). */
-const MediaBadge = ({ className, children }: { className?: string; children: ReactNode }) => (
-  <SpecLine
-    as="span"
-    className={`absolute flex items-center gap-2 bg-field/85 px-2.5 py-1.5 text-[9px] text-ink md:gap-3 md:px-3.5 md:py-2 md:text-[11px] ${className ?? ''}`}
-  >
-    {children}
-  </SpecLine>
 );
 
 /** Ember live-signal dot with the radar ping ("drop is live"). */
@@ -170,9 +158,6 @@ const Standard = () => (
         className={`object-[50%_30%] ${GRADED_IMG_CLASS}`}
       />
       <MediaGrade />
-      <MediaBadge className="bottom-3 left-3.5 md:bottom-6 md:left-10">
-        {BASELINE_DROP.standard.bannerBadge}
-      </MediaBadge>
     </div>
     {/* The three day photos run edge-to-edge under the wide band, split by
         1px slivers — the same 1px above them. The caption frames below butt
