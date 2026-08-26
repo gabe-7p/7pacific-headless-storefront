@@ -73,7 +73,9 @@ you the receipts.',
   standard: {
     heading: 'Built for how athletes actually train.',
     subtitle:
-      'Not one sport. Not one speed. Gear that keeps up whether the session is intervals, iron, or open runs.',
+      'You take training seriously. So do we, just with fabric. This was built for \
+athletes who train with intent: speed work, intervals, iron, even the run you swore \
+would be easy on Saturday. We got you.',
     /** Extra-wide band under the header. */
     banner: {
       kind: 'image',
