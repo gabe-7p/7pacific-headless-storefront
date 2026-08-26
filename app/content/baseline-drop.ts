@@ -43,7 +43,10 @@ months with real athletes before it earned a spot with us.',
 
   receipts: {
     heading: 'Proving the performance',
-    subtitle: 'These are the numbers our gear went through before we let you buy them.',
+    subtitle:
+      'We logged months of testing before we let you buy anything. Here’s what the \
+process looked like in numbers. Don’t believe us? Send us a message and we’ll send \
+you the receipts.',
     /** Dark stat tiles; `accent` is the mock's Ember-set trailing glyph. */
     stats: [
       {
