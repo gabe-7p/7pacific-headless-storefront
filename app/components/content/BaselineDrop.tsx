@@ -30,6 +30,18 @@ const DropSectionHeader = ({ heading, subtitle }: { heading: string; subtitle: s
   </div>
 );
 
+/** Unifying grade for the training-section photos: the images are shot in
+    different light (fog, beach sun, trail green), so each gets a slight
+    desaturation plus this cool Carbon multiply veil — enough to pull them
+    onto one color profile without visibly costing detail (Gabe 2026-08-25). */
+const GRADED_IMG_CLASS = 'saturate-[0.85]';
+const MediaGrade = () => (
+  <div
+    aria-hidden
+    className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
+  />
+);
+
 /** Mono caption badge pinned over full-bleed media (film credit, band caption). */
 const MediaBadge = ({ className, children }: { className?: string; children: ReactNode }) => (
   <SpecLine
@@ -157,7 +169,12 @@ const Standard = () => (
     <div className="relative border-t border-border-subtle">
       {/* The source is 3:2 cropped to 21:8 — bias the window upward so the
           athlete's head stays in frame. */}
-      <MediaSlot media={BASELINE_DROP.standard.banner} ratio="wide" className="object-[50%_30%]" />
+      <MediaSlot
+        media={BASELINE_DROP.standard.banner}
+        ratio="wide"
+        className={`object-[50%_30%] ${GRADED_IMG_CLASS}`}
+      />
+      <MediaGrade />
       <MediaBadge className="bottom-3 left-3.5 md:bottom-6 md:left-10">
         {BASELINE_DROP.standard.bannerBadge}
       </MediaBadge>
@@ -170,13 +187,16 @@ const Standard = () => (
       {BASELINE_DROP.standard.days.map((day, column) => (
         <div key={day.index} className="flex flex-col">
           <div className={column < 2 ? 'md:pr-px' : undefined}>
-            {/* Day 03's photo is near-square in a landscape box — anchor top
-                so the faces survive the crop. */}
-            <MediaSlot
-              media={day.media}
-              ratio="landscape"
-              className={day.index === '03' ? 'object-top' : undefined}
-            />
+            <div className="relative">
+              {/* Day 03's photo is near-square in a landscape box — anchor top
+                  so the faces survive the crop. */}
+              <MediaSlot
+                media={day.media}
+                ratio="landscape"
+                className={`${GRADED_IMG_CLASS} ${day.index === '03' ? 'object-top' : ''}`}
+              />
+              <MediaGrade />
+            </div>
           </div>
           {/* Hairline frame closes around the caption — the photo caps the
               top, and from md the left border is dropped on the inner columns
