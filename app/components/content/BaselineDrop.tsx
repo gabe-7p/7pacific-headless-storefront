@@ -111,10 +111,11 @@ const Film = () => (
 );
 
 /** One dark stat tile — the figure and its label pinned to the bottom.
-    The fixed 4:3 aspect keeps every tile the same compact height (no BG
-    photos are planned for these; Gabe 2026-08-25). */
+    No fixed aspect: the top padding is all the headroom the tile gets, so
+    the row stays a compact stat band; the grid levels the four tiles and
+    the bottom-pinned figures keep one shared baseline (Gabe 2026-08-25). */
 const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number] }) => (
-  <div className="flex aspect-4/3 flex-col justify-end overflow-hidden bg-field-night p-4 md:p-5 md:pb-6">
+  <div className="flex flex-col justify-end overflow-hidden bg-field-night px-4 pt-8 pb-4 md:px-5 md:pt-10 md:pb-6">
     <div>
       {/* Archivo Light figures (Gabe 2026-08-25) — full-width cut, sized to
           headline the card without swallowing it; the label sits beside the
