@@ -121,7 +121,8 @@ would be easy on Saturday. We got you.',
   pieces: {
     heading: 'Three pieces. On purpose.',
     subtitle:
-      'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. No filler, no colorway spam.',
+      'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. These are the \
+only three pieces you need to get to work.',
     /** Names and prices mirror the live Shopify products (2026-08-25) —
         update here if pricing changes. */
     products: [
