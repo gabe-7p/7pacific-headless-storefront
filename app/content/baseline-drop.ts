@@ -20,9 +20,9 @@ export const BASELINE_DROP = {
   /** Browser-tab / og title (buildMeta adds the brand suffix). */
   seoTitle: 'Baseline · ED. 01',
   intro:
-    'Our first collection. This is the kit you start with plus a few innovations for \
-athletes. It’s lightweight, breathable, durable, and stands out just enough. We tested \
-it for months with real athletes before it earned a spot with us.',
+    'Our first collection. The kit you start with, plus a few innovations for athletes. \
+It’s lightweight, breathable, durable, and stands out just enough. We tested it for \
+months with real athletes before it earned a spot with us.',
 
   /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop (Shopify
       file 52942265516349 + its CDN poster frame). 720p rendition, the repo's
