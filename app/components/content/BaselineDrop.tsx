@@ -110,18 +110,12 @@ const Film = () => (
   </section>
 );
 
-/** One dark 3:4 stat card — BG photo (fill slot) under a scrim, with the
-    figure and its label pinned to the bottom. The fixed aspect ratio keeps
-    every card the same height. */
+/** One dark stat tile — the figure and its label pinned to the bottom.
+    The fixed 4:3 aspect keeps every tile the same compact height (no BG
+    photos are planned for these; Gabe 2026-08-25). */
 const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number] }) => (
-  <div className="relative flex aspect-3/4 flex-col justify-end overflow-hidden bg-field-night p-4 md:p-5 md:pb-6">
-    <MediaSlot media={stat.media} ratio="fill" className="bg-transparent" />
-    {/* Scrim keeps the type legible once the real BG photo lands. */}
-    <div
-      aria-hidden
-      className="absolute inset-0 bg-linear-to-b from-field-night/30 from-25% to-field-night/90"
-    />
-    <div className="relative">
+  <div className="flex aspect-4/3 flex-col justify-end overflow-hidden bg-field-night p-4 md:p-5 md:pb-6">
+    <div>
       {/* Archivo Light figures (Gabe 2026-08-25) — full-width cut, sized to
           headline the card without swallowing it; the label sits beside the
           figure in the same face, a size down. */}

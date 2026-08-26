@@ -14,8 +14,6 @@
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { STORE_LINKS } from '~/content/links';
 
-const PLACEHOLDER_IMAGE = { kind: 'placeholder', type: 'image' } satisfies MediaSlotSource;
-
 export const BASELINE_DROP = {
   /** Mono eyebrow above the headline; its leading dot is the mock's live signal. */
   eyebrow: 'ED. 01 · H2-26',
@@ -49,31 +47,27 @@ athletes before it earned a spot with us.',
   receipts: {
     heading: 'Proving the performance',
     subtitle: 'These are the numbers our gear went through before we let you buy them.',
-    /** Dark 3:4 stat cards; `accent` is the mock's Ember-set trailing glyph. */
+    /** Dark stat tiles; `accent` is the mock's Ember-set trailing glyph. */
     stats: [
       {
         label: 'Wash cycles',
         value: '50',
         accent: '+',
-        media: PLACEHOLDER_IMAGE, // tee mid-wash / crumpled fabric, dark, desaturated
       },
       {
         label: 'Months trained in',
         value: '15',
         accent: '',
-        media: PLACEHOLDER_IMAGE, // empty gym at dawn / athlete resting on rack
       },
       {
         label: 'Prototypes',
         value: '09',
         accent: '',
-        media: PLACEHOLDER_IMAGE, // flat-lay of rejected prototypes / pins, chalk marks
       },
       {
         label: 'Hottest session',
         value: '103',
         accent: '°',
-        media: PLACEHOLDER_IMAGE, // sweat detail / heat haze on turf, harsh sun
       },
     ],
   },
