@@ -83,26 +83,42 @@ athletes before it earned a spot with us.',
     subtitle:
       'Not one sport. Not one speed. Gear that keeps up whether the session is intervals, iron, or open runs.',
     /** Extra-wide band under the header. */
-    banner: PLACEHOLDER_IMAGE, // wide: sled push or turf sprint, full body, full bleed
+    banner: {
+      kind: 'image',
+      src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_03806.jpg?v=1759043281&width=1600',
+      alt: 'Athlete driving battle ropes on a foggy clifftop',
+    } satisfies MediaSlotSource,
     bannerBadge: '05:47 AM — Nobody’s watching. The gear still has to work.',
     days: [
       {
         index: '01',
         title: 'Explosive days',
         body: 'Vertical work, plyos, olympic lifts, sprinting, the list goes on. Every piece has breathability built in.',
-        media: PLACEHOLDER_IMAGE, // max-effort jump or plyo, peak of the rep
+        media: {
+          kind: 'image',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_07344.jpg?v=1759115958&width=1200',
+          alt: 'Three athletes working battle ropes and med balls on the beach',
+        },
       },
       {
         index: '02',
         title: 'Race simulations',
         body: 'Hyrox sims, circuits, comp prep. A stay-put fit and sweat-wicking fabric from station one to the finishline.',
-        media: PLACEHOLDER_IMAGE, // race-sim floor: erg, wall balls or carries
+        media: {
+          kind: 'image',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/running.png?v=1756374530&width=1200',
+          alt: 'Pack of runners mid-stride in training gear',
+        },
       },
       {
         index: '03',
         title: 'Long days',
         body: 'Tempo runs, long intervals, 103° afternoons. Feather-light and breathable enough to disappear by mile six.',
-        media: PLACEHOLDER_IMAGE, // long run, heat haze or early light
+        media: {
+          kind: 'image',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/two_walking_to_workout_cropped.png?v=1758602930',
+          alt: 'Two athletes carrying kettlebells and a slam ball to a workout',
+        },
       },
     ],
   },

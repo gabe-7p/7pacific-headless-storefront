@@ -155,7 +155,9 @@ const Standard = () => (
       />
     </Container>
     <div className="relative border-t border-border-subtle">
-      <MediaSlot media={BASELINE_DROP.standard.banner} ratio="wide" />
+      {/* The source is 3:2 cropped to 21:8 — bias the window upward so the
+          athlete's head stays in frame. */}
+      <MediaSlot media={BASELINE_DROP.standard.banner} ratio="wide" className="object-[50%_30%]" />
       <MediaBadge className="bottom-3 left-3.5 md:bottom-6 md:left-10">
         {BASELINE_DROP.standard.bannerBadge}
       </MediaBadge>
@@ -168,7 +170,13 @@ const Standard = () => (
       {BASELINE_DROP.standard.days.map((day, column) => (
         <div key={day.index} className="flex flex-col">
           <div className={column < 2 ? 'md:pr-px' : undefined}>
-            <MediaSlot media={day.media} ratio="landscape" />
+            {/* Day 03's photo is near-square in a landscape box — anchor top
+                so the faces survive the crop. */}
+            <MediaSlot
+              media={day.media}
+              ratio="landscape"
+              className={day.index === '03' ? 'object-top' : undefined}
+            />
           </div>
           {/* Hairline frame closes around the caption — the photo caps the
               top, and from md the left border is dropped on the inner columns
