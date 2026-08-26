@@ -118,19 +118,32 @@ athletes before it earned a spot with us.',
         name: 'Air Rail Short',
         price: '$ —',
         href: STORE_LINKS.shopShorts,
-        media: PLACEHOLDER_IMAGE, // on-body, mid-movement
+        media: {
+          kind: 'image',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/chirstian-on-stairs.jpg?v=1785783387&width=1400',
+          alt: 'Athlete in the AirRail short on outdoor stairs',
+        },
       },
       {
         name: 'Training Tee',
         price: '$ —',
         href: STORE_LINKS.shopShirts,
-        media: PLACEHOLDER_IMAGE, // on-body, sweat-through OK
+        media: {
+          kind: 'image',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/face-on-shot-zach.jpg?v=1785783370&width=1400',
+          alt: 'Athlete facing the camera in the TraceFiber training tee',
+        },
       },
       {
         name: 'The Hat',
         price: '$ —',
         href: STORE_LINKS.shopHat,
-        media: PLACEHOLDER_IMAGE, // worn + flat-lay detail
+        // Same worn shot the MOTIONFRAME hat PDP leads with.
+        media: {
+          kind: 'image',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/hat_side_profile.jpg?v=1758436928&width=1400',
+          alt: 'Athlete wearing the white MOTIONFRAME running hat',
+        },
       },
     ],
   },
