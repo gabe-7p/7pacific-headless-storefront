@@ -20,14 +20,24 @@ const RATIOS = {
   wide: 'aspect-video sm:aspect-[21/8]',
   /** Landscape grid cell — 16:10 stacked on mobile, 4:3 from sm. */
   landscape: 'aspect-[16/10] sm:aspect-[4/3]',
-  /** Product tile (matches the PLP card crop). */
+  /** Drop-page product tile (the PLP card itself crops square). */
   product: 'aspect-[4/5]',
-  /** Fills a `relative` parent (background photo behind overlaid content) —
-      the parent owns the aspect ratio. */
-  fill: 'absolute inset-0 h-full',
 } as const;
 
 export type MediaSlotRatio = keyof typeof RATIOS;
+
+/**
+ * Named crop anchors for an image slot whose source doesn't match the box
+ * ratio — the focal point is a fact about the photo, so it rides the source
+ * (same union → static-class device as RATIOS). Extend as art direction
+ * needs.
+ */
+const FOCUS = {
+  /** Keep the top of the frame (faces in a portrait source, landscape box). */
+  top: 'object-top',
+  /** Bias the window toward the upper third (heads in a wide cinematic crop). */
+  upper: 'object-[50%_30%]',
+} as const;
 
 /**
  * What fills a slot. Content files hold one of these per slot; upgrading a
@@ -37,7 +47,7 @@ export type MediaSlotRatio = keyof typeof RATIOS;
  */
 export type MediaSlotSource =
   | { kind: 'placeholder'; type: 'image' | 'video' }
-  | { kind: 'image'; src: string; alt: string }
+  | { kind: 'image'; src: string; alt: string; focus?: keyof typeof FOCUS }
   | { kind: 'video'; src: string; poster?: string };
 
 type MediaSlotProps = {
@@ -58,7 +68,12 @@ export const MediaSlot = ({ media, ratio, loading = 'lazy', className }: MediaSl
 
   if (media.kind === 'image') {
     return (
-      <img src={media.src} alt={media.alt} loading={loading} className={cn(box, 'object-cover')} />
+      <img
+        src={media.src}
+        alt={media.alt}
+        loading={loading}
+        className={cn(box, 'object-cover', media.focus && FOCUS[media.focus])}
+      />
     );
   }
 
@@ -76,7 +91,6 @@ export const MediaSlot = ({ media, ratio, loading = 'lazy', className }: MediaSl
     );
   }
 
-  // Placeholder tint FIRST so a caller's className can override it (a `fill`
-  // slot inside an already-dark card passes `bg-transparent`).
+  // Placeholder tint first so a caller's className can override it.
   return <div aria-hidden data-media={media.type} className={cn('bg-media-placeholder', box)} />;
 };

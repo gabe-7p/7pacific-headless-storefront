@@ -112,7 +112,7 @@ export const Cta = ({
         <a
           href={href}
           target={target}
-          rel={target === '_blank' ? 'noreferrer' : undefined}
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
           onClick={onClick}
         >
           {label}

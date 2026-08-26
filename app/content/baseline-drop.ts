@@ -2,13 +2,10 @@
  * /drops/baseline — the ED. 01 "BASELINE" drop page (route drops.baseline.tsx
  * → components/content/BaselineDrop). Copy is transcribed verbatim from Gabe's
  * approved Claude Design mock (`BASELINE Drop Page.dc.html`, turn 4a — content
- * sections left-aligned, closer centered; 2026-08-24). All display strings are
- * sentence case here and uppercased by CSS, per the display-face rule.
- *
- * Every media field is a `MediaSlotSource`: when a real asset lands, swap the
- * `PLACEHOLDER_*` reference for an `{ kind: 'image' | 'video', … }` object — a
- * one-line change here, no component edits. The mock's per-slot art direction
- * is kept as a comment beside each slot.
+ * sections left-aligned, closer centered; 2026-08-24) plus Gabe's live
+ * design-review revisions. All display strings are sentence case here and
+ * uppercased by CSS, per the display-face rule. Every media field is a
+ * `MediaSlotSource` — per-photo crop anchoring rides each source as `focus`.
  */
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
@@ -18,8 +15,10 @@ export const BASELINE_DROP = {
   /** Mono eyebrow above the headline; its leading dot is the mock's live signal. */
   eyebrow: 'ED. 01 · H2-26',
   headline: 'Baseline',
-  /** Mobile stacks the date under the headline; desktop joins them inline. */
-  date: 'LIVE NOW',
+  /** Status line paired with the headline (was the drop date pre-launch). */
+  status: 'LIVE NOW',
+  /** Browser-tab / og title (buildMeta adds the brand suffix). */
+  seoTitle: 'Baseline · ED. 01',
   // "Lghtweight" is verbatim from Gabe's copy (2026-08-25) — flagged as a
   // likely typo ("Lightweight"); fix here once confirmed.
   intro:
@@ -28,12 +27,12 @@ Lghtweight, breathable, durable, and stands out just enough. Tested for months b
 athletes before it earned a spot with us.',
 
   /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop (Shopify
-      file 52942265516349, HD-1080p rendition + its CDN poster frame). The
-      mock's "SOUND OFF · TAP FOR AUDIO" badge ships once there is an audio
-      toggle. */
+      file 52942265516349 + its CDN poster frame). 720p rendition, the repo's
+      standard for background loops (the 1080p cut is 43 MB). The mock's
+      "SOUND OFF · TAP FOR AUDIO" badge ships once there is an audio toggle. */
   film: {
     kind: 'video',
-    src: 'https://cdn.shopify.com/videos/c/vp/002c07ce613b4b15893c9fdf493295c9/002c07ce613b4b15893c9fdf493295c9.HD-1080p-7.2Mbps-92527050.mp4',
+    src: 'https://cdn.shopify.com/videos/c/vp/002c07ce613b4b15893c9fdf493295c9/002c07ce613b4b15893c9fdf493295c9.HD-720p-4.5Mbps-92527050.mp4',
     poster:
       'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/preview_images/002c07ce613b4b15893c9fdf493295c9.thumbnail.0000000000.jpg?v=1787638763',
   } satisfies MediaSlotSource,
@@ -57,12 +56,10 @@ athletes before it earned a spot with us.',
       {
         label: 'Months trained in',
         value: '15',
-        accent: '',
       },
       {
         label: 'Prototypes',
         value: '09',
-        accent: '',
       },
       {
         label: 'Hottest session',
@@ -79,8 +76,9 @@ athletes before it earned a spot with us.',
     /** Extra-wide band under the header. */
     banner: {
       kind: 'image',
-      src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_03806.jpg?v=1759043281&width=1600',
+      src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_03806.jpg?v=1759043281&width=1200',
       alt: 'Athlete driving battle ropes on a foggy clifftop',
+      focus: 'upper', // 3:2 source in the 21:8 band — keep the athlete's head
     } satisfies MediaSlotSource,
     days: [
       {
@@ -111,6 +109,7 @@ athletes before it earned a spot with us.',
           kind: 'image',
           src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/two_walking_to_workout_cropped.png?v=1758602930',
           alt: 'Two athletes carrying kettlebells and a slam ball to a workout',
+          focus: 'top', // near-square source in the landscape box — keep the faces
         },
       },
     ],
@@ -129,7 +128,7 @@ athletes before it earned a spot with us.',
         href: STORE_LINKS.shopShorts,
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/mountain_mist_short_stretch_143cc154-8c83-4fe0-a05c-5eb44a21cf8f.jpg?v=1758601081&width=1400',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/mountain_mist_short_stretch_143cc154-8c83-4fe0-a05c-5eb44a21cf8f.jpg?v=1758601081&width=900',
           alt: 'Athlete stretching with a raised knee in the Mountain Mist AirRail short',
         },
       },
@@ -139,7 +138,7 @@ athletes before it earned a spot with us.',
         href: STORE_LINKS.shopShirts,
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/white_shirt_top_left_back.jpg?v=1758599851&width=1400',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/white_shirt_top_left_back.jpg?v=1758599851&width=900',
           alt: 'Back shoulder detail of the white TraceFiber tee',
         },
       },
@@ -150,7 +149,7 @@ athletes before it earned a spot with us.',
         // Same worn shot the MOTIONFRAME hat PDP leads with.
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/hat_side_profile.jpg?v=1758436928&width=1400',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/hat_side_profile.jpg?v=1758436928&width=900',
           alt: 'Athlete wearing the white MOTIONFRAME running hat',
         },
       },

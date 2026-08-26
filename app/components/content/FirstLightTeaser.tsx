@@ -1,6 +1,7 @@
 import { Container } from '~/components/common/Container';
 import { Countdown } from '~/components/common/Countdown';
 import { Heading } from '~/components/common/Heading';
+import { LiveDot } from '~/components/common/LiveDot';
 import { MediaSlot } from '~/components/common/MediaSlot';
 import { SpecLine } from '~/components/common/SpecLine';
 import { WaitlistForm } from '~/components/common/WaitlistForm';
@@ -34,14 +35,8 @@ const EarlyAccessForm = () => (
 const Intro = () => (
   <Container className="pt-10 pb-8 md:pt-14 md:pb-10">
     <SpecLine className="flex items-center gap-3 text-sm text-ink">
-      {/* bg-brand dot — the mock pairs the Ember accent with the SIGN UP CTA
-          below. The radar ping says "signal live" while the countdown runs;
-          the dot itself never moves, and the ring sits out under
-          motion-reduce. */}
-      <span aria-hidden className="relative size-2.5 shrink-0">
-        <span className="animate-radar-ping border-brand absolute inset-0 rounded-full border motion-reduce:hidden" />
-        <span className="bg-brand absolute inset-0 rounded-full" />
-      </span>
+      {/* The mock pairs the Ember live signal with the SIGN UP CTA below. */}
+      <LiveDot />
       {FIRST_LIGHT.eyebrow}
     </SpecLine>
     <Heading as="h1" size="none" className="mt-4 text-5xl md:text-6xl">
