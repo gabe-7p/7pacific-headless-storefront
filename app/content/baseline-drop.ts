@@ -136,8 +136,8 @@ athletes before it earned a spot with us.',
         href: STORE_LINKS.shopShorts,
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/chirstian-on-stairs.jpg?v=1785783387&width=1400',
-          alt: 'Athlete in the AirRail short on outdoor stairs',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/mountain_mist_short_stretch_143cc154-8c83-4fe0-a05c-5eb44a21cf8f.jpg?v=1758601081&width=1400',
+          alt: 'Athlete stretching with a raised knee in the Mountain Mist AirRail short',
         },
       },
       {
@@ -146,8 +146,8 @@ athletes before it earned a spot with us.',
         href: STORE_LINKS.shopShirts,
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/face-on-shot-zach.jpg?v=1785783370&width=1400',
-          alt: 'Athlete facing the camera in the TraceFiber training tee',
+          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/white_shirt_top_left_back.jpg?v=1758599851&width=1400',
+          alt: 'Back shoulder detail of the white TraceFiber tee',
         },
       },
       {
