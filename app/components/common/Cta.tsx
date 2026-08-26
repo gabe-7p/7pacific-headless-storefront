@@ -47,6 +47,8 @@ type CtaProps = {
   prefetch?: ComponentProps<typeof Link>['prefetch'];
   /** External/absolute link, e.g. checkout (renders an <a>). */
   href?: string;
+  /** For external links that should leave the storefront in a new tab. */
+  target?: '_blank';
   /** With neither `to` nor `href`, renders a real <button>. */
   type?: 'button' | 'submit';
   disabled?: boolean;
@@ -69,6 +71,7 @@ export const Cta = ({
   to,
   prefetch,
   href,
+  target,
   type = 'button',
   disabled,
   onClick,
@@ -106,7 +109,12 @@ export const Cta = ({
   if (href !== undefined) {
     return (
       <Button asChild variant={variant} size={size} className={className}>
-        <a href={href} onClick={onClick}>
+        <a
+          href={href}
+          target={target}
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+          onClick={onClick}
+        >
           {label}
         </a>
       </Button>

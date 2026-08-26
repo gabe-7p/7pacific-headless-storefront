@@ -111,6 +111,16 @@
    * weight. */
   --font-display: 'Archivo Variable', 'Archivo', 'Arial Narrow', sans-serif;
   --font-display--font-variation-settings: 'wdth' 75; /* Archivo Condensed */
+  /* Campaign faces — two more cuts of the same Archivo variable file, for
+   * drop/campaign pages only (see ui-components.md → Terminology for the
+   * scoped weight/usage exception): "Archivo Narrow" (wdth 87.5, section
+   * titles at 450 via Heading's campaign variant) and full-width Archivo
+   * (wdth 100, oversized stat figures at Light). wdth is pinned on both so
+   * neither inherits an ancestor's width axis. */
+  --font-display-narrow: 'Archivo Variable', 'Archivo', 'Arial Narrow', sans-serif;
+  --font-display-narrow--font-variation-settings: 'wdth' 87.5;
+  --font-archivo: 'Archivo Variable', 'Archivo', sans-serif;
+  --font-archivo--font-variation-settings: 'wdth' 100;
   --font-sans: 'Inter Variable', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
