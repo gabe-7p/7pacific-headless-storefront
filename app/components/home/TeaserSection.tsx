@@ -7,12 +7,17 @@ import { Heading } from '~/components/common/Heading';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { SpecLine } from '~/components/common/SpecLine';
 
-/** The photo + overlay copy for one teaser card; the CTA is passed separately
+/** Card background — same union shape as CoreValue's media panel. */
+export type TeaserCardMedia =
+  | { kind: 'image'; url: string; width: number; height: number }
+  | { kind: 'video'; src: string; poster?: string };
+
+/** The media + overlay copy for one teaser card; the CTA is passed separately
     (as a render slot) because CTA behavior is per-instance, not content. */
 export type TeaserCardContent = {
   eyebrow: string;
   title: string;
-  image: { url: string; width: number; height: number };
+  media: TeaserCardMedia;
 };
 
 type TeaserSectionCard = {
@@ -33,25 +38,38 @@ type TeaserSectionProps = {
 };
 
 /**
- * One teaser card: photo with a centered overlay — mono eyebrow, display
- * title, and the same xs outline Cta the tenet cards use. The shared aspect
- * ratio (not natural image height) is what keeps the two opposite-orientation
- * photos rendering as equal cards. It lives on the WRAPPER, with the image
- * absolutely filling it — Hydrogen's <Image> sets an inline aspect-ratio from
- * its width/height props, which beats any aspect-* class on the img itself.
+ * One teaser card: photo or looping video with a centered overlay — mono
+ * eyebrow, display title, and the same xs outline Cta the tenet cards use.
+ * The shared aspect ratio (not natural media height) is what keeps
+ * opposite-orientation media rendering as equal cards. It lives on the
+ * WRAPPER, with the media absolutely filling it (object-cover) — Hydrogen's
+ * <Image> sets an inline aspect-ratio from its width/height props, which
+ * beats any aspect-* class on the img itself.
  */
 const Card = ({ content, children }: { content: TeaserCardContent; children: ReactNode }) => (
   <div className="relative aspect-[4/5] overflow-hidden md:aspect-[10/13]">
-    <Image
-      src={content.image.url}
-      width={content.image.width}
-      height={content.image.height}
-      alt=""
-      loading="lazy"
-      sizes="(min-width: 768px) 50vw, 100vw"
-      className="absolute inset-0 h-full w-full object-cover"
-    />
-    {/* Legibility wash over the photo — same device as the Hero's, a touch
+    {content.media.kind === 'video' ? (
+      <video
+        src={content.media.src}
+        poster={content.media.poster}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : (
+      <Image
+        src={content.media.url}
+        width={content.media.width}
+        height={content.media.height}
+        alt=""
+        loading="lazy"
+        sizes="(min-width: 768px) 50vw, 100vw"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+    )}
+    {/* Legibility wash over the media — same device as the Hero's, a touch
         stronger (15% vs 10%) for the busier archive shots. */}
     <div className="pointer-events-none absolute inset-0 bg-black/15" />
     {/* text-ink-night on the wrapper so the outline CTA inherits it, the same
