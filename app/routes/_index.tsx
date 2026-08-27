@@ -53,7 +53,11 @@ const Homepage = () => {
       {/* The Name/Spec marquee sits flush below the hero, painted on load
           (no scroll-reveal gate) so the banner never pops in or shifts. */}
       <NameSpecBanner />
-      {/* Drop 02 teaser sits right under the banner, near the fold — painted
+      {/* Baseline intro sits right under the banner, near the fold — painted
+          on load (no scroll-reveal gate) like the other fold sections; it
+          deepens the story (drop page + film). */}
+      <BaselineIntro />
+      {/* Drop 02 teaser follows the Baseline intro, near the fold — painted
           on load (no scroll-reveal gate) so the countdown never pops in.
           Toggled by FEATURE_FLAGS.dropTwoTeaser (content/flags.ts). */}
       {FEATURE_FLAGS.dropTwoTeaser && <DropTwo />}
@@ -62,12 +66,6 @@ const Homepage = () => {
           than staying invisible until 30% scrolls into view. The lower
           sections keep the scroll-triggered fade. */}
       <FirstDrop products={products} />
-      {/* Baseline intro sits right below the grid it introduces — the grid
-          stays the painted-on-load fold content; this deepens the story
-          (drop page + film) with the other scroll-fade sections. */}
-      <FadeIn>
-        <BaselineIntro />
-      </FadeIn>
       <FadeIn>
         <CoreValues />
       </FadeIn>

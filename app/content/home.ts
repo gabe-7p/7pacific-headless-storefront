@@ -126,8 +126,8 @@ export const HOME_DROP_TWO = {
 } as const;
 
 /**
- * BASELINE intro teaser — the second TeaserSection instance, below the product
- * grid: two cards pointing deeper into the live ED. 01 story (the /drops/baseline
+ * BASELINE intro teaser — the second TeaserSection instance, below the Name/Spec
+ * banner: two cards pointing deeper into the live ED. 01 story (the /drops/baseline
  * editorial page and the collection film on YouTube — the same film the drop
  * page's overlay links). No countdown: the collection is live. Card photos are
  * placeholders (the Drop 02 shots, swapped left/right) pending final selects.
