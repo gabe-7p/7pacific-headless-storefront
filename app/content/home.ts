@@ -156,7 +156,7 @@ export const HOME_BASELINE_INTRO = {
       },
     },
     film: {
-      eyebrow: '5 min · Gabe Dalessandro, Founder',
+      eyebrow: 'Gabe Dalessandro, Founder',
       title: 'Why We Built It',
       /** External — opens the founder deep-dive on YouTube in a new tab. */
       cta: {
