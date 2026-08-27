@@ -138,9 +138,9 @@ export const HOME_BASELINE_INTRO = {
   subtitle: 'Our first collection. The kit you start with, plus a few innovations for athletes.',
   cards: {
     collection: {
-      // Mirrors the drop page's eyebrow so the two surfaces read as one drop.
-      eyebrow: 'ED. 01 · H2-26',
-      title: 'Baseline First Collection',
+      // Same "ED. 01 · <status>" device as the drop page's closer eyebrow.
+      eyebrow: 'ED. 01 · Available now',
+      title: 'The First Collection',
       cta: { label: 'See the Collection', href: STORE_LINKS.baselineDrop },
       image: {
         url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
@@ -149,10 +149,13 @@ export const HOME_BASELINE_INTRO = {
       },
     },
     film: {
-      eyebrow: 'Filmed in training',
-      title: 'The Film',
-      /** External — opens the collection film on YouTube in a new tab. */
-      cta: { label: 'Watch', href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s' },
+      eyebrow: '5 min · Gabe Dalessandro, Founder',
+      title: 'Why We Built It',
+      /** External — opens the founder deep-dive on YouTube in a new tab. */
+      cta: {
+        label: 'Watch the Deep Dive',
+        href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s',
+      },
       image: {
         url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`,
         width: 2048,
