@@ -1,8 +1,8 @@
 /**
  * Homepage marketing copy + section asset URLs (typed constants, not JSX).
  * The Impulse-parity sections (hero, first drop, core values, brand banner)
- * mirror the live theme; the Name/Spec marquee and Drop 02 teaser are
- * post-migration additions. Asset URLs are the same Shopify Files / CDN assets
+ * mirror the live theme; the Name/Spec marquee, Drop 02 teaser, and Baseline
+ * intro teaser are post-migration additions. Asset URLs are the same Shopify Files / CDN assets
  * the live theme uses — change a value here, the homepage follows.
  */
 
@@ -122,6 +122,42 @@ export const HOME_DROP_TWO = {
     emailPlaceholder: 'Email address',
     submitLabel: 'Get on the List',
     successMessage: 'You’re on it. See you at first light.',
+  },
+} as const;
+
+/**
+ * BASELINE intro teaser — the second TeaserSection instance, below the product
+ * grid: two cards pointing deeper into the live ED. 01 story (the /drops/baseline
+ * editorial page and the collection film on YouTube — the same film the drop
+ * page's overlay links). No countdown: the collection is live. Card photos are
+ * placeholders (the Drop 02 shots, swapped left/right) pending final selects.
+ */
+export const HOME_BASELINE_INTRO = {
+  heading: 'Baseline: ED. 01',
+  subtitle: 'The first collection. Everything after gets measured against it.',
+  cards: {
+    collection: {
+      // Mirrors the drop page's eyebrow so the two surfaces read as one drop.
+      eyebrow: 'ED. 01 · H2-26',
+      title: 'Baseline First Collection',
+      cta: { label: 'See the Collection', href: STORE_LINKS.baselineDrop },
+      image: {
+        url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
+        width: 1638,
+        height: 2048,
+      },
+    },
+    film: {
+      eyebrow: 'Filmed in training',
+      title: 'The Film',
+      /** External — opens the collection film on YouTube in a new tab. */
+      cta: { label: 'Watch', href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s' },
+      image: {
+        url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`,
+        width: 2048,
+        height: 1638,
+      },
+    },
   },
 } as const;
 

@@ -1,6 +1,7 @@
 import { useLoaderData } from 'react-router';
 
 import { FadeIn, MotionProvider } from '~/components/common/Motion';
+import { BaselineIntro } from '~/components/home/BaselineIntro';
 import { CoreValues } from '~/components/home/CoreValues';
 import { DropTwo } from '~/components/home/DropTwo';
 import { FirstDrop } from '~/components/home/FirstDrop';
@@ -61,6 +62,12 @@ const Homepage = () => {
           than staying invisible until 30% scrolls into view. The lower
           sections keep the scroll-triggered fade. */}
       <FirstDrop products={products} />
+      {/* Baseline intro sits right below the grid it introduces — the grid
+          stays the painted-on-load fold content; this deepens the story
+          (drop page + film) with the other scroll-fade sections. */}
+      <FadeIn>
+        <BaselineIntro />
+      </FadeIn>
       <FadeIn>
         <CoreValues />
       </FadeIn>

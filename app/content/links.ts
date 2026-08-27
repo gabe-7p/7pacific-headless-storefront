@@ -19,6 +19,8 @@ export const STORE_LINKS = {
   /** Drop 02 teaser card target — the FW26 FIRST LIGHT teaser page. Point it
       at the /collections/first-light collection once the drop is live. */
   firstLight: '/drops/first-light',
+  /** Homepage BASELINE intro card target — the Baseline editorial drop page. */
+  baselineDrop: '/drops/baseline',
 } as const;
 
 /**
