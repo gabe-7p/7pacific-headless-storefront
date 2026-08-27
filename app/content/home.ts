@@ -134,7 +134,8 @@ export const HOME_DROP_TWO = {
  */
 export const HOME_BASELINE_INTRO = {
   heading: 'Baseline: ED. 01',
-  subtitle: 'The first collection. Everything after gets measured against it.',
+  // Mirrors the opening of BASELINE_DROP.intro (content/baseline-drop.ts).
+  subtitle: 'Our first collection. The kit you start with, plus a few innovations for athletes.',
   cards: {
     collection: {
       // Mirrors the drop page's eyebrow so the two surfaces read as one drop.
