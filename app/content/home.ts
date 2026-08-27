@@ -134,13 +134,15 @@ export const HOME_DROP_TWO = {
  */
 export const HOME_BASELINE_INTRO = {
   heading: 'Baseline: ED. 01',
-  // Mirrors the opening of BASELINE_DROP.intro (content/baseline-drop.ts).
-  subtitle: 'Our first collection. The kit you start with, plus a few innovations for athletes.',
+  // The opening of BASELINE_DROP.intro (content/baseline-drop.ts), warmed up
+  // with the trailing hook per Gabe.
+  subtitle:
+    'Our first collection. The kit you start with, plus a few innovations for athletes you’re gonna love.',
   cards: {
     collection: {
       // Same "ED. 01 · <status>" device as the drop page's closer eyebrow.
       eyebrow: 'ED. 01 · Available now',
-      title: 'The First Collection',
+      title: 'Where We Started',
       cta: { label: 'See the Collection', href: STORE_LINKS.baselineDrop },
       image: {
         url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
