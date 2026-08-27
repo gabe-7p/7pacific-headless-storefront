@@ -142,7 +142,7 @@ export const HOME_BASELINE_INTRO = {
     collection: {
       // Same "ED. 01 · <status>" device as the drop page's closer eyebrow.
       eyebrow: 'ED. 01 · Available now',
-      title: 'Where We Started',
+      title: 'Where It Starts',
       cta: { label: 'See the Collection', href: STORE_LINKS.baselineDrop },
       image: {
         url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
