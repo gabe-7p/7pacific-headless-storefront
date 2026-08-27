@@ -1,11 +1,12 @@
 /**
  * Homepage marketing copy + section asset URLs (typed constants, not JSX).
  * The Impulse-parity sections (hero, first drop, core values, brand banner)
- * mirror the live theme; the Name/Spec marquee and Drop 02 teaser are
- * post-migration additions. Asset URLs are the same Shopify Files / CDN assets
+ * mirror the live theme; the Name/Spec marquee, Drop 02 teaser, and Baseline
+ * intro teaser are post-migration additions. Asset URLs are the same Shopify Files / CDN assets
  * the live theme uses — change a value here, the homepage follows.
  */
 
+import { BASELINE_DROP } from '~/content/baseline-drop';
 import { DROP_TWO_LAUNCH } from '~/content/drop-two';
 import { STORE_LINKS } from '~/content/links';
 import { MEMBERSHIP_PITCH } from '~/content/membership';
@@ -96,7 +97,8 @@ export const HOME_DROP_TWO = {
       eyebrow: 'Drops 09.13.26',
       title: 'Fall Gear',
       cta: { label: 'Discover', href: STORE_LINKS.firstLight },
-      image: {
+      media: {
+        kind: 'image',
         url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`,
         width: 2048,
         height: 1638,
@@ -107,7 +109,8 @@ export const HOME_DROP_TWO = {
       title: 'Coming Soon',
       /** No href — the card CTA opens the waitlist dialog instead. */
       cta: { label: 'Get on the List' },
-      image: {
+      media: {
+        kind: 'image',
         url: `${CDN}/chirstian-on-stairs.jpg?v=1785783387`,
         width: 1638,
         height: 2048,
@@ -122,6 +125,47 @@ export const HOME_DROP_TWO = {
     emailPlaceholder: 'Email address',
     submitLabel: 'Get on the List',
     successMessage: 'You’re on it. See you at first light.',
+  },
+} as const;
+
+/**
+ * BASELINE intro teaser — the second TeaserSection instance, below the Name/Spec
+ * banner: two cards pointing deeper into the live ED. 01 story (the /drops/baseline
+ * editorial page and the founder deep-dive on YouTube). No countdown: the
+ * collection is live. The right card loops the drop page's film in the card
+ * (BASELINE_DROP.film — one source for the ED. 01 recap video).
+ */
+export const HOME_BASELINE_INTRO = {
+  heading: 'Baseline: ED. 01',
+  // The opening of BASELINE_DROP.intro (content/baseline-drop.ts), warmed up
+  // with the trailing hook per Gabe.
+  subtitle:
+    'Our first collection. The kit you start with, plus a few innovations for athletes you’re gonna love.',
+  cards: {
+    collection: {
+      // Same "ED. 01 · <status>" device as the drop page's closer eyebrow.
+      eyebrow: 'ED. 01 · Available now',
+      title: 'Where It Starts',
+      cta: { label: 'See the Collection', href: STORE_LINKS.baselineDrop },
+      // Shopify file 53003545477437, picked by Gabe (2026-08-26).
+      media: {
+        kind: 'image',
+        url: `${CDN}/cole-running-from-behind-test.png?v=1787810904`,
+        width: 2616,
+        height: 3276,
+      },
+    },
+    film: {
+      eyebrow: 'Gabe Dalessandro, Founder',
+      title: 'Why We Built It',
+      /** External — opens the founder deep-dive on YouTube in a new tab. */
+      cta: {
+        label: 'Watch the Deep Dive',
+        href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s',
+      },
+      /** The drop page's film, looping muted in the card (object-cover). */
+      media: BASELINE_DROP.film,
+    },
   },
 } as const;
 

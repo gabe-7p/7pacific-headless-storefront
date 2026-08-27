@@ -1,6 +1,7 @@
 import { useLoaderData } from 'react-router';
 
 import { FadeIn, MotionProvider } from '~/components/common/Motion';
+import { BaselineIntro } from '~/components/home/BaselineIntro';
 import { CoreValues } from '~/components/home/CoreValues';
 import { DropTwo } from '~/components/home/DropTwo';
 import { FirstDrop } from '~/components/home/FirstDrop';
@@ -52,7 +53,11 @@ const Homepage = () => {
       {/* The Name/Spec marquee sits flush below the hero, painted on load
           (no scroll-reveal gate) so the banner never pops in or shifts. */}
       <NameSpecBanner />
-      {/* Drop 02 teaser sits right under the banner, near the fold — painted
+      {/* Baseline intro sits right under the banner, near the fold — painted
+          on load (no scroll-reveal gate) like the other fold sections; it
+          deepens the story (drop page + film). */}
+      <BaselineIntro />
+      {/* Drop 02 teaser follows the Baseline intro, near the fold — painted
           on load (no scroll-reveal gate) so the countdown never pops in.
           Toggled by FEATURE_FLAGS.dropTwoTeaser (content/flags.ts). */}
       {FEATURE_FLAGS.dropTwoTeaser && <DropTwo />}
