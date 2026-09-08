@@ -131,8 +131,31 @@ const Product = () => {
 
   // Dedicated per-product hero images (the theme's Background Image / …Mobile),
   // falling back to the variant image when a product has none.
-  const heroDesktop = getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
-  const heroMobile = getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
+  // TEMP hero-shot preview (Gabe, 2026-09-08): candidate quarterzip hero
+  // photography served from /public so it can be reviewed on a deploy without
+  // going through Shopify Files first. Once shots are final: upload them to
+  // Shopify Files, set custom.hero_image / custom.hero_image_mobile on each
+  // product, then delete this map and the /public JPEGs — the metafield path
+  // below is the permanent mechanism.
+  const heroOverrides: Record<
+    string,
+    Partial<Record<'desktop' | 'mobile', { url: string; width: number; height: number }>>
+  > = {
+    'daybreak-quarterzip-battleship-gray': {
+      desktop: { url: '/alex_grey_qz_standing-test.jpg', width: 4000, height: 2386 },
+      mobile: { url: '/alex_grey_qz_standing-mobile-test.jpg', width: 3733, height: 5472 },
+    },
+    'daybreak-quarterzip-dusty-rose': {
+      desktop: { url: '/cam-qz-test.jpg', width: 4000, height: 2882 },
+      mobile: { url: '/cam-qz.jpg', width: 3477, height: 4895 },
+    },
+  };
+  const heroOverride = heroOverrides[product.handle]?.desktop;
+  const heroMobileOverride = heroOverrides[product.handle]?.mobile;
+  const heroDesktop =
+    heroOverride ?? getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
+  const heroMobile =
+    heroMobileOverride ?? getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
 
   return (
     <>
