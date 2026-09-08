@@ -424,7 +424,7 @@ const AARON_LEE = {
       { label: 'Base', value: 'Seattle' },
       // His audience lives on TikTok (@rocklee.fit) — IG is the smaller channel.
       { label: 'Reach', value: '28.5K' },
-      { label: 'Series Tagline', value: 'My Wellness Diary' },
+      { label: 'Series Tagline', value: 'POV: You Train Like An Athlete' },
     ],
   },
   instagram: {
