@@ -383,10 +383,11 @@ const AARON_LEE = {
   transmissionLine: 'Seattle → San Francisco · 09.08.2026',
   eyebrowLine: 'Official // Athlete Signing · 09.08.2026',
   headline: { lead: 'Welcome to the team,', name: 'Aaron Lee.' },
-  body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. You built your foundation \
-  the D1 way at Oregon, and instead of leaving it there, you turned the daily work into a diary: the lifts, the recovery, the \
-  standards that don’t drop when the season ends. You’re showing people how to train like an athlete, and that’s exactly how \
-  we build. Scroll down to watch a personal message from us about why we’re fired up to have you on the team.',
+  body: 'We created this page to welcome you to the 7Pacific Athlete Creator team. You built your foundation the D1 way \
+  like Oregon does it. Instead of leaving it there, you turned that knowledge and discipline into the lifts, the recovery, \
+  and the standards that your following loves. You’re showing people how to train like an athlete, and that’s exactly who \
+  we’re building for: the athletes. Scroll down to watch a personal message from us about why we’re fired up to have you \
+  on the team.',
   signedLine: 'Signed · Status: Confirmed',
   hero: {
     modeLabel: 'Mode 01 · Action',
