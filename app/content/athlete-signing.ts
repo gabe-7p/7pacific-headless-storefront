@@ -365,12 +365,84 @@ export const OWEN_PLATT = {
   },
 } satisfies AthleteSigningContent;
 
+/**
+ * Aaron Lee — Seattle-based training creator (@rocklee.fit, "My wellness
+ * diary"): former D1 athlete at Oregon (football), now documenting the daily
+ * work and teaching athletes to train like athletes ("Train Like an Athlete"
+ * workout breakdowns). ~28.5K on TikTok (@rocklee.fit).
+ */
+const AARON_LEE = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/aaron-lee',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/aaron-lee',
+  },
+  transmissionLine: 'Seattle → San Francisco · 09.08.2026',
+  eyebrowLine: 'Official // Athlete Signing · 09.08.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Aaron Lee.' },
+  body: 'It’s official. We created this page to welcome you to the 7Pacific Athlete Creator team. You built your foundation \
+  the D1 way at Oregon, and instead of leaving it there, you turned the daily work into a diary: the lifts, the recovery, the \
+  standards that don’t drop when the season ends. You’re showing people how to train like an athlete, and that’s exactly how \
+  we build. Scroll down to watch a personal message from us about why we’re fired up to have you on the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Seattle · 47.61N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: {
+      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
+      // real dimensions) when Aaron's photo is uploaded.
+      src: '',
+      alt: 'Aaron Lee mid-training session',
+      width: 1920,
+      height: 1080,
+    },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // PLACEHOLDER — the Golden Gate homepage video until Aaron's founder
+    // message is recorded; swap src/poster (and captions) when uploaded.
+    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+    poster: '',
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:30',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    stat: { label: 'Foundation', value: 'D1', verified: true },
+    scale: { markerPercent: 85, markerLabel: 'Oregon FB' },
+    fields: [
+      { label: 'Discipline', value: 'Athletic Training' },
+      { label: 'Base', value: 'Seattle' },
+      // His audience lives on TikTok (@rocklee.fit) — IG is the smaller channel.
+      { label: 'Reach', value: '28.5K' },
+      { label: 'Series Tagline', value: 'My Wellness Diary' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'rocklee.fit',
+    tagline: 'My wellness diary. Former D1 athlete.',
+    series: ['Train Like an Athlete', 'My Gym Diary'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
 /** URL handle → signing page content. Adding an athlete = one line here. */
 const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
   'josh-wyche': JOSH_WYCHE,
   'kenneth-pierce': KENNETH_PIERCE,
   'owen-platt': OWEN_PLATT,
+  'aaron-lee': AARON_LEE,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
