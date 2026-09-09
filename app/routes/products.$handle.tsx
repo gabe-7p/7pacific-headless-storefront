@@ -142,8 +142,8 @@ const Product = () => {
     Partial<Record<'desktop' | 'mobile', { url: string; width: number; height: number }>>
   > = {
     'daybreak-quarterzip-battleship-gray': {
-      desktop: { url: '/alex_grey_qz_standing-test.jpg', width: 4000, height: 2386 },
-      mobile: { url: '/alex_grey_qz_standing-mobile-test.jpg', width: 3733, height: 5472 },
+      desktop: { url: '/qz-grey/1-desktop.jpg', width: 2400, height: 1707 },
+      mobile: { url: '/qz-grey/1-mobile.jpg', width: 1418, height: 2000 },
     },
     'daybreak-quarterzip-dusty-rose': {
       desktop: { url: '/cam-qz-test.jpg', width: 4000, height: 2882 },
@@ -152,6 +152,49 @@ const Product = () => {
   };
   const heroOverride = heroOverrides[product.handle]?.desktop;
   const heroMobileOverride = heroOverrides[product.handle]?.mobile;
+
+  // TEMP detail-card preview (same lifecycle as heroOverrides above): the grey
+  // quarterzip's PRODUCT DETAILS tiles from Gabe's website_test/grey shoot,
+  // numbered in tile order. Captions restate the custom.product_details
+  // metafield plus one new card (Small Graphic Detail) that doesn't exist in
+  // Shopify yet — when these shots are final, upload them to Shopify Files and
+  // write this full card list (CDN imageUrls) to the metafield, then delete
+  // this override.
+  const detailOverrides: Record<string, Array<ProductDetailCard>> = {
+    'daybreak-quarterzip-battleship-gray': [
+      {
+        imageUrl: '/qz-grey/2.jpg',
+        caption: 'Athletic Fit',
+        subcaption: 'The right amount of room for any training session',
+      },
+      {
+        imageUrl: '/qz-grey/3.jpg',
+        caption: 'Underarm Perforations',
+        subcaption: 'Airflow once you start upping the intensity',
+      },
+      {
+        imageUrl: '/qz-grey/4.jpg',
+        caption: 'Hidden Back Vent',
+        subcaption: 'Breathability where you sweat the most',
+      },
+      {
+        imageUrl: '/qz-grey/5.jpg',
+        caption: 'Hidden Thumbholes',
+        subcaption: 'Only notice them when you need them',
+      },
+      {
+        imageUrl: '/qz-grey/6.jpg',
+        caption: 'Locked in Drawcords',
+        subcaption: 'When you need everything secured and not moving',
+      },
+      {
+        imageUrl: '/qz-grey/7.jpg',
+        caption: 'Small Graphic Detail',
+        subcaption: 'Stands out just enough',
+      },
+    ],
+  };
+  const detailCards = detailOverrides[product.handle] ?? productDetails;
   const heroDesktop =
     heroOverride ?? getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
   const heroMobile =
@@ -251,7 +294,7 @@ const Product = () => {
         </Container>
       </section>
       <StickyAddToCart selectedVariant={selectedVariant} />
-      {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
+      {detailCards && detailCards.length > 0 && <ProductDetails cards={detailCards} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
       <Suspense fallback={null}>
