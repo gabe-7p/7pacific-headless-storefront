@@ -395,24 +395,22 @@ const AARON_LEE = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
-      // real dimensions) when Aaron's photo is uploaded.
-      src: '',
+      src: `${CDN}/aaron_lee_athlete_creator_avatar.png`,
       alt: 'Aaron Lee mid-training session',
-      width: 1920,
-      height: 1080,
+      width: 1024,
+      height: 1536,
     },
   },
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Aaron's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // Aaron's founder message in Shopify Files (portrait, 22s) — Shopify's
+    // 720p transcode; poster is the custom thumbnail set in Shopify admin.
+    src: 'https://cdn.shopify.com/videos/c/vp/8d5feed0d0594eecbb7aede436dde043/8d5feed0d0594eecbb7aede436dde043.HD-720p-3.0Mbps-93935029.mp4',
+    poster: `${CDN}/preview_images/Screenshot_2026-09-09_at_2.28.15_PM.png`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:22',
   },
   readout: {
     number: '02',
