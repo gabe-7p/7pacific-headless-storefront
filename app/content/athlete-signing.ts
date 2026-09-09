@@ -66,7 +66,11 @@ export type AthleteSigningContent = {
     camLine: string;
     /** Mobile-only caption row under the panel. */
     shotLine: string;
-    image: { src: string; alt: string; width: number; height: number };
+    /**
+     * `fit: 'contain'` letterboxes the full image inside the panel instead of
+     * cover-cropping it — for shots whose edges can't be lost (default cover).
+     */
+    image: { src: string; alt: string; width: number; height: number; fit?: 'cover' | 'contain' };
   };
   founderVideo: {
     number: string;
@@ -365,12 +369,85 @@ export const OWEN_PLATT = {
   },
 } satisfies AthleteSigningContent;
 
+/**
+ * Aaron Lee — Seattle-based training creator (@rocklee.fit, "My wellness
+ * diary"): former D1 athlete at Oregon (football), now documenting the daily
+ * work and teaching athletes to train like athletes ("Train Like an Athlete"
+ * workout breakdowns). ~28.5K on TikTok (@rocklee.fit).
+ */
+const AARON_LEE = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/aaron-lee',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/aaron-lee',
+  },
+  transmissionLine: 'Seattle → San Francisco · 09.08.2026',
+  eyebrowLine: 'Official // Athlete Signing · 09.08.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Aaron Lee.' },
+  body: 'We created this page to welcome you to the 7Pacific Athlete Creator team. You built your foundation the D1 way \
+  like Oregon does it. Instead of leaving it there, you turned that knowledge and discipline into the lifts, the recovery, \
+  and the standards that your following loves. You’re showing people how to train like an athlete, and that’s exactly who \
+  we’re building for: the athletes. Scroll down to watch a personal message from us about why we’re fired up to have you \
+  on the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Seattle · 47.61N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: {
+      src: `${CDN}/aaron_lee_athlete_creator_avatar.png`,
+      alt: 'Aaron Lee mid-training session',
+      width: 1024,
+      height: 1536,
+      // Full-figure shot — cover-cropping cuts his hands and feet off.
+      fit: 'contain',
+    },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // Aaron's founder message in Shopify Files (portrait, 22s) — Shopify's
+    // 720p transcode; poster is the custom thumbnail set in Shopify admin.
+    src: 'https://cdn.shopify.com/videos/c/vp/8d5feed0d0594eecbb7aede436dde043/8d5feed0d0594eecbb7aede436dde043.HD-720p-3.0Mbps-93935029.mp4',
+    poster: `${CDN}/preview_images/Screenshot_2026-09-09_at_2.28.15_PM.png`,
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:22',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    stat: { label: 'Foundation', value: 'D1', verified: true },
+    scale: { markerPercent: 85, markerLabel: 'Oregon FB' },
+    fields: [
+      { label: 'Discipline', value: 'Athletic Training' },
+      { label: 'Base', value: 'Seattle' },
+      // His audience lives on TikTok (@rocklee.fit) — IG is the smaller channel.
+      { label: 'Reach', value: '28.5K' },
+      { label: 'Series Tagline', value: 'POV: You Train Like An Athlete' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'rocklee.fit',
+    tagline: 'My wellness diary. Former D1 athlete.',
+    series: ['Train Like an Athlete', 'My Gym Diary'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
 /** URL handle → signing page content. Adding an athlete = one line here. */
 const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
   'josh-wyche': JOSH_WYCHE,
   'kenneth-pierce': KENNETH_PIERCE,
   'owen-platt': OWEN_PLATT,
+  'aaron-lee': AARON_LEE,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
