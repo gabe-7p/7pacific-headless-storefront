@@ -66,7 +66,11 @@ export type AthleteSigningContent = {
     camLine: string;
     /** Mobile-only caption row under the panel. */
     shotLine: string;
-    image: { src: string; alt: string; width: number; height: number };
+    /**
+     * `fit: 'contain'` letterboxes the full image inside the panel instead of
+     * cover-cropping it — for shots whose edges can't be lost (default cover).
+     */
+    image: { src: string; alt: string; width: number; height: number; fit?: 'cover' | 'contain' };
   };
   founderVideo: {
     number: string;
@@ -399,6 +403,8 @@ const AARON_LEE = {
       alt: 'Aaron Lee mid-training session',
       width: 1024,
       height: 1536,
+      // Full-figure shot — cover-cropping cuts his hands and feet off.
+      fit: 'contain',
     },
   },
   founderVideo: {

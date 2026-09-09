@@ -79,7 +79,10 @@ const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
         alt={hero.image.alt}
         loading="lazy"
         sizes="(min-width: 768px) 50vw, 100vw"
-        className="absolute inset-0 size-full object-cover"
+        className={cn(
+          'absolute inset-0 size-full',
+          hero.image.fit === 'contain' ? 'object-contain' : 'object-cover'
+        )}
       />
     )}
     <span className={cn(MONO_LABEL, 'text-support-night absolute top-4 left-4')}>
