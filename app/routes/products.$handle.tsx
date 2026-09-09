@@ -25,6 +25,7 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
+import { cn } from '~/lib/cn';
 import { getColorSwatches } from '~/lib/colors';
 import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
@@ -139,10 +140,12 @@ const Product = () => {
   // below is the permanent mechanism.
   const heroOverrides: Record<
     string,
-    Partial<Record<'desktop' | 'mobile', { url: string; width: number; height: number }>>
+    Partial<Record<'desktop' | 'mobile', { url: string; width?: number; height?: number }>>
   > = {
     'daybreak-quarterzip-battleship-gray': {
-      desktop: { url: '/qz-grey/1-desktop.jpg', width: 2400, height: 1543 },
+      // No intrinsic dimensions on purpose (Gabe, 2026-09-09) — paired with
+      // the natural-aspect section box below so the photo displays uncropped.
+      desktop: { url: '/qz-grey/1-desktop.jpg' },
       mobile: { url: '/qz-grey/1-mobile.jpg', width: 1418, height: 2000 },
     },
     'daybreak-quarterzip-dusty-rose': {
@@ -152,6 +155,16 @@ const Product = () => {
   };
   const heroOverride = heroOverrides[product.handle]?.desktop;
   const heroMobileOverride = heroOverrides[product.handle]?.mobile;
+
+  // TEMP (same lifecycle as heroOverrides): for the grey preview, the hero
+  // section adopts the photo's own aspect ratio (2400x1543) instead of the
+  // fixed 800px band, so object-cover has nothing to crop and the photo
+  // renders exactly as Gabe cropped it. Update the ratio if the file changes;
+  // below ~1245px wide the min-h floor still wins and edge-crops mildly.
+  const heroNaturalAspect =
+    product.handle === 'daybreak-quarterzip-battleship-gray'
+      ? 'min-[769px]:aspect-[2400/1543]'
+      : undefined;
 
   // TEMP detail-card preview (same lifecycle as heroOverrides above): the grey
   // quarterzip's PRODUCT DETAILS tiles from Gabe's website_test/grey shoot,
@@ -207,7 +220,12 @@ const Product = () => {
           (not a fixed height) so a tall buy card grows the hero instead of
           overflowing it under the header and past the fold; the vertical
           padding keeps the card inset like live's. */}
-      <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">
+      <section
+        className={cn(
+          'overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night',
+          heroNaturalAspect
+        )}
+      >
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
