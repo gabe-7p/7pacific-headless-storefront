@@ -142,7 +142,7 @@ const Product = () => {
     Partial<Record<'desktop' | 'mobile', { url: string; width: number; height: number }>>
   > = {
     'daybreak-quarterzip-battleship-gray': {
-      desktop: { url: '/qz-grey/1-desktop.jpg', width: 2400, height: 1000 },
+      desktop: { url: '/qz-grey/1-desktop.jpg', width: 2400, height: 1543 },
       mobile: { url: '/qz-grey/1-mobile.jpg', width: 1418, height: 2000 },
     },
     'daybreak-quarterzip-dusty-rose': {
