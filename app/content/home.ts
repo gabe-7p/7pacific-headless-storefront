@@ -22,9 +22,11 @@ export const HOME_HERO = {
    * The headline is verbatim from the approved Tone Chart product-line board.
    */
   headline: 'Built for the part of training nobody posts.',
-  /** Primary CTA, mono caps (the page's single Ember moment). Label + target per
-      Gabe (2026-07-19): the live hero's line, pointed at the Mint shorts. */
-  cta: { label: 'Own the Start', href: STORE_LINKS.shopShortsMint },
+  /** Primary CTA, mono caps (the page's single Ember moment). Label per Gabe
+      (2026-07-19): the live hero's line. Target is the BASELINE shop-all
+      collection (Gabe 2026-09-10) — it used to open a single colorway (Mint
+      shorts), which sent the hero's one Ember moment past the collection. */
+  cta: { label: 'Own the Start', href: STORE_LINKS.shopAll },
   /** Text-treatment secondary CTA per Gabe (2026-07-21) — a deliberate
       deviation from 7PA-232's single-CTA hero. Renders in chalk, so the
       one-Ember-moment rule still holds. */
