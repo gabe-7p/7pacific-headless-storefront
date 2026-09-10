@@ -24,6 +24,11 @@ export const BASELINE_DROP = {
 It’s lightweight, breathable, durable, and stands out just enough. We tested it for \
 months with real athletes before it earned a spot with us.',
 
+  /** Masthead CTA shown only where the masthead is NOT the drop page itself
+      — on /collections/baseline it sends shoppers to the editorial page (film,
+      receipts, the training standard) for the build story behind the kit. */
+  dropLink: { label: 'How We Built It', href: STORE_LINKS.baselineDrop },
+
   /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop (Shopify
       file 52942265516349 + its CDN poster frame). 720p rendition, the repo's
       standard for background loops (the 1080p cut is 43 MB). The mock's
