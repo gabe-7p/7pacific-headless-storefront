@@ -25,6 +25,7 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
+import { cn } from '~/lib/cn';
 import { getColorSwatches } from '~/lib/colors';
 import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
@@ -131,8 +132,86 @@ const Product = () => {
 
   // Dedicated per-product hero images (the theme's Background Image / …Mobile),
   // falling back to the variant image when a product has none.
-  const heroDesktop = getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
-  const heroMobile = getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
+  // TEMP hero-shot preview (Gabe, 2026-09-08): candidate quarterzip hero
+  // photography served from /public so it can be reviewed on a deploy without
+  // going through Shopify Files first. Once shots are final: upload them to
+  // Shopify Files, set custom.hero_image / custom.hero_image_mobile on each
+  // product, then delete this map and the /public JPEGs — the metafield path
+  // below is the permanent mechanism.
+  const heroOverrides: Record<
+    string,
+    Partial<Record<'desktop' | 'mobile', { url: string; width?: number; height?: number }>>
+  > = {
+    'daybreak-quarterzip-battleship-gray': {
+      // No intrinsic dimensions on purpose (Gabe, 2026-09-09) — paired with
+      // the natural-aspect section box below so the photo displays uncropped.
+      desktop: { url: '/qz-grey/1-desktop.jpg' },
+      mobile: { url: '/qz-grey/1-mobile.jpg', width: 1418, height: 2000 },
+    },
+    'daybreak-quarterzip-dusty-rose': {
+      desktop: { url: '/cam-qz-test.jpg', width: 4000, height: 2882 },
+      mobile: { url: '/cam-qz.jpg', width: 3477, height: 4895 },
+    },
+  };
+  const heroOverride = heroOverrides[product.handle]?.desktop;
+  const heroMobileOverride = heroOverrides[product.handle]?.mobile;
+
+  // TEMP (same lifecycle as heroOverrides): for the grey preview, the hero
+  // section adopts the photo's own aspect ratio (2400x1543) instead of the
+  // fixed 800px band, so object-cover has nothing to crop and the photo
+  // renders exactly as Gabe cropped it. Update the ratio if the file changes;
+  // below ~1245px wide the min-h floor still wins and edge-crops mildly.
+  const heroNaturalAspect =
+    product.handle === 'daybreak-quarterzip-battleship-gray'
+      ? 'min-[769px]:aspect-[2400/1543]'
+      : undefined;
+
+  // TEMP detail-card preview (same lifecycle as heroOverrides above): the grey
+  // quarterzip's PRODUCT DETAILS tiles from Gabe's website_test/grey shoot,
+  // numbered in tile order. Captions restate the custom.product_details
+  // metafield plus one new card (Small Graphic Detail) that doesn't exist in
+  // Shopify yet — when these shots are final, upload them to Shopify Files and
+  // write this full card list (CDN imageUrls) to the metafield, then delete
+  // this override.
+  const detailOverrides: Record<string, Array<ProductDetailCard>> = {
+    'daybreak-quarterzip-battleship-gray': [
+      {
+        imageUrl: '/qz-grey/2.jpg',
+        caption: 'Athletic Fit',
+        subcaption: 'The right amount of room for any training session',
+      },
+      {
+        imageUrl: '/qz-grey/3.jpg',
+        caption: 'Underarm Perforations',
+        subcaption: 'Airflow once you start upping the intensity',
+      },
+      {
+        imageUrl: '/qz-grey/4.jpg',
+        caption: 'Hidden Back Vent',
+        subcaption: 'Breathability where you sweat the most',
+      },
+      {
+        imageUrl: '/qz-grey/5.jpg',
+        caption: 'Hidden Thumbholes',
+        subcaption: 'Only notice them when you need them',
+      },
+      {
+        imageUrl: '/qz-grey/6.jpg',
+        caption: 'Locked in Drawcords',
+        subcaption: 'When you need everything secured and not moving',
+      },
+      {
+        imageUrl: '/qz-grey/7.jpg',
+        caption: 'Small Graphic Detail',
+        subcaption: 'Stands out just enough',
+      },
+    ],
+  };
+  const detailCards = detailOverrides[product.handle] ?? productDetails;
+  const heroDesktop =
+    heroOverride ?? getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
+  const heroMobile =
+    heroMobileOverride ?? getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
 
   return (
     <>
@@ -141,7 +220,12 @@ const Product = () => {
           (not a fixed height) so a tall buy card grows the hero instead of
           overflowing it under the header and past the fold; the vertical
           padding keeps the card inset like live's. */}
-      <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">
+      <section
+        className={cn(
+          'overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night',
+          heroNaturalAspect
+        )}
+      >
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
@@ -228,7 +312,7 @@ const Product = () => {
         </Container>
       </section>
       <StickyAddToCart selectedVariant={selectedVariant} />
-      {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
+      {detailCards && detailCards.length > 0 && <ProductDetails cards={detailCards} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
       <Suspense fallback={null}>
