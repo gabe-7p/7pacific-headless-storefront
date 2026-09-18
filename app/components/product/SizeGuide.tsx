@@ -62,12 +62,12 @@ export const SizeGuide = () => {
         </Eyebrow>
       </SheetTrigger>
       {/* The one translucent surface in the storefront: the product reads
-          through the panel at 70% with only a whisper of blur, so the guide
+          through the panel at 80% with only a whisper of blur, so the guide
           stays an overlay on the shot rather than a wall over it. */}
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full gap-0 border-l-border-subtle bg-field/70 p-0 text-ink backdrop-blur-xs sm:w-[560px] sm:max-w-none"
+        className="w-full gap-0 border-l-border-subtle bg-field/80 p-0 text-ink backdrop-blur-xs sm:w-[560px] sm:max-w-none"
         aria-describedby={undefined}
       >
         <SheetHeader className="relative shrink-0 items-center border-b border-border-subtle p-0 px-5 py-4">
@@ -104,8 +104,10 @@ export const SizeGuide = () => {
           </div>
           {/* Fixed layout so the three measurement columns stay equal instead of
               sizing to their widest value — auto layout makes the grid ragged
-              as the numbers change between units. */}
-          <table className="w-full table-fixed border border-border-subtle">
+              as the numbers change between units. The outline is Carbon so the
+              grid holds its edge against the product showing through; the
+              interior hairlines stay subtle so it reads as one device. */}
+          <table className="w-full table-fixed border border-ink">
             <caption className="sr-only">
               Body measurements in {unit === 'in' ? 'inches' : 'centimetres'}
             </caption>

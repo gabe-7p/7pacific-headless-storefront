@@ -49,17 +49,20 @@ does** rather than widening `Aside` with props for a single caller —
 Two gotchas either way: `sm:max-w-none` is required to beat the primitive's `sm:max-w-sm`,
 and `gap-0 p-0` kills its flex gap and padding so each section can re-apply `px-5`.
 
-**The size-guide drawer is the one translucent surface.** `bg-field/70` + `backdrop-blur-xs`
+**The size-guide drawer is the one translucent surface.** `bg-field/80` + `backdrop-blur-xs`
 — everywhere else stays opaque (`--color-field` / `--color-field-night`), and faded Carbon
 is banned outright in `tailwind.css`. It's an overlay _on_ the product, so the product reads
-through it; don't spread the treatment to other panels without a reason that specific.
+through it; don't spread the treatment to other panels without a reason that specific. The
+measurement table outlines itself in `border-ink` for the same reason — at this alpha a
+`border-border-subtle` frame loses its edge against whatever is showing through. Its interior
+hairlines stay subtle, so the device reads as one table rather than a grid of boxes.
 
-That alpha is as low as the type tolerates, and the `Sheet` scrim is what makes it work: the
-page is dimmed by `bg-black/50` _before_ the panel composites over it, which keeps the
-backdrop in a narrow band whatever the hero behind it. Measured across the live PDPs, the
-`text-support` copy lands 4.89–5.09:1 and `text-ink` 11.1–11.6:1 — AA holds, but only just
-for the support tier. **Going below 70%, or dropping the scrim, breaks it.** Re-measure the
-composite (not the token) before touching either.
+The `Sheet` scrim is what makes any of this survivable: the page is dimmed by `bg-black/50`
+_before_ the panel composites over it, which holds the backdrop in a narrow band whatever
+the hero behind it. Measured across the live PDPs at 80%, `text-support` lands 5.67–5.82:1
+and `text-ink` 12.9–13.2:1. **70% was the floor** — it measured 4.89–5.09:1, clearing AA's
+4.5:1 for the support tier by a hair and nothing more. Drop below that, or lose the scrim,
+and the body copy fails. Re-measure the composite (not the token) before touching either.
 
 ## Icons: match live, don't approximate
 
