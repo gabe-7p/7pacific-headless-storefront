@@ -1,6 +1,6 @@
 /**
  * The PDP size guide — the measurement table and "how to measure" explainer
- * behind the SIZE GUIDE link in the buy card (rendered by
+ * behind the SIZE GUIDE link on the buy card's SIZE row (rendered by
  * `components/product/SizeGuide`).
  *
  * Sizing is identical across the apparel range, so it lives here as a typed

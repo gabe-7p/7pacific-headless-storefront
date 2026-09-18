@@ -19,10 +19,9 @@ import { BrandBanner } from '~/components/product/BrandBanner';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { ProductDetails } from '~/components/product/ProductDetails';
-import { hasSizeOptions, ProductForm } from '~/components/product/ProductForm';
+import { ProductForm } from '~/components/product/ProductForm';
 import { ProductPrice } from '~/components/product/ProductPrice';
 import { Recommendations } from '~/components/product/Recommendations';
-import { SizeGuide } from '~/components/product/SizeGuide';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
@@ -206,13 +205,7 @@ const Product = () => {
                 </div>
               )}
               <div className="mt-4">
-                {/* The size guide rides the COLOR label's row — same caps tier,
-                    opposite edge. Hidden on One Size products, where an S–XL
-                    body chart would be misleading. */}
-                <div className="mb-2 flex items-baseline justify-between">
-                  <Eyebrow className="text-support">Color</Eyebrow>
-                  {hasSizeOptions(productOptions) && <SizeGuide />}
-                </div>
+                <Eyebrow className="mb-2 text-support">Color</Eyebrow>
                 <ColorSwatches
                   swatches={getColorSwatches(product.colorSiblings)}
                   currentHandle={product.handle}

@@ -20,7 +20,7 @@ type Unit = (typeof UNITS)[number];
 
 /**
  * The underlined caps link device shared by the trigger and the drawer's CLOSE
- * — the same type tier as the COLOR label the trigger sits beside. Tailwind v4's
+ * — the same type tier as the SIZE label the trigger sits beside. Tailwind v4's
  * preflight no longer gives a `<button>` a pointer cursor, so it's declared here.
  */
 const LINK_CLASS =
@@ -38,9 +38,9 @@ const UNIT_CELL =
 const DATA_CELL = 'py-3 text-center font-mono text-[11px] text-ink sm:text-[13px]';
 
 /**
- * The PDP size guide: an underlined SIZE GUIDE link beside the COLOR label that
- * opens a right-side drawer holding the measurement table (imperial/metric) and
- * the how-to-measure explainer.
+ * The PDP size guide: an underlined SIZE GUIDE link on the SIZE label's row
+ * (rendered by `ProductForm`) that opens a right-side drawer holding the
+ * measurement table (imperial/metric) and the how-to-measure explainer.
  *
  * It composes the `Sheet` primitive directly rather than going through
  * `layout/Aside` — Aside's recipe is fixed (350/450px, opaque field, left-aligned
@@ -62,11 +62,12 @@ export const SizeGuide = () => {
         </Eyebrow>
       </SheetTrigger>
       {/* The one translucent surface in the storefront: the product reads
-          through the panel, frosted, so the guide stays an overlay on it. */}
+          through the panel at 70% with only a whisper of blur, so the guide
+          stays an overlay on the shot rather than a wall over it. */}
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full gap-0 border-l-border-subtle bg-field/85 p-0 text-ink backdrop-blur-md sm:w-[560px] sm:max-w-none"
+        className="w-full gap-0 border-l-border-subtle bg-field/70 p-0 text-ink backdrop-blur-xs sm:w-[560px] sm:max-w-none"
         aria-describedby={undefined}
       >
         <SheetHeader className="relative shrink-0 items-center border-b border-border-subtle p-0 px-5 py-4">

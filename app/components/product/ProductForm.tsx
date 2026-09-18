@@ -1,7 +1,9 @@
 import { type MappedProductOptions } from '@shopify/hydrogen';
+import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
+import { SizeGuide } from '~/components/product/SizeGuide';
 import { cn } from '~/lib/cn';
 
 /** Map Shopify's verbose size values to the short labels the live PDP shows. */
@@ -22,18 +24,13 @@ const shortLabel = (value: string) => SIZE_LABELS[value.trim().toLowerCase()] ??
 const SIZE_CELL =
   'flex-1 border py-3 text-center text-[9.6px] font-semibold tracking-[0.3em] uppercase';
 
-const OptionLabel = ({ children }: { children: string }) => (
-  <Eyebrow className="mb-2 text-support">{children}</Eyebrow>
+/** The label row above a segmented bar; `action` rides its right edge. */
+const OptionLabel = ({ children, action }: { children: string; action?: ReactNode }) => (
+  <div className="mb-2 flex items-baseline justify-between">
+    <Eyebrow className="text-support">{children}</Eyebrow>
+    {action}
+  </div>
 );
-
-/**
- * Whether the product has a real size option — "Title" is Shopify's placeholder
- * option for single-variant products, so a product left with only that one is a
- * One Size item. Exported so the PDP's size-guide link can hide itself on those
- * without the two checks drifting apart.
- */
-export const hasSizeOptions = (productOptions: Array<MappedProductOptions>) =>
-  productOptions.some((option) => option.name !== 'Title');
 
 /**
  * Buy-box options (size selector), styled for the white PDP buy card as a
@@ -49,9 +46,10 @@ export const ProductForm = ({
 }) => {
   const navigate = useNavigate();
 
+  // "Title" is Shopify's placeholder option for single-variant products.
   const options = productOptions.filter((option) => option.name !== 'Title');
 
-  if (!hasSizeOptions(productOptions)) {
+  if (options.length === 0) {
     return (
       <div>
         <OptionLabel>Size</OptionLabel>
@@ -68,11 +66,16 @@ export const ProductForm = ({
 
   return (
     <div className="flex flex-col gap-6">
-      {options.map((option) => {
+      {options.map((option, index) => {
         const isSingle = option.optionValues.length === 1;
         return (
           <div key={option.name}>
-            <OptionLabel>{option.name}</OptionLabel>
+            {/* The size guide rides the first option's label row — the live
+                range is one option (Size) per product. It stays off the One
+                Size branch above, where an S-XL body chart would mislead. */}
+            <OptionLabel action={index === 0 ? <SizeGuide /> : undefined}>
+              {option.name}
+            </OptionLabel>
             <div className="flex w-full">
               {option.optionValues.map((value) => {
                 const { name, selected, available, exists, variantUriQuery } = value;

@@ -49,10 +49,17 @@ does** rather than widening `Aside` with props for a single caller —
 Two gotchas either way: `sm:max-w-none` is required to beat the primitive's `sm:max-w-sm`,
 and `gap-0 p-0` kills its flex gap and padding so each section can re-apply `px-5`.
 
-**The size-guide drawer is the one translucent surface.** `bg-field/85` + `backdrop-blur-md`
+**The size-guide drawer is the one translucent surface.** `bg-field/70` + `backdrop-blur-xs`
 — everywhere else stays opaque (`--color-field` / `--color-field-night`), and faded Carbon
 is banned outright in `tailwind.css`. It's an overlay _on_ the product, so the product reads
 through it; don't spread the treatment to other panels without a reason that specific.
+
+That alpha is as low as the type tolerates, and the `Sheet` scrim is what makes it work: the
+page is dimmed by `bg-black/50` _before_ the panel composites over it, which keeps the
+backdrop in a narrow band whatever the hero behind it. Measured across the live PDPs, the
+`text-support` copy lands 4.89–5.09:1 and `text-ink` 11.1–11.6:1 — AA holds, but only just
+for the support tier. **Going below 70%, or dropping the scrim, breaks it.** Re-measure the
+composite (not the token) before touching either.
 
 ## Icons: match live, don't approximate
 
