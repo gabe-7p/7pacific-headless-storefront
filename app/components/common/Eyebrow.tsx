@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { cn } from '~/lib/cn';
 
 type EyebrowProps = {
-  as?: 'p' | 'h4' | 'span';
+  as?: 'p' | 'h4' | 'span' | 'dt';
   className?: string;
   children: ReactNode;
 };

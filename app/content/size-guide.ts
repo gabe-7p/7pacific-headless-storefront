@@ -1,0 +1,87 @@
+/**
+ * The PDP size guide — the measurement table and "how to measure" explainer
+ * behind the SIZE GUIDE link on the buy card's SIZE row (rendered by
+ * `components/product/SizeGuide`).
+ *
+ * Sizing is identical across the apparel range, so it lives here as a typed
+ * constant rather than a per-product metafield. The numbers are body
+ * measurements (measure yourself), not garment measurements — Gabe supplied
+ * both unit tables, 2026-09-18; they are locked, edit them here only.
+ */
+
+import { BRAND } from '~/lib/brand';
+
+type SizeRow = {
+  /** Short size label, matching the PDP selector's cells (S/M/L/XL). */
+  size: string;
+  /** Chest range, already formatted with the spaced en-dash-style separator. */
+  chest: string;
+  waist: string;
+  hip: string;
+};
+
+type MeasurePoint = {
+  /** Body point, rendered as a caps label (ALL CAPS via CSS). */
+  label: string;
+  body: string;
+};
+
+export const SIZE_GUIDE = {
+  /** Drawer heading. Deliberately ungendered — the range is one line. */
+  title: 'Size Guide',
+  /** Table column heads, in render order; the first is the row label column. */
+  columns: ['Size', 'Chest', 'Waist', 'Hip'],
+  units: {
+    in: {
+      label: 'In',
+      rows: [
+        { size: 'S', chest: '34 - 36', waist: '29 - 31', hip: '33.5 - 35.5' },
+        { size: 'M', chest: '36.5 - 38.5', waist: '31.5 - 33.5', hip: '36.5 - 38.5' },
+        { size: 'L', chest: '39 - 41', waist: '34 - 36', hip: '39.5 - 41.5' },
+        { size: 'XL', chest: '41.5 - 43.5', waist: '36.5 - 38.5', hip: '42.5 - 44.5' },
+      ] satisfies ReadonlyArray<SizeRow>,
+    },
+    cm: {
+      label: 'Cm',
+      rows: [
+        { size: 'S', chest: '86 - 91', waist: '74 - 79', hip: '85 - 90' },
+        { size: 'M', chest: '93 - 98', waist: '80 - 85', hip: '93 - 98' },
+        { size: 'L', chest: '99 - 104', waist: '86 - 91', hip: '100 - 105' },
+        { size: 'XL', chest: '105 - 110', waist: '93 - 98', hip: '108 - 113' },
+      ] satisfies ReadonlyArray<SizeRow>,
+    },
+  },
+  howToMeasure: {
+    heading: 'How to measure',
+    body: 'To find your size, use a tape measure to measure your chest, waist, and hips. Then, use the size guide to find your size. Take note of the fit comments we have as well to ensure you want that fit. For example, an athletic fit will fit tighter than a relaxed fit.',
+    /**
+     * The measuring diagram. The CHEST / WAIST / HIP leader lines are baked
+     * into this asset, so nothing draws them in code — swapping the photo for
+     * one without them would silently drop the labels.
+     *
+     * Capped at width=1200 (2x the 560px panel); the source is a 3975px PNG
+     * and the CDN would otherwise serve all 9MB of it. `width`/`height` match
+     * the served size so the box reserves the right space before it loads.
+     */
+    image: {
+      url: `${BRAND.filesCdn}/side-guide-photo.png?width=1200`,
+      width: 1200,
+      height: 1500,
+      alt: 'The white tee, front on, with the chest, waist and hip measuring points marked',
+    },
+    points: [
+      {
+        label: 'Chest',
+        body: 'Measure around the fullest part of your chest, making sure the tape measure is parallel to the ground.',
+      },
+      {
+        label: 'Waist',
+        body: 'Measure around the narrowest part of your waist, above your hip bones.',
+      },
+      {
+        label: 'Hip',
+        body: 'Measure around the fullest part of your hips. Make sure the tape measure is parallel to the ground and fits comfortably.',
+      },
+    ] satisfies ReadonlyArray<MeasurePoint>,
+  },
+} as const;
