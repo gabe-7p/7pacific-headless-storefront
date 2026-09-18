@@ -54,12 +54,20 @@ export const SIZE_GUIDE = {
   howToMeasure: {
     heading: 'How to measure',
     body: 'Use a tape measure and these guidelines to determine your size. A friend might come in handy to help you with measuring. If you don’t have a tape measure, you can use a piece of string or ribbon and then measure it with a ruler. Please note: garments may vary due to design and manufacturing differences.',
-    /** Intrinsic dimensions of the Files asset — set so the box reserves space. */
+    /**
+     * The measuring diagram. The CHEST / WAIST / HIP leader lines are baked
+     * into this asset, so nothing draws them in code — swapping the photo for
+     * one without them would silently drop the labels.
+     *
+     * Capped at width=1200 (2x the 560px panel); the source is a 3975px PNG
+     * and the CDN would otherwise serve all 9MB of it. `width`/`height` match
+     * the served size so the box reserves the right space before it loads.
+     */
     image: {
-      url: `${BRAND.filesCdn}/white_shirt_side_walking.jpg`,
-      width: 1325,
-      height: 1656,
-      alt: 'Side view of a runner walking in the white tee',
+      url: `${BRAND.filesCdn}/side-guide-photo.png?width=1200`,
+      width: 1200,
+      height: 1500,
+      alt: 'The white tee, front on, with the chest, waist and hip measuring points marked',
     },
     points: [
       {
