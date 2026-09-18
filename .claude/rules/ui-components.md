@@ -35,6 +35,25 @@ It reads [`components.json`](../../components.json) (aliased to `~/*`, base colo
 - **Tokens live in `app/styles/tailwind.css`.** The shadcn base-color CSS variables (`--background`, `--primary`, `--border`, …) and the `@theme inline` mapping sit alongside the brand `@theme` tokens. They don't collide — keep both.
 - **Primitives are still presentational.** No data fetching or GraphQL in `components/ui/` — same boundary as every other component (see [module-boundaries.md](module-boundaries.md)).
 
+## Drawers: `Aside` vs. composing `Sheet` directly
+
+`layout/Aside` is the shared drawer, but it is a _fixed recipe_ — 350/450px wide, opaque
+`bg-background`, an `h-16` left-aligned header with the floating `CloseIcon`, and a
+`showHeader={false}` branch that also forces a transparent scrim. Reach for it when that
+recipe is what you want (the cart, the mobile menu). When a drawer needs its own width,
+ground, or header chrome, **compose `Sheet`/`SheetContent` directly the way `Aside` itself
+does** rather than widening `Aside` with props for a single caller —
+[`product/SizeGuide`](../../app/components/product/SizeGuide.tsx) is the worked example
+(560px, centred title, text CLOSE via `SheetClose`, `showCloseButton={false}`).
+
+Two gotchas either way: `sm:max-w-none` is required to beat the primitive's `sm:max-w-sm`,
+and `gap-0 p-0` kills its flex gap and padding so each section can re-apply `px-5`.
+
+**The size-guide drawer is the one translucent surface.** `bg-field/85` + `backdrop-blur-md`
+— everywhere else stays opaque (`--color-field` / `--color-field-night`), and faded Carbon
+is banned outright in `tailwind.css`. It's an overlay _on_ the product, so the product reads
+through it; don't spread the treatment to other panels without a reason that specific.
+
 ## Icons: match live, don't approximate
 
 Header/drawer glyphs live in [`app/components/common/icons.tsx`](../../app/components/common/icons.tsx), traced from the live theme's sprite (all on a `64x64` viewBox). lucide's hamburger, person, bag, and X differ visibly in weight and shape, so **don't** substitute them there. `lucide-react` is still fine for incidental UI (chevrons, steppers, the mail glyph).

@@ -27,6 +27,15 @@ const OptionLabel = ({ children }: { children: string }) => (
 );
 
 /**
+ * Whether the product has a real size option — "Title" is Shopify's placeholder
+ * option for single-variant products, so a product left with only that one is a
+ * One Size item. Exported so the PDP's size-guide link can hide itself on those
+ * without the two checks drifting apart.
+ */
+export const hasSizeOptions = (productOptions: Array<MappedProductOptions>) =>
+  productOptions.some((option) => option.name !== 'Title');
+
+/**
  * Buy-box options (size selector), styled for the white PDP buy card as a
  * full-width joined segmented bar (selected cell filled black). Shopify's
  * internal single-variant "Title" option is filtered out; products with no
@@ -40,10 +49,9 @@ export const ProductForm = ({
 }) => {
   const navigate = useNavigate();
 
-  // "Title" is Shopify's placeholder option for single-variant products.
   const options = productOptions.filter((option) => option.name !== 'Title');
 
-  if (options.length === 0) {
+  if (!hasSizeOptions(productOptions)) {
     return (
       <div>
         <OptionLabel>Size</OptionLabel>
