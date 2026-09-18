@@ -72,7 +72,7 @@ export const SizeGuide = () => {
       >
         <SheetHeader className="relative shrink-0 items-center border-b border-border-subtle p-0 px-5 py-4">
           <SheetTitle asChild>
-            <Heading as="h2" size="none" variant="caps" className="text-sm tracking-caps">
+            <Heading as="h2" size="none" variant="caps" className="text-xs tracking-caps">
               {title}
             </Heading>
           </SheetTitle>
@@ -144,10 +144,10 @@ export const SizeGuide = () => {
             </tbody>
           </table>
           <div>
-            <Heading as="h3" size="none" variant="caps" className="text-sm tracking-caps">
+            <Heading as="h3" size="none" variant="caps" className="text-xs tracking-caps">
               {howToMeasure.heading}
             </Heading>
-            <p className="mt-3 text-sm leading-relaxed text-support">{howToMeasure.body}</p>
+            <p className="mt-3 text-xs leading-relaxed text-support">{howToMeasure.body}</p>
           </div>
           <img
             src={image.url}
@@ -163,7 +163,7 @@ export const SizeGuide = () => {
                 <Eyebrow as="dt" className="text-ink">
                   {point.label}
                 </Eyebrow>
-                <dd className="mt-1 text-sm leading-relaxed text-support">{point.body}</dd>
+                <dd className="mt-1 text-xs leading-relaxed text-support">{point.body}</dd>
               </div>
             ))}
           </dl>
