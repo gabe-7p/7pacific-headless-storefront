@@ -53,7 +53,7 @@ export const SIZE_GUIDE = {
   },
   howToMeasure: {
     heading: 'How to measure',
-    body: 'Use a tape measure and these guidelines to determine your size. A friend might come in handy to help you with measuring. If you don’t have a tape measure, you can use a piece of string or ribbon and then measure it with a ruler. Please note: garments may vary due to design and manufacturing differences.',
+    body: 'To find your size, use a tape measure to measure your chest, waist, and hips. Then, use the size guide to find your size. Take note of the fit comments we have as well to ensure you want that fit. For example, an athletic fit will fit tighter than a relaxed fit.',
     /**
      * The measuring diagram. The CHEST / WAIST / HIP leader lines are baked
      * into this asset, so nothing draws them in code — swapping the photo for
@@ -76,11 +76,11 @@ export const SIZE_GUIDE = {
       },
       {
         label: 'Waist',
-        body: 'Measure around the narrowest part of your waist, where your body bends side to side.',
+        body: 'Measure around the narrowest part of your waist, above your hip bones.',
       },
       {
         label: 'Hip',
-        body: 'Measure around the fullest part of your hips. Make sure the tape measure is parallel to the ground and fits comfortably, not too tight or too loose.',
+        body: 'Measure around the fullest part of your hips. Make sure the tape measure is parallel to the ground and fits comfortably.',
       },
     ] satisfies ReadonlyArray<MeasurePoint>,
   },
