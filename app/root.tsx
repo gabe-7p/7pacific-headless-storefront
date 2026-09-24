@@ -1,4 +1,6 @@
+import { usePostHog } from '@posthog/react';
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen';
+import { useEffect } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -176,6 +178,7 @@ const App = () => {
 export const ErrorBoundary = () => {
   const rootData = useRouteLoaderData<RootLoader>('root');
   const error = useRouteError();
+  const posthog = usePostHog();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
@@ -187,6 +190,10 @@ export const ErrorBoundary = () => {
   }
 
   const isNotFound = errorStatus === 404;
+
+  useEffect(() => {
+    if (!isNotFound) posthog.captureException(error);
+  }, [error, isNotFound, posthog]);
 
   const content = isNotFound ? (
     <NotFound />

@@ -1,3 +1,4 @@
+import { usePostHog } from '@posthog/react';
 import { CartForm, Money, type OptimisticCart } from '@shopify/hydrogen';
 import { useEffect, useRef } from 'react';
 import { useFetcher } from 'react-router';
@@ -55,17 +56,39 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       <p className="mt-3 text-center text-xs text-support">
         Shipping, taxes, and discount codes calculated at checkout.
       </p>
-      <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
+      <CartCheckoutActions cart={cart} layout={layout} />
     </div>
   );
 };
 
-const CartCheckoutActions = ({ checkoutUrl }: { checkoutUrl?: string }) => {
+const CartCheckoutActions = ({ cart, layout }: CartSummaryProps) => {
+  const posthog = usePostHog();
+  const checkoutUrl = cart?.checkoutUrl;
+
   if (!checkoutUrl) return null;
   return (
     // The cart's one Ember moment (7PA-230) — the brand variant's mono-caps
     // arrow-slide device, full width.
-    <Cta href={checkoutUrl} variant="brand" size="lg" className="mt-5 w-full">
+    <Cta
+      href={checkoutUrl}
+      variant="brand"
+      size="lg"
+      className="mt-5 w-full"
+      onClick={() => {
+        posthog.capture('checkout_started', {
+          cart_layout: layout,
+          total_quantity: cart.totalQuantity,
+          subtotal: cart.cost?.subtotalAmount?.amount,
+          currency: cart.cost?.subtotalAmount?.currencyCode,
+        });
+        posthog.logger.info('checkout handoff requested', {
+          cart_layout: layout,
+          total_quantity: cart.totalQuantity,
+          subtotal: cart.cost?.subtotalAmount?.amount,
+          currency: cart.cost?.subtotalAmount?.currencyCode,
+        });
+      }}
+    >
       Checkout
     </Cta>
   );

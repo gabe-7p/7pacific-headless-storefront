@@ -17,7 +17,7 @@ export type NewsletterResponse = { ok: true } | { ok: false; error: string };
  * Admin API) once credentials are configured — out of scope for the front-end
  * migration.
  */
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, context }: Route.ActionArgs) {
   if (request.method !== 'POST') {
     return data<NewsletterResponse>({ ok: false, error: 'Method not allowed' }, { status: 405 });
   }
@@ -28,6 +28,8 @@ export async function action({ request }: Route.ActionArgs) {
   if (!EMAIL_RE.test(email)) {
     return data<NewsletterResponse>({ ok: false, error: INVALID_EMAIL_MESSAGE }, { status: 400 });
   }
+
+  context.posthog?.capture({ event: 'newsletter_subscribed' });
 
   return data<NewsletterResponse>({ ok: true });
 }

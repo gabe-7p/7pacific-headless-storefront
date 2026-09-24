@@ -18,7 +18,7 @@ export type WaitlistResponse =
  * Admin API) once credentials are configured — out of scope for now, per
  * Gabe (2026-08-03). The response shape stays the same when that lands.
  */
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, context }: Route.ActionArgs) {
   if (request.method !== 'POST') {
     return data<WaitlistResponse>(
       { ok: false, errors: { email: 'Method not allowed' } },
@@ -37,6 +37,8 @@ export async function action({ request }: Route.ActionArgs) {
   if (errors.name || errors.email) {
     return data<WaitlistResponse>({ ok: false, errors }, { status: 400 });
   }
+
+  context.posthog?.capture({ event: 'waitlist_joined' });
 
   return data<WaitlistResponse>({ ok: true });
 }

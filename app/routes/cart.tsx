@@ -17,7 +17,7 @@ export const meta: Route.MetaFunction = () => {
 export const headers: HeadersFunction = ({ actionHeaders }) => actionHeaders;
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const { cart } = context;
+  const { cart, posthog } = context;
 
   const formData = await request.formData();
 
@@ -76,6 +76,16 @@ export async function action({ request, context }: Route.ActionArgs) {
   const cartId = result?.cart?.id;
   const headers = cartId ? cart.setCartId(result.cart.id) : new Headers();
   const { cart: cartResult, errors, warnings } = result;
+
+  posthog?.capture({
+    event: 'cart_modified',
+    properties: {
+      action,
+      total_quantity: cartResult?.totalQuantity,
+      error_count: errors?.length ?? 0,
+      warning_count: warnings?.length ?? 0,
+    },
+  });
 
   const redirectTo = formData.get('redirectTo') ?? null;
   if (typeof redirectTo === 'string') {
