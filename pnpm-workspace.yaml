@@ -6,6 +6,7 @@
 # Hydrogen/Oxygen/Vite. `allowBuilds` is the pnpm 11 setting (a package→boolean
 # map); an entry set to `false` would explicitly BLOCK that package's scripts.
 allowBuilds:
+  core-js: true
   esbuild: true
   unrs-resolver: true
   workerd: true

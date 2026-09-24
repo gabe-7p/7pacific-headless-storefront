@@ -22,7 +22,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 | Porting a page/component from the live Liquid theme     | [migration-playbook.md](migration-playbook.md)                                                                                                                                   |
 | Touching products or color swatches                     | [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md) · [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)             |
 | Avoiding common bugs (nullability, waterfalls, secrets) | [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)                                                                                                          |
-| Adding env vars                                         | [.env.example](../.env.example) · [architecture.md](architecture.md#environment--secrets)                                                                                        |
+| Adding env vars                                         | [architecture.md](architecture.md#environment--secrets)                                                                                                                          |
 | Running the pre-PR gate / reviewing a PR                | [.claude/commands/check.md](../.claude/commands/check.md) · [.claude/commands/review_pr.md](../.claude/commands/review_pr.md)                                                    |
 | Understanding why a choice was made                     | [decisions/](decisions/README.md)                                                                                                                                                |
 

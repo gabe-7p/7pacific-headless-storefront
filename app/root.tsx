@@ -1,4 +1,6 @@
+import { usePostHog } from '@posthog/react';
 import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen';
+import { useEffect } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -17,6 +19,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { NotFound } from '~/components/content/NotFound';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
+import { getPostHogConfig, POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/posthog';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -67,6 +70,7 @@ export async function loader(args: Route.LoaderArgs) {
     ...deferredData,
     ...criticalData,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    posthog: getPostHogConfig(env, import.meta.env.DEV),
     shop: getShopAnalytics({
       storefront,
       publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
@@ -121,6 +125,7 @@ function loadDeferredData({ context }: Route.LoaderArgs) {
 
 export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const nonce = useNonce();
+  const posthog = useRouteLoaderData<RootLoader>('root')?.posthog;
 
   return (
     <html lang="en">
@@ -128,6 +133,9 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={tailwindCss}></link>
+        {/* Runtime PostHog config for entry.client (per-Oxygen-environment; absent = off). */}
+        {posthog && <meta name={POSTHOG_KEY_META} content={posthog.key} />}
+        {posthog && <meta name={POSTHOG_HOST_META} content={posthog.host} />}
         <Meta />
         <Links />
       </head>
@@ -176,6 +184,7 @@ const App = () => {
 export const ErrorBoundary = () => {
   const rootData = useRouteLoaderData<RootLoader>('root');
   const error = useRouteError();
+  const posthog = usePostHog();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
@@ -187,6 +196,10 @@ export const ErrorBoundary = () => {
   }
 
   const isNotFound = errorStatus === 404;
+
+  useEffect(() => {
+    if (!isNotFound) posthog.captureException(error);
+  }, [error, isNotFound, posthog]);
 
   const content = isNotFound ? (
     <NotFound />

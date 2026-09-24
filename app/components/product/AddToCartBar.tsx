@@ -1,3 +1,4 @@
+import { usePostHog } from '@posthog/react';
 import type { ProductFragment } from 'storefrontapi.generated';
 
 import { AddToCartButton } from '~/components/cart/AddToCartButton';
@@ -18,6 +19,26 @@ export const AddToCartBar = ({
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
 }) => {
   const { open } = useAside();
+  const posthog = usePostHog();
+
+  const handleAddToCart = () => {
+    if (selectedVariant?.availableForSale) {
+      posthog.capture('product_added_to_cart', {
+        product_handle: selectedVariant.product.handle,
+        variant_id: selectedVariant.id,
+        variant_title: selectedVariant.title,
+        quantity: 1,
+        price: selectedVariant.price.amount,
+        currency: selectedVariant.price.currencyCode,
+      });
+      posthog.logger.info('cart add requested', {
+        product_handle: selectedVariant.product.handle,
+        variant_id: selectedVariant.id,
+        quantity: 1,
+      });
+    }
+    open('cart');
+  };
 
   return (
     // The base layer caps every `form` at 400px from md up; the bar has to span
@@ -29,7 +50,7 @@ export const AddToCartBar = ({
           CTA that can't render through <Cta> (it's a CartForm submit). */}
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => open('cart')}
+        onClick={handleAddToCart}
         className={cn(buttonVariants({ variant: 'brand' }), 'h-auto min-h-[58px] w-full px-6 py-4')}
         lines={
           selectedVariant

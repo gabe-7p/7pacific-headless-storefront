@@ -1,12 +1,13 @@
 import { createHydrogenContext } from '@shopify/hydrogen';
 
 import { CART_QUERY_FRAGMENT } from '~/lib/fragments';
+import { createPostHogClient } from '~/lib/posthog.server';
 import { AppSession } from '~/lib/session';
 
-// Extra loader/action context (CMS clients, 3P SDKs, …) — none needed yet.
-const additionalContext = {} as const;
-
-type AdditionalContextType = typeof additionalContext;
+// Server-side PostHog client (undefined when PostHog is off — see lib/posthog.ts).
+type AdditionalContextType = {
+  posthog?: ReturnType<typeof createPostHogClient>;
+};
 
 declare global {
   // Global augmentation must use `interface` — type aliases can't be merged into the global scope.
@@ -25,6 +26,7 @@ export async function createHydrogenRouterContext(
   }
 
   const waitUntil = executionContext.waitUntil.bind(executionContext);
+  const posthog = createPostHogClient(env, request);
   const [cache, session] = await Promise.all([
     caches.open('hydrogen'),
     AppSession.init(request, [env.SESSION_SECRET]),
@@ -43,7 +45,7 @@ export async function createHydrogenRouterContext(
         queryFragment: CART_QUERY_FRAGMENT,
       },
     },
-    additionalContext
+    { posthog }
   );
 
   return hydrogenContext;

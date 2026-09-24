@@ -1,3 +1,4 @@
+import { usePostHog } from '@posthog/react';
 import {
   Analytics,
   getAdjacentAndFirstAvailableVariants,
@@ -7,7 +8,7 @@ import {
   useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Await, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -114,6 +115,7 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
 const Product = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
+  const posthog = usePostHog();
 
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
@@ -121,6 +123,31 @@ const Product = () => {
   );
 
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
+
+  // Primitive deps: `selectedVariant` is a fresh object on optimistic
+  // re-renders, and depending on it would re-fire the event for the same view.
+  const variantId = selectedVariant.id;
+  const variantPrice = selectedVariant.price.amount;
+  const variantCurrency = selectedVariant.price.currencyCode;
+  const variantAvailable = selectedVariant.availableForSale;
+  useEffect(() => {
+    posthog.capture('product_viewed', {
+      product_id: product.id,
+      product_handle: product.handle,
+      variant_id: variantId,
+      price: variantPrice,
+      currency: variantCurrency,
+      available_for_sale: variantAvailable,
+    });
+  }, [
+    posthog,
+    product.handle,
+    product.id,
+    variantId,
+    variantPrice,
+    variantCurrency,
+    variantAvailable,
+  ]);
 
   const productOptions = getProductOptions({
     ...product,
