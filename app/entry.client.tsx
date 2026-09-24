@@ -1,52 +1,49 @@
 import { PostHogProvider } from '@posthog/react';
 import { NonceProvider } from '@shopify/hydrogen';
-import posthog from 'posthog-js';
+import { posthog } from 'posthog-js';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 
-const posthogToken = import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN;
-const posthogHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
+import { POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/posthog';
 
-if (import.meta.env.DEV && !posthogToken) {
-  throw new Error(
-    'VITE_PUBLIC_POSTHOG_PROJECT_TOKEN variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_PUBLIC_POSTHOG_PROJECT_TOKEN is configured'
-  );
-}
-if (import.meta.env.DEV && !posthogHost) {
-  throw new Error(
-    'VITE_PUBLIC_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_PUBLIC_POSTHOG_HOST is configured'
-  );
-}
+// Runtime config rendered into <head> by root.tsx `Layout` (see lib/posthog.ts).
+// Absent → PostHog stays uninitialized and every capture is a no-op.
+const readMeta = (name: string) =>
+  document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`)?.content;
+const posthogKey = readMeta(POSTHOG_KEY_META);
+const posthogHost = readMeta(POSTHOG_HOST_META);
 
-const posthogClient =
-  posthogToken && posthogHost
-    ? posthog.init(posthogToken, {
-        api_host: posthogHost,
-        defaults: '2026-05-30',
-        capture_exceptions: true,
-        tracing_headers: [window.location.hostname],
-        logs: {
-          serviceName: 'storefront-web',
-          environment: import.meta.env.MODE,
-        },
-      })
-    : undefined;
+if (posthogKey && posthogHost) {
+  posthog.init(posthogKey, {
+    api_host: posthogHost,
+    // Pinned defaults: pageviews on every history change (client-side
+    // navigations included), plus pageleave.
+    defaults: '2026-05-30',
+    capture_exceptions: true,
+    // Tag the app's own fetches (loader/action requests) with the visitor's
+    // ids, so lib/posthog.server.ts can attribute server-side events.
+    tracing_headers: [window.location.hostname],
+    session_recording: { maskAllInputs: true },
+    logs: {
+      serviceName: 'storefront-web',
+      environment: import.meta.env.MODE,
+    },
+  });
+}
 
 if (!window.location.origin.includes('webcache.googleusercontent.com')) {
   startTransition(() => {
     const existingNonce = document.querySelector<HTMLScriptElement>('script[nonce]')?.nonce;
-    const router = <HydratedRouter />;
 
     hydrateRoot(
       document,
       <StrictMode>
         <NonceProvider value={existingNonce}>
-          {posthogClient ? (
-            <PostHogProvider client={posthogClient}>{router}</PostHogProvider>
-          ) : (
-            router
-          )}
+          {/* Always mounted, so usePostHog() is never undefined — even with PostHog off. */}
+          <PostHogProvider client={posthog}>
+            <HydratedRouter />
+          </PostHogProvider>
         </NonceProvider>
       </StrictMode>
     );

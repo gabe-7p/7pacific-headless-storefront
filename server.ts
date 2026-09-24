@@ -1,14 +1,11 @@
 import { createRequestHandler, storefrontRedirect } from '@shopify/hydrogen';
-import type { PostHog } from 'posthog-node';
 import * as serverBuild from 'virtual:react-router/server-build';
 
 import { createHydrogenRouterContext } from '~/lib/context';
 
 export default {
   async fetch(request: Request, env: Env, executionContext: ExecutionContext): Promise<Response> {
-    const distinctId = request.headers.get('X-POSTHOG-DISTINCT-ID') ?? undefined;
-    const sessionId = request.headers.get('X-POSTHOG-SESSION-ID') ?? undefined;
-    let posthog: PostHog | undefined;
+    let posthog: HydrogenAdditionalContext['posthog'];
 
     try {
       const hydrogenContext = await createHydrogenRouterContext(request, env, executionContext);
@@ -20,9 +17,7 @@ export default {
         getLoadContext: () => hydrogenContext,
       });
 
-      const response = posthog
-        ? await posthog.withContext({ distinctId, sessionId }, () => handleRequest(request))
-        : await handleRequest(request);
+      const response = await handleRequest(request);
 
       if (hydrogenContext.session.isPending) {
         response.headers.set('Set-Cookie', await hydrogenContext.session.commit());
@@ -40,10 +35,12 @@ export default {
       return response;
     } catch (error) {
       console.error(error);
-      posthog?.captureException(error, distinctId);
+      posthog?.captureException(error);
       return new Response('An unexpected error occurred', { status: 500 });
     } finally {
-      await posthog?.shutdown().catch(() => undefined);
+      // Flush after the response is sent — awaiting here would hold every
+      // response until PostHog answers.
+      if (posthog) executionContext.waitUntil(posthog.shutdown().catch(() => undefined));
     }
   },
 };

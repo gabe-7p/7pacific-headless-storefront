@@ -1,31 +1,48 @@
-import { PostHog } from 'posthog-node';
+// The edge build: Oxygen runs on workerd, and posthog-node's default (Node)
+// entry imports `path`/`process` and crashes MiniOxygen on load.
+import { PostHog } from 'posthog-node/edge';
 
-type PostHogEnv = Env & {
-  VITE_PUBLIC_POSTHOG_PROJECT_TOKEN?: string;
-  VITE_PUBLIC_POSTHOG_HOST?: string;
-};
+import { getPostHogConfig } from '~/lib/posthog';
 
-export const createPostHogClient = (env: Env) => {
-  const { VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: token, VITE_PUBLIC_POSTHOG_HOST: host } =
-    env as PostHogEnv;
+/**
+ * Per-request server-side PostHog client, or `undefined` when PostHog is off
+ * (see getPostHogConfig).
+ *
+ * posthog-js sends `X-POSTHOG-DISTINCT-ID` / `X-POSTHOG-SESSION-ID` on the
+ * app's own fetches (its `tracing_headers` option), so loader/action requests
+ * say which visitor they belong to. The Node build binds those through
+ * AsyncLocalStorage (`withContext`); the edge build has no context store and
+ * would send every server event as a fresh anonymous id, cut off from the
+ * visitor's journey. `before_send` re-attaches them instead — safe because the
+ * client lives for exactly one request.
+ */
+export const createPostHogClient = (env: Env, request: Request) => {
+  const config = getPostHogConfig(env, import.meta.env.DEV);
+  if (!config) return undefined;
 
-  if (import.meta.env.DEV && !token) {
-    throw new Error(
-      'VITE_PUBLIC_POSTHOG_PROJECT_TOKEN variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_PUBLIC_POSTHOG_PROJECT_TOKEN is configured'
-    );
-  }
-  if (import.meta.env.DEV && !host) {
-    throw new Error(
-      'VITE_PUBLIC_POSTHOG_HOST variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once VITE_PUBLIC_POSTHOG_HOST is configured'
-    );
-  }
+  const distinctId = request.headers.get('X-POSTHOG-DISTINCT-ID');
+  const sessionId = request.headers.get('X-POSTHOG-SESSION-ID');
 
-  if (!token || !host) return undefined;
-
-  return new PostHog(token, {
-    host,
+  return new PostHog(config.key, {
+    host: config.host,
+    // Send each event as it's captured; server.ts flushes the rest in
+    // waitUntil, after the response has gone out.
     flushAt: 1,
     flushInterval: 0,
     enableExceptionAutocapture: true,
+    // eslint-disable-next-line @typescript-eslint/naming-convention -- PostHog's option name
+    before_send: (event) => {
+      if (!event) return event;
+      const properties = { ...event.properties };
+      // No distinctId passed → the SDK minted an anonymous one and flagged it.
+      const isAnonymous = properties.$process_person_profile === false;
+      if (isAnonymous && distinctId) delete properties.$process_person_profile;
+      if (sessionId && !properties.$session_id) properties.$session_id = sessionId;
+      return {
+        ...event,
+        distinctId: isAnonymous && distinctId ? distinctId : event.distinctId,
+        properties,
+      };
+    },
   });
 };

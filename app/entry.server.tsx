@@ -4,6 +4,8 @@ import { renderToReadableStream } from 'react-dom/server';
 import type { EntryContext } from 'react-router';
 import { ServerRouter } from 'react-router';
 
+import { getPostHogOrigins } from '~/lib/posthog';
+
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
@@ -11,6 +13,7 @@ export default async function handleRequest(
   reactRouterContext: EntryContext,
   context: HydrogenRouterContextProvider
 ) {
+  const posthogOrigins = getPostHogOrigins(context.env.PUBLIC_POSTHOG_HOST);
   const { nonce, header, NonceProvider } = createContentSecurityPolicy({
     shop: {
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
@@ -22,6 +25,13 @@ export default async function handleRequest(
     // defaults.
     styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.shopify.com'],
     fontSrc: ["'self'", 'https://cdn.shopify.com'],
+    // PostHog: events + remote config go to the ingestion host; posthog-js
+    // lazy-loads its extensions (session-replay recorder, …) from the matching
+    // assets host. connectSrc merges with Hydrogen's defaults; scriptSrc does
+    // not (Hydrogen only appends the nonce), so it restates the baseline.
+    connectSrc: posthogOrigins,
+    scriptSrc: ["'self'", 'https://cdn.shopify.com', ...posthogOrigins],
+    workerSrc: ["'self'", 'blob:'],
   });
 
   const body = await renderToReadableStream(
