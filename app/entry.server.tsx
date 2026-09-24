@@ -28,9 +28,10 @@ export default async function handleRequest(
     // PostHog: events + remote config go to the ingestion host; posthog-js
     // lazy-loads its extensions (session-replay recorder, …) from the matching
     // assets host. connectSrc merges with Hydrogen's defaults; scriptSrc does
-    // not (Hydrogen only appends the nonce), so it restates the baseline.
+    // not (Hydrogen only appends the nonce), so it restates the baseline —
+    // the same Shopify hosts Hydrogen's default-src allows scripts from.
     connectSrc: posthogOrigins,
-    scriptSrc: ["'self'", 'https://cdn.shopify.com', ...posthogOrigins],
+    scriptSrc: ["'self'", 'https://cdn.shopify.com', 'https://shopify.com', ...posthogOrigins],
     workerSrc: ["'self'", 'blob:'],
   });
 

@@ -30,26 +30,20 @@ pnpm install
 
 ### Environment variables
 
-The app needs Storefront API credentials to render live data. Copy the template and fill it in:
-
-```bash
-cp .env.example .env
-```
-
-The fastest way to populate it is to pull from the linked Oxygen storefront:
+The app needs Storefront API credentials to render live data, read from a gitignored `.env` at the repo root. The fastest way to create it is to pull from the linked Oxygen storefront:
 
 ```bash
 pnpm shopify hydrogen link      # one-time: link this repo to the Hydrogen storefront
 pnpm shopify hydrogen env pull  # writes real values into .env
 ```
 
-Or fill `.env` by hand using the comments in [.env.example](.env.example). `SESSION_SECRET` can be generated locally:
+Or write `.env` by hand. Every variable is listed in [docs/architecture.md](docs/architecture.md#environment--secrets). `SESSION_SECRET` can be generated locally:
 
 ```bash
 openssl rand -hex 32
 ```
 
-> `.env` is gitignored and holds secrets — never commit it. See [.env.example](.env.example) for which vars are public vs secret.
+> `.env` is gitignored and holds secrets — never commit it. See [docs/architecture.md](docs/architecture.md#environment--secrets) for which vars are public vs secret.
 
 ## Develop
 

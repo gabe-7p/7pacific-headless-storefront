@@ -93,7 +93,20 @@ The 9 live products are **separate Shopify products per color**, not Shopify var
 
 ## Environment & secrets
 
-Configuration is via environment variables ([.env.example](../.env.example) documents each). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` and `SESSION_SECRET` are **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
+Configuration is via environment variables, listed below. `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` and `SESSION_SECRET` are **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
+
+| Variable                        | Access | What it is                                                                                   |
+| ------------------------------- | ------ | -------------------------------------------------------------------------------------------- |
+| `PUBLIC_STORE_DOMAIN`           | public | myshopify domain, e.g. `7pacific.myshopify.com`                                              |
+| `PUBLIC_STOREFRONT_API_TOKEN`   | public | Public Storefront API access token                                                           |
+| `PRIVATE_STOREFRONT_API_TOKEN`  | secret | Private (delegate) Storefront API token, server-only                                         |
+| `PUBLIC_STOREFRONT_API_VERSION` | public | Storefront API version (`2026-04`); Hydrogen defaults it, set only to override               |
+| `PUBLIC_STOREFRONT_ID`          | public | Numeric storefront id, used by Shopify Analytics                                             |
+| `SESSION_SECRET`                | secret | Session cookie signing secret, generate with `openssl rand -hex 32`                          |
+| `PUBLIC_CHECKOUT_DOMAIN`        | public | Checkout domain, used by the consent API and checkout links                                  |
+| `PUBLIC_POSTHOG_KEY`            | public | PostHog project API key (`phc_…`); unset = PostHog off. Different key per Oxygen environment |
+| `PUBLIC_POSTHOG_HOST`           | public | PostHog ingestion host, `https://us.i.posthog.com`                                           |
+| `PUBLIC_POSTHOG_DEV`            | public | `true` to send events from `pnpm dev`; off by default, never set on Oxygen                   |
 
 ## Deployment
 
