@@ -3,7 +3,7 @@ import { Image } from '@shopify/hydrogen';
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { OUR_STORY } from '~/content/our-story';
+import { OUR_STORY, type Paragraph } from '~/content/our-story';
 import { cn } from '~/lib/cn';
 
 /**
@@ -15,12 +15,33 @@ const SECTION_HEADING = 'text-[1.8rem] leading-[1.1] md:text-[1.92rem] xl:text-[
 /** Body copy: 16px at the brand’s 1.55 body line-height (guideline floor 1.55–1.65). */
 const BODY_COPY = 'text-base leading-[1.55] text-ink';
 
+/** Key for a paragraph — its text, segments joined. */
+const paragraphKey = (p: Paragraph) =>
+  typeof p === 'string' ? p : p.map((s) => (typeof s === 'string' ? s : s.strong)).join('');
+
+/** One body paragraph; `{ strong }` segments render bold. */
+const RichParagraph = ({ paragraph }: { paragraph: Paragraph }) => (
+  <p>
+    {typeof paragraph === 'string'
+      ? paragraph
+      : paragraph.map((s) =>
+          typeof s === 'string' ? (
+            s
+          ) : (
+            <strong key={s.strong} className="font-semibold">
+              {s.strong}
+            </strong>
+          )
+        )}
+  </p>
+);
+
 /**
- * Our Story page — hero, mission, and founder story. Presentational: renders the
+ * Our Story page — hero, intro, mission, and founder story. Presentational: renders the
  * typed copy/assets from content/our-story.ts (mirrors the live Liquid section).
  */
 export const OurStory = () => {
-  const { hero, mission, fitness, story } = OUR_STORY;
+  const { hero, intro, mission, fitness, story } = OUR_STORY;
   return (
     <>
       <section className="relative flex min-h-[70vh] flex-col justify-end overflow-hidden bg-field-night text-ink-night">
@@ -67,9 +88,18 @@ export const OurStory = () => {
         </div>
       </section>
 
+      {/* INTRO — unheaded lead-in; shares its bottom gap with Mission. */}
+      <Container className="py-16 md:py-24">
+        <div className={cn(BODY_COPY, 'max-w-xl space-y-4')}>
+          {intro.map((p) => (
+            <RichParagraph key={paragraphKey(p)} paragraph={p} />
+          ))}
+        </div>
+      </Container>
+
       {/* MISSION — full-width section: two-line display heading, full-bleed
-          orange rule, larger statement copy. */}
-      <section className="py-16 md:py-24">
+          orange rule, bold statement line, then body copy. */}
+      <section className="pb-16 md:pb-24">
         <Container>
           <Heading
             as="h2"
@@ -80,7 +110,12 @@ export const OurStory = () => {
         </Container>
         <div className="border-brand mt-6 border-t-2" />
         <Container>
-          <p className={cn(BODY_COPY, 'mt-6 max-w-xl')}>{mission.statement}</p>
+          <div className={cn(BODY_COPY, 'mt-6 max-w-xl space-y-4')}>
+            <p className="font-semibold">{mission.statement}</p>
+            {mission.body.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
         </Container>
       </section>
 
@@ -103,7 +138,7 @@ export const OurStory = () => {
           />
           <div className={cn(BODY_COPY, 'order-2 space-y-4 lg:order-1 lg:flex-1')}>
             {fitness.body.map((p) => (
-              <p key={p}>{p}</p>
+              <RichParagraph key={paragraphKey(p)} paragraph={p} />
             ))}
           </div>
         </div>
@@ -113,7 +148,7 @@ export const OurStory = () => {
       <hr className="border-t border-ink" />
 
       {/* STORY — display heading above the grid (left on desktop, centered on
-          tablet/mobile); small square image + four-paragraph founder story. */}
+          tablet/mobile); small square image + founder story. */}
       <div>
         <Container className="py-16 md:py-24">
           {/* Live: 32px → 48px (desktop), 0.03em tracking. */}
@@ -138,7 +173,7 @@ export const OurStory = () => {
             <div className="lg:flex-1">
               <div className={cn(BODY_COPY, 'space-y-4')}>
                 {story.body.map((p) => (
-                  <p key={p}>{p}</p>
+                  <RichParagraph key={paragraphKey(p)} paragraph={p} />
                 ))}
               </div>
               {/* Live signature: 22px brand-orange name over a 14px grey role. */}
