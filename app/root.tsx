@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   type ShouldRevalidateFunction,
+  useLocation,
   useMatches,
   useRouteError,
   useRouteLoaderData,
@@ -19,7 +20,12 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { NotFound } from '~/components/content/NotFound';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
-import { getPostHogConfig, POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/posthog';
+import {
+  getPostHogConfig,
+  getRouteErrorException,
+  POSTHOG_HOST_META,
+  POSTHOG_KEY_META,
+} from '~/lib/posthog';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -185,6 +191,7 @@ export const ErrorBoundary = () => {
   const rootData = useRouteLoaderData<RootLoader>('root');
   const error = useRouteError();
   const posthog = usePostHog();
+  const { pathname } = useLocation();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
 
@@ -198,8 +205,14 @@ export const ErrorBoundary = () => {
   const isNotFound = errorStatus === 404;
 
   useEffect(() => {
-    if (!isNotFound) posthog.captureException(error);
-  }, [error, isNotFound, posthog]);
+    if (isNotFound) return;
+    if (isRouteErrorResponse(error)) {
+      const { status, statusText } = error;
+      posthog.captureException(getRouteErrorException(error), { status, statusText, pathname });
+    } else {
+      posthog.captureException(error);
+    }
+  }, [error, isNotFound, pathname, posthog]);
 
   const content = isNotFound ? (
     <NotFound />

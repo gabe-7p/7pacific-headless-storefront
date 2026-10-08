@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getPostHogConfig, getPostHogOrigins } from '~/lib/posthog';
+import { getPostHogConfig, getPostHogOrigins, getRouteErrorException } from '~/lib/posthog';
 
 const env = { PUBLIC_POSTHOG_KEY: 'phc_test', PUBLIC_POSTHOG_HOST: 'https://us.i.posthog.com' };
 
@@ -35,5 +35,22 @@ describe('getPostHogOrigins', () => {
   it('allows nothing when the host is unset or malformed', () => {
     expect(getPostHogOrigins(undefined)).toEqual([]);
     expect(getPostHogOrigins('not a url')).toEqual([]);
+  });
+});
+
+describe('getRouteErrorException', () => {
+  it('turns a route error response into an Error that names its status', () => {
+    const exception = getRouteErrorException({
+      status: 500,
+      statusText: 'Internal Server Error',
+      data: 'boom',
+    });
+    expect(exception).toBeInstanceOf(Error);
+    expect(exception.name).toBe('RouteErrorResponse');
+    expect(exception.message).toBe('500 Internal Server Error');
+  });
+
+  it('falls back to the bare status when there is no status text', () => {
+    expect(getRouteErrorException({ status: 503, statusText: '', data: null }).message).toBe('503');
   });
 });
