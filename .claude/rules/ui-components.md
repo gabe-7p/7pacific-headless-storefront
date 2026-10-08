@@ -64,6 +64,16 @@ and `text-ink` 12.9–13.2:1. **70% was the floor** — it measured 4.89–5.09:
 4.5:1 for the support tier by a hair and nothing more. Drop below that, or lose the scrim,
 and the body copy fails. Re-measure the composite (not the token) before touching either.
 
+## File/HUD devices stay on night editorial surfaces
+
+`common/Readout` (`SectionLabel`, `CornerBrackets`) and the `--grain` photo veil in
+`tailwind.css` are the "issued file" vocabulary from the brand world doc — numbered
+chapters, mono readouts, a photo mount, grain over photography. They belong to the
+night-surface editorial pages (athlete signings, Our Story) and assume a `field-night`
+ground. Don't scatter them onto product or commerce surfaces, and keep grain on photos
+only, never under body copy. Chapter numbers encode order in a file; don't number things
+that aren't a sequence.
+
 ## Icons: match live, don't approximate
 
 Header/drawer glyphs live in [`app/components/common/icons.tsx`](../../app/components/common/icons.tsx), traced from the live theme's sprite (all on a `64x64` viewBox). lucide's hamburger, person, bag, and X differ visibly in weight and shape, so **don't** substitute them there. `lucide-react` is still fine for incidental UI (chevrons, steppers, the mail glyph).
