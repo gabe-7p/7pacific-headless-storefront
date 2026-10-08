@@ -8,6 +8,8 @@
  * tags (see root.tsx `Layout` → entry.client.tsx); lib/posthog.server.ts uses
  * it for server-side events.
  */
+import type { ErrorResponse } from 'react-router';
+
 export type PostHogConfig = { key: string; host: string };
 
 type PostHogEnv = {
@@ -46,4 +48,17 @@ export const getPostHogOrigins = (host: string | undefined): Array<string> => {
   } catch {
     return [];
   }
+};
+
+/**
+ * A thrown route response (`throw new Response(…, { status: 500 })`) reaches
+ * the root ErrorBoundary as an ErrorResponse, not an Error. Captured as-is,
+ * posthog-js reports it with no message or stack, so every status falls into
+ * one issue. Wrap it in an Error whose message carries the status, so each
+ * status gets its own issue.
+ */
+export const getRouteErrorException = ({ status, statusText }: ErrorResponse): Error => {
+  const exception = new Error(`${status} ${statusText}`.trim());
+  exception.name = 'RouteErrorResponse';
+  return exception;
 };
