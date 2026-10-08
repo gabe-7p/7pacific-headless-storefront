@@ -94,7 +94,6 @@ export const OUR_STORY = {
       },
     ],
     body: [
-      "There's no shortage of athletic clothing designed to look like you might work out. That's not what we're here for.",
       '7Pacific creates technical performance apparel for weight training, strength training, HYROX, running, and everything in between. Gear built for athletes who demand more from their clothing because they demand more from themselves.',
       'We obsess over the details that make a difference during training. Four-way stretch that moves through every squat, sprint, and lift. Lightweight fabrics and strategically placed ventilation to manage heat. Bonded construction that reduces unnecessary bulk, with functional details designed to keep distractions to a minimum.',
       'Every feature has a purpose, and every piece has to earn its place in your rotation.',
