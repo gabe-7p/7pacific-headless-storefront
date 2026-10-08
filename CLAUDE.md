@@ -38,7 +38,7 @@ app/
   lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
-public/          static files served at the web root as-is (favicon.ico)
+public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
