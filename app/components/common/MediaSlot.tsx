@@ -37,6 +37,8 @@ const FOCUS = {
   top: 'object-top',
   /** Bias the window toward the upper third (heads in a wide cinematic crop). */
   upper: 'object-[50%_30%]',
+  /** Keep the right half (a subject framed right in a landscape source, portrait box). */
+  right: 'object-right',
 } as const;
 
 /**
