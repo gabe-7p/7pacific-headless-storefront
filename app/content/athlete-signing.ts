@@ -523,9 +523,9 @@ const DAKOTAH_RIEMER = {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',
     edition: '001/001',
-    urlLine: '7pacificapparel.com/athletes/dakotah-riemer',
+    urlLine: '7pacificapparel.com/athletes/kody-riemer',
     designedLine: 'Designed in San Francisco',
-    existsLine: 'Exists only at /athletes/dakotah-riemer',
+    existsLine: 'Exists only at /athletes/kody-riemer',
   },
   transmissionLine: 'Menasha → San Francisco · 10.08.2026',
   eyebrowLine: 'Official // Athlete Signing · 10.08.2026',
@@ -590,7 +590,7 @@ const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'owen-platt': OWEN_PLATT,
   'aaron-lee': AARON_LEE,
   'nick-gonzalez': NICK_GONZALEZ,
-  'dakotah-riemer': DAKOTAH_RIEMER,
+  'kody-riemer': DAKOTAH_RIEMER,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
