@@ -48,7 +48,7 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
           <div className="p-8">
             <BrandDialogTitle>{BRAND.newsletter.heading}</BrandDialogTitle>
             <DialogDescription className="mt-3 text-sm text-support-night">
-              {BRAND.newsletter.body}
+              {BRAND.newsletter.dialogBody}
             </DialogDescription>
             <NewsletterForm />
           </div>
