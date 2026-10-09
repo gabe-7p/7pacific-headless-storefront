@@ -471,24 +471,25 @@ const NICK_GONZALEZ = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
-      // real dimensions) when Nick's photo is uploaded.
-      src: '',
+      src: `${CDN}/nick_gonzalez_athlete_picture.png`,
       alt: 'Nick Gonzalez mid-training session',
-      width: 1920,
-      height: 1080,
+      width: 1122,
+      height: 1402,
+      // Full-figure shot — cover-cropping cuts his head and feet off.
+      fit: 'contain',
     },
   },
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Nick's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // Nick's founder message in Shopify Files (portrait, 32s) — Shopify's
+    // 720p transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/d28bb7a756df42b3a46ea28c7ea9b7e9/d28bb7a756df42b3a46ea28c7ea9b7e9.HD-720p-1.6Mbps-96972241.mp4',
+    poster: `${CDN}/preview_images/d28bb7a756df42b3a46ea28c7ea9b7e9.thumbnail.0000000000.jpg`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:32',
   },
   readout: {
     number: '02',
@@ -523,9 +524,9 @@ const DAKOTAH_RIEMER = {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',
     edition: '001/001',
-    urlLine: '7pacificapparel.com/athletes/dakotah-riemer',
+    urlLine: '7pacificapparel.com/athletes/kody-riemer',
     designedLine: 'Designed in San Francisco',
-    existsLine: 'Exists only at /athletes/dakotah-riemer',
+    existsLine: 'Exists only at /athletes/kody-riemer',
   },
   transmissionLine: 'Menasha → San Francisco · 10.08.2026',
   eyebrowLine: 'Official // Athlete Signing · 10.08.2026',
@@ -541,24 +542,25 @@ const DAKOTAH_RIEMER = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
-      // real dimensions) when Dakotah's photo is uploaded.
-      src: '',
+      src: `${CDN}/kody_riemer_athlete_picture.png`,
       alt: 'Dakotah Riemer mid-training session',
-      width: 1920,
-      height: 1080,
+      width: 1122,
+      height: 1402,
+      // Full-figure shot — cover-cropping cuts his head and feet off.
+      fit: 'contain',
     },
   },
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Dakotah's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // Dakotah's founder message in Shopify Files (portrait, 35s) — Shopify's
+    // 720p transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/8c133fee98e7483cab2d4aebb6758c83/8c133fee98e7483cab2d4aebb6758c83.HD-720p-1.6Mbps-96972281.mp4',
+    poster: `${CDN}/preview_images/8c133fee98e7483cab2d4aebb6758c83.thumbnail.0000000000.jpg`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:35',
   },
   readout: {
     number: '02',
@@ -590,7 +592,7 @@ const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'owen-platt': OWEN_PLATT,
   'aaron-lee': AARON_LEE,
   'nick-gonzalez': NICK_GONZALEZ,
-  'dakotah-riemer': DAKOTAH_RIEMER,
+  'kody-riemer': DAKOTAH_RIEMER,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
