@@ -482,13 +482,14 @@ const NICK_GONZALEZ = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Nick's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // Nick's founder message in Shopify Files (portrait, 32s) — Shopify's
+    // 720p transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/d28bb7a756df42b3a46ea28c7ea9b7e9/d28bb7a756df42b3a46ea28c7ea9b7e9.HD-720p-1.6Mbps-96972241.mp4',
+    poster: `${CDN}/preview_images/d28bb7a756df42b3a46ea28c7ea9b7e9.thumbnail.0000000000.jpg`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:32',
   },
   readout: {
     number: '02',
@@ -552,13 +553,14 @@ const DAKOTAH_RIEMER = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // PLACEHOLDER — the Golden Gate homepage video until Dakotah's founder
-    // message is recorded; swap src/poster (and captions) when uploaded.
-    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
-    poster: '',
+    // Dakotah's founder message in Shopify Files (portrait, 35s) — Shopify's
+    // 720p transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/8c133fee98e7483cab2d4aebb6758c83/8c133fee98e7483cab2d4aebb6758c83.HD-720p-1.6Mbps-96972281.mp4',
+    poster: `${CDN}/preview_images/8c133fee98e7483cab2d4aebb6758c83.thumbnail.0000000000.jpg`,
     captions: '',
     attribution: 'Gabriel · Founder',
-    duration: '00:30',
+    duration: '00:35',
   },
   readout: {
     number: '02',
