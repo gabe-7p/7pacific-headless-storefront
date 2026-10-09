@@ -441,6 +441,78 @@ const AARON_LEE = {
   },
 } satisfies AthleteSigningContent;
 
+/**
+ * Nick Gonzalez — Miami-based athlete (@nickg_14): triathlon + strength
+ * (first Charleston Triathlon, July 2026; Coastal Athletic Club), faith-led.
+ * Owner of Almavora (@almavora_) — strength programs from elite college
+ * coaches, built for athletes chasing college sports. ~4.2K followers.
+ */
+const NICK_GONZALEZ = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/nick-gonzalez',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/nick-gonzalez',
+  },
+  transmissionLine: 'Miami → San Francisco · 10.08.2026',
+  eyebrowLine: 'Official // Athlete Signing · 10.08.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Nick Gonzalez.' },
+  body: 'We created this page to welcome you to the 7Pacific Athlete Creator team. You’re an athlete first: the heavy \
+  loads, the long miles, your first triathlon finish line already crossed. Then you built Almavora to hand that same \
+  next-level training to athletes chasing college sports. Faith, discipline, and no shortcuts is exactly who we’re \
+  building for: the athletes. Scroll down to watch a personal message from us about why we’re fired up to have you on \
+  the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Miami · 25.76N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: {
+      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
+      // real dimensions) when Nick's photo is uploaded.
+      src: '',
+      alt: 'Nick Gonzalez mid-training session',
+      width: 1920,
+      height: 1080,
+    },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // PLACEHOLDER — the Golden Gate homepage video until Nick's founder
+    // message is recorded; swap src/poster (and captions) when uploaded.
+    src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+    poster: '',
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:30',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    // His first triathlon (Charleston, July 2026) — a public race finish.
+    stat: { label: 'Triathlons Finished', value: '01', verified: true },
+    scale: { markerPercent: 80, markerLabel: 'Charleston' },
+    fields: [
+      { label: 'Discipline', value: 'Triathlon x Strength' },
+      { label: 'Base', value: 'Miami' },
+      { label: 'Reach', value: '4.2K' },
+      { label: 'Owner', value: 'Almavora' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'nickg_14',
+    tagline: 'Athlete. Follower of Jesus. Owner of Almavora.',
+    series: ['Almavora · College Strength Training', 'Coastal Athletic Club'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
 /** URL handle → signing page content. Adding an athlete = one line here. */
 const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
@@ -448,6 +520,7 @@ const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'kenneth-pierce': KENNETH_PIERCE,
   'owen-platt': OWEN_PLATT,
   'aaron-lee': AARON_LEE,
+  'nick-gonzalez': NICK_GONZALEZ,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */
