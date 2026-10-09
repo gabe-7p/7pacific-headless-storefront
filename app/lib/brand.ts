@@ -38,12 +38,12 @@ export const BRAND = {
 
   /**
    * Newsletter copy (7PA-241) — acquisition through community, not price:
-   * no discount language, ever. One signup per page (the footer); the old
-   * site-wide popup is gone.
+   * no discount language, ever. One body line shared by the footer signup
+   * and the click-triggered membership dialog (Gabe 2026-10-08).
    */
   newsletter: {
     heading: 'The Early One',
-    body: 'Drop dates, training days, the occasional film. First word when editions go live.',
+    body: 'You’ll be the first to know about new collections, training events, and everything happening at 7Pacific.',
     placeholder: 'Enter your email',
     submitLabel: 'Sign up',
     successMessage: 'You’re in. See you out there.',

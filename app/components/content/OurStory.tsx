@@ -213,8 +213,9 @@ const Kit = () => {
   );
 };
 
-/** 04 ROSTER — the founder's card (sticky from lg) beside the letter. The
-    card is the page's one bold move: portrait in the mount, four mono fields. */
+/** 04 ROSTER — the founder's card (sticky from lg) beside the letter, ending
+    in the sign-off. The card is the page's one bold move: portrait in the
+    mount, four mono fields. */
 const Roster = () => {
   const { roster } = OUR_STORY;
   return (
@@ -266,36 +267,11 @@ const Roster = () => {
   );
 };
 
-/** Closing band — the hero line returns as a bookend over the 7P mark, with
-    the page's second (and last) CTA. */
-const Closer = () => {
-  const { closer } = OUR_STORY;
-  return (
-    <section className="relative overflow-hidden">
-      <MediaSlot media={closer.media} ratio="backdrop" className="saturate-[0.85]" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-field-night/20 mix-blend-multiply"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-field-night via-field-night/60 to-transparent"
-      />
-      <GrainVeil />
-      <Container className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-6 pb-10 md:flex-row md:items-end md:justify-between md:pb-16">
-        <Heading as="h2" size="none" lines={closer.headingLines} className={STATEMENT} />
-        <Cta to={closer.cta.href} variant="brand-outline" size="sm">
-          {closer.cta.label}
-        </Cta>
-      </Container>
-    </section>
-  );
-};
-
 /**
  * Our Story — "The File". A Night Session page that tells the story as an
  * athlete's issued file: hero → 01 status → 02 mission → 03 kit → 04 roster
- * (letter + sign-off) → closing band. Presentational: renders the typed copy and media slots from
+ * (letter + sign-off). The file ends on the sign-off — there is no closing
+ * band. Presentational: renders the typed copy and media slots from
  * content/our-story.ts. Owns its MotionProvider (NotFound precedent). The
  * 72px faint grid is AthleteSigning's.
  */
@@ -307,7 +283,6 @@ export const OurStory = () => (
       <Mission />
       <Kit />
       <Roster />
-      <Closer />
     </div>
   </MotionProvider>
 );

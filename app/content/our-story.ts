@@ -2,8 +2,8 @@
  * Our Story page — "The File". Copy from the Oct 2026 Notion revamp ("Revamp
  * of Our Story page", under Website); that page is the source of truth, so
  * edit it there first, then here. The page tells the story as an athlete's
- * issued file: four numbered chapters (status, mission, kit, roster) and a
- * closing sign-off. Rendered by app/components/content/OurStory.tsx.
+ * issued file: four numbered chapters (status, mission, kit, roster), ending
+ * on the founder's sign-off. Rendered by app/components/content/OurStory.tsx.
  *
  * Photography is STAND-IN: the brand world calls for direct-flash, night-
  * session shots and the library only holds the fog/daylight shoot. Every
@@ -28,7 +28,7 @@ export const OUR_STORY = {
         --animate-type-on is tuned to roughly this length. */
     readout: 'File 01 · Our Story · San Francisco',
     image: { url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`, width: 2048, height: 1638 },
-    // One secondary CTA — the story page carries no Ember moment (7PA-230).
+    // The page's only CTA — the story page carries no Ember moment (7PA-230).
     cta: { label: 'Shop', href: STORE_LINKS.shopShorts },
   },
   status: {
@@ -127,16 +127,5 @@ export const OUR_STORY = {
     pull: "It's the one they're becoming",
     close: 'See you out there.',
     founder: { name: 'Gabriel Dalessandro', role: 'Founder and CEO' },
-  },
-  // Closing band: the hero line returns as a bookend over the 7P mark on the
-  // runner's back (focus `top` keeps the logo in the 16:9 crop).
-  closer: {
-    media: image(
-      `${CDN}/cole-running-from-behind-test.png?v=1787810904&width=1600`,
-      'Runner heading away along the coast, 7Pacific mark on the shirt',
-      'top'
-    ),
-    headingLines: ['The athlete', 'never left'],
-    cta: { label: 'Shop', href: STORE_LINKS.shopShorts },
   },
 } as const;
