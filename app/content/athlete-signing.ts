@@ -471,12 +471,12 @@ const NICK_GONZALEZ = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
-      // real dimensions) when Nick's photo is uploaded.
-      src: '',
+      src: `${CDN}/nick_gonzalez_athlete_picture.png`,
       alt: 'Nick Gonzalez mid-training session',
-      width: 1920,
-      height: 1080,
+      width: 1122,
+      height: 1402,
+      // Full-figure shot — cover-cropping cuts his head and feet off.
+      fit: 'contain',
     },
   },
   founderVideo: {
@@ -541,12 +541,12 @@ const DAKOTAH_RIEMER = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      // PLACEHOLDER — no hero shot in Shopify Files yet; swap src (and the
-      // real dimensions) when Dakotah's photo is uploaded.
-      src: '',
+      src: `${CDN}/kody_riemer_athlete_picture.png`,
       alt: 'Dakotah Riemer mid-training session',
-      width: 1920,
-      height: 1080,
+      width: 1122,
+      height: 1402,
+      // Full-figure shot — cover-cropping cuts his head and feet off.
+      fit: 'contain',
     },
   },
   founderVideo: {
