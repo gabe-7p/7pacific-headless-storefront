@@ -9,8 +9,8 @@ import { SpecLine } from '~/components/common/SpecLine';
 
 /** Card background — same union shape as CoreValue's media panel. */
 export type TeaserCardMedia =
-  | { kind: 'image'; url: string; width: number; height: number }
-  | { kind: 'video'; src: string; poster?: string };
+  | { kind: 'image'; url: string; width: number; height: number; alt?: string }
+  | { kind: 'video'; src: string; poster?: string; label?: string };
 
 /** The media + overlay copy for one teaser card; the CTA is passed separately
     (as a render slot) because CTA behavior is per-instance, not content. */
@@ -52,6 +52,7 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
       <video
         src={content.media.src}
         poster={content.media.poster}
+        aria-label={content.media.label}
         autoPlay
         muted
         loop
@@ -63,7 +64,7 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
         src={content.media.url}
         width={content.media.width}
         height={content.media.height}
-        alt=""
+        alt={content.media.alt ?? ''}
         loading="lazy"
         sizes="(min-width: 768px) 50vw, 100vw"
         className="absolute inset-0 h-full w-full object-cover"

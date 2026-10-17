@@ -31,13 +31,21 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
 
 const Media = ({ media }: { media: CoreValue['media'] }) =>
   media.kind === 'video' ? (
-    <video src={media.src} autoPlay loop muted playsInline className="size-full object-cover" />
+    <video
+      src={media.src}
+      aria-label={media.label}
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="size-full object-cover"
+    />
   ) : (
     <Image
       src={media.url}
       width={media.width}
       height={media.height}
-      alt=""
+      alt={media.alt}
       loading="lazy"
       sizes="(min-width: 1024px) 66vw, 100vw"
       className="size-full object-cover"
@@ -45,9 +53,10 @@ const Media = ({ media }: { media: CoreValue['media'] }) =>
   );
 
 /**
- * "What We Stand For" — four alternating rows pairing each tenet card with its
+ * "How We Train" — three alternating rows pairing each rule card with its
  * media (wide media ~2/3, narrow card ~1/3, sides alternating per row; single
- * column below lg). Mirrors the live `core-values-homepage-v2` section.
+ * column below lg). Layout mirrors the live `core-values-homepage-v2` section;
+ * the copy is homepage v2 (content/home.ts).
  */
 export const CoreValues = () => {
   const { heading, subtitle, values } = HOME_CORE_VALUES;

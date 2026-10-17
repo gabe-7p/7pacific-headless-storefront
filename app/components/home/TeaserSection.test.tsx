@@ -109,4 +109,34 @@ describe('TeaserSection', () => {
       withCountdown.container.querySelector('[aria-label="Countdown to the drop"]')
     ).not.toBeNull();
   });
+
+  it('passes image alt text and video labels through to the media', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <TeaserSection
+          heading="Section Heading"
+          cards={[
+            {
+              content: {
+                ...CARDS[0].content,
+                media: { ...CARDS[0].content.media, alt: 'Kit on bleachers' },
+              },
+              cta: CARDS[0].cta,
+            },
+            {
+              content: {
+                ...CARDS[1].content,
+                media: { ...CARDS[1].content.media, label: 'Founder at the track' },
+              },
+              cta: CARDS[1].cta,
+            },
+          ]}
+        />
+      </MemoryRouter>
+    );
+    expect(container.querySelector('img')?.getAttribute('alt')).toBe('Kit on bleachers');
+    expect(container.querySelector('video')?.getAttribute('aria-label')).toBe(
+      'Founder at the track'
+    );
+  });
 });
