@@ -1,9 +1,9 @@
 /**
  * Homepage marketing copy + section asset URLs (typed constants, not JSX).
- * The Impulse-parity sections (hero, first drop, core values, brand banner)
- * mirror the live theme; the Name/Spec marquee, Drop 02 teaser, and Baseline
- * intro teaser are post-migration additions. Asset URLs are the same Shopify Files / CDN assets
- * the live theme uses — change a value here, the homepage follows.
+ * Homepage v2 (Oct 2026): every section talks to one athlete ("you") with
+ * "we" in the frame. Asset URLs are the Shopify Files / CDN assets already in
+ * the slots; their alt text describes the intended Shoot #2 replacement (see
+ * homepage-image-swaps.md).
  */
 
 import { BASELINE_DROP } from '~/content/baseline-drop';
@@ -15,21 +15,26 @@ import { BRAND } from '~/lib/brand';
 const CDN = BRAND.filesCdn;
 
 export const HOME_HERO = {
-  /** Mono spec-strip label above the headline: drop number + city. */
-  eyebrow: 'Drop 01 · San Francisco',
+  /** Mono spec-strip label above the headline: kit + version, where tested,
+      when. TODO: bump the date with each kit revision. */
+  eyebrow: 'Baseline V01 · Tested SF · Oct 2026',
   /**
-   * Locked hero spec (7PA-232): ≤8 words, one sentence, ALL CAPS via CSS.
-   * The headline is verbatim from the approved Tone Chart product-line board.
+   * Homepage v2 hero (Oct 2026). The headline is a fact the athlete already
+   * knows, never a motivational line: ALL CAPS via CSS, two forced lines,
+   * eight words max. Option A per the brief; Option B is
+   * ['The stands are empty.', 'We train anyway.'].
    */
-  headline: 'Built for the part of training nobody posts.',
-  /** Primary CTA, mono caps (the page's single Ember moment). Label per Gabe
-      (2026-07-19): the live hero's line. Target is the BASELINE shop-all
-      collection (Gabe 2026-09-10) — it used to open a single colorway (Mint
-      shorts), which sent the hero's one Ember moment past the collection. */
-  cta: { label: 'Own the Start', href: STORE_LINKS.shopAll },
-  /** Text-treatment secondary CTA per Gabe (2026-07-21) — a deliberate
-      deviation from 7PA-232's single-CTA hero. Renders in chalk, so the
-      one-Ember-moment rule still holds. */
+  headlineLines: ['the athlete', 'never left.'],
+  /** Inter, sentence case — puts "we" in the frame under the "you" headline. */
+  subhead: 'We build the kit you train in. Tested by athletes, revised after every session.',
+  /** Primary CTA, mono caps (the page's single Ember moment). Target is the
+      BASELINE shop-all collection (Gabe 2026-09-10). */
+  cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
+  /**
+   * Text-treatment secondary CTA (renders in chalk, so the one-Ember-moment
+   * rule still holds). TODO: point at the Shoot #2 founder video once it is
+   * live — until then it anchors to the Starting Lineup grid (FirstDrop's id).
+   */
   secondaryCta: { label: 'Read the Story', href: '/pages/our-story' },
   /** Mono spec lines under the CTAs: where and when the hero shot was made. */
   coordinates: '37.78°N · 122.51°W',
@@ -38,6 +43,9 @@ export const HOME_HERO = {
     url: `${CDN}/24_121_7pacific_03806.jpg`,
     width: 1656,
     height: 1104,
+    // Describes the intended Shoot #2 replacement (see
+    // content/homepage-image-swaps.md); the file swaps in without a code edit.
+    alt: 'Four athletes sprinting on an empty stadium track at dusk',
   },
 } as const;
 
@@ -131,50 +139,53 @@ export const HOME_DROP_TWO = {
 } as const;
 
 /**
- * BASELINE intro teaser — the second TeaserSection instance, below the Name/Spec
- * banner: two cards pointing deeper into the live ED. 01 story (the /drops/baseline
- * editorial page and the founder deep-dive on YouTube). No countdown: the
- * collection is live. The right card loops the drop page's film in the card
- * (BASELINE_DROP.film — one source for the ED. 01 recap video).
+ * BASELINE V01 — the second TeaserSection instance, below the Name/Spec
+ * banner: two cards pointing deeper into the first kit (the shop-all
+ * collection and the founder film on YouTube). No countdown: the kit is live.
+ * The right card loops the drop page's film in the card (BASELINE_DROP.film —
+ * one source for the recap video). "Edition" language is gone: the brand
+ * versions product like software (V01).
  */
 export const HOME_BASELINE_INTRO = {
-  heading: 'Baseline: ED. 01',
-  // The opening of BASELINE_DROP.intro (content/baseline-drop.ts), warmed up
-  // with the trailing hook per Gabe.
+  heading: 'Baseline V01',
   subtitle:
-    'Our first collection. The kit you start with, plus a few innovations for athletes you’re gonna love.',
+    'Our first collection of technical training essentials built for the starting line, the weight room, and everything in between. Lightweight fabrics, functional details, and unrestricted movement for whatever the session demands.',
   cards: {
     collection: {
-      // Same "ED. 01 · <status>" device as the drop page's closer eyebrow.
-      eyebrow: 'ED. 01 · Available now',
-      title: 'Where It Starts',
-      cta: { label: 'See the Collection', href: STORE_LINKS.baselineDrop },
+      eyebrow: 'Baseline V01 · Available now',
+      title: 'The First Kit',
+      cta: { label: 'Shop Baseline V01', href: STORE_LINKS.shopAll },
       // Shopify file 53003545477437, picked by Gabe (2026-08-26).
       media: {
         kind: 'image',
         url: `${CDN}/cole-running-from-behind-test.png?v=1787810904`,
         width: 2616,
         height: 3276,
+        alt: 'Training kit laid out on stadium bleachers with version tag visible',
       },
     },
     film: {
       eyebrow: 'Gabe Dalessandro, Founder',
-      title: 'Why We Built It',
+      title: 'Behind the Build',
       /** External — opens the founder deep-dive on YouTube in a new tab. */
       cta: {
-        label: 'Watch the Deep Dive',
+        label: 'Watch the build',
         href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s',
       },
       /** The drop page's film, looping muted in the card (object-cover). */
-      media: BASELINE_DROP.film,
+      media: {
+        ...BASELINE_DROP.film,
+        label: 'Founder logging session times in a notebook at the track',
+      },
     },
   },
 } as const;
 
 export const HOME_FIRST_DROP = {
-  heading: 'Baseline: The Starting Nine',
-  // Voice Gate: a number, no web-speak ("Click in to see why" failed Q5).
-  subtitle: 'Three products in nine colors tested on the hills we run.',
+  heading: 'The Starting Lineup',
+  /** The count is the real number of products in the lineup (the loader's
+      grid), never a hardcoded word. */
+  subtitle: 'Purpose-built essentials engineered for the way athletes move.',
   // Grid order is merchant-controlled: the manual `homepage-first-drop`
   // collection in Shopify (see HOMEPAGE_COLLECTION_HANDLE in content/links.ts).
 } as const;
@@ -183,62 +194,79 @@ export type CoreValue = {
   title: string;
   body: string;
   cta: { label: string; href: string };
-  /** Card background tone — live alternates dark charcoal and light gray. */
+  /** Card background tone — rows alternate dark charcoal and light gray. */
   tone: 'dark' | 'light';
   /** The media panel paired with the card in its row. */
   media:
-    | { kind: 'video'; src: string }
-    | { kind: 'image'; url: string; width: number; height: number };
+    | { kind: 'video'; src: string; label?: string }
+    | { kind: 'image'; url: string; width: number; height: number; alt: string };
 };
 
 /**
- * The four homepage cards (7PA-238). Not the internal values list — the
- * Strategy Canvas calls publishing values verbatim "wall art." These are
- * customer-facing reminders in the working voice; cards 1, 3, and 4 quote
- * the approved Tone Chart caption/product-line boards verbatim.
+ * "How We Train" — three rules, not feelings (homepage v2, Oct 2026). Each
+ * card is a rule the athlete already follows, in the working voice. The CTAs
+ * are not in the brief; they stay outline (never Ember) and point at existing
+ * surfaces.
  */
 export const HOME_CORE_VALUES = {
-  heading: 'What We Stand For',
-  subtitle: 'The reminders we train by. No matter the season.',
+  heading: 'How We Train',
+  subtitle: `Being an athlete isn't about what you've done. It's about what you're willing to keep working for.`,
   values: [
     {
-      title: 'No Losses, Only Lessons',
+      title: 'Chase the Numbers',
       tone: 'dark',
-      body: "When something doesn't work out, we figure out why and come back more experienced.",
-      cta: { label: 'Read the story', href: '/pages/our-story' },
+      body: "Another plate on the bar, a faster split, a few more inches on your vertical. There's always something worth working toward.",
+      cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
       media: {
         kind: 'video',
         src: 'https://cdn.shopify.com/videos/c/o/v/a156e4e88aec47fa96892073a276450f.mp4',
+        label: 'Hand writing a split time into a training notebook',
       },
     },
     {
-      title: 'Love The Journey',
+      title: 'RAISE THE STANDARD',
       tone: 'light',
-      body: 'The peak is a moment. The climb is the life. Most of the fun and memories are in the journey.',
-      cta: { label: 'Sign up', href: '#newsletter' },
-      media: { kind: 'image', url: `${CDN}/social_sharing.jpg`, width: 1656, height: 1104 },
+      body: `There's something about training alongside people who expect more of themselves. The competition gets better, the effort goes up, and everyone leaves a little further ahead.`,
+      cta: { label: 'Read the story', href: '/pages/our-story' },
+      media: {
+        kind: 'image',
+        url: `${CDN}/social_sharing.jpg`,
+        width: 1656,
+        height: 1104,
+        alt: 'Athlete sprinting while a teammate calls the split from the infield',
+      },
     },
     {
-      title: 'Not Too Serious',
+      title: 'LOVE THE JOURNEY',
       tone: 'dark',
-      body: "The training is serious. We're not. We hit our numbers, laugh between sets, and leave the tough-guy act to everyone else.",
-      cta: { label: 'Shop tees', href: STORE_LINKS.shopShirts },
-      media: { kind: 'image', url: `${CDN}/paul_screaming.jpg`, width: 1656, height: 1104 },
-    },
-    {
-      title: 'Play The Long Game',
-      tone: 'light',
-      body: "We don't chase quick wins. We build things that outlast the season. Patience is the loudest statement.",
+      body: `We take training seriously because we love it, and some of our best memories happen between the warm-up and the finish line.`,
       cta: { label: 'Shop shorts', href: STORE_LINKS.shopShorts },
-      media: { kind: 'image', url: `${CDN}/digital_map.png`, width: 1536, height: 1024 },
+      media: {
+        kind: 'image',
+        url: `${CDN}/paul_screaming.jpg`,
+        width: 1656,
+        height: 1104,
+        alt: 'Athletes warming up on a dark track at first light',
+      },
     },
   ] satisfies ReadonlyArray<CoreValue>,
 } as const;
 
-export const HOME_TESTED = {
-  headingLines: ['Tested In Training.', 'Refined By Community.'],
+/**
+ * "The Roster" — the split section at the foot of the page (homepage v2,
+ * Oct 2026): the pitch and the ask. Body + CTA are MEMBERSHIP_PITCH
+ * (content/membership.ts), shared with the PDP brand banner.
+ */
+export const HOME_ROSTER = {
+  headingLines: ['The Roster'],
   body: MEMBERSHIP_PITCH.body,
+  /** Opens the signup dialog. */
   cta: MEMBERSHIP_PITCH.cta,
   video: 'https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4',
-  image: { url: `${CDN}/two_walking_to_workout_cropped.png`, width: 696, height: 728 },
+  image: {
+    url: `${CDN}/two_walking_to_workout_cropped.png`,
+    width: 696,
+    height: 728,
+    alt: 'Four athletes seated apart across empty stadium bleachers',
+  },
 } as const;

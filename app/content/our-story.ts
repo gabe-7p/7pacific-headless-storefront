@@ -23,7 +23,7 @@ const image = (src: string, alt: string, focus?: 'top' | 'upper' | 'right'): Med
 
 export const OUR_STORY = {
   hero: {
-    title: ['The athlete', 'never left'],
+    title: ['We train here too.'],
     /** Mono readout that types on under the header — steps(30) in
         --animate-type-on is tuned to roughly this length. */
     readout: 'File 01 · Our Story · San Francisco',

@@ -37,16 +37,18 @@ export const BRAND = {
   ] satisfies Array<SocialLink>,
 
   /**
-   * Newsletter copy (7PA-241) — acquisition through community, not price:
-   * no discount language, ever. One body line shared by the footer signup
-   * and the click-triggered membership dialog (Gabe 2026-10-08).
+   * Signup copy (7PA-241) — acquisition through community, not price: no
+   * discount language, ever. One set of lines shared by the footer signup and
+   * the click-triggered "Join the roster" dialog (Gabe 2026-10-08), so the
+   * dialog continues the CTA that opened it. Homepage v2 (Oct 2026): the
+   * membership is the roster.
    */
   newsletter: {
-    heading: 'The Early One',
-    body: 'You’ll be the first to know about new collections, training events, and everything happening at 7Pacific.',
-    placeholder: 'Enter your email',
-    submitLabel: 'Sign up',
-    successMessage: 'You’re in. See you out there.',
+    heading: 'Join the roster',
+    body: 'We’re creating a community where competition and connection go hand in hand, bringing athletes together through training sessions, challenges, and experiences beyond the gym. Leave your email and we add your name to the book.',
+    placeholder: 'your@email.com',
+    submitLabel: 'Add my name',
+    successMessage: 'You’re in the book. See you at the next session.',
   },
 
   /** Fallback footer links, used only if the Storefront `footer` menu is empty. */

@@ -9,11 +9,11 @@ import { cn } from '~/lib/cn';
 
 /**
  * Full-bleed homepage hero. Structure per the drop-01 mockup (Gabe,
- * 2026-07-21): mono spec-strip eyebrow, the locked ≤8-word ALL-CAPS headline
- * (7PA-232, unchanged), a filled + text CTA pair, and two mono spec lines
- * (coordinates, location/time). Deliberate deviations from 7PA-232: two CTAs
- * instead of one and no subline — the secondary renders in chalk, so the
- * page's one Ember moment is still the primary CTA alone. Sits under the
+ * 2026-07-21): mono spec-strip eyebrow, the ALL-CAPS headline (homepage v2:
+ * two forced lines, ≤8 words), an Inter subhead, a filled + text CTA pair,
+ * and two mono spec lines (coordinates, location/time). Deliberate deviations
+ * from 7PA-232: two CTAs instead of one — the secondary renders in chalk, so
+ * the page's one Ember moment is still the primary CTA alone. Sits under the
  * transparent overlay header. The photograph itself is replaced by the
  * photography program (7PA-236/237).
  */
@@ -25,7 +25,7 @@ export const Hero = () => (
       src={HOME_HERO.backgroundImage.url}
       width={HOME_HERO.backgroundImage.width}
       height={HOME_HERO.backgroundImage.height}
-      alt=""
+      alt={HOME_HERO.backgroundImage.alt}
       sizes="100vw"
       loading="eager"
       // React 18's runtime doesn't implement the camelCase fetchPriority DOM
@@ -43,15 +43,25 @@ export const Hero = () => (
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Spec-strip tier (7PA-242): JetBrains Mono caps at +0.1em. */}
       <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>
-      {/* Hero display tier: 48px mobile → 72/96px desktop, -0.005em, lh 0.95
-          (leading repeats per size — text-* utilities reset line-height). */}
+      {/* Hero display tier, -0.005em, lh 0.95 (leading repeats per size —
+          text-* utilities reset line-height). Each line is a nowrap block so
+          the break lands at the period on every viewport. The longer line
+          ("GOING TO BE AN ATHLETE.") measures ≈10px per font-px, so each step
+          is the largest size whose line fits the content box at that width:
+          32px at 375, 48px from 560, 60px from md, 72px from lg, 96px from xl.
+          The 560 step is an arbitrary breakpoint like the base; the named
+          md/lg/xl steps above it stay in ascending order, so emit order is
+          safe. Re-measure if the headline copy changes. */}
       <Heading
         as="h1"
         size="none"
-        className="max-w-[16ch] text-5xl leading-[0.95] tracking-hero md:text-7xl md:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
-      >
-        {HOME_HERO.headline}
-      </Heading>
+        lines={HOME_HERO.headlineLines}
+        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl min-[560px]:leading-[0.95] md:text-6xl md:leading-[0.95] lg:text-7xl lg:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
+      />
+      {/* Body tier: Inter, sentence case. */}
+      <p className="max-w-[42ch] text-base leading-[1.55] md:text-lg md:leading-[1.55]">
+        {HOME_HERO.subhead}
+      </p>
       <div className="mt-1 flex flex-wrap items-center gap-x-6 gap-y-3">
         <Cta to={HOME_HERO.cta.href} variant="brand" size="lg">
           {HOME_HERO.cta.label}
