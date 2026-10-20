@@ -2,12 +2,13 @@ import { Image } from '@shopify/hydrogen';
 
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { HOME_TESTED } from '~/content/home';
+import { HOME_ROSTER } from '~/content/home';
 
 /**
- * "Tested in training. Refined by community." — split section: dark textured
- * (looping video) panel with the copy + membership CTA on the left, lifestyle
- * photo filling the right. Mirrors the live `black-text-image-split` section.
+ * "The Roster" — split section: dark textured (looping video) panel with the
+ * ask + JOIN THE ROSTER CTA on the left, lifestyle photo filling the right.
+ * Layout mirrors the live `black-text-image-split` section; copy is homepage
+ * v2 (content/home.ts).
  */
 export const TestedInTraining = () => (
   // Splits 5:4 (text left) from 640px up rather than live's 1024: the photo is
@@ -19,7 +20,7 @@ export const TestedInTraining = () => (
           to carry white text. `bg-field-night` on the section covers the gap
           until the first frame decodes. */}
       <video
-        src={HOME_TESTED.video}
+        src={HOME_ROSTER.video}
         autoPlay
         loop
         muted
@@ -32,21 +33,21 @@ export const TestedInTraining = () => (
         <Heading
           as="h2"
           size="none"
-          lines={HOME_TESTED.headingLines}
+          lines={HOME_ROSTER.headingLines}
           className="text-2xl leading-[1.2] md:text-[2.5rem] xl:text-[4.05rem]"
         />
-        <p className="mt-6 max-w-md text-sm text-support-night">{HOME_TESTED.body}</p>
+        <p className="mt-6 max-w-md text-sm text-support-night">{HOME_ROSTER.body}</p>
         {/* Secondary — the home page's one Ember moment is the hero CTA (7PA-230). */}
-        <Cta to={HOME_TESTED.cta.href} className="mt-8">
-          {HOME_TESTED.cta.label}
+        <Cta to={HOME_ROSTER.cta.href} className="mt-8">
+          {HOME_ROSTER.cta.label}
         </Cta>
       </div>
     </div>
     <Image
-      src={HOME_TESTED.image.url}
-      width={HOME_TESTED.image.width}
-      height={HOME_TESTED.image.height}
-      alt=""
+      src={HOME_ROSTER.image.url}
+      width={HOME_ROSTER.image.width}
+      height={HOME_ROSTER.image.height}
+      alt={HOME_ROSTER.image.alt}
       loading="lazy"
       sizes="(min-width: 640px) 45vw, 100vw"
       className="order-1 aspect-[351/367] w-full object-cover sm:order-2 sm:aspect-auto sm:h-full"

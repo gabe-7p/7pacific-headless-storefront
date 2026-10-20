@@ -24,8 +24,10 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
 function robotsTxtData({ url, shopId }: { shopId?: string; url?: string }) {
   const sitemapUrl = url ? `${url}/sitemap.xml` : undefined;
+  const llmsUrl = url ? `${url}/llms.txt` : undefined;
 
   return `
+${llmsUrl ? `# LLM-readable site summary (llms.txt): ${llmsUrl}` : ''}
 User-agent: *
 ${generalDisallowRules({ sitemapUrl, shopId })}
 

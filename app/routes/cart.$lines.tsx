@@ -8,7 +8,7 @@ import type { Route } from './+types/cart.$lines';
  * e.g. `/cart/41007289663544:1,41007289696312:2?discount=SUMMER`.
  */
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const { cart } = context;
+  const { cart, posthog } = context;
   const { lines } = params;
   if (!lines) return redirect('/cart');
   const linesMap = lines.split(',').map((line) => {
@@ -44,6 +44,15 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   const headers = cart.setCartId(cartResult.id);
 
   if (cartResult.checkoutUrl) {
+    posthog?.capture({
+      distinctId: cartResult.id.split('?')[0],
+      event: 'direct_checkout_started',
+      properties: {
+        line_count: linesMap.length,
+        total_quantity: linesMap.reduce((total, line) => total + line.quantity, 0),
+        has_discount: discountArray.length > 0,
+      },
+    });
     return redirect(cartResult.checkoutUrl, { headers });
   } else {
     throw new Error('No checkout URL found');

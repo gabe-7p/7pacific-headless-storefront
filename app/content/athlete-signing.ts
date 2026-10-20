@@ -66,7 +66,11 @@ export type AthleteSigningContent = {
     camLine: string;
     /** Mobile-only caption row under the panel. */
     shotLine: string;
-    image: { src: string; alt: string; width: number; height: number };
+    /**
+     * `fit: 'contain'` letterboxes the full image inside the panel instead of
+     * cover-cropping it — for shots whose edges can't be lost (default cover).
+     */
+    image: { src: string; alt: string; width: number; height: number; fit?: 'cover' | 'contain' };
   };
   founderVideo: {
     number: string;
@@ -365,12 +369,230 @@ export const OWEN_PLATT = {
   },
 } satisfies AthleteSigningContent;
 
+/**
+ * Aaron Lee — Seattle-based training creator (@rocklee.fit, "My wellness
+ * diary"): former D1 athlete at Oregon (football), now documenting the daily
+ * work and teaching athletes to train like athletes ("Train Like an Athlete"
+ * workout breakdowns). ~28.5K on TikTok (@rocklee.fit).
+ */
+const AARON_LEE = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/aaron-lee',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/aaron-lee',
+  },
+  transmissionLine: 'Seattle → San Francisco · 09.08.2026',
+  eyebrowLine: 'Official // Athlete Signing · 09.08.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Aaron Lee.' },
+  body: 'We created this page to welcome you to the 7Pacific Athlete Creator team. You built your foundation the D1 way \
+  like Oregon does it. Instead of leaving it there, you turned that knowledge and discipline into the lifts, the recovery, \
+  and the standards that your following loves. You’re showing people how to train like an athlete, and that’s exactly who \
+  we’re building for: the athletes. Scroll down to watch a personal message from us about why we’re fired up to have you \
+  on the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Seattle · 47.61N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: {
+      src: `${CDN}/aaron_lee_athlete_creator_avatar.png`,
+      alt: 'Aaron Lee mid-training session',
+      width: 1024,
+      height: 1536,
+      // Full-figure shot — cover-cropping cuts his hands and feet off.
+      fit: 'contain',
+    },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // Aaron's founder message in Shopify Files (portrait, 22s) — Shopify's
+    // 720p transcode; poster is the custom thumbnail set in Shopify admin.
+    src: 'https://cdn.shopify.com/videos/c/vp/8d5feed0d0594eecbb7aede436dde043/8d5feed0d0594eecbb7aede436dde043.HD-720p-3.0Mbps-93935029.mp4',
+    poster: `${CDN}/preview_images/Screenshot_2026-09-09_at_2.28.15_PM.png`,
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:22',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    stat: { label: 'Foundation', value: 'D1', verified: true },
+    scale: { markerPercent: 85, markerLabel: 'Oregon FB' },
+    fields: [
+      { label: 'Discipline', value: 'Athletic Training' },
+      { label: 'Base', value: 'Seattle' },
+      // His audience lives on TikTok (@rocklee.fit) — IG is the smaller channel.
+      { label: 'Reach', value: '28.5K' },
+      { label: 'Series Tagline', value: 'POV: You Train Like An Athlete' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'rocklee.fit',
+    tagline: 'My wellness diary. Former D1 athlete.',
+    series: ['Train Like an Athlete', 'My Gym Diary'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
+/**
+ * Nick Gonzalez — Miami-based athlete (@nickg_14): triathlon + strength
+ * (first Charleston Triathlon, July 2026; Coastal Athletic Club), faith-led.
+ * Owner of Almavora (@almavora_) — strength programs from elite college
+ * coaches, built for athletes chasing college sports. ~4.2K followers.
+ */
+const NICK_GONZALEZ = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/nick-gonzalez',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/nick-gonzalez',
+  },
+  transmissionLine: 'Miami → San Francisco · 10.08.2026',
+  eyebrowLine: 'Official // Athlete Signing · 10.08.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Nick Gonzalez.' },
+  body: 'We created this page to welcome you to the 7Pacific Athlete Creator team. You’re an athlete first: the heavy \
+  loads, the long miles, your first triathlon finish line already crossed. Then you built Almavora to hand that same \
+  next-level training to athletes chasing college sports. Faith, discipline, and no shortcuts is exactly who we’re \
+  building for: the athletes. Scroll down to watch a personal message from us about why we’re fired up to have you on \
+  the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Miami · 25.76N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: {
+      src: `${CDN}/nick_gonzalez_athlete_picture.png`,
+      alt: 'Nick Gonzalez mid-training session',
+      width: 1122,
+      height: 1402,
+      // Full-figure shot — cover-cropping cuts his head and feet off.
+      fit: 'contain',
+    },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // Nick's founder message in Shopify Files (portrait, 32s) — Shopify's
+    // 720p transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/d28bb7a756df42b3a46ea28c7ea9b7e9/d28bb7a756df42b3a46ea28c7ea9b7e9.HD-720p-1.6Mbps-96972241.mp4',
+    poster: `${CDN}/preview_images/d28bb7a756df42b3a46ea28c7ea9b7e9.thumbnail.0000000000.jpg`,
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:32',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    // His first triathlon (Charleston, July 2026) — a public race finish.
+    stat: { label: 'Triathlons Finished', value: '01', verified: true },
+    scale: { markerPercent: 80, markerLabel: 'Charleston' },
+    fields: [
+      { label: 'Discipline', value: 'Triathlon x Strength' },
+      { label: 'Base', value: 'Miami' },
+      { label: 'Reach', value: '4.2K' },
+      { label: 'Owner', value: 'Almavora' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'nickg_14',
+    tagline: 'Athlete. Follower of Jesus. Owner of Almavora.',
+    series: ['Almavora · College Strength Training', 'Coastal Athletic Club'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
+/**
+ * Dakotah Riemer — Menasha, WI (Fox Cities) football-built strength and
+ * mindset creator (@kodyriemer, "Fitness | Motivation | Mindset"): two-time
+ * All-Conference college football player; "Dare to be great." ~14K followers.
+ */
+const DAKOTAH_RIEMER = {
+  chrome: {
+    badge: 'Official // Athlete Signing',
+    privacy: 'Private',
+    edition: '001/001',
+    urlLine: '7pacificapparel.com/athletes/kody-riemer',
+    designedLine: 'Designed in San Francisco',
+    existsLine: 'Exists only at /athletes/kody-riemer',
+  },
+  transmissionLine: 'Menasha → San Francisco · 10.08.2026',
+  eyebrowLine: 'Official // Athlete Signing · 10.08.2026',
+  headline: { lead: 'Welcome to the team,', name: 'Dakotah Riemer.' },
+  body: 'We created this page to welcome you to the 7Pacific Athlete Creator team. Two-time All-Conference on the football \
+  field, and you kept the standard when the season ended: the sprints, the mountain leg days, the mindset you put in front \
+  of 14K people every day. Vacation changes the location, not the standard, and that’s exactly who we’re building for: \
+  the athletes. Scroll down to watch a personal message from us about why we’re fired up to have you on the team.',
+  signedLine: 'Signed · Status: Confirmed',
+  hero: {
+    modeLabel: 'Mode 01 · Action',
+    locationLine: 'Menasha · 44.20N',
+    camLine: '',
+    shotLine: 'Shot.01 — First Session',
+    image: {
+      src: `${CDN}/kody_riemer_athlete_picture.png`,
+      alt: 'Dakotah Riemer mid-training session',
+      width: 1122,
+      height: 1402,
+      // Full-figure shot — cover-cropping cuts his head and feet off.
+      fit: 'contain',
+    },
+  },
+  founderVideo: {
+    number: '01',
+    title: 'A Personal Message from the Founder',
+    // Dakotah's founder message in Shopify Files (portrait, 35s) — Shopify's
+    // 720p transcode; poster is Shopify's auto-generated preview (no custom
+    // thumbnail set for this video yet).
+    src: 'https://cdn.shopify.com/videos/c/vp/8c133fee98e7483cab2d4aebb6758c83/8c133fee98e7483cab2d4aebb6758c83.HD-720p-1.6Mbps-96972281.mp4',
+    poster: `${CDN}/preview_images/8c133fee98e7483cab2d4aebb6758c83.thumbnail.0000000000.jpg`,
+    captions: '',
+    attribution: 'Gabriel · Founder',
+    duration: '00:35',
+  },
+  readout: {
+    number: '02',
+    title: 'Performance Readout',
+    stat: { label: 'All-Conference', value: 'X2', verified: true },
+    scale: { markerPercent: 85, markerLabel: 'College FB' },
+    fields: [
+      { label: 'Discipline', value: 'Football x Strength' },
+      { label: 'Base', value: 'Menasha' },
+      { label: 'Reach', value: '14K' },
+      { label: 'Creed', value: 'Dare to Be Great' },
+    ],
+  },
+  instagram: {
+    number: '03',
+    title: 'The Creator',
+    handle: 'kodyriemer',
+    tagline: 'Fitness | Motivation | Mindset. Dare to be great.',
+    series: ['Fitness · Motivation · Mindset', 'Vacation Changes the Location, Not the Standard'],
+    linkLabel: 'Open Instagram',
+  },
+} satisfies AthleteSigningContent;
+
 /** URL handle → signing page content. Adding an athlete = one line here. */
 const ATHLETE_SIGNINGS: Record<string, AthleteSigningContent> = {
   'amir-smith': AMIR_SMITH,
   'josh-wyche': JOSH_WYCHE,
   'kenneth-pierce': KENNETH_PIERCE,
   'owen-platt': OWEN_PLATT,
+  'aaron-lee': AARON_LEE,
+  'nick-gonzalez': NICK_GONZALEZ,
+  'kody-riemer': DAKOTAH_RIEMER,
 };
 
 /** Returns null for unknown handles — the route turns that into a 404. */

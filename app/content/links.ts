@@ -10,9 +10,8 @@ export const STORE_LINKS = {
   /** Core Values card CTAs ("Shop tees" / "Shop shorts"). */
   shopShirts: '/products/tracefiber-performance-tech-tee-mountain-mist',
   shopShorts: '/products/airrail-6-performance-shorts-mountain-mist',
-  /** Homepage hero CTA target. */
-  shopShortsMint: '/products/airrail-6-performance-shorts-mint',
   /** Homepage Name/Spec banner cells — one per live product family: */
+  shopShortsMint: '/products/airrail-6-performance-shorts-mint',
   shopShortsMidnight: '/products/airrail-6-performance-shorts-midnight',
   shopShirtsMidnight: '/products/tracefiber-performance-tech-tee-midnight',
   shopHat: '/products/motionframe-running-hat-white',

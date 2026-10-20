@@ -38,7 +38,7 @@ app/
   lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
-public/          static files served at the web root as-is (favicon.ico)
+public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
 *.generated.d.ts storefront types (GENERATED — never edit)
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
@@ -66,7 +66,7 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 - **Layout & motion** (page width, header/announcement heights, easing) → `app/styles/tailwind.css` `:root` (used via `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`; the sticky topbar offsets itself by `-top-(--announcement-h)`).
 - **Content & links** (name, wordmark, announcement, social, newsletter, fallback nav) → [app/lib/brand.ts](app/lib/brand.ts).
 - **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`buildMeta()`).
-- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`, `SpecLine`, `BrandDialog`). All titles render through `Heading` (multi-line via its `lines` prop); all CTAs through `Cta` (label in, arrow + variant handled once); mono spec-strip labels through `SpecLine`; night-tier modals through the `BrandDialog` shell — never hand-roll these class recipes at a callsite.
+- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`, `SpecLine`, `BrandDialog`, `Readout`). All titles render through `Heading` (multi-line via its `lines` prop); all CTAs through `Cta` (label in, arrow + variant handled once); mono spec-strip labels through `SpecLine`; night-tier modals through the `BrandDialog` shell; file/HUD chapter labels and corner brackets through `Readout` — never hand-roll these class recipes at a callsite.
 
 ## Domain note: color = separate product
 
@@ -87,7 +87,7 @@ The 9 live products are **separate Shopify products per color**, not variants. T
 **When you change code, update the documentation that describes it — in the same change, not later.** A PR that drifts from its docs is incomplete. Specifically:
 
 - Changed a **convention or pattern**? Update the relevant `.claude/rules/*.md` (and the Cursor mirror at `.cursor/rules/code-style.mdc`) in the same commit.
-- Added/renamed/moved a **script, command, env var, or top-level directory**? Update this `CLAUDE.md` (Commands / Repo map) and `.env.example`.
+- Added/renamed/moved a **script, command, env var, or top-level directory**? Update this `CLAUDE.md` (Commands / Repo map) and the env var table in [docs/architecture.md](docs/architecture.md#environment--secrets).
 - Introduced a **new pattern worth following** (or a sharp edge worth avoiding)? Add it to the right rule file so the next agent inherits it.
 - Made a **decision that wasn't obvious**? Record the _why_ where future readers will look (rule file, or `docs/` once it exists).
 

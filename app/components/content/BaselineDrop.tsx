@@ -1,13 +1,12 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { LiveDot } from '~/components/common/LiveDot';
 import {
   MediaSlot,
   type MediaSlotRatio,
   type MediaSlotSource,
 } from '~/components/common/MediaSlot';
-import { SpecLine } from '~/components/common/SpecLine';
+import { BaselineMasthead } from '~/components/content/BaselineMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
 import { cn } from '~/lib/cn';
 
@@ -53,29 +52,6 @@ const GradedMedia = ({
       className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
     />
   </div>
-);
-
-/** Live dot + edition line, the page headline (the status line stacks under
-    it on mobile, joins it inline from md), and the intro paragraph. */
-const Intro = () => (
-  <Container className="pt-8 pb-6 md:pt-14 md:pb-10">
-    <SpecLine className="flex items-center gap-3 text-sm text-ink">
-      <LiveDot />
-      {BASELINE_DROP.eyebrow}
-    </SpecLine>
-    <Heading
-      as="h1"
-      size="none"
-      className="mt-3 text-[2.5rem] leading-none tracking-hero md:mt-4 md:text-6xl md:leading-none"
-    >
-      {BASELINE_DROP.headline}
-      <span className="hidden md:inline">{`\u2002·\u2002${BASELINE_DROP.status}`}</span>
-    </Heading>
-    <SpecLine className="mt-2 text-base text-ink md:hidden">{BASELINE_DROP.status}</SpecLine>
-    <p className="mt-4 max-w-2xl text-sm leading-relaxed text-support md:mt-5">
-      {BASELINE_DROP.intro}
-    </p>
-  </Container>
 );
 
 /** The full-bleed 16:9 drop film, with the full-video pointer pinned to
@@ -268,7 +244,7 @@ const Closer = () => (
  */
 export const BaselineDrop = () => (
   <div>
-    <Intro />
+    <BaselineMasthead />
     <Film />
     <Receipts />
     <Standard />

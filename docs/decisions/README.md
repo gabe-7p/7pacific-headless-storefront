@@ -40,3 +40,4 @@ What this makes easy, what it costs, what we're explicitly not doing.
 | [0005](0005-color-as-separate-product.md)         | Keep "color = separate product" data model for v1    |
 | [0006](0006-shadcn-ui-for-headless-primitives.md) | shadcn/ui for headless primitives (refines 0002)     |
 | [0007](0007-motion-for-animation.md)              | Motion for animation, not GSAP (extends 0002)        |
+| [0008](0008-posthog-analytics.md)                 | PostHog for analytics + session replay               |

@@ -5,8 +5,11 @@ import { createHydrogenRouterContext } from '~/lib/context';
 
 export default {
   async fetch(request: Request, env: Env, executionContext: ExecutionContext): Promise<Response> {
+    let posthog: HydrogenAdditionalContext['posthog'];
+
     try {
       const hydrogenContext = await createHydrogenRouterContext(request, env, executionContext);
+      posthog = hydrogenContext.posthog;
 
       const handleRequest = createRequestHandler({
         build: serverBuild,
@@ -32,7 +35,12 @@ export default {
       return response;
     } catch (error) {
       console.error(error);
+      posthog?.captureException(error);
       return new Response('An unexpected error occurred', { status: 500 });
+    } finally {
+      // Flush after the response is sent — awaiting here would hold every
+      // response until PostHog answers.
+      if (posthog) executionContext.waitUntil(posthog.shutdown().catch(() => undefined));
     }
   },
 };

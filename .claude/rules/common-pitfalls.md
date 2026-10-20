@@ -95,6 +95,14 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 
 The same skeleton block also styles every bare `input` (`margin-top: 0.25rem`, `margin-bottom: 0.5rem`, border, radius, padding). Utility classes on the input override the ones you set — but any you _don't_ set leak through: a custom-styled input needs `m-0` (and `rounded-none` if square) or it sits 4px lower than the button beside it. Measure the rendered row, not the classes.
 
+## Server packages must have a workerd build
+
+Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry imports Node built-ins (`path`, `fs`, `process.cwd()`) fails at load with an opaque `MiniOxygen couldn't load your app's entry point` error. `posthog-node` is the known case, so import it from **`posthog-node/edge`**. Its edge build has no AsyncLocalStorage, so `withContext()` does nothing there. [lib/posthog.server.ts](../../app/lib/posthog.server.ts) attaches the visitor through `before_send` instead.
+
+## Runtime config beats `VITE_*`
+
+`import.meta.env.VITE_*` is inlined at **build** time, so every Oxygen environment gets the same value. Anything that differs between Production and Preview (like the PostHog project key) is a `PUBLIC_*` Oxygen var, read from `context.env` and passed to the client through the root loader.
+
 ## No `any`
 
 `no-explicit-any` is a warning we treat as a defect — it hides type mismatches. Use `unknown` + narrowing, generics, or the generated types instead.
