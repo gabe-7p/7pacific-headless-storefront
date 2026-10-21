@@ -59,6 +59,8 @@ The typed result is keyed off the literal query string. After editing a `#graphq
 
 Render Storefront images with `<Image data={...} sizes="..." />` (responsive srcset, CDN sizing) and prices with `<Money data={...} />` — don't hand-roll `<img>` or format currency manually.
 
+This is not just a bandwidth nicety. A bare `<img>` pointing at a full-size CDN file makes every visitor's browser shrink a 20-megapixel photo to a card, and the GPU path browsers use for that aliases fine, regular textures (the knit on the quarter-zip) into visible wave bands. Re-uploading at a different size does not fix it; the only fix is an image delivered at the slot's own pixel size, which `<Image>` with `sizes` (and `aspectRatio` + `crop` for a cropped slot) does. Metafield JSON that carries plain URLs (`product_details`) still goes through `<Image src=...>`, not `<img>`.
+
 ## The "color = separate product" data model
 
 The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
@@ -88,6 +90,8 @@ Three bit us during the live-parity work; all three type-check and lint clean.
 ```
 
 **A preset `size` on `Heading`/`SectionHeader` carries responsive steps** (`md:`/`xl:`) that a `className` can't override at those breakpoints. Pass `size="none"` when a page owns its whole scale.
+
+**`aspect-*` plus `min-h-*` on an auto-width box widens the box, not just its height.** CSS transfers a min/max constraint through `aspect-ratio` into the other axis whenever that axis is `auto`, so `min-h-[50rem] aspect-[2400/1543]` on a full-bleed section becomes a 1244px _min-width_ and the page scrolls sideways on every narrower viewport. Give the box an explicit width (`w-full`) so there is nothing to transfer; `min-w-0` does not help. Measure `document.documentElement.scrollWidth` against `clientWidth` after any aspect-ratio change.
 
 ## The base layer caps every `form` at 400px
 
