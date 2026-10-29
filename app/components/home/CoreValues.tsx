@@ -17,15 +17,25 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
       className
     )}
   >
-    {/* Tenet heading: 24px, 28.8px tablet, 32px desktop; tracking comes from
-        the Heading brand variant (section-header tier). */}
-    <Heading as="h3" size="none" className="text-2xl leading-[1.1] md:text-[1.8rem] xl:text-[2rem]">
+    {/* Tenet heading: 18px, 20px tablet, 24px desktop (two steps under the
+        live 24/28.8/32 — Gabe, 2026-10-28); tracking comes from the Heading
+        brand variant (section-header tier). */}
+    <Heading
+      as="h3"
+      size="none"
+      className="text-lg leading-[1.1] md:text-xl md:leading-[1.1] xl:text-2xl xl:leading-[1.1]"
+    >
       {value.title}
     </Heading>
-    <p className="mt-4 max-w-[38ch] text-[0.95rem] leading-[1.2] md:text-base">{value.body}</p>
-    <Cta to={value.cta.href} prefetch="intent" size="xs" className="mt-6">
-      {value.cta.label}
-    </Cta>
+    {/* Body: 13px, 14px from md (two steps under the live 15.2/16). */}
+    <p className="mt-4 max-w-[38ch] text-[0.8125rem] leading-[1.25] md:text-sm md:leading-[1.25]">
+      {value.body}
+    </p>
+    {value.cta && (
+      <Cta to={value.cta.href} prefetch="intent" size="xs" className="mt-6">
+        {value.cta.label}
+      </Cta>
+    )}
   </div>
 );
 
@@ -53,7 +63,7 @@ const Media = ({ media }: { media: CoreValue['media'] }) =>
   );
 
 /**
- * "How We Train" — three alternating rows pairing each rule card with its
+ * "How We Train" — four alternating rows pairing each rule card with its
  * media (wide media ~2/3, narrow card ~1/3, sides alternating per row; single
  * column below lg). Layout mirrors the live `core-values-homepage-v2` section;
  * the copy is homepage v2 (content/home.ts).

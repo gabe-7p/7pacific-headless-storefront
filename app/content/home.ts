@@ -15,9 +15,8 @@ import { BRAND } from '~/lib/brand';
 const CDN = BRAND.filesCdn;
 
 export const HOME_HERO = {
-  /** Mono spec-strip label above the headline: kit + version, where tested,
-      when. TODO: bump the date with each kit revision. */
-  eyebrow: 'Baseline V01 · Tested SF · Oct 2026',
+  /** Mono spec-strip label above the headline (caps via CSS). */
+  eyebrow: 'Designed in San Francisco',
   /**
    * Homepage v2 hero (Oct 2026). The headline is a fact the athlete already
    * knows, never a motivational line: ALL CAPS via CSS, two forced lines,
@@ -25,8 +24,8 @@ export const HOME_HERO = {
    * ['The stands are empty.', 'We train anyway.'].
    */
   headlineLines: ['the athlete', 'never left.'],
-  /** Inter, sentence case — puts "we" in the frame under the "you" headline. */
-  subhead: 'We build the kit you train in. Tested by athletes, revised after every session.',
+  /** Inter, sentence case. */
+  subhead: 'Performance apparel engineered for athletes who never stop competing.',
   /** Primary CTA, mono caps (the page's single Ember moment). Target is the
       BASELINE shop-all collection (Gabe 2026-09-10). */
   cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
@@ -36,7 +35,9 @@ export const HOME_HERO = {
    * live — until then it anchors to the Starting Lineup grid (FirstDrop's id).
    */
   secondaryCta: { label: 'Read the Story', href: '/pages/our-story' },
-  /** Mono spec lines under the CTAs: where and when the hero shot was made. */
+  /** Mono spec lines under the CTAs: where and when the hero shot was made.
+      Not rendered for now (Gabe, 2026-10-28) — Hero keeps the block parked
+      until there is a shot to caption. */
   coordinates: '37.78°N · 122.51°W',
   tagline: 'Lands End · 5:47 AM',
   backgroundImage: {
@@ -47,6 +48,16 @@ export const HOME_HERO = {
     // content/homepage-image-swaps.md); the file swaps in without a code edit.
     alt: 'Four athletes sprinting on an empty stadium track at dusk',
   },
+  /**
+   * Local media test (Oct 2026): a hero cut served from `public/media/`,
+   * which is a gitignored SYMLINK to ~/Desktop/hero_video_edit on Gabe's
+   * machine (the clips are far over GitHub's 100MB file limit, so nothing
+   * under /media is in the repo — preview deploys won't have it). `_web`
+   * files beside the originals are the crops made for these slots. The
+   * backgroundImage above stays as the poster (first paint + no-video
+   * fallback). Swap to CDN URLs before this ships beyond a test.
+   */
+  backgroundVideo: { src: '/media/sled_push_1.mp4' },
 } as const;
 
 type NameSpecCell = {
@@ -155,13 +166,17 @@ export const HOME_BASELINE_INTRO = {
       eyebrow: 'Baseline V01 · Available now',
       title: 'The First Kit',
       cta: { label: 'Shop Baseline V01', href: STORE_LINKS.shopAll },
-      // Shopify file 53003545477437, picked by Gabe (2026-08-26).
+      // Local media test (Gabe, 2026-10-28): served from public/media. Cropped
+      // from the 4954×6193 original (sips -c 5325 4260 --cropOffset 700 595)
+      // so the athlete fills the card. Previous slot: Shopify file 53003545477437
+      // (`${CDN}/cole-running-from-behind-test.png?v=1787810904`, 2616×3276).
+      // Upload to Shopify Files and point back at the CDN before this ships.
       media: {
         kind: 'image',
-        url: `${CDN}/cole-running-from-behind-test.png?v=1787810904`,
-        width: 2616,
-        height: 3276,
-        alt: 'Training kit laid out on stadium bleachers with version tag visible',
+        url: '/media/taking_off_shirt_web.jpg',
+        width: 4260,
+        height: 5325,
+        alt: 'Athlete pulling off a grey training tee at the rail of a stadium track at dusk',
       },
     },
     film: {
@@ -193,7 +208,8 @@ export const HOME_FIRST_DROP = {
 export type CoreValue = {
   title: string;
   body: string;
-  cta: { label: string; href: string };
+  /** Optional — a row can be title + body only (the fourth row). */
+  cta?: { label: string; href: string };
   /** Card background tone — rows alternate dark charcoal and light gray. */
   tone: 'dark' | 'light';
   /** The media panel paired with the card in its row. */
@@ -203,7 +219,7 @@ export type CoreValue = {
 };
 
 /**
- * "How We Train" — three rules, not feelings (homepage v2, Oct 2026). Each
+ * "How We Train" — four rules, not feelings (homepage v2, Oct 2026). Each
  * card is a rule the athlete already follows, in the working voice. The CTAs
  * are not in the brief; they stay outline (never Ember) and point at existing
  * surfaces.
@@ -228,12 +244,18 @@ export const HOME_CORE_VALUES = {
       tone: 'light',
       body: `There's something about training alongside people who expect more of themselves. The competition gets better, the effort goes up, and everyone leaves a little further ahead.`,
       cta: { label: 'Read the story', href: '/pages/our-story' },
+      // Local media test (Gabe, 2026-10-28): served from public/media. A 2:1
+      // band cropped from the 3811×4764 portrait original (sips -c 1786 3572
+      // --cropOffset 715 120) — head, upper back and the loaded bar — so the
+      // wide slot's object-cover trims little at any breakpoint. Previous
+      // slot: `${CDN}/social_sharing.jpg` (1656×1104). Upload to Shopify
+      // Files and point back at the CDN before this ships.
       media: {
         kind: 'image',
-        url: `${CDN}/social_sharing.jpg`,
-        width: 1656,
-        height: 1104,
-        alt: 'Athlete sprinting while a teammate calls the split from the infield',
+        url: '/media/squatting_from_behind_web.jpg',
+        width: 3572,
+        height: 1786,
+        alt: 'Athlete from behind under a loaded barbell in a dark squat rack',
       },
     },
     {
@@ -241,32 +263,95 @@ export const HOME_CORE_VALUES = {
       tone: 'dark',
       body: `We take training seriously because we love it, and some of our best memories happen between the warm-up and the finish line.`,
       cta: { label: 'Shop shorts', href: STORE_LINKS.shopShorts },
+      // Local media test (Gabe, 2026-10-28): served from public/media. Previous
+      // slot: `${CDN}/paul_screaming.jpg` (1656×1104). Upload to Shopify Files
+      // and point back at the CDN before this ships.
+      media: {
+        kind: 'video',
+        src: '/media/dapping_up_at_track_edited.mp4',
+        label: 'Athletes dapping each other up on the track between reps',
+      },
+    },
+    {
+      title: 'YOUR BEST SEASON IS NEXT',
+      tone: 'light',
+      body: `The athlete you used to be got you here. The one you're becoming is what keeps you going.`,
+      // Local media test (Gabe, 2026-10-28): served from public/media. A 2:1
+      // band cropped from the 4902×6128 portrait original (sips -c 2100 4200
+      // --cropOffset 651 429) — both athletes from the head to the shorts.
+      // Upload to Shopify Files and point at the CDN before this ships.
       media: {
         kind: 'image',
-        url: `${CDN}/paul_screaming.jpg`,
-        width: 1656,
-        height: 1104,
-        alt: 'Athletes warming up on a dark track at first light',
+        url: '/media/leaning_against_fence_web.jpg',
+        width: 4200,
+        height: 2100,
+        alt: 'Two athletes in sunglasses leaning against a chain-link fence in full sun',
       },
     },
   ] satisfies ReadonlyArray<CoreValue>,
 } as const;
 
 /**
- * "The Roster" — the split section at the foot of the page (homepage v2,
- * Oct 2026): the pitch and the ask. Body + CTA are MEMBERSHIP_PITCH
- * (content/membership.ts), shared with the PDP brand banner.
+ * "The Roster" — the section at the foot of the page (homepage v2, Oct 2026;
+ * relaid Gabe 2026-10-28): a centered pitch + ask, then full-bleed media
+ * bands stacked with no gap, the video at 80% and the Kezar photo at 70% of
+ * their native height (both 75%, then 65%, then 70% earlier on 2026-10-28). Body +
+ * CTA are MEMBERSHIP_PITCH (content/membership.ts), shared with the PDP brand
+ * banner.
+ *
+ * Local media test (2026-10-28): both bands are served from public/media.
+ * Previous slots: video
+ * https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4,
+ * image `${CDN}/two_walking_to_workout_cropped.png` (696×728). Upload to
+ * Shopify Files and point back at the CDN before this ships.
  */
 export const HOME_ROSTER = {
   headingLines: ['The Roster'],
   body: MEMBERSHIP_PITCH.body,
   /** Opens the signup dialog. */
   cta: MEMBERSHIP_PITCH.cta,
-  video: 'https://cdn.shopify.com/videos/c/o/v/10bb3b154ea542699c4f83e68a45a05f.mp4',
+  /** Native 3840×2160; the band shows 80% of its height, anchored 85% down
+      (TestedInTraining's aspect-[3840/1728] box + object-cover
+      object-[50%_85%] — most of the trim comes off the top, a sliver off the
+      floor). */
+  video: {
+    src: '/media/wide_gym_video.mp4',
+    label: 'Athletes training across a wide gym floor',
+  },
+  /** Pre-cropped to 70% of the 7254×4838 original's height
+      (sips -c 3387 7254 --cropOffset 927 0), centered on the group. */
   image: {
-    url: `${CDN}/two_walking_to_workout_cropped.png`,
-    width: 696,
-    height: 728,
-    alt: 'Four athletes seated apart across empty stadium bleachers',
+    url: '/media/roster_at_kezar_web.jpg',
+    width: 7254,
+    height: 3387,
+    alt: 'Six athletes stretching along the track and bench at Kezar Stadium',
+  },
+  /**
+   * Third band: the SF bakery run, two 1.36:1 halves side by side in a
+   * 2.72:1 box — a step shorter than the Kezar band (Gabe, 2026-10-28). Both
+   * cropped from 3:2 originals ~15% wider than the earlier square and
+   * anchored to the bottom edge, so the trees go and the crowd stays —
+   * squad: 6542×4361 (sips -c 3688 5015 --cropOffset 673 1201, centred on the
+   * banner); announcement: 6607×4405 (sips -c 3725 5066 --cropOffset 680 775,
+   * centred on the speaker).
+   */
+  bakeryRun: {
+    squad: {
+      url: '/media/sf_bakery_run_full_squad_web.jpg',
+      width: 5015,
+      height: 3688,
+      alt: 'The full bakery-run squad gathered on the road behind a 7Pacific banner',
+    },
+    announcement: {
+      url: '/media/sf_bakery_run_announcement_web.jpg',
+      width: 5066,
+      height: 3725,
+      alt: 'Runners gathered under the trees listening to the pre-run announcement',
+    },
+    /** External — the recap post on Instagram, new tab. */
+    cta: {
+      label: 'Watch bakery run recap',
+      href: 'https://www.instagram.com/p/DdpdpIIhBYg/',
+    },
   },
 } as const;
