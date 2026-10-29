@@ -14,9 +14,7 @@
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { STORE_LINKS } from '~/content/links';
-import { BRAND } from '~/lib/brand';
-
-const CDN = BRAND.filesCdn;
+import { shopifyImage } from '~/lib/shopifyFiles';
 
 const image = (src: string, alt: string, focus?: 'top' | 'upper' | 'right'): MediaSlotSource =>
   focus ? { kind: 'image', src, alt, focus } : { kind: 'image', src, alt };
@@ -27,7 +25,11 @@ export const OUR_STORY = {
     /** Mono readout that types on under the header — steps(30) in
         --animate-type-on is tuned to roughly this length. */
     readout: 'File 01 · Our Story · San Francisco',
-    image: { url: `${CDN}/face-on-shot-zach.jpg?v=1785783370`, width: 2048, height: 1638 },
+    image: {
+      url: shopifyImage('face-on-shot-zach.jpg', { v: 1785783370 }),
+      width: 2048,
+      height: 1638,
+    },
     // The page's only CTA — the story page carries no Ember moment (7PA-230).
     cta: { label: 'Shop', href: STORE_LINKS.shopShorts },
   },
@@ -36,7 +38,7 @@ export const OUR_STORY = {
     title: 'About',
     open: 'Somewhere along the way, the jerseys came off. Practices became meetings, teammates became coworkers, and competing for something bigger became something you used to do.',
     media: image(
-      `${CDN}/chirstian-on-stairs.jpg?v=1785783387&width=900`,
+      shopifyImage('chirstian-on-stairs.jpg', { v: 1785783387, width: 900 }),
       'Athlete on a stone stairway, hands on hips'
     ),
     statement: 'But the athlete never left.',
@@ -66,7 +68,7 @@ export const OUR_STORY = {
     title: 'Built for the session',
     headingLines: ['Built for the session.', 'Not the sidelines.'],
     banner: image(
-      `${CDN}/potential_hero_image.jpg?width=1600`,
+      shopifyImage('potential_hero_image.jpg', { width: 1600 }),
       'Two athletes walking out to train, fog behind them',
       'upper'
     ),
@@ -76,18 +78,21 @@ export const OUR_STORY = {
       {
         caption: 'Running',
         media: image(
-          `${CDN}/our_story_hero_image.jpg?width=900`,
+          shopifyImage('our_story_hero_image.jpg', { width: 900 }),
           'Athletes climbing a coastal stair'
         ),
       },
       {
         caption: 'Weight training',
-        media: image(`${CDN}/our_mission2.jpg?width=900`, 'Group carrying weights through fog'),
+        media: image(
+          shopifyImage('our_mission2.jpg', { width: 900 }),
+          'Group carrying weights through fog'
+        ),
       },
       {
         caption: 'Strength training',
         media: image(
-          `${CDN}/two_walking_to_workout_cropped.png?width=900`,
+          shopifyImage('two_walking_to_workout_cropped.png', { width: 900 }),
           'Two athletes walking to a workout',
           'top'
         ),
@@ -105,7 +110,11 @@ export const OUR_STORY = {
     title: 'Our Story',
     card: {
       // Landscape source, framed right so the whole face stays in the crop.
-      media: image(`${CDN}/our_founder.jpg?width=1200`, 'Gabriel Dalessandro', 'right'),
+      media: image(
+        shopifyImage('our_founder.jpg', { width: 1200 }),
+        'Gabriel Dalessandro',
+        'right'
+      ),
       fields: [
         { label: 'Name', value: 'Dalessandro, Gabriel' },
         { label: 'Role', value: 'Founder and CEO' },

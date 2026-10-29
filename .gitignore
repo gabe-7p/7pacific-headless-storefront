@@ -21,3 +21,6 @@ yarn-error.log*
 
 # Local agent worktrees (contain a .git file — a blanket `git add .` records them as phantom submodules)
 .claude/worktrees/
+
+# Local media tests: point a public/media symlink at a folder of big files; never commit it
+/public/media

@@ -1,17 +1,14 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
+import { SpecLine } from '~/components/common/SpecLine';
 import { HOME_HERO } from '~/content/home';
-import { cn } from '~/lib/cn';
 
 /**
  * Full-bleed homepage hero. Structure per the drop-01 mockup (Gabe,
  * 2026-07-21): mono spec-strip eyebrow, the ALL-CAPS headline (homepage v2:
- * two forced lines, ≤8 words), an Inter subhead, a filled + text CTA pair,
- * and two mono spec lines (coordinates, location/time). Deliberate deviations
+ * two forced lines, ≤8 words), an Inter subhead, and a filled + text CTA
+ * pair. Deliberate deviations
  * from 7PA-232: two CTAs instead of one — the secondary renders in chalk, so
  * the page's one Ember moment is still the primary CTA alone. Sits under the
  * transparent overlay header. The photograph itself is replaced by the
@@ -21,19 +18,16 @@ export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
   // the announcement bar above it stays opaque.
   <section className="bg-field-night relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-ink-night md:min-h-[44rem]">
-    <Image
-      src={HOME_HERO.backgroundImage.url}
-      width={HOME_HERO.backgroundImage.width}
-      height={HOME_HERO.backgroundImage.height}
-      alt={HOME_HERO.backgroundImage.alt}
-      sizes="100vw"
-      loading="eager"
-      // React 18's runtime doesn't implement the camelCase fetchPriority DOM
-      // prop (that's React 19; @types/react declares it early, so TS allowed
-      // it). Spread the lowercase attribute instead — React forwards unknown
-      // lowercase attributes to the DOM as-is, and HTML attribute names are
-      // case-insensitive, so the browser still gets the LCP priority hint.
-      {...{ fetchpriority: 'high' }}
+    {/* Plain autoplay video, not LazyVideo: above the fold it must start
+        before hydration. The poster is the clip's first frame. */}
+    <video
+      src={HOME_HERO.backgroundVideo.src}
+      poster={HOME_HERO.backgroundVideo.poster}
+      aria-label={HOME_HERO.backgroundVideo.alt}
+      autoPlay
+      loop
+      muted
+      playsInline
       className="absolute inset-0 size-full object-cover"
     />
     {/* Live's .custom-hero-overlay verbatim: a flat rgba(0,0,0,0.10) wash over
@@ -59,7 +53,7 @@ export const Hero = () => (
         className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl min-[560px]:leading-[0.95] md:text-6xl md:leading-[0.95] lg:text-7xl lg:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
       />
       {/* Body tier: Inter, sentence case. */}
-      <p className="max-w-[42ch] text-base leading-[1.55] md:text-lg md:leading-[1.55]">
+      <p className="max-w-[42ch] text-sm leading-[1.55] md:text-base md:leading-[1.55]">
         {HOME_HERO.subhead}
       </p>
       <div className="mt-1 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -70,10 +64,12 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
+      {/* Spec lines (coordinates, location/time) — parked, not rendered.
       <div className={cn(SPEC_LINE_CLASS, 'text-support-night mt-2 flex flex-col gap-1')}>
         <span>{HOME_HERO.coordinates}</span>
         <span>{HOME_HERO.tagline}</span>
       </div>
+      */}
     </Container>
   </section>
 );

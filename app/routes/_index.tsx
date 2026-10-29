@@ -7,7 +7,7 @@ import { DropTwo } from '~/components/home/DropTwo';
 import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
-import { TestedInTraining } from '~/components/home/TestedInTraining';
+import { Roster } from '~/components/home/Roster';
 import { FEATURE_FLAGS } from '~/content/flags';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
@@ -70,7 +70,7 @@ const Homepage = () => {
         <CoreValues />
       </FadeIn>
       <FadeIn>
-        <TestedInTraining />
+        <Roster />
       </FadeIn>
     </MotionProvider>
   );

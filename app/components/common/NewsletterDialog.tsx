@@ -5,9 +5,14 @@ import { BrandDialogContent, BrandDialogTitle } from '~/components/common/BrandD
 import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { Dialog, DialogDescription } from '~/components/ui/dialog';
 import { BRAND } from '~/lib/brand';
+import { shopifyImage } from '~/lib/shopifyFiles';
 
-/** The membership image the production popup uses (Shopify Files). */
-const IMAGE = `${BRAND.filesCdn}/24_121_7pacific_019221_cropped2.png`;
+/** The signup modal's image (Shopify Files). */
+const IMAGE = {
+  src: shopifyImage('jahli_full_body_behind_in_gym.jpg', { v: 1793245833 }),
+  width: 3580,
+  height: 4000,
+};
 
 type NewsletterDialogContextValue = { open: () => void };
 
@@ -38,10 +43,10 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
             half-width crop would read as a sliver. */}
         <BrandDialogContent className="grid gap-0 overflow-hidden p-0 sm:max-w-3xl sm:grid-cols-2">
           <Image
-            src={IMAGE}
+            src={IMAGE.src}
             alt=""
-            width={1372}
-            height={1350}
+            width={IMAGE.width}
+            height={IMAGE.height}
             sizes="(min-width: 640px) 384px, 0px"
             className="hidden size-full object-cover sm:block"
           />

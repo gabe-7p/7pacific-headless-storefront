@@ -93,7 +93,7 @@ describe('homepage copy — brand gate', () => {
     expect(words.length).toBeLessThanOrEqual(8);
   });
 
-  it('renders three rules', () => {
-    expect(HOME_CORE_VALUES.values).toHaveLength(3);
+  it('renders four rules', () => {
+    expect(HOME_CORE_VALUES.values).toHaveLength(4);
   });
 });

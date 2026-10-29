@@ -9,7 +9,7 @@
  * both unit tables, 2026-09-18; they are locked, edit them here only.
  */
 
-import { BRAND } from '~/lib/brand';
+import { shopifyImage } from '~/lib/shopifyFiles';
 
 type SizeRow = {
   /** Short size label, matching the PDP selector's cells (S/M/L/XL). */
@@ -64,7 +64,7 @@ export const SIZE_GUIDE = {
      * the served size so the box reserves the right space before it loads.
      */
     image: {
-      url: `${BRAND.filesCdn}/side-guide-photo.png?width=1200`,
+      url: shopifyImage('side-guide-photo.png', { width: 1200 }),
       width: 1200,
       height: 1500,
       alt: 'The white tee, front on, with the chest, waist and hip measuring points marked',
