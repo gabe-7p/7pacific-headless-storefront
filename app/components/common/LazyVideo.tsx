@@ -9,10 +9,10 @@ type LazyVideoProps = {
 };
 
 /**
- * Below-the-fold background loop: renders poster-only, then attaches `src`
- * and plays once within half a viewport of the fold, so clips don't all
- * download at once. Above the fold use a plain `<video autoPlay>` — it must
- * start before hydration.
+ * Below-the-fold background loop: renders poster-only, attaches `src` once
+ * within half a viewport of the fold (so it buffers before it's needed), and
+ * plays only while it's actually on screen — paused again off screen. Above
+ * the fold use a plain `<video autoPlay>`; it must start before hydration.
  */
 export const LazyVideo = ({ src, poster, label, className }: LazyVideoProps) => {
   const ref = useRef<HTMLVideoElement>(null);
@@ -20,18 +20,31 @@ export const LazyVideo = ({ src, poster, label, className }: LazyVideoProps) => 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
+
+    const loader = new IntersectionObserver(
       ([entry]) => {
         if (!entry?.isIntersecting) return;
         el.src = src;
-        // Rejects if autoplay is blocked; the poster stays up.
-        el.play().catch(() => undefined);
-        observer.disconnect();
+        loader.disconnect();
       },
       { rootMargin: '50% 0px' }
     );
-    observer.observe(el);
-    return () => observer.disconnect();
+
+    const player = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) {
+        // Rejects if autoplay is blocked; the poster stays up.
+        el.play().catch(() => undefined);
+      } else {
+        el.pause();
+      }
+    });
+
+    loader.observe(el);
+    player.observe(el);
+    return () => {
+      loader.disconnect();
+      player.disconnect();
+    };
   }, [src]);
 
   return (
