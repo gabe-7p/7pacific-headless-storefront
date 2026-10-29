@@ -8,8 +8,7 @@ import { HOME_HERO } from '~/content/home';
  * Full-bleed homepage hero. Structure per the drop-01 mockup (Gabe,
  * 2026-07-21): mono spec-strip eyebrow, the ALL-CAPS headline (homepage v2:
  * two forced lines, ≤8 words), an Inter subhead, and a filled + text CTA
- * pair. The two mono spec lines under the CTAs are parked below, not
- * rendered, until there is a shot to caption. Deliberate deviations
+ * pair. Deliberate deviations
  * from 7PA-232: two CTAs instead of one — the secondary renders in chalk, so
  * the page's one Ember moment is still the primary CTA alone. Sits under the
  * transparent overlay header. The photograph itself is replaced by the
@@ -19,14 +18,12 @@ export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
   // the announcement bar above it stays opaque.
   <section className="bg-field-night relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-ink-night md:min-h-[44rem]">
-    {/* Local media test: the hero video plays over the still, which stays as
-        the poster so first paint is unchanged and the frame never goes empty
-        before the first video frame decodes. Same autoplay recipe as the
-        other homepage background videos (muted/loop/playsInline). */}
+    {/* Plain autoplay video, not LazyVideo: above the fold it must start
+        before hydration. The poster is the clip's first frame. */}
     <video
       src={HOME_HERO.backgroundVideo.src}
-      poster={HOME_HERO.backgroundImage.url}
-      aria-label={HOME_HERO.backgroundImage.alt}
+      poster={HOME_HERO.backgroundVideo.poster}
+      aria-label={HOME_HERO.backgroundVideo.alt}
       autoPlay
       loop
       muted
@@ -55,8 +52,7 @@ export const Hero = () => (
         lines={HOME_HERO.headlineLines}
         className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl min-[560px]:leading-[0.95] md:text-6xl md:leading-[0.95] lg:text-7xl lg:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
       />
-      {/* Body tier: Inter, sentence case — 14px, 16px from md (one step under
-          the 16/18 it launched at; Gabe, 2026-10-28). */}
+      {/* Body tier: Inter, sentence case. */}
       <p className="max-w-[42ch] text-sm leading-[1.55] md:text-base md:leading-[1.55]">
         {HOME_HERO.subhead}
       </p>
@@ -68,8 +64,7 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
-      {/* Spec lines (coordinates, location/time) parked for now — re-enable
-          by uncommenting; HOME_HERO.coordinates/tagline still hold the copy.
+      {/* Spec lines (coordinates, location/time) — parked, not rendered.
       <div className={cn(SPEC_LINE_CLASS, 'text-support-night mt-2 flex flex-col gap-1')}>
         <span>{HOME_HERO.coordinates}</span>
         <span>{HOME_HERO.tagline}</span>

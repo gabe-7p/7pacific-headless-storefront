@@ -3,6 +3,7 @@ import { Image } from '@shopify/hydrogen';
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { LazyVideo } from '~/components/common/LazyVideo';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { type CoreValue, HOME_CORE_VALUES } from '~/content/home';
 import { cn } from '~/lib/cn';
@@ -10,7 +11,7 @@ import { cn } from '~/lib/cn';
 const ValueCard = ({ value, className }: { value: CoreValue; className?: string }) => (
   <div
     className={cn(
-      // Padding eases at md, where the card is a ~230px column beside the media.
+      // Padding eases at md, where the card is a ~230px column.
       'flex flex-col items-start justify-center p-8 md:p-6 lg:p-12',
       value.tone === 'dark'
         ? 'bg-tenet-dark text-tenet-dark-text'
@@ -18,9 +19,8 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
       className
     )}
   >
-    {/* Tenet heading: 18px, 20px tablet, 24px desktop (two steps under the
-        live 24/28.8/32 — Gabe, 2026-10-28); tracking comes from the Heading
-        brand variant (section-header tier). */}
+    {/* Tenet heading: 18px, 20px tablet, 24px desktop; tracking from the
+        Heading brand variant. */}
     <Heading
       as="h3"
       size="none"
@@ -28,7 +28,7 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
     >
       {value.title}
     </Heading>
-    {/* Body: 13px, 14px from md (two steps under the live 15.2/16). */}
+    {/* Body: 13px, 14px from md. */}
     <p className="mt-4 max-w-[38ch] text-[0.8125rem] leading-[1.25] md:text-sm md:leading-[1.25]">
       {value.body}
     </p>
@@ -42,13 +42,10 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
 
 const Media = ({ media }: { media: CoreValue['media'] }) =>
   media.kind === 'video' ? (
-    <video
+    <LazyVideo
       src={media.src}
-      aria-label={media.label}
-      autoPlay
-      loop
-      muted
-      playsInline
+      poster={media.poster}
+      label={media.label}
       className="size-full object-cover"
     />
   ) : (
@@ -66,9 +63,8 @@ const Media = ({ media }: { media: CoreValue['media'] }) =>
 /**
  * "How We Train" — four alternating rows pairing each rule card with its
  * media (wide media ~2/3, narrow card ~1/3, sides alternating per row; single
- * column below md — it was lg, but that stacked the cards on tablets, which
- * read as separate boxes too early; Gabe, 2026-10-28). Layout mirrors the live `core-values-homepage-v2` section;
- * the copy is homepage v2 (content/home.ts).
+ * column below md). Layout mirrors the live `core-values-homepage-v2`
+ * section; the copy is homepage v2 (content/home.ts).
  */
 export const CoreValues = () => {
   const { heading, subtitle, values } = HOME_CORE_VALUES;

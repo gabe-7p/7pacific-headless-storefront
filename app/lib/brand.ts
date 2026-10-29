@@ -29,7 +29,7 @@ export const BRAND = {
     href: '',
   },
 
-  /** Base URL for brand assets uploaded to Shopify Files (one source; content files build URLs from it). */
+  /** Base URL for Shopify Files assets — only lib/shopifyFiles.ts reads it. */
   filesCdn: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files',
 
   social: [

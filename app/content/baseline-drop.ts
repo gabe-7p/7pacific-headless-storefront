@@ -10,6 +10,7 @@
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { STORE_LINKS } from '~/content/links';
+import { shopifyImage, shopifyVideo, shopifyVideoThumbnail } from '~/lib/shopifyFiles';
 
 export const BASELINE_DROP = {
   /** Mono eyebrow above the headline; its leading dot is the mock's live signal. */
@@ -35,9 +36,8 @@ months with real athletes before it earned a spot with us.',
       "SOUND OFF · TAP FOR AUDIO" badge ships once there is an audio toggle. */
   film: {
     kind: 'video',
-    src: 'https://cdn.shopify.com/videos/c/vp/002c07ce613b4b15893c9fdf493295c9/002c07ce613b4b15893c9fdf493295c9.HD-720p-4.5Mbps-92527050.mp4',
-    poster:
-      'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/preview_images/002c07ce613b4b15893c9fdf493295c9.thumbnail.0000000000.jpg?v=1787638763',
+    src: shopifyVideo('002c07ce613b4b15893c9fdf493295c9', 'HD-720p-4.5Mbps-92527050'),
+    poster: shopifyVideoThumbnail('002c07ce613b4b15893c9fdf493295c9', { v: 1787638763 }),
   } satisfies MediaSlotSource,
   /** Lower-left overlay on the film — points at the full drop film on
       YouTube (opens in a new tab). */
@@ -84,7 +84,7 @@ would be easy on Saturday. We got you.',
     /** Extra-wide band under the header. */
     banner: {
       kind: 'image',
-      src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_03806.jpg?v=1759043281&width=1200',
+      src: shopifyImage('24_121_7pacific_03806.jpg', { v: 1759043281, width: 1200 }),
       alt: 'Athlete driving battle ropes on a foggy clifftop',
       focus: 'upper', // 3:2 source in the 21:8 band — keep the athlete's head
     } satisfies MediaSlotSource,
@@ -95,7 +95,7 @@ would be easy on Saturday. We got you.',
         body: 'Vertical work, plyos, olympic lifts, sprinting, the list goes on. Every piece has breathability built in.',
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/24_121_7pacific_07344.jpg?v=1759115958&width=1200',
+          src: shopifyImage('24_121_7pacific_07344.jpg', { v: 1759115958, width: 1200 }),
           alt: 'Three athletes working battle ropes and med balls on the beach',
         },
       },
@@ -105,7 +105,7 @@ would be easy on Saturday. We got you.',
         body: 'Hyrox sims, circuits, comp prep. A stay-put fit and sweat-wicking fabric from station one to the finishline.',
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/running.png?v=1756374530&width=1200',
+          src: shopifyImage('running.png', { v: 1756374530, width: 1200 }),
           alt: 'Pack of runners mid-stride in training gear',
         },
       },
@@ -115,7 +115,7 @@ would be easy on Saturday. We got you.',
         body: 'Tempo runs, long intervals, 103° afternoons. Feather-light and breathable enough to disappear by mile six.',
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/two_walking_to_workout_cropped.png?v=1758602930',
+          src: shopifyImage('two_walking_to_workout_cropped.png', { v: 1758602930 }),
           alt: 'Two athletes carrying kettlebells and a slam ball to a workout',
           focus: 'top', // near-square source in the landscape box — keep the faces
         },
@@ -137,7 +137,10 @@ only three pieces you need to get to work.',
         href: STORE_LINKS.shopShorts,
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/mountain_mist_short_stretch_143cc154-8c83-4fe0-a05c-5eb44a21cf8f.jpg?v=1758601081&width=900',
+          src: shopifyImage(
+            'mountain_mist_short_stretch_143cc154-8c83-4fe0-a05c-5eb44a21cf8f.jpg',
+            { v: 1758601081, width: 900 }
+          ),
           alt: 'Athlete stretching with a raised knee in the Mountain Mist AirRail short',
         },
       },
@@ -147,7 +150,7 @@ only three pieces you need to get to work.',
         href: STORE_LINKS.shopShirts,
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/white_shirt_top_left_back.jpg?v=1758599851&width=900',
+          src: shopifyImage('white_shirt_top_left_back.jpg', { v: 1758599851, width: 900 }),
           alt: 'Back shoulder detail of the white TraceFiber tee',
         },
       },
@@ -158,7 +161,7 @@ only three pieces you need to get to work.',
         // Same worn shot the MOTIONFRAME hat PDP leads with.
         media: {
           kind: 'image',
-          src: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files/hat_side_profile.jpg?v=1758436928&width=900',
+          src: shopifyImage('hat_side_profile.jpg', { v: 1758436928, width: 900 }),
           alt: 'Athlete wearing the white MOTIONFRAME running hat',
         },
       },

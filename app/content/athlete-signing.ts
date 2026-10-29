@@ -9,9 +9,7 @@
  * page renders styled placeholder panels until they're set.
  */
 
-import { BRAND } from '~/lib/brand';
-
-const CDN = BRAND.filesCdn;
+import { shopifyImage, shopifyVideo, shopifyVideoPoster } from '~/lib/shopifyFiles';
 
 /**
  * Marker position along the performance-readout scale, in 5% steps. A union
@@ -126,7 +124,7 @@ const AMIR_SMITH = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/amir-smith-athlete.png`,
+      src: shopifyImage('amir-smith-athlete.png'),
       alt: 'Amir Smith mid-dunk, first session',
       width: 1920,
       height: 1080,
@@ -137,8 +135,8 @@ const AMIR_SMITH = {
     title: 'A Personal Message from the Founder',
     // IMG-0004 in Shopify Files (portrait, 39s) — Shopify's 720p transcode;
     // poster is the custom preview thumbnail set in Shopify admin.
-    src: 'https://cdn.shopify.com/videos/c/vp/4e4b180b71854aeb9ddb8aed88129177/4e4b180b71854aeb9ddb8aed88129177.HD-720p-4.5Mbps-89659002.mp4',
-    poster: `${CDN}/preview_images/Screenshot_2026-07-22_at_11.02.10_PM.png`,
+    src: shopifyVideo('4e4b180b71854aeb9ddb8aed88129177', 'HD-720p-4.5Mbps-89659002'),
+    poster: shopifyVideoPoster('Screenshot_2026-07-22_at_11.02.10_PM.png'),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:39',
@@ -193,7 +191,7 @@ const JOSH_WYCHE = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/josh-wyche-athlete.png`,
+      src: shopifyImage('josh-wyche-athlete.png'),
       alt: 'Josh Wyche on the court',
       width: 1920,
       height: 1080,
@@ -204,8 +202,10 @@ const JOSH_WYCHE = {
     title: 'A Personal Message from the Founder',
     // IMG-0006 in Shopify Files (portrait, 40s) — Shopify's 720p transcode;
     // poster is the custom preview thumbnail set in Shopify admin.
-    src: 'https://cdn.shopify.com/videos/c/vp/b01389f236234449b4e379bb39620772/b01389f236234449b4e379bb39620772.HD-720p-4.5Mbps-89659216.mp4',
-    poster: `${CDN}/preview_images/Screenshot_2026-07-22_at_11.02.10_PM_0f4117ad-5577-48b3-8fee-1c8c77662097.png`,
+    src: shopifyVideo('b01389f236234449b4e379bb39620772', 'HD-720p-4.5Mbps-89659216'),
+    poster: shopifyVideoPoster(
+      'Screenshot_2026-07-22_at_11.02.10_PM_0f4117ad-5577-48b3-8fee-1c8c77662097.png'
+    ),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:40',
@@ -260,7 +260,7 @@ const KENNETH_PIERCE = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/kenneth-pierce-signing.png`,
+      src: shopifyImage('kenneth-pierce-signing.png'),
       alt: 'Kenneth Pierce mid-run',
       width: 1010,
       height: 1031,
@@ -272,8 +272,8 @@ const KENNETH_PIERCE = {
     // FullSizeRender in Shopify Files (portrait, 25s) — Shopify's 720p
     // transcode; poster is Shopify's auto-generated preview (no custom
     // thumbnail set for this video yet).
-    src: 'https://cdn.shopify.com/videos/c/vp/41d3555453a64e79b9a45343f800b0ed/41d3555453a64e79b9a45343f800b0ed.HD-720p-4.5Mbps-89804130.mp4',
-    poster: `${CDN}/preview_images/41d3555453a64e79b9a45343f800b0ed.thumbnail.0000000000.jpg`,
+    src: shopifyVideo('41d3555453a64e79b9a45343f800b0ed', 'HD-720p-4.5Mbps-89804130'),
+    poster: shopifyVideoPoster('41d3555453a64e79b9a45343f800b0ed.thumbnail.0000000000.jpg'),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:24',
@@ -329,7 +329,7 @@ export const OWEN_PLATT = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/owen-platt-athlete.png`,
+      src: shopifyImage('owen-platt-athlete.png'),
       alt: 'Owen Platt in a defensive stance',
       width: 776,
       height: 773,
@@ -340,8 +340,8 @@ export const OWEN_PLATT = {
     title: 'A Personal Message from the Founder',
     // Owen's founder message in Shopify Files (portrait, 28s) — Shopify's
     // 720p transcode; poster is the custom thumbnail set in Shopify admin.
-    src: 'https://cdn.shopify.com/videos/c/vp/4e59f563e64348948ba8e23ccbdddd1e/4e59f563e64348948ba8e23ccbdddd1e.HD-720p-4.5Mbps-91367435.mp4',
-    poster: `${CDN}/preview_images/Screenshot_2026-08-11_at_5.17.33_PM.png`,
+    src: shopifyVideo('4e59f563e64348948ba8e23ccbdddd1e', 'HD-720p-4.5Mbps-91367435'),
+    poster: shopifyVideoPoster('Screenshot_2026-08-11_at_5.17.33_PM.png'),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:28',
@@ -399,7 +399,7 @@ const AARON_LEE = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/aaron_lee_athlete_creator_avatar.png`,
+      src: shopifyImage('aaron_lee_athlete_creator_avatar.png'),
       alt: 'Aaron Lee mid-training session',
       width: 1024,
       height: 1536,
@@ -412,8 +412,8 @@ const AARON_LEE = {
     title: 'A Personal Message from the Founder',
     // Aaron's founder message in Shopify Files (portrait, 22s) — Shopify's
     // 720p transcode; poster is the custom thumbnail set in Shopify admin.
-    src: 'https://cdn.shopify.com/videos/c/vp/8d5feed0d0594eecbb7aede436dde043/8d5feed0d0594eecbb7aede436dde043.HD-720p-3.0Mbps-93935029.mp4',
-    poster: `${CDN}/preview_images/Screenshot_2026-09-09_at_2.28.15_PM.png`,
+    src: shopifyVideo('8d5feed0d0594eecbb7aede436dde043', 'HD-720p-3.0Mbps-93935029'),
+    poster: shopifyVideoPoster('Screenshot_2026-09-09_at_2.28.15_PM.png'),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:22',
@@ -471,7 +471,7 @@ const NICK_GONZALEZ = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/nick_gonzalez_athlete_picture.png`,
+      src: shopifyImage('nick_gonzalez_athlete_picture.png'),
       alt: 'Nick Gonzalez mid-training session',
       width: 1122,
       height: 1402,
@@ -485,8 +485,8 @@ const NICK_GONZALEZ = {
     // Nick's founder message in Shopify Files (portrait, 32s) — Shopify's
     // 720p transcode; poster is Shopify's auto-generated preview (no custom
     // thumbnail set for this video yet).
-    src: 'https://cdn.shopify.com/videos/c/vp/d28bb7a756df42b3a46ea28c7ea9b7e9/d28bb7a756df42b3a46ea28c7ea9b7e9.HD-720p-1.6Mbps-96972241.mp4',
-    poster: `${CDN}/preview_images/d28bb7a756df42b3a46ea28c7ea9b7e9.thumbnail.0000000000.jpg`,
+    src: shopifyVideo('d28bb7a756df42b3a46ea28c7ea9b7e9', 'HD-720p-1.6Mbps-96972241'),
+    poster: shopifyVideoPoster('d28bb7a756df42b3a46ea28c7ea9b7e9.thumbnail.0000000000.jpg'),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:32',
@@ -542,7 +542,7 @@ const DAKOTAH_RIEMER = {
     camLine: '',
     shotLine: 'Shot.01 — First Session',
     image: {
-      src: `${CDN}/kody_riemer_athlete_picture.png`,
+      src: shopifyImage('kody_riemer_athlete_picture.png'),
       alt: 'Dakotah Riemer mid-training session',
       width: 1122,
       height: 1402,
@@ -556,8 +556,8 @@ const DAKOTAH_RIEMER = {
     // Dakotah's founder message in Shopify Files (portrait, 35s) — Shopify's
     // 720p transcode; poster is Shopify's auto-generated preview (no custom
     // thumbnail set for this video yet).
-    src: 'https://cdn.shopify.com/videos/c/vp/8c133fee98e7483cab2d4aebb6758c83/8c133fee98e7483cab2d4aebb6758c83.HD-720p-1.6Mbps-96972281.mp4',
-    poster: `${CDN}/preview_images/8c133fee98e7483cab2d4aebb6758c83.thumbnail.0000000000.jpg`,
+    src: shopifyVideo('8c133fee98e7483cab2d4aebb6758c83', 'HD-720p-1.6Mbps-96972281'),
+    poster: shopifyVideoPoster('8c133fee98e7483cab2d4aebb6758c83.thumbnail.0000000000.jpg'),
     captions: '',
     attribution: 'Gabriel · Founder',
     duration: '00:35',
