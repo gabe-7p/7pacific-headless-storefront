@@ -116,7 +116,10 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     footer,
     cartData: cartResult.data,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
-    posthog: getPostHogConfig(env, import.meta.env.DEV),
+    posthog: getPostHogConfig(env, {
+      isDev: import.meta.env.DEV,
+      hostname: new URL(request.url).hostname,
+    }),
     // What <ShopifyScripts> needs: shop identity for analytics + consent, and
     // the active currency for browse events (they carry no price of their own).
     shop: {

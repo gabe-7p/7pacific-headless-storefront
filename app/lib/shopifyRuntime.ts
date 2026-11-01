@@ -9,6 +9,8 @@ type WhenShopifyReadyOptions = {
   /** Polls before giving up (the immediate check doesn't count). */
   attempts?: number;
   intervalMs?: number;
+  /** Called once if the piece never appears within `attempts`. */
+  onGiveUp?: () => void;
 };
 
 /**
@@ -19,7 +21,7 @@ type WhenShopifyReadyOptions = {
 export const whenShopifyReady = <T>(
   select: () => T | null | undefined,
   callback: (value: T) => void,
-  { attempts = 40, intervalMs = 250 }: WhenShopifyReadyOptions = {}
+  { attempts = 40, intervalMs = 250, onGiveUp }: WhenShopifyReadyOptions = {}
 ): (() => void) => {
   if (typeof window === 'undefined') return () => {};
 
@@ -37,6 +39,7 @@ export const whenShopifyReady = <T>(
       callback(value);
     } else if (--remaining <= 0) {
       window.clearInterval(timer);
+      onGiveUp?.();
     }
   }, intervalMs);
   return () => window.clearInterval(timer);

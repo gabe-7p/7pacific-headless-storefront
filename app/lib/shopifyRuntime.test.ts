@@ -44,15 +44,26 @@ describe('whenShopifyReady', () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
-  it('gives up after the configured attempts', () => {
+  it('gives up after the configured attempts and says so once', () => {
     const select = vi.fn(() => null);
     const callback = vi.fn();
-    whenShopifyReady(select, callback, { attempts: 3, intervalMs: 100 });
+    const onGiveUp = vi.fn();
+    whenShopifyReady(select, callback, { attempts: 3, intervalMs: 100, onGiveUp });
 
     vi.advanceTimersByTime(10_000);
     expect(select).toHaveBeenCalledTimes(1 + 3);
     expect(callback).not.toHaveBeenCalled();
+    expect(onGiveUp).toHaveBeenCalledTimes(1);
     expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('does not report giving up when the piece arrives in time', () => {
+    let value: string | null = null;
+    const onGiveUp = vi.fn();
+    whenShopifyReady(() => value, vi.fn(), { attempts: 3, intervalMs: 100, onGiveUp });
+    value = 'bus';
+    vi.advanceTimersByTime(10_000);
+    expect(onGiveUp).not.toHaveBeenCalled();
   });
 
   it('cancels a pending poll', () => {
