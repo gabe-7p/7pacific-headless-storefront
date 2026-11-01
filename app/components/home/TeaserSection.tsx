@@ -43,9 +43,9 @@ type TeaserSectionProps = {
  * eyebrow, display title, and the same xs outline Cta the tenet cards use.
  * The shared aspect ratio (not natural media height) is what keeps
  * opposite-orientation media rendering as equal cards. It lives on the
- * WRAPPER, with the media absolutely filling it (object-cover) — Hydrogen's
- * <Image> sets an inline aspect-ratio from its width/height props, which
- * beats any aspect-* class on the img itself.
+ * WRAPPER, with the media absolutely filling it (object-cover) — the app's
+ * `common/Image` sets an inline aspect-ratio from its width/height props,
+ * which beats any aspect-* class on the img itself.
  */
 const Card = ({ content, children }: { content: TeaserCardContent; children: ReactNode }) => (
   <div className="relative aspect-[4/5] overflow-hidden md:aspect-[10/13]">

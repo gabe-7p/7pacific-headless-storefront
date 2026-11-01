@@ -7,7 +7,7 @@ import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
 import { notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
-import { formatJournalDate, readingTimeMinutes } from '~/lib/journal';
+import { formatJournalDate, readingTimeMinutes } from '~/lib/journalFormat';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
 

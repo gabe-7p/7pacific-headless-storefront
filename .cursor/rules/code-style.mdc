@@ -7,7 +7,7 @@ Code conventions for the 7Pacific Hydrogen storefront. Always follow these in co
 
 1. **Components are `const` arrow functions** — never the `function` keyword. One component per file, PascalCase, named after the file. (Enforced by ESLint `react/function-component-definition`.) Exception: generated shadcn/ui primitives in `app/components/ui/` use the `function` keyword and are ESLint-exempt — don't rewrite them. See `.claude/rules/ui-components.md`.
 
-2. **No `any`.** Use `unknown` + narrowing, generics, or generated GraphQL types. The `no-explicit-any` warning is treated as a defect.
+2. **No `any`.** Use `unknown` + narrowing, generics, or the `StorefrontApi.ResultOf` types Hydrogen derives from `gql()` documents. The `no-explicit-any` warning is treated as a defect.
 
 3. **Data fetching lives in loaders/actions and `lib/`, never in components.** Components receive typed props and render them. See `.claude/rules/module-boundaries.md`.
 

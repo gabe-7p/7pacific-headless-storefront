@@ -1,5 +1,4 @@
 import { reactRouter } from '@react-router/dev/vite';
-import { localHttps } from '@shopify/hydrogen/vite';
 import { oxygen } from '@shopify/mini-oxygen/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
@@ -16,12 +15,8 @@ if (!oxygenPlugin?.api) throw new Error('MiniOxygen plugin API is unavailable.')
 // the same override). Remove once MiniOxygen handles inferred dates it can't run.
 oxygenPlugin.api.registerPluginOptions({ compatibilityDate: '2026-04-01' });
 
-// Local HTTPS is only needed for Customer Account flows (`pnpm dev:https`);
-// the plugin needs an explicit flag, it does not self-detect.
-const httpsEnabled = process.env.npm_lifecycle_event === 'dev:https';
-
 export default defineConfig({
-  plugins: [localHttps({ enabled: httpsEnabled }), tailwindcss(), ...oxygenPlugins, reactRouter()],
+  plugins: [tailwindcss(), ...oxygenPlugins, reactRouter()],
   resolve: {
     // Vite 8 resolves tsconfig `paths` (the `~/*` alias) natively.
     tsconfigPaths: true,

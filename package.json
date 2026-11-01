@@ -8,7 +8,6 @@
   "scripts": {
     "build": "react-router build",
     "dev": "hydrogen skills check --mode=warn && vite dev",
-    "dev:https": "hydrogen skills check --mode=warn && vite dev",
     "preview": "react-router build && vite preview",
     "deploy": "shopify hydrogen deploy --assets-dir dist/client --worker-dir dist/server",
     "lint": "eslint --no-error-on-unmatched-pattern .",

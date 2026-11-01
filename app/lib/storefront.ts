@@ -2,9 +2,9 @@ import {
   type CacheInstance,
   type CachingStrategy,
   createShopifyRequestContext,
+  createShopifyRouteTemplates,
   createStorefrontClient,
   type RequestScopedPrivateStorefrontClient,
-  type ShopifyRequestContext,
 } from '@shopify/hydrogen';
 import { createContext } from 'react-router';
 
@@ -20,8 +20,17 @@ export type StorefrontClient = RequestScopedPrivateStorefrontClient<CacheOptions
 
 /** The request-scoped Storefront API client, set by the root middleware. */
 export const storefrontClientContext = createContext<StorefrontClient>();
-/** The request context the client was built with (cookies, i18n, response headers). */
-export const storefrontRequestContext = createContext<ShopifyRequestContext>();
+
+/**
+ * Where Shopify's own URL shapes map onto this app's routes. Passed to
+ * `handleShopifyRoutes`, `handleShopifyRedirects` and `ShopifyScripts` so
+ * handler-owned URLs, redirect targets and agent-resolved links agree.
+ * Only non-default shapes need listing.
+ */
+export const routeTemplates = createShopifyRouteTemplates({
+  // Products never nest under a collection path on this storefront.
+  productInCollection: '/products/:productHandle',
+});
 
 const BUYER_IP_HEADERS = ['oxygen-buyer-ip', 'cf-connecting-ip', 'x-forwarded-for'] as const;
 

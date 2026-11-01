@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatJournalDate, readingTimeMinutes } from '~/lib/journal';
+import { formatJournalDate, readingTimeMinutes } from '~/lib/journalFormat';
 
 describe('formatJournalDate', () => {
   it('formats the mono strip date as uppercase, comma-free', () => {

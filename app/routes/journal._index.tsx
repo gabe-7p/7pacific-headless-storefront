@@ -5,7 +5,7 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { JOURNAL } from '~/content/journal';
 import { notFound } from '~/lib/http';
-import { formatJournalDate } from '~/lib/journal';
+import { formatJournalDate } from '~/lib/journalFormat';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
 

@@ -16,13 +16,13 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 
 ## Request & data flow
 
-The app is **server-first**. Since Hydrogen 2026.10, Hydrogen is a library the app composes into one request lifecycle (the _root middleware_ in [app/root.tsx](../app/root.tsx)); it owns no routing, build or CSP.
+The app is **server-first**. Since Hydrogen 2026.10, Hydrogen is a library the app composes into one request lifecycle (the _root middleware_, [app/lib/shopifyMiddleware.ts](../app/lib/shopifyMiddleware.ts), registered by [app/root.tsx](../app/root.tsx)); it owns no routing, build or CSP.
 
 ```
 Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cache + waitUntil on the router context)
                          │
                          ▼
-              root middleware (app/root.tsx)
+              root middleware (app/lib/shopifyMiddleware.ts)
                 ├─ createRequestStorefrontClient()        one private Storefront API client per request
                 ├─ handleShopifyRoutes()  ──▶ answers Shopify-owned URLs before the router:
                 │       /api/cart (cart store), /checkout, /cart/ID:QTY + /buy permalinks,
@@ -38,7 +38,7 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
 - **The cart lives in the browser.** The root loader seeds `CartProvider` with `cartHandlers.get()`; every cart surface reads `useCart(selector)` and mutates through `useCartForm` / the product form, which post to `/api/cart` (optimistic lines settle when the handler confirms). No `/cart` action route, no loader promise for the cart.
 - **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product.ts](../app/lib/product.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
 - **Every Storefront read passes an explicit `cache`** (`Cache.long()` for menus/pages/journal/recommendations, `Cache.short()` for the PDP product and collection grids). There is no implicit default; a read without one hits the API every request.
-- **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery`) and rendered with `<Suspense>`/`<Await>`.
+- **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery` in [lib/http.ts](../app/lib/http.ts)) and rendered with `<Suspense>`/`<Await>`.
 - **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (tracker components in [components/layout/AnalyticsTrackers.tsx](../app/components/layout/AnalyticsTrackers.tsx)); destinations — Shopify's own analytics and PostHog ([lib/posthog.client.ts](../app/lib/posthog.client.ts)) — receive events only once Customer Privacy allows.
 - **CSP and the nonce are app code** ([lib/csp.ts](../app/lib/csp.ts), [lib/nonce.tsx](../app/lib/nonce.tsx)), set in `entry.server.tsx`.
 
@@ -100,7 +100,7 @@ The 9 live products are **separate Shopify products per color**, not Shopify var
 
 ## Environment & secrets
 
-Configuration is via environment variables, listed below (shape in [app/lib/env.ts](../app/lib/env.ts), read in `server.ts` and the root middleware via `envContext`). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
+Configuration is via environment variables, listed below (shape in [app/lib/env.ts](../app/lib/env.ts); `server.ts` puts the worker env on the router context, and the middleware and loaders read it as `context.env` — declared in `env.d.ts`). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
 
 | Variable                       | Access | What it is                                                                                   |
 | ------------------------------ | ------ | -------------------------------------------------------------------------------------------- |
@@ -108,11 +108,12 @@ Configuration is via environment variables, listed below (shape in [app/lib/env.
 | `PUBLIC_STOREFRONT_API_TOKEN`  | public | Public Storefront API access token                                                           |
 | `PRIVATE_STOREFRONT_API_TOKEN` | secret | Private (delegate) Storefront API token, server-only                                         |
 | `PUBLIC_STOREFRONT_ID`         | public | Numeric storefront id, used by Shopify Analytics                                             |
-| `SESSION_SECRET`               | secret | Unused since the 2026.10 migration (guest checkout, no session); harmless to leave set       |
 | `PUBLIC_CHECKOUT_DOMAIN`       | public | Checkout domain, used by the consent API and checkout links                                  |
 | `PUBLIC_POSTHOG_KEY`           | public | PostHog project API key (`phc_…`); unset = PostHog off. Different key per Oxygen environment |
 | `PUBLIC_POSTHOG_HOST`          | public | PostHog ingestion host, `https://us.i.posthog.com`                                           |
 | `PUBLIC_POSTHOG_DEV`           | public | `true` to send events from `pnpm dev`; off by default, never set on Oxygen                   |
+
+`SESSION_SECRET` (the classic Hydrogen session cookie key) is no longer read anywhere — the store has no customer accounts and the cart is identified by Shopify's own cookies — so it can be deleted from every Oxygen environment.
 
 ## Deployment
 

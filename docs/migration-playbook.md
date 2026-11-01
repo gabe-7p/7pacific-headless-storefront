@@ -173,7 +173,7 @@ nav becomes a mobile drawer, the cart opens differently), so each must be exerci
 - **Responsive breakpoints:** resize across the mobile↔desktop boundary; confirm drawers/menus swap
   correctly.
 - **Console & network:** `browser_console_messages` shows no errors; no failed GraphQL requests;
-  codegen types resolve (`pnpm type-check`).
+  `pnpm type-check` (incl. `hydrogen gql check`) passes.
 
 ---
 

@@ -17,9 +17,9 @@ module.exports = {
       from: {},
       to: {
         couldNotResolve: true,
-        // Exclude codegen output (resolved via tsconfig baseUrl) and React Router's
-        // generated per-route types (./+types/*) — both resolve in tsc/build, not here.
-        pathNot: ['\\.generated$', '\\+types/'],
+        // Exclude React Router's generated per-route types (./+types/*) — they
+        // resolve through tsconfig rootDirs in tsc/build, not here.
+        pathNot: ['\\+types/'],
       },
     },
     {
@@ -35,6 +35,7 @@ module.exports = {
           '\\.config\\.(c?js|ts)$',
           '^app/root\\.tsx$',
           '^app/entry\\.(client|server)\\.tsx$',
+          '^app/lib/env\\.ts$', // the Env shape; imported only by the root env.d.ts (outside the cruised tree)
           '^app/routes\\.ts$',
           '^app/routes/', // file-based routes are framework entry points
           '^app/styles/',
@@ -46,7 +47,7 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: 'node_modules' },
-    // tsconfig paths/baseUrl make `~/*` and the codegen output resolvable.
+    // tsconfig paths make the `~/*` alias resolvable.
     tsConfig: { fileName: 'tsconfig.json' },
     tsPreCompilationDeps: true,
     enhancedResolveOptions: {

@@ -55,8 +55,9 @@ type CtaProps = {
  * label slides right: a second arrow enters from the left while the trailing
  * one exits, via `CtaLabel`). ALL link/button CTAs render through this so the
  * icon and its behavior are defined once — don't hand-assemble `Button` +
- * arrow at callsites. The one exception is the PDP `AddToCartButton` (a
- * CartForm submit), which composes `buttonVariants` + `CtaLabel` directly.
+ * arrow at callsites. The one exception is `product/AddToCartBar` (the
+ * product-form store's submit, `register('addToCart')`), which composes
+ * `buttonVariants` + `CtaLabel` directly.
  */
 export const Cta = ({
   variant = 'brand-outline',

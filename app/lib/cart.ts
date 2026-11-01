@@ -13,5 +13,4 @@ export type CartLine = CartData['lines']['nodes'][number];
  * read cart state (never a deferred loader promise); `useCartForm` builds the
  * line / discount forms that post to `/api/cart` through the store.
  */
-export const { CartProvider, useCart, useCartForm, useCartActions } =
-  createCartComponents<typeof cartHandlers>();
+export const { CartProvider, useCart, useCartForm } = createCartComponents<typeof cartHandlers>();

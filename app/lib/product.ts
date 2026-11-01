@@ -9,5 +9,4 @@ import type { ProductData } from '~/lib/productQueries';
  * `adjacentVariants` / the encoded variant fields — no loader round-trip.
  * (Type-only import above: the queries never reach the browser bundle.)
  */
-export const { ProductProvider, useProduct, useProductForm } =
-  createProductComponents<ProductData>();
+export const { ProductProvider, useProductForm } = createProductComponents<ProductData>();
