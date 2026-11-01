@@ -1,4 +1,4 @@
-import { BRAND } from '~/lib/brand';
+import { BRAND } from '~/content/brand';
 
 /**
  * Thin promo bar above the header. It scrolls away with the page (the sticky

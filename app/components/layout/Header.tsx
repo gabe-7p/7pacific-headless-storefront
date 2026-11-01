@@ -6,7 +6,7 @@ import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import { useAside } from '~/components/layout/Aside';
-import { BRAND } from '~/lib/brand';
+import { BRAND } from '~/content/brand';
 import { useCart } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 import type { HeaderData } from '~/lib/fragments';

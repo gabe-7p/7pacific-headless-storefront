@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { productUrl, toInternalPath } from '~/lib/urls';
+import {
+  cartUrl,
+  collectionUrl,
+  journalUrl,
+  pageUrl,
+  productUrl,
+  toInternalPath,
+  youtubeWatchUrl,
+} from '~/lib/urls';
 
 describe('productUrl', () => {
   it('returns the bare product path when no options are given', () => {
@@ -18,6 +26,32 @@ describe('productUrl', () => {
     expect(productUrl('tee-mint', [{ name: 'Size', value: 'Extra Large' }])).toBe(
       '/products/tee-mint?Size=Extra+Large'
     );
+  });
+});
+
+describe('resource URL builders', () => {
+  it('builds collection, page and cart paths', () => {
+    expect(collectionUrl('baseline')).toBe('/collections/baseline');
+    expect(pageUrl('contact-us')).toBe('/pages/contact-us');
+    expect(cartUrl()).toBe('/cart');
+  });
+
+  it('builds the journal index without a handle and an article with one', () => {
+    expect(journalUrl()).toBe('/journal');
+    expect(journalUrl('founder-letter-ed-01')).toBe('/journal/founder-letter-ed-01');
+  });
+});
+
+describe('youtubeWatchUrl', () => {
+  it('builds a watch URL from the video id', () => {
+    expect(youtubeWatchUrl('jf_E0NEgeCE')).toBe('https://www.youtube.com/watch?v=jf_E0NEgeCE');
+  });
+
+  it('appends a start offset only when one is given', () => {
+    expect(youtubeWatchUrl('jf_E0NEgeCE', 4)).toBe(
+      'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s'
+    );
+    expect(youtubeWatchUrl('jf_E0NEgeCE', 0)).toBe('https://www.youtube.com/watch?v=jf_E0NEgeCE');
   });
 });
 

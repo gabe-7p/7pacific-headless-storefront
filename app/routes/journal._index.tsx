@@ -4,10 +4,12 @@ import { Link, useLoaderData } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { JOURNAL } from '~/content/journal';
+import { HANDLES } from '~/content/links';
 import { notFound } from '~/lib/http';
 import { formatJournalDate } from '~/lib/journalFormat';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
+import { journalUrl } from '~/lib/urls';
 
 import type { Route } from './+types/journal._index';
 
@@ -16,6 +18,7 @@ export const meta: Route.MetaFunction = () =>
 
 export async function loader({ context }: Route.LoaderArgs) {
   const { data } = await context.get(storefrontClientContext).graphql(JOURNAL_QUERY, {
+    variables: { blogHandle: HANDLES.journalBlog },
     // Curated, rarely-changing content.
     cache: Cache.long(),
   });
@@ -37,7 +40,7 @@ const Journal = () => {
         {articles.map((article) => (
           <li key={article.id} className="border-border-subtle border-t">
             <Link
-              to={`/journal/${article.handle}`}
+              to={journalUrl(article.handle)}
               prefetch="intent"
               className="block py-6 transition-opacity hover:opacity-70"
             >
@@ -58,9 +61,9 @@ const Journal = () => {
 };
 
 const JOURNAL_QUERY = gql(`
-  query Journal($country: CountryCode, $language: LanguageCode)
+  query Journal($blogHandle: String!, $country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    blog(handle: "journal") {
+    blog(handle: $blogHandle) {
       articles(first: 20, sortKey: PUBLISHED_AT, reverse: true) {
         nodes {
           id

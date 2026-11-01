@@ -1,7 +1,6 @@
 import { formatMoney } from '@shopify/hydrogen';
 
-/** English/US only for v1; a market-aware storefront would pass the active locale. */
-const LOCALE = 'en-US';
+import { MONEY_LOCALE } from '~/lib/i18n';
 
 /** A (possibly partial) MoneyV2 — optimistic cart lines can carry an incomplete price. */
 export type MoneyLike = { amount?: string | null; currencyCode?: string | null };
@@ -24,10 +23,10 @@ export const formatPrice = (
   const value = { amount: money.amount, currencyCode: money.currencyCode };
   switch (format) {
     case 'brand':
-      return `${formatMoney(value, { locale: LOCALE, withoutTrailingZeros: true })} ${value.currencyCode}`;
+      return `${formatMoney(value, { locale: MONEY_LOCALE, withoutTrailingZeros: true })} ${value.currencyCode}`;
     case 'compact':
-      return formatMoney(value, { locale: LOCALE, withoutTrailingZeros: true }).toString();
+      return formatMoney(value, { locale: MONEY_LOCALE, withoutTrailingZeros: true }).toString();
     case 'cart':
-      return formatMoney(value, { locale: LOCALE }).toString();
+      return formatMoney(value, { locale: MONEY_LOCALE }).toString();
   }
 };

@@ -10,7 +10,9 @@
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { STORE_LINKS } from '~/content/links';
+import { BEHIND_THE_BUILD_VIDEO_ID } from '~/content/media';
 import { shopifyImage, shopifyVideo, shopifyVideoThumbnail } from '~/lib/shopifyFiles';
+import { youtubeWatchUrl } from '~/lib/urls';
 
 export const BASELINE_DROP = {
   /** Mono eyebrow above the headline; its leading dot is the mock's live signal. */
@@ -43,7 +45,7 @@ months with real athletes before it earned a spot with us.',
       YouTube (opens in a new tab). */
   filmOverlay: {
     label: 'The why behind our first collection',
-    cta: { label: 'Watch full video', href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE' },
+    cta: { label: 'Watch full video', href: youtubeWatchUrl(BEHIND_THE_BUILD_VIDEO_ID) },
   },
 
   receipts: {

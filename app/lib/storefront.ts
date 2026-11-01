@@ -8,8 +8,7 @@ import {
 } from '@shopify/hydrogen';
 import { createContext } from 'react-router';
 
-/** English/US only for v1 — no locale detection. */
-export const I18N = { country: 'US', language: 'EN' } as const;
+import { MARKET } from '~/lib/i18n';
 
 // The bare client type defaults its per-call extras to `{}`, which erases the
 // `cache` option from `graphql()`; carry it through the alias so every
@@ -72,7 +71,7 @@ export const createRequestStorefrontClient = (
     type: 'private',
     requestContext: createShopifyRequestContext({
       request,
-      i18n: I18N,
+      i18n: MARKET,
       buyerIp: getBuyerIp(request.headers),
     }),
     config: {

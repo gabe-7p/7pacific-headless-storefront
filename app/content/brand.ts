@@ -1,15 +1,17 @@
 /**
- * Brand content & config — the single source of truth for site-wide text and
- * links (ported from the live store, verified against the live DOM). Change it
+ * Brand content — the single source of truth for site-wide text and links
+ * (ported from the live store, verified against the live DOM). Change it
  * here and it applies everywhere it's consumed (header logo, announcement,
  * footer, social). English-only per our scope.
  *
  * Visual design tokens (colors, fonts, layout sizes) live in
- * app/styles/tailwind.css; this file is for content/data. Signup copy (the
- * roster + the drop waitlist) lives in app/content/join.ts.
+ * app/styles/tailwind.css; Shopify handles and store links in content/links.ts;
+ * the Files CDN roots in lib/shopifyFiles.ts; signup copy (the roster + the
+ * drop waitlist) in content/join.ts.
  */
 
 import { STORE_LINKS } from '~/content/links';
+import { pageUrl } from '~/lib/urls';
 
 type SocialPlatform = 'Instagram';
 type SocialLink = { platform: SocialPlatform; href: string };
@@ -30,31 +32,26 @@ export const BRAND = {
     href: '',
   },
 
-  /** Base URL for Shopify Files assets — only lib/shopifyFiles.ts reads it. */
-  filesCdn: 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files',
-
   social: [
     { platform: 'Instagram', href: 'https://www.instagram.com/7_pacific/' },
   ] satisfies Array<SocialLink>,
 
   /** Fallback footer links, used only if the Storefront `footer` menu is empty. */
   footerLinks: [
-    { title: 'Terms of Service', url: '/pages/terms-of-service' },
-    { title: 'Contact Us', url: '/pages/contact-us' },
-    { title: 'Returns', url: '/pages/returns' },
+    { title: 'Terms of Service', url: pageUrl('terms-of-service') },
+    { title: 'Contact Us', url: STORE_LINKS.contact },
+    { title: 'Returns', url: pageUrl('returns') },
   ] satisfies Array<NavLink>,
 
   /**
    * Fallback header nav, used only if the Storefront `main-menu` is empty —
    * mirrors the locked nav (7PA-235); Contact lives in the footer only.
-   * NB: `/account` has no local route (guest checkout) — the live menu's
-   * entry points at Shopify's hosted portal, so this fallback link only
-   * matters in the degraded no-menu case.
+   * No Account entry: there is no local /account route (guest checkout), and
+   * the header's log-in glyph already points at Shopify's hosted portal.
    */
   headerLinks: [
     { title: 'Shop', url: STORE_LINKS.shopAll },
-    { title: 'Journal', url: '/journal' },
-    { title: 'About', url: '/pages/our-story' },
-    { title: 'Account', url: '/account' },
+    { title: 'Journal', url: STORE_LINKS.journal },
+    { title: 'About', url: STORE_LINKS.ourStory },
   ] satisfies Array<NavLink>,
 } as const;

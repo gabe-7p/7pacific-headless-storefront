@@ -1,6 +1,6 @@
 import logoDarkBg from '~/assets/logo-dark-bg.svg';
 import logoLightBg from '~/assets/logo-light-bg.svg';
-import { BRAND } from '~/lib/brand';
+import { BRAND } from '~/content/brand';
 import { cn } from '~/lib/cn';
 
 /**

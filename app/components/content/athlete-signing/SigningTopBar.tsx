@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { Logo } from '~/components/common/Logo';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
-import { BRAND } from '~/lib/brand';
+import { BRAND } from '~/content/brand';
 import { cn } from '~/lib/cn';
 
 import { MONO_LABEL } from './monoLabel';

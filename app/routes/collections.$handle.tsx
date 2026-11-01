@@ -6,19 +6,19 @@ import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
-import { STORE_LINKS } from '~/content/links';
+import { HANDLES } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
+import { collectionUrl } from '~/lib/urls';
 
 import type { Route } from './+types/collections.$handle';
 
-/** The shop-all collection's handle, derived from its one source in links.ts.
-    That collection opens on the drop page's BASELINE masthead instead of the
-    generic title/description header, so both entry points to ED. 01 — the nav's
-    Shop link and /drops/baseline — read the same above the fold. */
-const SHOP_ALL_HANDLE = STORE_LINKS.shopAll.replace('/collections/', '');
+/** The shop-all collection opens on the drop page's BASELINE masthead instead
+    of the generic title/description header, so both entry points to ED. 01 —
+    the nav's Shop link and /drops/baseline — read the same above the fold. */
+const SHOP_ALL_HANDLE = HANDLES.shopAllCollection;
 
 const PAGE_SIZE = 24;
 
@@ -89,7 +89,7 @@ const Collection = () => {
           ))}
         </div>
         <LoadMore
-          pathname={`/collections/${collection.handle}`}
+          pathname={collectionUrl(collection.handle)}
           pageInfo={pageInfo}
           isLoading={isLoading}
           onLoad={loadMore}

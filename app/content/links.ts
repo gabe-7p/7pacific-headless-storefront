@@ -1,33 +1,54 @@
+import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
+
 /**
- * Store links that point at Shopify resources. THE single place
- * product/collection handles may appear in app code — when a handle changes in
- * Shopify, update it here and every CTA follows. (Nav/footer links come from
- * Shopify menus; these are the marketing-CTA targets baked into page content.)
+ * THE single place a Shopify handle may appear in app code — when a handle
+ * changes in Shopify, update it here and every query and CTA follows. URL
+ * shapes come from lib/urls.ts; this file only supplies the handles.
+ * (Nav/footer links come from Shopify menus; the links below are the
+ * marketing-CTA targets baked into page content.)
  */
+export const HANDLES = {
+  /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue
+      shopping", and the one collection page that opens on the BASELINE masthead. */
+  shopAllCollection: 'baseline',
+  /**
+   * Manual collection whose product order drives the homepage BASELINE grid —
+   * reorder it in the Shopify admin to reorder the homepage. Not linked in
+   * any navigation.
+   */
+  homepageCollection: 'homepage-first-drop',
+  /** The one blog the journal publishes (index, article and sitemap). */
+  journalBlog: 'journal',
+  /** The Shopify navigation menus the root loader reads for the chrome. */
+  headerMenu: 'main-menu',
+  footerMenu: 'footer',
+  /** The Shopify page whose body renders above the contact form. */
+  contactPage: 'contact-us',
+} as const;
+
 export const STORE_LINKS = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue shopping". */
-  shopAll: '/collections/baseline',
+  shopAll: collectionUrl(HANDLES.shopAllCollection),
   /** Core Values card CTAs ("Shop tees" / "Shop shorts"). */
-  shopShirts: '/products/tracefiber-performance-tech-tee-mountain-mist',
-  shopShorts: '/products/airrail-6-performance-shorts-mountain-mist',
+  shopShirts: productUrl('tracefiber-performance-tech-tee-mountain-mist'),
+  shopShorts: productUrl('airrail-6-performance-shorts-mountain-mist'),
   /** Homepage Name/Spec banner cells — one per live product family: */
-  shopShortsMint: '/products/airrail-6-performance-shorts-mint',
-  shopShortsMidnight: '/products/airrail-6-performance-shorts-midnight',
-  shopShirtsMidnight: '/products/tracefiber-performance-tech-tee-midnight',
-  shopHat: '/products/motionframe-running-hat-white',
+  shopShortsMint: productUrl('airrail-6-performance-shorts-mint'),
+  shopShortsMidnight: productUrl('airrail-6-performance-shorts-midnight'),
+  shopShirtsMidnight: productUrl('tracefiber-performance-tech-tee-midnight'),
+  shopHat: productUrl('motionframe-running-hat-white'),
   /** Drop 02 teaser card target — the FW26 FIRST LIGHT teaser page. Point it
       at the /collections/first-light collection once the drop is live. */
   firstLight: '/drops/first-light',
   /** Homepage BASELINE intro card target — the Baseline editorial drop page. */
   baselineDrop: '/drops/baseline',
+  /** The journal index (fallback nav). */
+  journal: journalUrl(),
+  /** Our Story — the homepage "Read the story" CTAs and the fallback nav's About. */
+  ourStory: pageUrl('our-story'),
+  /** The contact page (fallback footer nav). */
+  contact: pageUrl(HANDLES.contactPage),
 } as const;
-
-/**
- * Manual Shopify collection whose product order drives the homepage
- * homepage BASELINE grid — reorder it in the Shopify admin to reorder the
- * homepage. Not linked in any navigation.
- */
-export const HOMEPAGE_COLLECTION_HANDLE = 'homepage-first-drop';
 
 /**
  * Content files mark membership CTAs with this href instead of a real path;
