@@ -3,7 +3,7 @@
 import { PostHog } from 'posthog-node/edge';
 import { createContext } from 'react-router';
 
-import { getPostHogConfig } from '~/lib/posthog';
+import { getPostHogConfig } from '~/lib/analytics/posthog';
 
 /**
  * Per-request server-side PostHog client, or `undefined` when PostHog is off

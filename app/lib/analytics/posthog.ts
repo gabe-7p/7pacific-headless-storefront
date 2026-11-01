@@ -5,7 +5,7 @@
  * Oxygen environment can point at its own PostHog project: Production and
  * Preview carry different `PUBLIC_POSTHOG_KEY`s, and an environment with no key
  * sends nothing. The root loader hands the result to the browser via `<meta>`
- * tags (see root.tsx `Layout` → entry.client.tsx); lib/posthog.server.ts uses
+ * tags (see root.tsx `Layout` → entry.client.tsx); lib/analytics/posthog.server.ts uses
  * it for server-side events.
  */
 import type { ErrorResponse } from 'react-router';

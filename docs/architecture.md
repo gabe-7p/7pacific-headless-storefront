@@ -39,7 +39,7 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
 - **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product.ts](../app/lib/product.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
 - **Every Storefront read passes an explicit `cache`** (`Cache.long()` for menus/pages/journal/recommendations, `Cache.short()` for the PDP product and collection grids). There is no implicit default; a read without one hits the API every request.
 - **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery` in [lib/http.ts](../app/lib/http.ts)) and rendered with `<Suspense>`/`<Await>`.
-- **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (tracker components in [components/layout/AnalyticsTrackers.tsx](../app/components/layout/AnalyticsTrackers.tsx)); destinations — Shopify's own analytics and PostHog ([lib/posthog.client.ts](../app/lib/posthog.client.ts)) — receive events only once Customer Privacy allows.
+- **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (the bus helpers in [lib/analytics/shopify.ts](../app/lib/analytics/shopify.ts), tracker components in [components/analytics/Trackers.tsx](../app/components/analytics/Trackers.tsx)); destinations — Shopify's own analytics and PostHog ([lib/analytics/posthog.client.ts](../app/lib/analytics/posthog.client.ts), event names and property builders in [lib/analytics/posthog.events.ts](../app/lib/analytics/posthog.events.ts)) — receive events only once Customer Privacy allows. Anything that must wait for a piece of `window.Shopify` (the bus, Standard Actions, Customer Privacy) polls through the one helper in [lib/shopifyRuntime.ts](../app/lib/shopifyRuntime.ts).
 - **CSP and the nonce are app code** ([lib/csp.ts](../app/lib/csp.ts), [lib/nonce.tsx](../app/lib/nonce.tsx)), set in `entry.server.tsx`.
 
 See [.claude/rules/module-boundaries.md](../.claude/rules/module-boundaries.md) for the loader-fetches / component-renders rule, and [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md) for caching, deferral, and nullability.
@@ -57,6 +57,7 @@ app/
   routes/        one file per route (React Router flat convention)
   components/
     layout/      Header, Footer, PageLayout, Aside, Announcement
+    analytics/   Trackers (route-driven publishers to the Shopify analytics bus + the PostHog bridge)
     cart/        cart UI
     product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
     collection/  ProductCard, MarketingSections
@@ -64,7 +65,8 @@ app/
     content/     static-page compositions (OurStory, AthleteSigning, FirstLightTeaser)
     common/      shared primitives (Container, Heading, Cta, Prose, NewsletterDialog, …)
   content/       typed marketing copy + store links (links.ts)
-  lib/           storefront.ts, cart-handlers.ts, cart.ts, product.ts, productQueries.ts, fragments.ts, csp.ts, sitemap.ts, colors.ts, … (+ colocated *.test.ts)
+  lib/           storefront.ts, cart-handlers.ts, cart.ts, product.ts, productQueries.ts, fragments.ts, csp.ts, sitemap.ts, colors.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
+    analytics/   shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders) — no barrel: client and server stay separate imports
   styles/        tailwind.css — the single stylesheet (no separate globals)
 ```
 

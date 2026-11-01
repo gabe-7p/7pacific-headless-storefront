@@ -1,12 +1,15 @@
 import type { AnalyticsEventMap } from '@shopify/hydrogen';
 
+import type { MoneyLike } from '~/lib/money';
+
 /**
- * PostHog commerce events — names and payload builders in one place, so every
- * capture site sends the same fields. Since Hydrogen 2026.10 the commerce
- * funnel reaches PostHog as a *destination* on the Shopify analytics bus
- * (lib/posthog.client.ts): these builders map the bus payloads to PostHog
- * properties. `checkout_started` is the one event still captured directly
- * (a click, not a cart change).
+ * PostHog event names and payload builders in one place, so every capture
+ * site sends the same fields. Since Hydrogen 2026.10 the commerce funnel
+ * reaches PostHog as a *destination* on the Shopify analytics bus
+ * (lib/analytics/posthog.client.ts): these builders map the bus payloads to
+ * PostHog properties. `checkout_started` is the one browser event still
+ * captured directly (a click, not a cart change); the form events are
+ * captured server-side by their resource routes (routes/api.*).
  */
 export const ANALYTICS_EVENT = {
   productViewed: 'product_viewed',
@@ -16,9 +19,9 @@ export const ANALYTICS_EVENT = {
   productRemovedFromCart: 'product_removed_from_cart',
   cartUpdated: 'cart_updated',
   checkoutStarted: 'checkout_started',
+  newsletterSubscribed: 'newsletter_subscribed',
+  waitlistJoined: 'waitlist_joined',
 } as const;
-
-type Money = { amount?: string | null; currencyCode?: string | null };
 
 export const productViewedProperties = (payload: AnalyticsEventMap['product_viewed']) => {
   const product = payload.products[0];
@@ -68,7 +71,7 @@ export const cartLineChangeProperties = (payload: AnalyticsEventMap['product_add
 };
 
 export const checkoutStartedProperties = (
-  cart: { totalQuantity?: number | null; cost?: { subtotalAmount?: Money | null } | null },
+  cart: { totalQuantity?: number | null; cost?: { subtotalAmount?: MoneyLike | null } | null },
   layout: string
 ) => ({
   cart_layout: layout,

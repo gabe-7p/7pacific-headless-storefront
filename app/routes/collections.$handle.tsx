@@ -1,11 +1,11 @@
 import { Cache, gql } from '@shopify/hydrogen';
 import { redirect, useLoaderData } from 'react-router';
 
+import { CollectionViewedTracker } from '~/components/analytics/Trackers';
 import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
-import { CollectionViewedTracker } from '~/components/layout/AnalyticsTrackers';
 import { STORE_LINKS } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { getPostHogConfig, getPostHogOrigins, getRouteErrorException } from '~/lib/posthog';
+import {
+  getPostHogConfig,
+  getPostHogOrigins,
+  getRouteErrorException,
+} from '~/lib/analytics/posthog';
 
 const env = { PUBLIC_POSTHOG_KEY: 'phc_test', PUBLIC_POSTHOG_HOST: 'https://us.i.posthog.com' };
 

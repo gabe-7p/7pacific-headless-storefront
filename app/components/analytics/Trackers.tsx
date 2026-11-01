@@ -3,8 +3,8 @@ import type { MoneyV2 } from '@shopify/hydrogen/storefront-api-types';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 
-import { bridgePostHogToShopify } from '~/lib/posthog.client';
-import { AnalyticsEvent, getAnalytics } from '~/lib/shopifyAnalytics';
+import { connectPostHogToShopify } from '~/lib/analytics/posthog.client';
+import { AnalyticsEvent, getAnalytics } from '~/lib/analytics/shopify';
 
 /**
  * Route-driven events for the Shopify analytics bus. Nothing publishes
@@ -69,15 +69,6 @@ export const CollectionViewedTracker = ({ id, handle }: { id: string; handle: st
 
 /** Registers PostHog as a bus destination and syncs its consent (client only). */
 export const PostHogBridge = () => {
-  useEffect(() => {
-    if (bridgePostHogToShopify()) return;
-    // The bus is created by ShopifyScripts' inline bootstrap; retry briefly if
-    // hydration somehow beat it.
-    let attempts = 0;
-    const timer = window.setInterval(() => {
-      if (bridgePostHogToShopify() || ++attempts >= 20) window.clearInterval(timer);
-    }, 250);
-    return () => window.clearInterval(timer);
-  }, []);
+  useEffect(() => connectPostHogToShopify(), []);
   return null;
 };

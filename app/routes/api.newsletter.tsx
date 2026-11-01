@@ -1,7 +1,8 @@
 import { data } from 'react-router';
 
+import { ANALYTICS_EVENT } from '~/lib/analytics/posthog.events';
+import { posthogContext } from '~/lib/analytics/posthog.server';
 import { collectErrors, type FormResult, readField, validateEmail } from '~/lib/forms';
-import { posthogContext } from '~/lib/posthog.server';
 
 import type { Route } from './+types/api.newsletter';
 
@@ -30,7 +31,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const errors = collectErrors({ email: validateEmail(readField(form, 'email')) });
   if (errors) return data<NewsletterResponse>({ ok: false, errors }, { status: 400 });
 
-  context.get(posthogContext)?.capture({ event: 'newsletter_subscribed' });
+  context.get(posthogContext)?.capture({ event: ANALYTICS_EVENT.newsletterSubscribed });
 
   return data<NewsletterResponse>({ ok: true });
 }

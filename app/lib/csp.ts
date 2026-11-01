@@ -1,4 +1,4 @@
-import { getPostHogOrigins } from '~/lib/posthog';
+import { getPostHogOrigins } from '~/lib/analytics/posthog';
 
 /**
  * The Content-Security-Policy header, app-owned since Hydrogen 2026.10

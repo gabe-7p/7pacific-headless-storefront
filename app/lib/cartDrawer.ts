@@ -1,3 +1,5 @@
+import { whenShopifyReady } from '~/lib/shopifyRuntime';
+
 /**
  * The cart drawer is a Radix Sheet owned by `layout/Aside`; its open function
  * lives in React state. This tiny registry lets the one non-React caller reach
@@ -6,22 +8,16 @@
  * `product/AddToCartBar`) call `useAside().open('cart')` directly.
  */
 let opener: (() => void) | null = null;
-let configured = false;
-let retries = 0;
-
-const configureOpenCartAction = () => {
-  if (configured || typeof window === 'undefined') return;
-  const openCart = window.Shopify?.actions?.openCart;
-  if (!openCart) {
-    // The Standard Actions script loads asynchronously; try again briefly.
-    if (retries++ < 40) window.setTimeout(configureOpenCartAction, 250);
-    return;
-  }
-  openCart.configure({ handler: async () => opener?.() });
-  configured = true;
-};
+let configuring = false;
 
 export const registerCartDrawerOpener = (open: () => void) => {
   opener = open;
-  configureOpenCartAction();
+  if (configuring) return;
+  configuring = true;
+  // The Standard Actions script loads asynchronously; the handler reads
+  // `opener` at call time, so a later re-registration still wins.
+  whenShopifyReady(
+    () => window.Shopify?.actions?.openCart,
+    (openCart) => openCart.configure({ handler: async () => opener?.() })
+  );
 };

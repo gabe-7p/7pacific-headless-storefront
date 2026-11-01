@@ -4,7 +4,7 @@ import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
 import { Price } from '~/components/common/Price';
 import { Button } from '~/components/ui/button';
-import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics';
+import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics/posthog.events';
 import { useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 

@@ -1,5 +1,7 @@
+import type { StorefrontAnalytics } from '@shopify/hydrogen';
 import { posthog } from 'posthog-js';
 
+import type { PostHogConfig } from '~/lib/analytics/posthog';
 import {
   ANALYTICS_EVENT,
   cartLineChangeProperties,
@@ -7,8 +9,9 @@ import {
   cartViewedProperties,
   collectionViewedProperties,
   productViewedProperties,
-} from '~/lib/analytics';
-import type { PostHogConfig } from '~/lib/posthog';
+} from '~/lib/analytics/posthog.events';
+import { getAnalytics } from '~/lib/analytics/shopify';
+import { whenShopifyReady } from '~/lib/shopifyRuntime';
 
 /**
  * PostHog in the browser (Option C, Oct 2026):
@@ -30,11 +33,11 @@ export const initPostHog = ({ key, host }: PostHogConfig) => {
     defaults: '2026-05-30',
     capture_exceptions: true,
     // Tag the app's own fetches (loader/action requests) with the visitor's
-    // ids, so lib/posthog.server.ts can attribute server-side events.
+    // ids, so lib/analytics/posthog.server.ts can attribute server-side events.
     tracing_headers: [window.location.hostname],
     session_recording: { maskAllInputs: true },
     logs: { serviceName: 'storefront-web', environment: import.meta.env.MODE },
-    // Consent-gated: lib/posthog.client.ts opts in once Customer Privacy allows.
+    // Consent-gated: connectPostHogToShopify opts in once Customer Privacy allows.
     opt_out_capturing_by_default: true,
     disable_session_recording: true,
   });
@@ -52,19 +55,18 @@ const applyConsent = (customerPrivacy: NonNullable<Window['Shopify']>['customerP
   }
 };
 
-/**
- * Connects PostHog to the Shopify runtime. Idempotent; returns false until
- * `window.Shopify.analytics` exists (the inline bootstrap `<ShopifyScripts>`
- * renders creates it before hydration, so the first call normally succeeds).
- */
-export const bridgePostHogToShopify = (): boolean => {
-  if (bridged) return true;
-  if (typeof window === 'undefined' || !posthog.__loaded) return false;
-  const shopify = window.Shopify;
-  if (!shopify?.analytics) return false;
+/** The Customer Privacy API, once its (asynchronously loaded) script has arrived. */
+const getCustomerPrivacy = () => {
+  const customerPrivacy = window.Shopify?.customerPrivacy;
+  return customerPrivacy?.analyticsProcessingAllowed ? customerPrivacy : null;
+};
+
+/** Registers PostHog as a destination on the bus and follows consent. Runs once. */
+const bridgePostHogToShopify = (analytics: StorefrontAnalytics) => {
+  if (bridged) return;
   bridged = true;
 
-  shopify.analytics.addDestination({
+  analytics.addDestination({
     name: 'posthog',
     setup({ subscribe }) {
       const unsubscribe = [
@@ -91,21 +93,22 @@ export const bridgePostHogToShopify = (): boolean => {
     },
   });
 
-  // The Customer Privacy API loads asynchronously; poll briefly for it, then
-  // follow every later consent change through its DOM event.
-  const syncConsent = () => {
-    const customerPrivacy = window.Shopify?.customerPrivacy;
-    if (!customerPrivacy?.analyticsProcessingAllowed) return false;
-    applyConsent(customerPrivacy);
-    return true;
-  };
-  document.addEventListener('visitorConsentCollected', syncConsent);
-  if (!syncConsent()) {
-    let attempts = 0;
-    const timer = window.setInterval(() => {
-      if (syncConsent() || ++attempts >= 40) window.clearInterval(timer);
-    }, 250);
-  }
+  // Wait for the Customer Privacy API, then follow every later consent change
+  // through its DOM event.
+  document.addEventListener('visitorConsentCollected', () => {
+    const customerPrivacy = getCustomerPrivacy();
+    if (customerPrivacy) applyConsent(customerPrivacy);
+  });
+  whenShopifyReady(getCustomerPrivacy, applyConsent);
+};
 
-  return true;
+/**
+ * Connects PostHog to the Shopify runtime (client only). The bus is created by
+ * `<ShopifyScripts>`' inline bootstrap before hydration, so the first check
+ * normally succeeds; it polls briefly in case hydration somehow beat it. A
+ * no-op when PostHog is off (never initialised). Returns a cancel function.
+ */
+export const connectPostHogToShopify = (): (() => void) => {
+  if (!posthog.__loaded) return () => {};
+  return whenShopifyReady(getAnalytics, bridgePostHogToShopify, { attempts: 20 });
 };
