@@ -84,6 +84,16 @@ describe('getSitemapIndex', () => {
     expect(response.headers.get('Content-Type')).toBe('application/xml');
     expect(locs(await response.text())).toEqual([`${BASE_URL}/sitemap/products/1.xml`]);
   });
+
+  it('counts the journal from the journal blog (HANDLES.journalBlog)', async () => {
+    const { client, graphql } = mockClient();
+    await getSitemapIndex(client, BASE_URL);
+
+    expect(graphql).toHaveBeenCalledWith(
+      expect.stringContaining('query SitemapIndex'),
+      expect.objectContaining({ variables: { blogHandle: 'journal' } })
+    );
+  });
 });
 
 describe('getSitemap', () => {

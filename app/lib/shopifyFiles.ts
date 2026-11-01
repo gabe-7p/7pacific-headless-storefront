@@ -1,9 +1,7 @@
-import { BRAND } from '~/lib/brand';
-
 /**
  * The one way to reference media on Shopify Files — every asset URL is built
  * here from the filename or media id Files shows, never pasted, so the CDN
- * roots live in one place.
+ * roots live in one place (the two constants below).
  *
  * Videos: Files assigns a 32-char media id and transcodes the upload into
  * renditions (`HD-720p-4.5Mbps-…` — copy the string between the id and
@@ -12,7 +10,8 @@ import { BRAND } from '~/lib/brand';
  * every video under the same id.
  */
 
-const FILES_CDN = BRAND.filesCdn;
+/** The store's Files bucket on Shopify's CDN. */
+const FILES_CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
 const VIDEO_CDN = 'https://cdn.shopify.com/videos/c';
 
 type ImageParams = {

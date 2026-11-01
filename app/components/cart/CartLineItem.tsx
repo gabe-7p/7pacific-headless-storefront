@@ -7,7 +7,7 @@ import { Price } from '~/components/common/Price';
 import { useAside } from '~/components/layout/Aside';
 import { type CartLine, useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
-import { productUrl } from '~/lib/urls';
+import { cartUrl, productUrl } from '~/lib/urls';
 
 const STEP_BUTTON =
   'flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30';
@@ -29,7 +29,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
   const product = merchandise?.product;
   const title = product?.title ?? merchandise?.title ?? 'Product';
   const selectedOptions = merchandise?.selectedOptions ?? [];
-  const lineItemUrl = product?.handle ? productUrl(product.handle, selectedOptions) : '/cart';
+  const lineItemUrl = product?.handle ? productUrl(product.handle, selectedOptions) : cartUrl();
   const isOptimistic = id.startsWith('optimistic:');
   const errorMessage = lineError?.userErrors[0]?.message;
 

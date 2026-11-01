@@ -8,6 +8,8 @@
  * ever. Homepage v2 (Oct 2026): the membership is the roster.
  */
 
+import { MEMBERSHIP_PITCH } from '~/content/membership';
+
 /** The lists a visitor can join. The API rejects anything else with a 400. */
 export const JOIN_LISTS = ['newsletter', 'waitlist'] as const;
 
@@ -38,11 +40,12 @@ export const JOIN_COPY: Record<JoinList, JoinDialogCopy> = {
   /**
    * The roster (email only). One set of lines shared by the footer signup and
    * the click-triggered "Join the roster" dialog (Gabe 2026-10-08), so the
-   * dialog continues the CTA that opened it.
+   * dialog continues the CTA that opened it — the body opens with the same
+   * pitch paragraph the homepage Roster section and PDP banner show.
    */
   newsletter: {
     heading: 'Join the roster',
-    body: 'We’re creating a community where competition and connection go hand in hand, bringing athletes together through training sessions, challenges, and experiences beyond the gym. Leave your email and we add your name to the book.',
+    body: `${MEMBERSHIP_PITCH.body} Leave your email and we add your name to the book.`,
     emailPlaceholder: 'your@email.com',
     submitLabel: 'Add my name',
     successMessage: 'You’re in the book. See you at the next session.',

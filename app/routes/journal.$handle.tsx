@@ -5,6 +5,7 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
+import { HANDLES } from '~/content/links';
 import { notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { formatJournalDate, readingTimeMinutes } from '~/lib/journalFormat';
@@ -25,7 +26,7 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   if (!handle) throw notFound('Article not found');
 
   const { data } = await context.get(storefrontClientContext).graphql(ARTICLE_QUERY, {
-    variables: { handle },
+    variables: { blogHandle: HANDLES.journalBlog, handle },
     cache: Cache.long(),
   });
   const article = data?.blog?.articleByHandle;
@@ -72,9 +73,13 @@ const Article = () => {
 };
 
 const ARTICLE_QUERY = gql(`
-  query JournalArticle($handle: String!, $country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    blog(handle: "journal") {
+  query JournalArticle(
+    $blogHandle: String!
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    blog(handle: $blogHandle) {
       articleByHandle(handle: $handle) {
         id
         handle

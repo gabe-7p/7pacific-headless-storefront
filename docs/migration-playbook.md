@@ -37,7 +37,7 @@ you're reproducing. Produce a short written audit (in the PR description or a sc
 5. **Inventory behavior.** Note every interaction: hovers, clicks, drawers/modals, form submits,
    scroll effects, responsive changes, JS in `assets/*.js` (e.g. `color-map.js`, `theme.js`).
 6. **Map data → Storefront API.** Decide what comes from a loader (products, menu, cart,
-   metafields) vs. typed content constants (marketing copy → `content/*.ts` or `lib/brand.ts`).
+   metafields) vs. typed content constants (marketing copy → `content/*.ts`, brand content → `content/brand.ts`).
 7. **Flag deviations & unknowns.** If the live site differs from the Liquid source, the live site
    wins — record the deviation. If you can't find an asset or verify a behavior, flag it; don't guess.
 
@@ -93,7 +93,7 @@ of truth — read the relevant one before changing that area).
   (use `bg-nav`, `text-brand`, …). Layout/motion (page width, header heights, easing) →
   `tailwind.css` `:root` (use `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`).
   Content/links (name, wordmark, announcement, social, newsletter, fallback nav) →
-  [app/lib/brand.ts](../app/lib/brand.ts). SEO titles → [app/lib/seo.ts](../app/lib/seo.ts).
+  [app/content/brand.ts](../app/content/brand.ts); Shopify handles → `HANDLES` in [app/content/links.ts](../app/content/links.ts); URL shapes → [app/lib/urls.ts](../app/lib/urls.ts); market/locales → [app/lib/i18n.ts](../app/lib/i18n.ts). SEO titles → [app/lib/seo.ts](../app/lib/seo.ts).
   Repeated UI → `app/components/common/` (`Container`, `Logo`, `Heading`). If a brand value would be
   reused, put it in its single source and import it — don't redefine it inline.
 - **Content.** Marketing/product copy → typed `content/*.ts` constants, not JSX literals.

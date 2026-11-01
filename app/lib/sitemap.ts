@@ -1,6 +1,8 @@
 import { Cache, gql } from '@shopify/hydrogen';
 
+import { HANDLES } from '~/content/links';
 import type { StorefrontClient } from '~/lib/storefront';
+import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
 
 /**
  * Sitemaps, app-owned since Hydrogen 2026.10 (classic's `getSitemapIndex` /
@@ -12,13 +14,12 @@ import type { StorefrontClient } from '~/lib/storefront';
 export const SITEMAP_TYPES = ['products', 'collections', 'pages', 'journal'] as const;
 export type SitemapType = (typeof SITEMAP_TYPES)[number];
 
-/** The one blog the journal publishes. The API's ARTICLE sitemap mixes every blog's
-    articles with bare handles, so the journal page is built from the blog itself. */
-const JOURNAL_BLOG_HANDLE = 'journal';
+/** The API's ARTICLE sitemap mixes every blog's articles with bare handles, so
+    the journal page is built from the journal blog itself (HANDLES.journalBlog). */
 const SITEMAP_PAGE_SIZE = 250;
 
 const SITEMAP_INDEX_QUERY = gql(`
-  query SitemapIndex {
+  query SitemapIndex($blogHandle: String!) {
     products: sitemap(type: PRODUCT) {
       pagesCount {
         count
@@ -34,7 +35,7 @@ const SITEMAP_INDEX_QUERY = gql(`
         count
       }
     }
-    journal: blog(handle: "journal") {
+    journal: blog(handle: $blogHandle) {
       articles(first: 250) {
         nodes {
           id
@@ -76,11 +77,12 @@ const SITEMAP_API_TYPE = {
   pages: 'PAGE',
 } as const;
 
-const PATH_PREFIX: Record<SitemapType, string> = {
-  products: '/products',
-  collections: '/collections',
-  pages: '/pages',
-  journal: '/journal',
+/** Each type's URL shape, from the one builder set in lib/urls.ts. */
+const RESOURCE_URL: Record<SitemapType, (handle: string) => string> = {
+  products: (handle) => productUrl(handle),
+  collections: collectionUrl,
+  pages: pageUrl,
+  journal: journalUrl,
 };
 
 export const isSitemapType = (value: string): value is SitemapType =>
@@ -117,7 +119,7 @@ const journalItems = async (
   page: number
 ): Promise<Array<SitemapItem>> => {
   const { data, errors } = await client.graphql(JOURNAL_SITEMAP_QUERY, {
-    variables: { blogHandle: JOURNAL_BLOG_HANDLE, first: SITEMAP_PAGE_SIZE },
+    variables: { blogHandle: HANDLES.journalBlog, first: SITEMAP_PAGE_SIZE },
     cache: Cache.long(),
   });
   if (errors) console.error(errors);
@@ -131,7 +133,10 @@ const journalItems = async (
 
 /** `/sitemap.xml`: one `<sitemap>` per resource type per 250-item page. */
 export const getSitemapIndex = async (client: StorefrontClient, baseUrl: string) => {
-  const { data, errors } = await client.graphql(SITEMAP_INDEX_QUERY, { cache: Cache.long() });
+  const { data, errors } = await client.graphql(SITEMAP_INDEX_QUERY, {
+    variables: { blogHandle: HANDLES.journalBlog },
+    cache: Cache.long(),
+  });
   if (errors) console.error(errors);
   if (!data) throw new Response('Sitemap unavailable', { status: 500 });
   // Re-bound after the guard: the narrowing doesn't survive into the callback.
@@ -164,7 +169,7 @@ export const getSitemap = async (
 
   const urls = items.map(
     ({ handle, lastmod }) =>
-      `  <url>\n    <loc>${escape(`${baseUrl}${PATH_PREFIX[type]}/${handle}`)}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`
+      `  <url>\n    <loc>${escape(`${baseUrl}${RESOURCE_URL[type](handle)}`)}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`
   );
 
   return xml(

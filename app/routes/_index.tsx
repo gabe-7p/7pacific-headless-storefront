@@ -10,7 +10,7 @@ import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { Roster } from '~/components/home/Roster';
 import { FEATURE_FLAGS } from '~/content/flags';
-import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
+import { HANDLES } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
@@ -33,7 +33,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   // Grid order is merchant-controlled: the manual homepage collection's
   // product order IS the display order (reorder in Shopify admin).
   const { data } = await storefront.graphql(HOME_PRODUCTS_QUERY, {
-    variables: { handle: HOMEPAGE_COLLECTION_HANDLE },
+    variables: { handle: HANDLES.homepageCollection },
     cache: Cache.long(),
   });
 

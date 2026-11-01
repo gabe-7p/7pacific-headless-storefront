@@ -26,6 +26,7 @@ import {
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { NotFound } from '~/components/content/NotFound';
+import { HANDLES } from '~/content/links';
 import {
   getPostHogConfig,
   getRouteErrorException,
@@ -36,9 +37,10 @@ import { CartProvider } from '~/lib/cart';
 import { cartHandlers } from '~/lib/cart.server';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 import { deferQuery } from '~/lib/http';
+import { MARKET } from '~/lib/i18n';
 import { useNonce } from '~/lib/nonce';
 import { shopifyMiddleware } from '~/lib/shopifyMiddleware';
-import { I18N, routeTemplates, storefrontClientContext } from '~/lib/storefront';
+import { routeTemplates, storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -83,7 +85,10 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   // Below the fold: deferred and guarded (never throws).
   const footer = deferQuery(
     storefront
-      .graphql(FOOTER_QUERY, { variables: { footerMenuHandle: 'footer' }, cache: Cache.long() })
+      .graphql(FOOTER_QUERY, {
+        variables: { footerMenuHandle: HANDLES.footerMenu },
+        cache: Cache.long(),
+      })
       .then(({ data }) => data)
   );
 
@@ -91,7 +96,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   // The cart is awaited so the first paint has it (no empty-then-filled flicker).
   const [headerResult, cartResult] = await Promise.all([
     storefront.graphql(HEADER_QUERY, {
-      variables: { headerMenuHandle: 'main-menu' },
+      variables: { headerMenuHandle: HANDLES.headerMenu },
       cache: Cache.long(),
     }),
     cartHandlers.get({ storefrontClient: storefront, request }),
@@ -141,7 +146,7 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         {rootData && (
           <ShopifyScripts
             shop={rootData.shop}
-            i18n={{ ...I18N, currency: rootData.currency }}
+            i18n={{ ...MARKET, currency: rootData.currency }}
             analytics={{ channel: 'hydrogen' }}
             consent={{ mode: 'default-banner' }}
             navigate={navigate}

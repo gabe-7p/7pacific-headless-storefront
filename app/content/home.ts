@@ -9,6 +9,7 @@
 import { BASELINE_DROP } from '~/content/baseline-drop';
 import { DROP_TWO_LAUNCH } from '~/content/drop-two';
 import { STORE_LINKS } from '~/content/links';
+import { BEHIND_THE_BUILD_VIDEO_ID } from '~/content/media';
 import { MEMBERSHIP_PITCH } from '~/content/membership';
 import {
   shopifyImage,
@@ -16,6 +17,7 @@ import {
   shopifyVideoOriginal,
   shopifyVideoThumbnail,
 } from '~/lib/shopifyFiles';
+import { youtubeWatchUrl } from '~/lib/urls';
 
 export const HOME_HERO = {
   /** Mono spec-strip label above the headline (caps via CSS). */
@@ -37,7 +39,7 @@ export const HOME_HERO = {
    * rule still holds). TODO: point at the Shoot #2 founder video once it is
    * live — until then it anchors to the Starting Lineup grid (FirstDrop's id).
    */
-  secondaryCta: { label: 'Read the Story', href: '/pages/our-story' },
+  secondaryCta: { label: 'Read the Story', href: STORE_LINKS.ourStory },
   /** Mono spec lines under the CTAs — parked in Hero, not rendered. */
   coordinates: '37.78°N · 122.51°W',
   tagline: 'Lands End · 5:47 AM',
@@ -163,7 +165,7 @@ export const HOME_BASELINE_INTRO = {
       /** External — opens the founder deep-dive on YouTube in a new tab. */
       cta: {
         label: 'Watch the build',
-        href: 'https://www.youtube.com/watch?v=jf_E0NEgeCE&t=4s',
+        href: youtubeWatchUrl(BEHIND_THE_BUILD_VIDEO_ID, 4),
       },
       /** The drop page's film, looping muted in the card (object-cover). */
       media: {
@@ -179,8 +181,8 @@ export const HOME_FIRST_DROP = {
   /** The count is the real number of products in the lineup (the loader's
       grid), never a hardcoded word. */
   subtitle: 'Purpose-built essentials engineered for the way athletes move.',
-  // Grid order is merchant-controlled: the manual `homepage-first-drop`
-  // collection in Shopify (see HOMEPAGE_COLLECTION_HANDLE in content/links.ts).
+  // Grid order is merchant-controlled: the manual homepage collection in
+  // Shopify (HANDLES.homepageCollection in content/links.ts).
 } as const;
 
 export type CoreValue = {
@@ -221,7 +223,7 @@ export const HOME_CORE_VALUES = {
       title: 'RAISE THE STANDARD',
       tone: 'light',
       body: `There's something about training alongside people who expect more of themselves. The competition gets better, the effort goes up, and everyone leaves a little further ahead.`,
-      cta: { label: 'Read the story', href: '/pages/our-story' },
+      cta: { label: 'Read the story', href: STORE_LINKS.ourStory },
       // Pre-cropped to 2:1 so the wide slot trims little at any breakpoint.
       media: {
         kind: 'image',

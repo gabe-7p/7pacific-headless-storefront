@@ -6,6 +6,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { CONTACT } from '~/content/contact';
+import { HANDLES } from '~/content/links';
 import {
   collectErrors,
   type FormResult,
@@ -28,7 +29,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   // The live Contact page's static copy (intro, support email, returns block)
   // lives in the Shopify page body; render it above the form.
   const { data } = await context.get(storefrontClientContext).graphql(CONTACT_PAGE_QUERY, {
-    variables: { handle: 'contact-us' },
+    variables: { handle: HANDLES.contactPage },
     cache: Cache.long(),
   });
   return { page: data?.page ?? null };

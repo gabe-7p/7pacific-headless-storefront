@@ -1,4 +1,4 @@
-import { BRAND } from '~/lib/brand';
+import { BRAND } from '~/content/brand';
 
 /**
  * SEO defaults — single source for the page-title format and fallback meta.
