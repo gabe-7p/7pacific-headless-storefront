@@ -1,10 +1,11 @@
-import { Image } from '@shopify/hydrogen';
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 import { BrandDialogContent, BrandDialogTitle } from '~/components/common/BrandDialog';
+import { Image } from '~/components/common/Image';
 import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { Dialog, DialogDescription } from '~/components/ui/dialog';
 import { BRAND } from '~/lib/brand';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { shopifyImage } from '~/lib/shopifyFiles';
 
 /** The signup modal's image (Shopify Files). */
@@ -47,7 +48,7 @@ export const NewsletterDialogProvider = ({ children }: { children: ReactNode }) 
             alt=""
             width={IMAGE.width}
             height={IMAGE.height}
-            sizes="(min-width: 640px) 384px, 0px"
+            sizes={IMAGE_SIZES.dialogPanel}
             className="hidden size-full object-cover sm:block"
           />
           <div className="p-8">

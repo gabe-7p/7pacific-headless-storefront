@@ -1,10 +1,11 @@
-import { Image } from '@shopify/hydrogen';
 import { useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
 import { notFound } from '~/lib/http';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { formatJournalDate, readingTimeMinutes } from '~/lib/journal';
 import { buildMeta } from '~/lib/seo';
 
@@ -54,7 +55,11 @@ const Article = () => {
       </Container>
 
       {article.image && (
-        <Image data={article.image} sizes="100vw" className="h-auto w-full object-cover" />
+        <Image
+          data={article.image}
+          sizes={IMAGE_SIZES.full}
+          className="h-auto w-full object-cover"
+        />
       )}
 
       <Container className={article.image ? 'pt-12 md:pt-16' : ''}>

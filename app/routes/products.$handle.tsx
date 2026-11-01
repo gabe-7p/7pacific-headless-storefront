@@ -4,7 +4,6 @@ import {
   getAdjacentAndFirstAvailableVariants,
   getProductOptions,
   getSelectedProductOptions,
-  Image,
   useOptimisticVariant,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
@@ -14,6 +13,7 @@ import { Await, useLoaderData } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
@@ -26,13 +26,16 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
+import { ANALYTICS_EVENT, productViewedProperties } from '~/lib/analytics';
 import { getColorSwatches } from '~/lib/colors';
 import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
+import { deferQuery } from '~/lib/loaders';
 import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
 import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/productContent';
-import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
+import { productUrl } from '~/lib/urls';
 
 import type { Route } from './+types/products.$handle';
 
@@ -44,7 +47,7 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
     }),
     {
       rel: 'canonical',
-      href: `/products/${loaderData?.product.handle}`,
+      href: loaderData ? productUrl(loaderData.product.handle) : undefined,
     },
   ];
 };
@@ -75,8 +78,6 @@ async function loadCriticalData({ context, params, request }: Route.LoaderArgs) 
     throw notFound('Product not found');
   }
 
-  redirectIfHandleIsLocalized(request, { handle, data: product });
-
   return {
     product,
     productDetails: parseJsonMetafield<Array<ProductDetailCard>>(product.productDetails),
@@ -94,20 +95,18 @@ function loadDeferredData({ context, params }: Route.LoaderArgs) {
 
   // "PLANNING TO SWEAT MORE?" — read the curated recommended_products metafield
   // references. Deferred + guarded so a failure never 500s the PDP.
-  const recommendations = context.storefront
-    .query(RECOMMENDATIONS_QUERY, {
-      variables: { handle },
-      cache: context.storefront.CacheLong(),
-    })
-    .then(({ product }) => {
-      const nodes = product?.recommended?.references?.nodes ?? [];
-      // Exclude the product being viewed; cap at 3 like live.
-      return nodes.filter((node) => node.handle !== handle).slice(0, 3);
-    })
-    .catch((error: Error) => {
-      console.error(error);
-      return null;
-    });
+  const recommendations = deferQuery(
+    context.storefront
+      .query(RECOMMENDATIONS_QUERY, {
+        variables: { handle },
+        cache: context.storefront.CacheLong(),
+      })
+      .then(({ product }) => {
+        const nodes = product?.recommended?.references?.nodes ?? [];
+        // Exclude the product being viewed; cap at 3 like live.
+        return nodes.filter((node) => node.handle !== handle).slice(0, 3);
+      })
+  );
 
   return { recommendations };
 }
@@ -131,14 +130,17 @@ const Product = () => {
   const variantCurrency = selectedVariant.price.currencyCode;
   const variantAvailable = selectedVariant.availableForSale;
   useEffect(() => {
-    posthog.capture('product_viewed', {
-      product_id: product.id,
-      product_handle: product.handle,
-      variant_id: variantId,
-      price: variantPrice,
-      currency: variantCurrency,
-      available_for_sale: variantAvailable,
-    });
+    posthog.capture(
+      ANALYTICS_EVENT.productViewed,
+      productViewedProperties({
+        product: { id: product.id, handle: product.handle },
+        variant: {
+          id: variantId,
+          price: { amount: variantPrice, currencyCode: variantCurrency },
+          availableForSale: variantAvailable,
+        },
+      })
+    );
   }, [
     posthog,
     product.handle,
@@ -190,7 +192,7 @@ const Product = () => {
         {heroDesktop && (
           <Image
             data={heroDesktop}
-            sizes="100vw"
+            sizes={IMAGE_SIZES.full}
             className="hidden object-cover object-center min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full"
           />
         )}

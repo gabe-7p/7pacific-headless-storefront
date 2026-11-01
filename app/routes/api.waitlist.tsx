@@ -1,12 +1,17 @@
 import { data } from 'react-router';
 
-import { EMAIL_RE, INVALID_EMAIL_MESSAGE } from '~/lib/validation';
+import {
+  collectErrors,
+  type FormResult,
+  readField,
+  REQUIRED_NAME_MESSAGE,
+  validateEmail,
+  validateRequired,
+} from '~/lib/forms';
 
 import type { Route } from './+types/api.waitlist';
 
-export type WaitlistResponse =
-  | { ok: true }
-  | { ok: false; errors: { name?: string; email?: string } };
+export type WaitlistResponse = FormResult<'name' | 'email'>;
 
 /**
  * Drop waitlist signup endpoint (POST /api/waitlist) — name + email from the
@@ -27,16 +32,11 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   const form = await request.formData();
-  const name = String(form.get('name') ?? '').trim();
-  const email = String(form.get('email') ?? '').trim();
-
-  const errors: { name?: string; email?: string } = {};
-  if (!name) errors.name = 'Please enter your name.';
-  if (!EMAIL_RE.test(email)) errors.email = INVALID_EMAIL_MESSAGE;
-
-  if (errors.name || errors.email) {
-    return data<WaitlistResponse>({ ok: false, errors }, { status: 400 });
-  }
+  const errors = collectErrors({
+    name: validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE),
+    email: validateEmail(readField(form, 'email')),
+  });
+  if (errors) return data<WaitlistResponse>({ ok: false, errors }, { status: 400 });
 
   context.posthog?.capture({ event: 'waitlist_joined' });
 

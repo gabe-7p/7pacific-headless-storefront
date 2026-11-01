@@ -20,6 +20,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { NotFound } from '~/components/content/NotFound';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
+import { deferQuery } from '~/lib/loaders';
 import {
   getPostHogConfig,
   getRouteErrorException,
@@ -114,15 +115,12 @@ async function loadCriticalData({ context }: Route.LoaderArgs) {
 function loadDeferredData({ context }: Route.LoaderArgs) {
   const { storefront, cart } = context;
 
-  const footer = storefront
-    .query(FOOTER_QUERY, {
+  const footer = deferQuery(
+    storefront.query(FOOTER_QUERY, {
       cache: storefront.CacheLong(),
       variables: { footerMenuHandle: 'footer' },
     })
-    .catch((error: Error) => {
-      console.error(error); // log, don't throw — the page still renders
-      return null;
-    });
+  );
   return {
     cart: cart.get(),
     footer,

@@ -11,7 +11,7 @@
 import { STORE_LINKS } from '~/content/links';
 
 type SocialPlatform = 'Instagram';
-export type SocialLink = { platform: SocialPlatform; href: string };
+type SocialLink = { platform: SocialPlatform; href: string };
 export type NavLink = { title: string; url: string };
 
 export const BRAND = {

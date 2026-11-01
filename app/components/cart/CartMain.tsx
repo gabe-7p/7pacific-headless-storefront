@@ -11,7 +11,7 @@ import { CartSummary } from './CartSummary';
 
 export type CartLayout = 'page' | 'aside';
 
-export type CartMainProps = {
+type CartMainProps = {
   cart: CartApiQueryFragment | null;
   layout: CartLayout;
 };

@@ -1,12 +1,14 @@
-import { CartForm, Image, Money, type OptimisticCartLine } from '@shopify/hydrogen';
+import { CartForm, type OptimisticCartLine } from '@shopify/hydrogen';
 import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types';
 import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout } from '~/components/cart/CartMain';
+import { Image } from '~/components/common/Image';
+import { Price } from '~/components/common/Price';
 import { useAside } from '~/components/layout/Aside';
-import { useVariantUrl } from '~/lib/variants';
+import { productUrl } from '~/lib/urls';
 
 export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
 
@@ -17,7 +19,7 @@ export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
 export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartLine }) => {
   const { id, merchandise } = line;
   const { product, title, image, selectedOptions } = merchandise;
-  const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
+  const lineItemUrl = productUrl(product.handle, selectedOptions);
   const { close } = useAside();
   const closeIfAside = () => layout === 'aside' && close();
 
@@ -59,10 +61,11 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
           <div className="mt-3 flex items-center justify-between gap-4">
             <QuantityStepper line={line} />
             <div className="font-mono text-sm font-medium">
-              {/* Raw <Money> ("$79.00") to match the cart's subtotal, not the
-                  brand <Price> ("$79 USD") the PDP and product cards use.
-                  Mono face per the numbers-live-in-mono rule. */}
-              {line.cost?.totalAmount ? <Money data={line.cost.totalAmount} /> : null}
+              {/* Cart format ("$79.00") to match the subtotal, not the brand
+                  format ("$79 USD") the PDP and product cards use. */}
+              {line.cost?.totalAmount ? (
+                <Price data={line.cost.totalAmount} variant="cart" />
+              ) : null}
             </div>
           </div>
           <CartLineRemoveForm lineIds={[id]}>

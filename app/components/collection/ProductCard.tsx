@@ -1,12 +1,15 @@
-import { Image, Money } from '@shopify/hydrogen';
 import { Link } from 'react-router';
 import type { ProductCardFragment } from 'storefrontapi.generated';
 
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
+import { Price } from '~/components/common/Price';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { getColorSwatches } from '~/lib/colors';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { getShortTitle } from '~/lib/productDisplay';
+import { productUrl } from '~/lib/urls';
 
 type ProductCardProps = {
   product: ProductCardFragment;
@@ -15,9 +18,6 @@ type ProductCardProps = {
   /** Eager-load the featured image (for above-the-fold cards). Default lazy. */
   priority?: boolean;
 };
-
-/** Responsive `sizes` hint matching the 2-col mobile / 3-col desktop grid. */
-const IMAGE_SIZES = '(min-width: 768px) 33vw, 50vw';
 
 /**
  * Grid product card, matching the live card's hover ensemble: the card lifts
@@ -31,7 +31,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
   const { handle, title, featuredImage, priceRange } = product;
   // Second Shopify image crossfades in on hover (live's product-image-hover).
   const hoverImage = product.images.nodes[1];
-  const to = `/products/${handle}`;
+  const to = productUrl(handle);
 
   // The signature two-line device (7PA-234): short name + mono strip.
   // The product's own color name comes from its entry in the sibling list.
@@ -54,7 +54,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
           {featuredImage && (
             <Image
               data={featuredImage}
-              sizes={IMAGE_SIZES}
+              sizes={IMAGE_SIZES.card}
               loading={priority ? 'eager' : 'lazy'}
               className="aspect-square w-full object-cover"
             />
@@ -64,7 +64,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
             // on first hover, which reads as flicker instead of a crossfade.
             <Image
               data={hoverImage}
-              sizes={IMAGE_SIZES}
+              sizes={IMAGE_SIZES.card}
               loading="eager"
               className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
@@ -97,7 +97,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
           />
           {product.editionNumber?.value ? ' · ' : ''}
           {colorName ? `${colorName} · ` : ''}
-          <Money data={priceRange.minVariantPrice} withoutTrailingZeros as="span" />
+          <Price data={priceRange.minVariantPrice} variant="compact" />
         </span>
       </div>
     </div>

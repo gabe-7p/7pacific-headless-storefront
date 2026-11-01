@@ -1,10 +1,10 @@
 import { data } from 'react-router';
 
-import { EMAIL_RE, INVALID_EMAIL_MESSAGE } from '~/lib/validation';
+import { collectErrors, type FormResult, readField, validateEmail } from '~/lib/forms';
 
 import type { Route } from './+types/api.newsletter';
 
-export type NewsletterResponse = { ok: true } | { ok: false; error: string };
+export type NewsletterResponse = FormResult<'email'>;
 
 /**
  * Newsletter signup endpoint (POST /api/newsletter).
@@ -19,15 +19,15 @@ export type NewsletterResponse = { ok: true } | { ok: false; error: string };
  */
 export async function action({ request, context }: Route.ActionArgs) {
   if (request.method !== 'POST') {
-    return data<NewsletterResponse>({ ok: false, error: 'Method not allowed' }, { status: 405 });
+    return data<NewsletterResponse>(
+      { ok: false, errors: { email: 'Method not allowed' } },
+      { status: 405 }
+    );
   }
 
   const form = await request.formData();
-  const email = String(form.get('email') ?? '').trim();
-
-  if (!EMAIL_RE.test(email)) {
-    return data<NewsletterResponse>({ ok: false, error: INVALID_EMAIL_MESSAGE }, { status: 400 });
-  }
+  const errors = collectErrors({ email: validateEmail(readField(form, 'email')) });
+  if (errors) return data<NewsletterResponse>({ ok: false, errors }, { status: 400 });
 
   context.posthog?.capture({ event: 'newsletter_subscribed' });
 

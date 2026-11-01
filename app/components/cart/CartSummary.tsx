@@ -1,12 +1,14 @@
 import { usePostHog } from '@posthog/react';
-import { CartForm, Money, type OptimisticCart } from '@shopify/hydrogen';
+import { CartForm, type OptimisticCart } from '@shopify/hydrogen';
 import { useEffect, useRef } from 'react';
 import { useFetcher } from 'react-router';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
+import { Price } from '~/components/common/Price';
 import { Button } from '~/components/ui/button';
+import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics';
 import { cn } from '~/lib/cn';
 
 type CartSummaryProps = {
@@ -37,10 +39,13 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
           Subtotal
         </span>
         <span className="font-mono text-sm font-medium">
-          {/* Deliberately raw <Money> ("$74.00"), NOT the brand <Price> ("$74 USD"):
-              the live cart shows cents without a currency suffix. Product cards
-              and the PDP use <Price>. Mono face per the numbers-live-in-mono rule. */}
-          {cart?.cost?.subtotalAmount?.amount ? <Money data={cart?.cost?.subtotalAmount} /> : '-'}
+          {/* Cart format ("$74.00"): the live cart shows cents without a
+              currency suffix. Product cards and the PDP use the brand format. */}
+          {cart?.cost?.subtotalAmount?.amount ? (
+            <Price data={cart.cost.subtotalAmount} variant="cart" />
+          ) : (
+            '-'
+          )}
         </span>
       </div>
 
@@ -74,20 +79,9 @@ const CartCheckoutActions = ({ cart, layout }: CartSummaryProps) => {
       variant="brand"
       size="lg"
       className="mt-5 w-full"
-      onClick={() => {
-        posthog.capture('checkout_started', {
-          cart_layout: layout,
-          total_quantity: cart.totalQuantity,
-          subtotal: cart.cost?.subtotalAmount?.amount,
-          currency: cart.cost?.subtotalAmount?.currencyCode,
-        });
-        posthog.logger.info('checkout handoff requested', {
-          cart_layout: layout,
-          total_quantity: cart.totalQuantity,
-          subtotal: cart.cost?.subtotalAmount?.amount,
-          currency: cart.cost?.subtotalAmount?.currencyCode,
-        });
-      }}
+      onClick={() =>
+        posthog.capture(ANALYTICS_EVENT.checkoutStarted, checkoutStartedProperties(cart, layout))
+      }
     >
       Checkout
     </Cta>
@@ -178,7 +172,7 @@ const CartGiftCard = ({
             <RemoveGiftCardForm key={giftCard.id} giftCardId={giftCard.id}>
               <div className="flex items-center gap-2">
                 <code>***{giftCard.lastCharacters}</code>
-                <Money data={giftCard.amountUsed} />
+                <Price data={giftCard.amountUsed} variant="cart" />
                 <button type="submit" className="underline">
                   Remove
                 </button>

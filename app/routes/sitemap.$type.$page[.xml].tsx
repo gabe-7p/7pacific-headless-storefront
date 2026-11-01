@@ -1,6 +1,6 @@
 import { getSitemap } from '@shopify/hydrogen';
 
-import { notFound } from '~/lib/http';
+import { CACHE_ONE_DAY, notFound } from '~/lib/http';
 
 import { SITEMAP_TYPES } from './[sitemap.xml]';
 import type { Route } from './+types/sitemap.$type.$page[.xml]';
@@ -20,7 +20,7 @@ export async function loader({ request, params, context: { storefront } }: Route
     getLink: ({ type, baseUrl, handle }) => `${baseUrl}/${type}/${handle}`,
   });
 
-  response.headers.set('Cache-Control', `max-age=${60 * 60 * 24}`);
+  response.headers.set('Cache-Control', CACHE_ONE_DAY);
 
   return response;
 }

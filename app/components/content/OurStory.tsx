@@ -1,8 +1,7 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { LiveDot } from '~/components/common/LiveDot';
 import {
   MediaSlot,
@@ -14,6 +13,7 @@ import { CornerBrackets, SectionLabel } from '~/components/common/Readout';
 import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
 import { OUR_STORY } from '~/content/our-story';
 import { cn } from '~/lib/cn';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Body copy: 14px Inter at 1.6 (Gabe 2026-10-08 — the guideline floor). */
 const BODY = 'text-sm leading-[1.6] text-ink-night';
@@ -77,10 +77,9 @@ const FileHero = () => {
           width={hero.image.width}
           height={hero.image.height}
           alt=""
-          sizes="100vw"
+          sizes={IMAGE_SIZES.full}
           loading="eager"
-          // Lowercase attribute on purpose — see home/Hero.tsx.
-          {...{ fetchpriority: 'high' }}
+          fetchPriority="high"
           className="size-full object-cover object-[50%_30%] saturate-[0.85]"
         />
       </SettleIn>

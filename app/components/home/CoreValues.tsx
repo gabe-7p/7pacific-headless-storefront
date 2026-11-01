@@ -1,12 +1,12 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { LazyVideo } from '~/components/common/LazyVideo';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { type CoreValue, HOME_CORE_VALUES } from '~/content/home';
 import { cn } from '~/lib/cn';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 const ValueCard = ({ value, className }: { value: CoreValue; className?: string }) => (
   <div
@@ -55,7 +55,7 @@ const Media = ({ media }: { media: CoreValue['media'] }) =>
       height={media.height}
       alt={media.alt}
       loading="lazy"
-      sizes="(min-width: 1024px) 66vw, 100vw"
+      sizes={IMAGE_SIZES.twoThirds}
       className="size-full object-cover"
     />
   );

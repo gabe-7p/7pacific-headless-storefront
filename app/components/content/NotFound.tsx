@@ -1,11 +1,11 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
 import { SpecLine } from '~/components/common/SpecLine';
 import { MICROCOPY } from '~/content/microcopy';
 import { NOT_FOUND_PAGE } from '~/content/not-found';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /**
  * The 404 view, rendered by the root ErrorBoundary. Split editorial: the
@@ -70,7 +70,7 @@ export const NotFound = () => (
               width={NOT_FOUND_PAGE.image.width}
               height={NOT_FOUND_PAGE.image.height}
               alt={NOT_FOUND_PAGE.image.altText}
-              sizes="(min-width: 768px) 50vw, 100vw"
+              sizes={IMAGE_SIZES.half}
               className="w-full"
             />
           </SettleIn>

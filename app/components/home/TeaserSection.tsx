@@ -1,20 +1,21 @@
-import { Image } from '@shopify/hydrogen';
 import type { ReactNode } from 'react';
 
 import { Container } from '~/components/common/Container';
 import { Countdown } from '~/components/common/Countdown';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { SpecLine } from '~/components/common/SpecLine';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Card background — same union shape as CoreValue's media panel. */
-export type TeaserCardMedia =
+type TeaserCardMedia =
   | { kind: 'image'; url: string; width: number; height: number; alt?: string }
   | { kind: 'video'; src: string; poster?: string; label?: string };
 
 /** The media + overlay copy for one teaser card; the CTA is passed separately
     (as a render slot) because CTA behavior is per-instance, not content. */
-export type TeaserCardContent = {
+type TeaserCardContent = {
   eyebrow: string;
   title: string;
   media: TeaserCardMedia;
@@ -66,7 +67,7 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
         height={content.media.height}
         alt={content.media.alt ?? ''}
         loading="lazy"
-        sizes="(min-width: 768px) 50vw, 100vw"
+        sizes={IMAGE_SIZES.half}
         className="absolute inset-0 h-full w-full object-cover"
       />
     )}
