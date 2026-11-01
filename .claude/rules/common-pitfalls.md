@@ -114,3 +114,7 @@ Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry im
 ## Don't edit generated files
 
 `storefrontapi.generated.d.ts` and `.react-router/types/*` are regenerated — edit the source query/fragment and re-run codegen.
+
+## Pin `@shopify/hydrogen` with a tilde, never a caret
+
+Hydrogen forked in October 2026. The `2026.4.x` line is the React Router framework this repo runs; `2026.10.x` (npm `latest`) is a rewrite where Hydrogen is a library and the `hydrogen()` Vite plugin throws on boot by design. Semver treats `2026.10` as a minor bump over `2026.4`, so `^2026.4.8` resolves to the rewrite on the next lockfile refresh. Keep the specifier `~2026.4.8` (or exact) until the migration in [ADR 0009](../../docs/decisions/0009-stay-on-hydrogen-2026-04.md) is done. `h2 upgrade` is also stale for this line (its changelog feed stops at 2026.4.3) — bump by hand from the `2026-04` dist-tag.

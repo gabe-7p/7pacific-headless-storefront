@@ -6,7 +6,7 @@ import { defineConfig } from 'vitest/config';
 // logic and must not boot the Hydrogen/Oxygen/React Router plugin stack.
 export default defineConfig({
   resolve: {
-    alias: { '~': path.resolve(__dirname, 'app') },
+    alias: { '~': path.resolve(import.meta.dirname, 'app') },
   },
   test: {
     include: ['app/**/*.test.{ts,tsx}'],
