@@ -18,25 +18,25 @@ import {
 } from 'react-router';
 
 import favicon from '~/assets/favicon.svg';
-import { Cta } from '~/components/common/Cta';
-import { Heading } from '~/components/common/Heading';
-import { NotFound } from '~/components/content/NotFound';
 import {
   CartAnalyticsTracker,
   PageViewedTracker,
   PostHogBridge,
-} from '~/components/layout/AnalyticsTrackers';
-import { CartProvider } from '~/lib/cart';
-import { cartHandlers } from '~/lib/cart-handlers';
-import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
-import { deferQuery } from '~/lib/http';
-import { useNonce } from '~/lib/nonce';
+} from '~/components/analytics/Trackers';
+import { Cta } from '~/components/common/Cta';
+import { Heading } from '~/components/common/Heading';
+import { NotFound } from '~/components/content/NotFound';
 import {
   getPostHogConfig,
   getRouteErrorException,
   POSTHOG_HOST_META,
   POSTHOG_KEY_META,
-} from '~/lib/posthog';
+} from '~/lib/analytics/posthog';
+import { CartProvider } from '~/lib/cart';
+import { cartHandlers } from '~/lib/cart-handlers';
+import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
+import { deferQuery } from '~/lib/http';
+import { useNonce } from '~/lib/nonce';
 import { shopifyMiddleware } from '~/lib/shopifyMiddleware';
 import { I18N, routeTemplates, storefrontClientContext } from '~/lib/storefront';
 

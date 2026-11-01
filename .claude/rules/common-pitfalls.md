@@ -70,7 +70,7 @@ The image rule is not just a bandwidth nicety. A bare `<img>` pointing at a full
 
 ## The "color = separate product" data model
 
-The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
+The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/product/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
 
 ## Tailwind traps that silently lose a style
 
@@ -108,7 +108,7 @@ The same skeleton block also styles every bare `input` (`margin-top: 0.25rem`, `
 
 ## Server packages must have a workerd build
 
-Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry imports Node built-ins (`path`, `fs`, `process.cwd()`) fails at load with an opaque `MiniOxygen couldn't load your app's entry point` error. `posthog-node` is the known case, so import it from **`posthog-node/edge`**. Its edge build has no AsyncLocalStorage, so `withContext()` does nothing there. [lib/posthog.server.ts](../../app/lib/posthog.server.ts) attaches the visitor through `before_send` instead.
+Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry imports Node built-ins (`path`, `fs`, `process.cwd()`) fails at load with an opaque `MiniOxygen couldn't load your app's entry point` error. `posthog-node` is the known case, so import it from **`posthog-node/edge`**. Its edge build has no AsyncLocalStorage, so `withContext()` does nothing there. [lib/analytics/posthog.server.ts](../../app/lib/analytics/posthog.server.ts) attaches the visitor through `before_send` instead.
 
 ## Runtime config beats `VITE_*`
 

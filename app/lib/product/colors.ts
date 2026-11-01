@@ -13,25 +13,24 @@
  * code changes required (the old hand-maintained lib/colorMap.ts is gone).
  */
 
+import type { ProductCardData } from '~/lib/fragments';
+
 export type ColorSwatch = { handle: string; name: string; hex: string };
 
-// Metafield references are a union of every referenceable type; non-products
-// carry only `__typename` and are skipped below.
-type SiblingNode = {
-  __typename?: string;
-  handle?: string;
-  colorName?: { value?: string | null } | null;
-  colorHex?: { value?: string | null } | null;
-};
-
-type ColorSiblingsMetafield = {
-  references?: { nodes: Array<SiblingNode> } | null;
-} | null;
+/**
+ * What `...ColorSiblings` selects — derived from the fragment in
+ * `lib/fragments.ts` so this shape can't drift from the query. Metafield
+ * references are a union of every referenceable type; a non-product node
+ * carries only `__typename` and is skipped below.
+ */
+type ColorSiblingsMetafield = ProductCardData['colorSiblings'];
 
 /** Map a product's `colorSiblings` metafield into renderable swatches. */
-export const getColorSwatches = (colorSiblings?: ColorSiblingsMetafield): Array<ColorSwatch> =>
+export const getColorSwatches = (
+  colorSiblings?: ColorSiblingsMetafield | null
+): Array<ColorSwatch> =>
   (colorSiblings?.references?.nodes ?? []).flatMap((node) =>
-    node.handle && node.colorName?.value && node.colorHex?.value
+    'handle' in node && node.handle && node.colorName?.value && node.colorHex?.value
       ? [{ handle: node.handle, name: node.colorName.value, hex: node.colorHex.value }]
       : []
   );

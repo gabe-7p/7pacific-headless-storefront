@@ -41,7 +41,7 @@ export const ProductCard = ({ product }: { product: ProductCardData }) => {
 
 ## More boundaries
 
-- **GraphQL documents never live in a component file.** Co-locate them in the loader that runs them, or — if shared — in `app/lib/fragments.ts` / `app/lib/productQueries.ts`; components import the exported _types_ only. See [graphql-fragments.md](graphql-fragments.md).
+- **GraphQL documents never live in a component file.** Co-locate them in the loader that runs them, or — if shared — in `app/lib/fragments.ts` / `app/lib/product/queries.ts`; components import the exported _types_ only. See [graphql-fragments.md](graphql-fragments.md).
 - **Shopify-owned URLs are not routes.** `/api/cart`, `/checkout`, cart and buy permalinks, the Storefront API proxy, `/api/mcp` and `?variant=` redirects are answered by `handleShopifyRoutes` in the root middleware; don't add route files for them.
 - **Modules don't reach into each other's internals.** Import a module through its public entry, not deep paths into its `components/`/`lib/`.
 - **Copy lives in `content/`, not JSX.** Marketing/product copy goes in typed `content/*.ts` constants, imported by the component.

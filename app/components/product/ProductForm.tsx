@@ -4,22 +4,9 @@ import { Link } from 'react-router';
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { SizeGuide } from '~/components/product/SizeGuide';
 import { cn } from '~/lib/cn';
-import { useProductForm } from '~/lib/product';
+import { shortSizeLabel } from '~/lib/product/display';
+import { useProductForm } from '~/lib/product/store';
 import { productUrl } from '~/lib/urls';
-
-/** Map Shopify's verbose size values to the short labels the live PDP shows. */
-const SIZE_LABELS: Record<string, string> = {
-  'extra small': 'XS',
-  small: 'S',
-  medium: 'M',
-  large: 'L',
-  'extra large': 'XL',
-  'x-large': 'XL',
-  'xx-large': 'XXL',
-  'one size': 'OS',
-};
-
-const shortLabel = (value: string) => SIZE_LABELS[value.trim().toLowerCase()] ?? value;
 
 /** Live's segmented size cell: 9.6px, semibold, 0.3em tracking, uppercase. */
 const SIZE_CELL =
@@ -89,7 +76,7 @@ export const ProductForm = ({ handle }: { handle: string }) => {
             <div className="flex w-full">
               {option.values.map((value) => {
                 const { name, selected, available, exists } = value;
-                const label = shortLabel(name);
+                const label = shortSizeLabel(name);
                 // The cells overlap by 1px, so a neighbour's pale left border
                 // paints over this one's darkened right border on hover — lift
                 // the hovered cell like the selected one.

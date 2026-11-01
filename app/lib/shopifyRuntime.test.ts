@@ -1,0 +1,78 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { whenShopifyReady } from '~/lib/shopifyRuntime';
+
+// Tests run in node; the helper only needs `window`'s timers, which this stub
+// routes through the (fake-timer-patched) globals at call time.
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.stubGlobal('window', {
+    setInterval: (handler: () => void, ms: number) => setInterval(handler, ms),
+    clearInterval: (id: ReturnType<typeof setInterval>) => clearInterval(id),
+  });
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.useRealTimers();
+});
+
+describe('whenShopifyReady', () => {
+  it('calls back at once when the runtime piece already exists', () => {
+    const callback = vi.fn();
+    whenShopifyReady(() => 'bus', callback);
+    expect(callback).toHaveBeenCalledWith('bus');
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('polls until the piece appears, then stops', () => {
+    let value: string | null = null;
+    const select = vi.fn(() => value);
+    const callback = vi.fn();
+    whenShopifyReady(select, callback, { intervalMs: 250 });
+
+    vi.advanceTimersByTime(500);
+    expect(callback).not.toHaveBeenCalled();
+
+    value = 'bus';
+    vi.advanceTimersByTime(250);
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('bus');
+
+    vi.advanceTimersByTime(1000);
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('gives up after the configured attempts', () => {
+    const select = vi.fn(() => null);
+    const callback = vi.fn();
+    whenShopifyReady(select, callback, { attempts: 3, intervalMs: 100 });
+
+    vi.advanceTimersByTime(10_000);
+    expect(select).toHaveBeenCalledTimes(1 + 3);
+    expect(callback).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('cancels a pending poll', () => {
+    let value: string | null = null;
+    const callback = vi.fn();
+    const cancel = whenShopifyReady(() => value, callback);
+
+    cancel();
+    value = 'bus';
+    vi.advanceTimersByTime(5_000);
+    expect(callback).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('does nothing on the server', () => {
+    vi.stubGlobal('window', undefined);
+    const select = vi.fn(() => 'bus');
+    const callback = vi.fn();
+    expect(whenShopifyReady(select, callback)).toBeTypeOf('function');
+    expect(select).not.toHaveBeenCalled();
+    expect(callback).not.toHaveBeenCalled();
+  });
+});

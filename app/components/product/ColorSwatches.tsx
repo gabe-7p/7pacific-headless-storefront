@@ -2,7 +2,7 @@ import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import { Link } from 'react-router';
 
 import { cn } from '~/lib/cn';
-import type { ColorSwatch } from '~/lib/colors';
+import type { ColorSwatch } from '~/lib/product/colors';
 import { productUrl } from '~/lib/urls';
 
 /**

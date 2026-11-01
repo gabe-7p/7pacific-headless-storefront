@@ -6,10 +6,10 @@ import { Announcement } from '~/components/layout/Announcement';
 import { Aside, useAside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
 import { Header, HeaderMenu } from '~/components/layout/Header';
+import { publishCartViewed } from '~/lib/analytics/shopify';
 import { useCart } from '~/lib/cart';
 import { registerCartDrawerOpener } from '~/lib/cartDrawer';
 import type { FooterData, HeaderData } from '~/lib/fragments';
-import { publishCartViewed } from '~/lib/shopifyAnalytics';
 
 type PageLayoutProps = {
   footer: Promise<FooterData | null>;

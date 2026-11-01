@@ -6,7 +6,7 @@ import { SectionHeader } from '~/components/common/SectionHeader';
 import { CareIcon } from '~/components/product/CareIcon';
 import { PdpSection } from '~/components/product/PdpSection';
 import { cn } from '~/lib/cn';
-import type { TechFeature, TechIcon, TechStackData } from '~/lib/productContent';
+import type { TechFeature, TechIcon, TechStackData } from '~/lib/product/content';
 
 const ICONS: Record<TechIcon, string> = {
   perforations: perforationsIcon,

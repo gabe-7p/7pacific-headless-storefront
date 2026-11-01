@@ -10,7 +10,7 @@ export type AppEnv = {
   PUBLIC_STOREFRONT_API_TOKEN?: string;
   PRIVATE_STOREFRONT_API_TOKEN?: string;
   PUBLIC_CHECKOUT_DOMAIN?: string;
-  /** [public] PostHog project API key (`phc_…`) — unset = PostHog off. See lib/posthog.ts. */
+  /** [public] PostHog project API key (`phc_…`) — unset = PostHog off. See lib/analytics/posthog.ts. */
   PUBLIC_POSTHOG_KEY?: string;
   /** [public] PostHog ingestion host, e.g. https://us.i.posthog.com */
   PUBLIC_POSTHOG_HOST?: string;

@@ -101,7 +101,7 @@ export type MenuData = NonNullable<HeaderData['menu']>;
 // ---------------------------------------------------------------------------
 // Base building-block fragments — only the fields every consumer needs.
 // Feature-specific extras (PDP hero metafields, tech stack, …) belong in the
-// query that needs them (lib/productQueries.ts), not here.
+// query that needs them (lib/product/queries.ts), not here.
 // ---------------------------------------------------------------------------
 
 /**

@@ -1,7 +1,7 @@
 import { createRequestHandler, RouterContextProvider } from 'react-router';
 import * as serverBuild from 'virtual:react-router/server-build';
 
-import { createPostHogClient, posthogContext } from '~/lib/posthog.server';
+import { createPostHogClient, posthogContext } from '~/lib/analytics/posthog.server';
 
 /**
  * The Oxygen worker entry. Hydrogen 2026.10 is a library, so this is a plain

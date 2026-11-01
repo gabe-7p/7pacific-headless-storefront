@@ -4,8 +4,8 @@ import { CtaLabel } from '~/components/common/Cta';
 import { useAside } from '~/components/layout/Aside';
 import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
-import { useProductForm } from '~/lib/product';
-import type { ProductData } from '~/lib/productQueries';
+import type { ProductData } from '~/lib/product/queries';
+import { useProductForm } from '~/lib/product/store';
 
 /**
  * The PDP add-to-cart bar — rendered flush at the bottom edge of the buy card,

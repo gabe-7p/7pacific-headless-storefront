@@ -4,11 +4,11 @@ import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 
+import { POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/analytics/posthog';
+import { initPostHog } from '~/lib/analytics/posthog.client';
 import { NonceProvider } from '~/lib/nonce';
-import { POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/posthog';
-import { initPostHog } from '~/lib/posthog.client';
 
-// Runtime config rendered into <head> by root.tsx `Layout` (see lib/posthog.ts).
+// Runtime config rendered into <head> by root.tsx `Layout` (see lib/analytics/posthog.ts).
 // Absent → PostHog stays uninitialized and every capture is a no-op.
 const readMeta = (name: string) =>
   document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`)?.content;

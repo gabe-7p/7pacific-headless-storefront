@@ -4,9 +4,9 @@ import { CartMain } from '~/components/cart/CartMain';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
 import { STORE_LINKS } from '~/content/links';
+import { publishCartViewed } from '~/lib/analytics/shopify';
 import { useCart } from '~/lib/cart';
 import { buildMeta } from '~/lib/seo';
-import { publishCartViewed } from '~/lib/shopifyAnalytics';
 
 import type { Route } from './+types/cart';
 
