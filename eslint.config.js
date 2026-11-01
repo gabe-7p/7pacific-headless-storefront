@@ -32,6 +32,8 @@ export default [
       // Written at the project root by @shopify/hydrogen/ts-plugin (gitignored).
       '**/*-graphql-env.d.ts',
       '**/.react-router/',
+      // Local agent worktrees (gitignored) — each carries a full copy of the repo.
+      '**/.claude/worktrees/',
     ],
   },
   ...fixupConfigRules(

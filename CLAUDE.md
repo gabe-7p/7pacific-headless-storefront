@@ -14,20 +14,21 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 
 ## Commands
 
-| Task                       | Command                                                                             |
-| -------------------------- | ----------------------------------------------------------------------------------- |
-| Dev server (mini-oxygen)   | `pnpm dev` (`vite dev`, http://localhost:3000)                                      |
-| Build                      | `pnpm build` (`react-router build` → `dist/`)                                       |
-| Preview the worker build   | `pnpm preview`                                                                      |
-| Deploy to Oxygen (CI)      | `pnpm deploy`                                                                       |
-| Type check + query check   | `pnpm type-check` (tsc + `hydrogen gql check`)                                      |
-| Lint                       | `pnpm lint`                                                                         |
-| Format                     | `pnpm prettier` / check: `pnpm prettier:check`                                      |
-| Unit tests (Vitest)        | `pnpm test`                                                                         |
-| Sync Hydrogen agent skills | `pnpm exec hydrogen skills sync` (after a Hydrogen bump; `skills check` runs in CI) |
-| Dependency-boundary check  | `pnpm depcruise`                                                                    |
-| Add a shadcn/ui primitive  | `pnpm dlx shadcn@latest add <name>`                                                 |
-| Full pre-PR gate           | the `/check` command (mirrors CI)                                                   |
+| Task                           | Command                                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------------ |
+| Dev server (mini-oxygen)       | `pnpm dev` (`vite dev`, http://localhost:3000)                                             |
+| Build                          | `pnpm build` (`react-router build` → `dist/`)                                              |
+| Preview the worker build       | `pnpm preview`                                                                             |
+| Deploy to Oxygen (CI)          | `pnpm deploy`                                                                              |
+| Type check + query check       | `pnpm type-check` (tsc + `hydrogen gql check`)                                             |
+| Lint                           | `pnpm lint`                                                                                |
+| Format                         | `pnpm prettier` / check: `pnpm prettier:check`                                             |
+| Unit tests (Vitest)            | `pnpm test`                                                                                |
+| Meta Pixel funnel (Playwright) | `pnpm test:pixel` (offline stub) / `pnpm test:pixel:live` — see docs/META_PIXEL_TESTING.md |
+| Sync Hydrogen agent skills     | `pnpm exec hydrogen skills sync` (after a Hydrogen bump; `skills check` runs in CI)        |
+| Dependency-boundary check      | `pnpm depcruise`                                                                           |
+| Add a shadcn/ui primitive      | `pnpm dlx shadcn@latest add <name>`                                                        |
+| Full pre-PR gate               | the `/check` command (mirrors CI)                                                          |
 
 ## Repo map
 
@@ -37,13 +38,14 @@ app/
   routes/        one file per route (React Router flat convention); loader/action live here (+ colocated *.test.ts, ignored by routes.ts)
   components/    presentational only — layout/ analytics/ cart/ (CartDrawer + useCartDrawer, CartMain, CartLineItem, CartSummary) product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + brand content — links.ts (`HANDLES` = the ONE place a Shopify handle lives + `STORE_LINKS`), brand.ts (name, wordmark, announcement, social, fallback nav), media.ts (external media ids), join.ts, membership.ts, …
-  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), i18n.ts (`MARKET`, `MONEY_LOCALE`, `DATE_LOCALE`), urls.ts (every URL shape: `productUrl`, `collectionUrl`, `pageUrl`, `journalUrl`, `cartUrl`, `youtubeWatchUrl`), cart.server.ts (the `/api/cart` handlers) / cart.ts (the client store: `CartProvider`, `useCart`, `useCartForm`), product/ (PDP: queries.ts gql documents + types, store.ts product-form store, content.ts metafield JSON shapes, display.ts short titles/size labels, colors.ts swatches), fragments.ts (shared gql fragments + chrome queries), http.ts (notFound, deferQuery), csp.ts, sitemap.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
+  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), i18n.ts (`MARKET`, `MONEY_LOCALE`, `DATE_LOCALE`), urls.ts (every URL shape: `productUrl`, `collectionUrl`, `pageUrl`, `journalUrl`, `cartUrl`, `youtubeWatchUrl`), cart.server.ts (the `/api/cart` handlers) / cart.ts (the client store: `CartProvider`, `useCart`, `useCartForm`), product/ (PDP: queries.ts gql documents + types, store.ts product-form store, content.ts metafield JSON shapes, display.ts short titles/size labels, colors.ts swatches), fragments.ts (shared gql fragments + chrome queries), http.ts (notFound, deferQuery), csp.ts, sitemap.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders, meta-pixel.ts = Meta event mapping + `toMetaContentId`, meta-pixel.client.ts = the pixel as a bus destination; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
 *-graphql-env.d.ts Storefront API schema environments written by the Hydrogen ts-plugin (gitignored, never edit)
 .claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit
-docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
+docs/            architecture.md, decisions/ (ADRs), META_PIXEL_TESTING.md (the pixel checklist), doc index + lookup table
+e2e/             the Playwright Meta Pixel funnel test (`pnpm test:pixel`; playwright.config.ts at the root)
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```
 

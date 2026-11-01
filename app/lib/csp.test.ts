@@ -28,4 +28,17 @@ describe('createCsp', () => {
     const csp = createCsp({ nonce: 'n', env: { ...env, PUBLIC_POSTHOG_HOST: undefined } });
     expect(csp).not.toContain('posthog');
   });
+  it('allows the Meta Pixel script, beacons and tracking image', () => {
+    const csp = directives(createCsp({ nonce: 'n', env }));
+    expect(csp['script-src']).toContain('https://connect.facebook.net');
+    expect(csp['connect-src']).toContain('https://www.facebook.com');
+    expect(csp['connect-src']).toContain('https://connect.facebook.net');
+    expect(csp['img-src']).toContain('https://www.facebook.com');
+  });
+
+  it('keeps the img-src sources that default-src used to cover', () => {
+    const csp = directives(createCsp({ nonce: 'n', env }));
+    expect(csp['img-src']).toContain("'self'");
+    expect(csp['img-src']).toContain('https://cdn.shopify.com');
+  });
 });

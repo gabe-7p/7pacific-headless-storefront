@@ -20,6 +20,7 @@ import {
 import favicon from '~/assets/favicon.svg';
 import {
   CartAnalyticsTracker,
+  MetaPixelBridge,
   PageViewedTracker,
   PostHogBridge,
 } from '~/components/analytics/Trackers';
@@ -120,6 +121,10 @@ export async function loader({ context, request }: Route.LoaderArgs) {
       isDev: import.meta.env.DEV,
       hostname: new URL(request.url).hostname,
     }),
+    // Meta Pixel (lib/analytics/meta-pixel.client.ts): the ID reaches the
+    // browser through this loader, never through a client-side env read.
+    metaPixelId: env.PUBLIC_META_PIXEL_ID || null,
+    metaDomainVerification: env.PUBLIC_META_DOMAIN_VERIFICATION || null,
     // What <ShopifyScripts> needs: shop identity for analytics + consent, and
     // the active currency for browse events (they carry no price of their own).
     shop: {
@@ -160,6 +165,10 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         {/* Runtime PostHog config for entry.client (per-Oxygen-environment; absent = off). */}
         {rootData?.posthog && <meta name={POSTHOG_KEY_META} content={rootData.posthog.key} />}
         {rootData?.posthog && <meta name={POSTHOG_HOST_META} content={rootData.posthog.host} />}
+        {/* Meta domain verification (Events Manager → Brand Safety → Domains); optional. */}
+        {rootData?.metaDomainVerification && (
+          <meta name="facebook-domain-verification" content={rootData.metaDomainVerification} />
+        )}
         <Meta />
         <Links />
       </head>
@@ -197,6 +206,7 @@ const App = () => {
       <PageViewedTracker />
       <CartAnalyticsTracker />
       <PostHogBridge />
+      <MetaPixelBridge pixelId={data.metaPixelId} />
       {isBareChrome ? (
         <Outlet />
       ) : (

@@ -5,7 +5,9 @@ import { getPostHogOrigins } from '~/lib/analytics/posthog';
  * (classic's `createContentSecurityPolicy` is gone). Same allowlist as before:
  * self + Shopify's CDN/scripts, the checkout and store domains for the
  * Storefront API and consent calls, PostHog's ingestion + assets hosts, and
- * `blob:` workers for the session-replay recorder. Fonts are self-hosted.
+ * `blob:` workers for the session-replay recorder, and the Meta Pixel hosts
+ * (fbevents.js from connect.facebook.net, beacons + the tracking image on
+ * www.facebook.com). Fonts are self-hosted.
  * Every script tag carries the per-request nonce (React Router's `<Scripts>`
  * and `<ShopifyScripts nonce>`); a dropped nonce leaves pages rendering while
  * hydration is silently dead, so keep the console clear of CSP violations.
@@ -18,6 +20,7 @@ export const createCsp = ({
   env: Pick<Env, 'PUBLIC_STORE_DOMAIN' | 'PUBLIC_CHECKOUT_DOMAIN' | 'PUBLIC_POSTHOG_HOST'>;
 }): string => {
   const shopifyScripts = ['https://cdn.shopify.com', 'https://shopify.com'];
+  const metaPixel = ['https://www.facebook.com', 'https://connect.facebook.net'];
   const posthog = getPostHogOrigins(env.PUBLIC_POSTHOG_HOST);
   const storeOrigins = [env.PUBLIC_CHECKOUT_DOMAIN, env.PUBLIC_STORE_DOMAIN]
     .filter((domain): domain is string => Boolean(domain))
@@ -34,9 +37,18 @@ export const createCsp = ({
       'https://monorail-edge.shopifysvc.com',
       ...storeOrigins,
       ...posthog,
+      ...metaPixel,
     ],
     'font-src': ["'self'", 'https://cdn.shopify.com'],
-    'script-src': ["'self'", ...shopifyScripts, ...posthog, `'nonce-${nonce}'`],
+    // Explicit (was inherited from default-src) so the pixel's tracking image can be added.
+    'img-src': ["'self'", ...shopifyScripts, 'https://www.facebook.com'],
+    'script-src': [
+      "'self'",
+      ...shopifyScripts,
+      ...posthog,
+      'https://connect.facebook.net',
+      `'nonce-${nonce}'`,
+    ],
     'worker-src': ["'self'", 'blob:'],
   };
 
