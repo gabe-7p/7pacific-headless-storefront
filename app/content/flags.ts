@@ -5,8 +5,9 @@
  */
 export const FEATURE_FLAGS: {
   /** The homepage "Drop 02: FW26" teaser (countdown + Fall Gear / Coming
-      Soon cards). `false` hides the whole section, including its waitlist
-      dialog; the /api/waitlist endpoint stays live either way. */
+      Soon cards). `false` hides the whole section, including its door to
+      the waitlist dialog; the /api/subscribe endpoint (and the FIRST LIGHT
+      page's own waitlist form) stay live either way. */
   dropTwoTeaser: boolean;
 } = {
   dropTwoTeaser: false,

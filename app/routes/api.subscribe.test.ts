@@ -1,0 +1,71 @@
+import { RouterContextProvider } from 'react-router';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { ANALYTICS_EVENT } from '~/lib/analytics/posthog.events';
+import { posthogContext, type PostHogServerClient } from '~/lib/analytics/posthog.server';
+import { INVALID_EMAIL_MESSAGE, REQUIRED_NAME_MESSAGE } from '~/lib/forms';
+import { action, UNKNOWN_LIST_MESSAGE } from '~/routes/api.subscribe';
+
+const capture = vi.fn();
+
+/** The router context server.ts builds, with a capture-only PostHog stub. */
+const context = new RouterContextProvider();
+context.set(posthogContext, { capture } as unknown as PostHogServerClient);
+
+const post = (fields: Record<string, string>) => {
+  const body = new FormData();
+  for (const [key, value] of Object.entries(fields)) body.set(key, value);
+  return new Request('http://localhost/api/subscribe', { method: 'POST', body });
+};
+
+const call = (request: Request) =>
+  action({ request, context, params: {}, url: new URL(request.url), pattern: '/api/subscribe' });
+
+beforeEach(() => capture.mockClear());
+
+describe('POST /api/subscribe', () => {
+  it('confirms a valid newsletter signup and captures the event', async () => {
+    const result = await call(post({ list: 'newsletter', email: 'mason@example.com' }));
+    expect(result.data).toEqual({ ok: true });
+    expect(result.init?.status).toBeUndefined();
+    expect(capture).toHaveBeenCalledWith({ event: ANALYTICS_EVENT.newsletterSubscribed });
+  });
+
+  it('confirms a valid waitlist signup and captures the event', async () => {
+    const result = await call(
+      post({ list: 'waitlist', name: 'Mason', email: 'mason@example.com' })
+    );
+    expect(result.data).toEqual({ ok: true });
+    expect(capture).toHaveBeenCalledWith({ event: ANALYTICS_EVENT.waitlistJoined });
+  });
+
+  it('rejects an invalid email with the email message', async () => {
+    const result = await call(post({ list: 'newsletter', email: 'nope' }));
+    expect(result.init?.status).toBe(400);
+    expect(result.data).toEqual({ ok: false, errors: { email: INVALID_EMAIL_MESSAGE } });
+    expect(capture).not.toHaveBeenCalled();
+  });
+
+  it('requires a name on the waitlist only', async () => {
+    const result = await call(post({ list: 'waitlist', name: '  ', email: 'a@b.co' }));
+    expect(result.init?.status).toBe(400);
+    expect(result.data).toEqual({ ok: false, errors: { name: REQUIRED_NAME_MESSAGE } });
+
+    const newsletter = await call(post({ list: 'newsletter', email: 'a@b.co' }));
+    expect(newsletter.data).toEqual({ ok: true });
+  });
+
+  it('rejects an unknown list', async () => {
+    const result = await call(post({ list: 'vip', email: 'a@b.co' }));
+    expect(result.init?.status).toBe(400);
+    expect(result.data).toEqual({ ok: false, errors: { list: UNKNOWN_LIST_MESSAGE } });
+    expect(capture).not.toHaveBeenCalled();
+  });
+
+  it('answers a GET with 405', async () => {
+    const result = await call(new Request('http://localhost/api/subscribe'));
+    expect(result.init?.status).toBe(405);
+    expect(result.data.ok).toBe(false);
+    expect(capture).not.toHaveBeenCalled();
+  });
+});

@@ -2,7 +2,7 @@ import { ArrowRight } from 'lucide-react';
 import type { ComponentProps, ReactNode } from 'react';
 import { Link } from 'react-router';
 
-import { useNewsletterDialog } from '~/components/common/NewsletterDialog';
+import { useJoinDialog } from '~/components/common/useJoinDialog';
 import { Button } from '~/components/ui/button';
 import { NEWSLETTER_HREF } from '~/content/links';
 
@@ -72,20 +72,20 @@ export const Cta = ({
   disabled,
   onClick,
 }: CtaProps) => {
-  const newsletter = useNewsletterDialog();
+  const join = useJoinDialog();
 
   const label = <CtaLabel>{children}</CtaLabel>;
 
-  // Membership CTAs open the signup dialog rather than navigating. Falls
-  // through to a normal link if rendered outside the provider.
-  if ((href === NEWSLETTER_HREF || to === NEWSLETTER_HREF) && newsletter) {
+  // Membership CTAs open the roster signup dialog rather than navigating.
+  // Falls through to a normal link if rendered outside the provider.
+  if ((href === NEWSLETTER_HREF || to === NEWSLETTER_HREF) && join) {
     return (
       <Button
         type="button"
         variant={variant}
         size={size}
         className={className}
-        onClick={newsletter.open}
+        onClick={() => join.open('newsletter')}
       >
         {label}
       </Button>

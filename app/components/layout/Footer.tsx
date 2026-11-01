@@ -5,8 +5,9 @@ import { Await, NavLink } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { InstagramIcon } from '~/components/common/icons';
+import { JoinForm } from '~/components/common/JoinForm';
 import { Logo } from '~/components/common/Logo';
-import { NewsletterForm } from '~/components/common/NewsletterForm';
+import { JOIN_COPY } from '~/content/join';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
 import type { FooterData, HeaderData } from '~/lib/fragments';
@@ -46,7 +47,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                   <SocialIcons />
                 </div>
               </div>
-              <FooterCollapsible title={BRAND.newsletter.heading}>
+              <FooterCollapsible title={JOIN_COPY.newsletter.heading}>
                 <Newsletter />
                 <div className="mt-6 hidden impulse:block">
                   <SocialIcons />
@@ -130,8 +131,14 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
 const Newsletter = () => (
   <div className="impulse:max-w-md">
     {/* Live footer copy and links are 10.2px. */}
-    <p className="text-[10.2px] text-support-night">{BRAND.newsletter.body}</p>
-    <NewsletterForm />
+    <p className="text-[10.2px] text-support-night">{JOIN_COPY.newsletter.body}</p>
+    <JoinForm
+      list="newsletter"
+      copy={JOIN_COPY.newsletter}
+      submit="mail"
+      className="mt-5"
+      errorClassName="mt-2 text-sm text-support-night"
+    />
   </div>
 );
 

@@ -1,10 +1,10 @@
 import { Container } from '~/components/common/Container';
 import { Countdown } from '~/components/common/Countdown';
 import { Heading } from '~/components/common/Heading';
+import { JoinForm } from '~/components/common/JoinForm';
 import { LiveDot } from '~/components/common/LiveDot';
 import { MediaSlot } from '~/components/common/MediaSlot';
 import { SpecLine } from '~/components/common/SpecLine';
-import { WaitlistForm } from '~/components/common/WaitlistForm';
 import { FIRST_LIGHT } from '~/content/first-light';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
@@ -16,14 +16,17 @@ const fieldClass =
   'm-0 block h-9 w-full rounded-none border border-ink bg-transparent px-4 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
 
 /**
- * The Early Access signup — the shared drop-waitlist form (one list, two
- * doors with the homepage dialog) in the mock's boxed-mono, single-row
+ * The Early Access signup — the shared `JoinForm` on the waitlist (one list,
+ * two doors with the homepage dialog) in the mock's boxed-mono, single-row
  * treatment. max-w-none opts the row out of the base layer's
  * form { max-width: 400px } cap.
  */
 const EarlyAccessForm = () => (
-  <WaitlistForm
+  <JoinForm
+    list="waitlist"
     copy={FIRST_LIGHT.earlyAccess}
+    withName
+    noValidate
     className="mt-6 grid max-w-none grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
     fieldClassName={fieldClass}
     successClassName="mt-6 text-sm font-medium text-ink"

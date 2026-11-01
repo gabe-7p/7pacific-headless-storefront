@@ -128,15 +128,8 @@ export const HOME_DROP_TWO = {
       },
     },
   },
-  /** Copy for the waitlist dialog the Coming Soon card opens. */
-  waitlist: {
-    heading: 'Get on the List',
-    body: 'DAYBREAK™ and FRONTRUNNER™ land 09.13.26. Leave your name and we’ll tell you the moment they do.',
-    namePlaceholder: 'Name',
-    emailPlaceholder: 'Email address',
-    submitLabel: 'Get on the List',
-    successMessage: 'You’re on it. See you at first light.',
-  },
+  // The waitlist dialog the Coming Soon card opens reads JOIN_COPY.waitlist
+  // (content/join.ts) — it's the list's copy, not the homepage's.
 } as const;
 
 /**
