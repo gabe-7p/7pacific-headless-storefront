@@ -35,7 +35,7 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
                 └─ requestContext.applyResponseHeaders()  Shopify's cookies/cache headers onto every response
 ```
 
-- **The cart lives in the browser.** The root loader seeds `CartProvider` with `cartHandlers.get()`; every cart surface reads `useCart(selector)` and mutates through `useCartForm` / the product form, which post to `/api/cart` (optimistic lines settle when the handler confirms). No `/cart` action route, no loader promise for the cart.
+- **The cart lives in the browser.** The root loader seeds `CartProvider` with `cartHandlers.get()`; every cart surface reads `useCart(selector)` and mutates through `useCartForm` / the product form, which post to `/api/cart` (optimistic lines settle when the handler confirms). No `/cart` action route, no loader promise for the cart. The drawer is `components/cart/CartDrawer`: the header bag, the PDP add-to-cart and Shopify's `openCart` standard action all open it through `useCartDrawer()`.
 - **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product/store.ts](../app/lib/product/store.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
 - **Every Storefront read passes an explicit `cache`** (`Cache.long()` for menus/pages/journal/recommendations, `Cache.short()` for the PDP product and collection grids). There is no implicit default; a read without one hits the API every request.
 - **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery` in [lib/http.ts](../app/lib/http.ts)) and rendered with `<Suspense>`/`<Await>`.
@@ -58,14 +58,14 @@ app/
   components/
     layout/      Header, Footer, PageLayout, Aside, Announcement
     analytics/   Trackers (route-driven publishers to the Shopify analytics bus + the PostHog bridge)
-    cart/        cart UI
+    cart/        CartDrawer (the Aside drawer + useCartDrawer, the openCart target), CartMain / CartLineItem / CartSummary
     product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
     collection/  ProductCard, MarketingSections
     home/        homepage sections
     content/     static-page compositions (OurStory, FirstLightTeaser, athlete-signing/ — the signing page as a root + one file per section)
     common/      shared primitives (Container, Heading, Cta, Prose, NewsletterDialog, …)
   content/       typed marketing copy + store links (links.ts); athlete-signing/ = types + one file per athlete + the handle registry
-  lib/           storefront.ts, cart-handlers.ts, cart.ts, product/ (queries, store, content, display, colors), fragments.ts, csp.ts, sitemap.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
+  lib/           storefront.ts, cart.server.ts, cart.ts, product/ (queries, store, content, display, colors), fragments.ts, csp.ts, sitemap.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
     analytics/   shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders) — no barrel: client and server stay separate imports
   styles/        tailwind.css — the single stylesheet (no separate globals)
 ```

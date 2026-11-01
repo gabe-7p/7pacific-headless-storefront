@@ -1,6 +1,6 @@
 import { handleShopifyRedirects, handleShopifyRoutes } from '@shopify/hydrogen';
 
-import { cartHandlers } from '~/lib/cart-handlers';
+import { cartHandlers } from '~/lib/cart.server';
 import {
   createRequestStorefrontClient,
   routeTemplates,
