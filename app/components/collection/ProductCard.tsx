@@ -5,10 +5,10 @@ import { Image } from '~/components/common/Image';
 import { Price } from '~/components/common/Price';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
-import { getColorSwatches } from '~/lib/colors';
 import type { ProductCardData } from '~/lib/fragments';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
-import { getShortTitle } from '~/lib/productDisplay';
+import { getColorSwatches } from '~/lib/product/colors';
+import { getShortTitle } from '~/lib/product/display';
 import { productUrl } from '~/lib/urls';
 
 type ProductCardProps = {

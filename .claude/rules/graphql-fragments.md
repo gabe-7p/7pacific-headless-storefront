@@ -53,8 +53,8 @@ if (!data?.product) throw notFound('Product not found');
   | (none)          | The cart (Hydrogen's handlers manage it)                                         | `cartHandlers`                                                                  |
 
 - **`$country` / `$language` are injected.** Declare them with `@inContext` and leave them out of `variables`; the client fills them from the request context's i18n (EN/US).
-- **Union and interface selections are typed as the full union.** A metafield `references` / `reference` is a union of every referenceable type; select `__typename` in the inline fragment and narrow (`'handle' in node`) or accept a structural, all-optional shape (`lib/colors.ts`, `lib/metafields.ts`).
-- **Keep base fragments lean** — only fields every consumer needs. Feature-specific fields (PDP hero metafields, tech stack) belong in the query that needs them (`lib/productQueries.ts`).
+- **Union and interface selections are typed as the full union.** A metafield `references` / `reference` is a union of every referenceable type; select `__typename` in the inline fragment, derive the shape from the fragment's result type, and narrow with `'handle' in node` (`lib/product/colors.ts`); a helper that has no fragment to lean on accepts a structural, all-optional shape instead (`lib/metafields.ts`).
+- **Keep base fragments lean** — only fields every consumer needs. Feature-specific fields (PDP hero metafields, tech stack) belong in the query that needs them (`lib/product/queries.ts`).
 - **`hydrogen gql check --fail-on-warn` is part of `pnpm type-check`.** It validates every document against the bundled Storefront API schema (the plugin alone does not run under `tsc`). The plugin writes `storefront-graphql-env.d.ts` / `customer-account-graphql-env.d.ts` at the repo root — gitignored, never edited.
 - **No GraphQL in components** — see [module-boundaries.md](module-boundaries.md).
 

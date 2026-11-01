@@ -70,7 +70,7 @@ The image rule is not just a bandwidth nicety. A bare `<img>` pointing at a full
 
 ## The "color = separate product" data model
 
-The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
+The 9 live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/product/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app.
 
 ## Tailwind traps that silently lose a style
 

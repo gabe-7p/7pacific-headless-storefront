@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { cn } from '~/lib/cn';
-import type { ProductData } from '~/lib/productQueries';
+import type { ProductData } from '~/lib/product/queries';
 
 /**
  * Mobile/tablet sticky add-to-cart bar (7PA-166). The in-card bar can't pin via

@@ -1,6 +1,6 @@
 import { createProductComponents } from '@shopify/hydrogen/react';
 
-import type { ProductData } from '~/lib/productQueries';
+import type { ProductData } from '~/lib/product/queries';
 
 /**
  * The product-form store for the PDP: `ProductProvider` holds the loader's

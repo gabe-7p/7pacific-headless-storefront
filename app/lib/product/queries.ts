@@ -108,7 +108,7 @@ export const PRODUCT_QUERY = gql(
           value
         }
         # The Spec Card (7PA-231) — the locked seven-field JSON device
-        # (fabric/weight/use/seams/pockets/fit/origin); see lib/productContent.
+        # (fabric/weight/use/seams/pockets/fit/origin); see lib/product/content.
         specCard: metafield(namespace: "custom", key: "spec_card") {
           value
         }

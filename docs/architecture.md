@@ -36,7 +36,7 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
 ```
 
 - **The cart lives in the browser.** The root loader seeds `CartProvider` with `cartHandlers.get()`; every cart surface reads `useCart(selector)` and mutates through `useCartForm` / the product form, which post to `/api/cart` (optimistic lines settle when the handler confirms). No `/cart` action route, no loader promise for the cart.
-- **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product.ts](../app/lib/product.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
+- **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product/store.ts](../app/lib/product/store.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
 - **Every Storefront read passes an explicit `cache`** (`Cache.long()` for menus/pages/journal/recommendations, `Cache.short()` for the PDP product and collection grids). There is no implicit default; a read without one hits the API every request.
 - **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery` in [lib/http.ts](../app/lib/http.ts)) and rendered with `<Suspense>`/`<Await>`.
 - **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (the bus helpers in [lib/analytics/shopify.ts](../app/lib/analytics/shopify.ts), tracker components in [components/analytics/Trackers.tsx](../app/components/analytics/Trackers.tsx)); destinations — Shopify's own analytics and PostHog ([lib/analytics/posthog.client.ts](../app/lib/analytics/posthog.client.ts), event names and property builders in [lib/analytics/posthog.events.ts](../app/lib/analytics/posthog.events.ts)) — receive events only once Customer Privacy allows. Anything that must wait for a piece of `window.Shopify` (the bus, Standard Actions, Customer Privacy) polls through the one helper in [lib/shopifyRuntime.ts](../app/lib/shopifyRuntime.ts).
@@ -46,7 +46,7 @@ See [.claude/rules/module-boundaries.md](../.claude/rules/module-boundaries.md) 
 
 ## GraphQL
 
-Documents are `gql()` calls from `@shopify/hydrogen` — a query string plus the fragments it spreads — typed in place by the `@shopify/hydrogen/ts-plugin` entry in `tsconfig.json` (which writes the gitignored `*-graphql-env.d.ts` schema environments at the repo root). Shared fragments and the chrome queries live in [app/lib/fragments.ts](../app/lib/fragments.ts), the PDP's in [app/lib/productQueries.ts](../app/lib/productQueries.ts); result types come from `StorefrontApi.ResultOf<typeof DOC>`. `hydrogen gql check` (part of `pnpm type-check`) validates every document against the schema. Full rules: [.claude/rules/graphql-fragments.md](../.claude/rules/graphql-fragments.md).
+Documents are `gql()` calls from `@shopify/hydrogen` — a query string plus the fragments it spreads — typed in place by the `@shopify/hydrogen/ts-plugin` entry in `tsconfig.json` (which writes the gitignored `*-graphql-env.d.ts` schema environments at the repo root). Shared fragments and the chrome queries live in [app/lib/fragments.ts](../app/lib/fragments.ts), the PDP's in [app/lib/product/queries.ts](../app/lib/product/queries.ts); result types come from `StorefrontApi.ResultOf<typeof DOC>`. `hydrogen gql check` (part of `pnpm type-check`) validates every document against the schema. Full rules: [.claude/rules/graphql-fragments.md](../.claude/rules/graphql-fragments.md).
 
 ## Code organization
 
@@ -65,7 +65,7 @@ app/
     content/     static-page compositions (OurStory, AthleteSigning, FirstLightTeaser)
     common/      shared primitives (Container, Heading, Cta, Prose, NewsletterDialog, …)
   content/       typed marketing copy + store links (links.ts)
-  lib/           storefront.ts, cart-handlers.ts, cart.ts, product.ts, productQueries.ts, fragments.ts, csp.ts, sitemap.ts, colors.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
+  lib/           storefront.ts, cart-handlers.ts, cart.ts, product/ (queries, store, content, display, colors), fragments.ts, csp.ts, sitemap.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
     analytics/   shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders) — no barrel: client and server stay separate imports
   styles/        tailwind.css — the single stylesheet (no separate globals)
 ```
@@ -98,7 +98,7 @@ Rules for modules:
 
 ## Domain model: color = separate product
 
-The 9 live products are **separate Shopify products per color**, not Shopify variants. Color "swatches" navigate between sibling product handles; the family (names, hexes, ordered sibling references) lives in Shopify product metafields (`custom.color_*`), read via `lib/colors.ts`. Don't model color as a `ProductVariant` selectedOption. Rationale: [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md).
+The 9 live products are **separate Shopify products per color**, not Shopify variants. Color "swatches" navigate between sibling product handles; the family (names, hexes, ordered sibling references) lives in Shopify product metafields (`custom.color_*`), read via `lib/product/colors.ts`. Don't model color as a `ProductVariant` selectedOption. Rationale: [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md).
 
 ## Environment & secrets
 

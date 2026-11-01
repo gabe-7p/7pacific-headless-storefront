@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { ColorSwatches } from '~/components/product/ColorSwatches';
-import type { ColorSwatch } from '~/lib/colors';
+import type { ColorSwatch } from '~/lib/product/colors';
 
 const TEE_FAMILY: Array<ColorSwatch> = [
   { handle: 'tee-mountain-mist', name: 'Mountain Mist', hex: '#6A7E8D' },

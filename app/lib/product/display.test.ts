@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getShortTitle } from '~/lib/productDisplay';
+import { getShortTitle, shortSizeLabel } from '~/lib/product/display';
 
 describe('getShortTitle', () => {
   it('derives the short name from a real shorts title (spaced color dash)', () => {
@@ -27,5 +27,27 @@ describe('getShortTitle', () => {
 
   it('strips an unknown color suffix without a colorName hint', () => {
     expect(getShortTitle('TRACEFIBER TEE - WHITE')).toBe('TRACEFIBER TEE');
+  });
+});
+
+describe('shortSizeLabel', () => {
+  it('maps the verbose Shopify size values to the live PDP labels', () => {
+    expect(shortSizeLabel('Extra Small')).toBe('XS');
+    expect(shortSizeLabel('Small')).toBe('S');
+    expect(shortSizeLabel('Medium')).toBe('M');
+    expect(shortSizeLabel('Large')).toBe('L');
+    expect(shortSizeLabel('Extra Large')).toBe('XL');
+    expect(shortSizeLabel('X-Large')).toBe('XL');
+    expect(shortSizeLabel('XX-Large')).toBe('XXL');
+    expect(shortSizeLabel('One Size')).toBe('OS');
+  });
+
+  it('ignores case and surrounding whitespace', () => {
+    expect(shortSizeLabel('  MEDIUM ')).toBe('M');
+  });
+
+  it('passes unknown values through untouched', () => {
+    expect(shortSizeLabel('32')).toBe('32');
+    expect(shortSizeLabel('Tall')).toBe('Tall');
   });
 });

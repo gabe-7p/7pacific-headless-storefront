@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { getColorSwatches } from '~/lib/colors';
+import { getColorSwatches } from '~/lib/product/colors';
 
-const node = (handle: string, name: string, hex: string) => ({
+// Fixtures are typed against the fragment-derived shape: a sibling is a
+// `Product` node whose color metafields are `{ value }` or `null` when unset.
+const node = (handle: string, name: string | null, hex: string | null) => ({
+  __typename: 'Product' as const,
   handle,
-  colorName: { value: name },
-  colorHex: { value: hex },
+  colorName: name === null ? null : { value: name },
+  colorHex: hex === null ? null : { value: hex },
 });
 
 describe('getColorSwatches', () => {
@@ -31,10 +34,11 @@ describe('getColorSwatches', () => {
     const metafield = {
       references: {
         nodes: [
-          {}, // non-Product reference resolves to an empty object
+          // A non-Product reference carries only its `__typename`.
+          { __typename: 'ProductVariant' as const },
           node('ok', 'White', '#ffffff'),
-          { handle: 'no-color-data' },
-          { handle: 'no-hex', colorName: { value: 'Slate' }, colorHex: { value: null } },
+          node('no-color-data', null, null),
+          node('no-hex', 'Slate', null),
         ],
       },
     };

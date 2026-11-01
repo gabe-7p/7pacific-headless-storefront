@@ -1,7 +1,9 @@
 /**
- * Helpers for the product card's signature two-line device (7PA-234): an
- * Archivo caps short name over a JetBrains Mono strip (`MINT · $79`). Raw
- * Shopify titles carry a "//" descriptor and a trailing color
+ * Display helpers that turn raw Shopify strings into what the storefront
+ * shows: the product card's short name and the PDP's short size labels.
+ *
+ * The card's signature two-line device (7PA-234) is an Archivo caps short
+ * name over a JetBrains Mono strip (`MINT · $79`). Raw Shopify titles carry a "//" descriptor and a trailing color
  * ("AIRRAIL™ 6\" // CORE MOTION TRAINING SHORT - MINT"), so the device derives
  * the short name instead of rendering the raw string.
  *
@@ -39,3 +41,19 @@ export const getShortTitle = (title: string, colorName?: string): string => {
   const noun = descriptor.split(' ').at(-1);
   return normalize(noun ? `${left} ${noun}` : left);
 };
+
+/** Map Shopify's verbose size values to the short labels the live PDP shows. */
+const SIZE_LABELS: Record<string, string> = {
+  'extra small': 'XS',
+  small: 'S',
+  medium: 'M',
+  large: 'L',
+  'extra large': 'XL',
+  'x-large': 'XL',
+  'xx-large': 'XXL',
+  'one size': 'OS',
+};
+
+/** "Medium" → "M", "Extra Large" → "XL"; unknown values pass through untouched. */
+export const shortSizeLabel = (value: string): string =>
+  SIZE_LABELS[value.trim().toLowerCase()] ?? value;

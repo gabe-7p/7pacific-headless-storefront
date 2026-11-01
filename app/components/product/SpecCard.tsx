@@ -1,4 +1,4 @@
-import type { SpecCardData } from '~/lib/productContent';
+import type { SpecCardData } from '~/lib/product/content';
 
 /** The locked field order from the guidelines — never re-sort. */
 const SPEC_ROWS = [

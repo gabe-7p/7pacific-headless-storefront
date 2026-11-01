@@ -37,7 +37,7 @@ app/
   routes/        one file per route (React Router flat convention); loader/action live here
   components/    presentational only — layout/ analytics/ cart/ product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + store links (links.ts = the ONE place product/collection handles live)
-  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), cart-handlers.ts / cart.ts (Hydrogen cart), product.ts / productQueries.ts (PDP), fragments.ts (gql documents + types), http.ts (notFound, deferQuery), csp.ts, sitemap.ts, colors.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
+  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), cart-handlers.ts / cart.ts (Hydrogen cart), product/ (PDP: queries.ts gql documents + types, store.ts product-form store, content.ts metafield JSON shapes, display.ts short titles/size labels, colors.ts swatches), fragments.ts (shared gql fragments + chrome queries), http.ts (notFound, deferQuery), csp.ts, sitemap.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
@@ -74,7 +74,7 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 
 ## Domain note: color = separate product
 
-The 9 live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/colors.ts` — don't model color as a `ProductVariant` selectedOption.
+The 9 live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/product/colors.ts` — don't model color as a `ProductVariant` selectedOption.
 
 ## How to add/swap a product or color (Shopify-only — no deploy)
 
