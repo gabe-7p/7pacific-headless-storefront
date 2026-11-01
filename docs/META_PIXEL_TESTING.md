@@ -19,7 +19,7 @@ The pixel loads only after Shopify's Customer Privacy API allows analytics (imme
 2. **Traffic Permissions.** The pixel currently has an allow-list in Meta Events Manager, and `localhost` is not on it, so Meta's script refuses to send anything from a local server. Fix: Events Manager → your pixel → **Settings → Traffic permissions** → add `localhost` (and, for step 4, your Oxygen preview domain, e.g. `xxxx.o2.myshopify.dev`). Without this, sections 1, 2 and 4 show **no** `facebook.com/tr` requests, and the browser console says:
 
    ```
-   [Meta pixel] 993591565379147 is unavailable on this website due to it's traffic permission settings.
+   [Meta pixel] <your pixel id> is unavailable on this website due to it's traffic permission settings.
    ```
 
    That message means configuration, not a storefront bug. Section 3's automated test does not depend on it.
@@ -32,14 +32,14 @@ pnpm dev
 
 Expected: `➜  Local: http://localhost:3000/`. Open that URL in Chrome, press `F12`, open the **Network** tab and type `facebook.com/tr` in the filter box. Then walk the funnel:
 
-| Step                                                 | Requests you should see (click one → **Payload** tab)                                                                                                                                           |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Load the homepage                                    | 1 request: `ev: PageView`, `id: <your pixel id>`                                                                                                                                                |
-| Click a product                                      | 1 more `ev: PageView` and 1 `ev: ViewContent` with `cd[content_ids]: ["shopify_US_<product>_<variant>"]`, `cd[content_type]: product`, `cd[content_name]`, `cd[value]: 74`, `cd[currency]: USD` |
-| Click **Add to cart**                                | 1 `ev: AddToCart` with `cd[num_items]: 1`, `cd[value]` = the unit price, `cd[currency]`, `cd[content_ids]`                                                                                      |
-| In the cart drawer, click **+** once                 | 1 more `ev: AddToCart`, again `cd[num_items]: 1` (if it says `2`, that is a bug: it is sending the cart total)                                                                                  |
-| Click **−** or **Remove**                            | nothing new (removals are not Meta events)                                                                                                                                                      |
-| Reload a product page while the cart still has items | only `PageView` + `ViewContent`, **no** `AddToCart` (a pre-existing cart must not re-fire)                                                                                                      |
+| Step                                                 | Requests you should see (click one → **Payload** tab)                                                                                                                                                     |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Load the homepage                                    | 1 request: `ev: PageView`, `id: <your pixel id>`                                                                                                                                                          |
+| Click a product                                      | 1 more `ev: PageView` and 1 `ev: ViewContent` with `cd[content_ids]: ["shopify_US_<product>_<variant>"]`, `cd[content_type]: product`, `cd[content_name]`, `cd[value]: <unit price>`, `cd[currency]: USD` |
+| Click **Add to cart**                                | 1 `ev: AddToCart` with `cd[num_items]: 1`, `cd[value]` = the unit price, `cd[currency]`, `cd[content_ids]`                                                                                                |
+| In the cart drawer, click **+** once                 | 1 more `ev: AddToCart`, again `cd[num_items]: 1` (if it says `2`, that is a bug: it is sending the cart total)                                                                                            |
+| Click **−** or **Remove**                            | nothing new (removals are not Meta events)                                                                                                                                                                |
+| Reload a product page while the cart still has items | only `PageView` + `ViewContent`, **no** `AddToCart` (a pre-existing cart must not re-fire)                                                                                                                |
 
 Then the **Console** tab:
 

@@ -51,18 +51,19 @@ On boot you should see `[storefront] Connected to "<your shop>"` — confirmatio
 
 ## Common commands
 
-| Task                         | Command                                 |
-| ---------------------------- | --------------------------------------- |
-| Dev server                   | `pnpm dev`                              |
-| Production build             | `pnpm build`                            |
-| Preview the production build | `pnpm preview`                          |
-| Type check + GraphQL check   | `pnpm type-check`                       |
-| Lint                         | `pnpm lint`                             |
-| Format / check formatting    | `pnpm prettier` / `pnpm prettier:check` |
-| Unit tests (Vitest)          | `pnpm test`                             |
-| Sync Hydrogen agent skills   | `pnpm exec hydrogen skills sync`        |
-| Dependency-boundary check    | `pnpm depcruise`                        |
-| Full pre-PR gate (in Claude) | the `/check` command — mirrors CI       |
+| Task                           | Command                                            |
+| ------------------------------ | -------------------------------------------------- |
+| Dev server                     | `pnpm dev`                                         |
+| Production build               | `pnpm build`                                       |
+| Preview the production build   | `pnpm preview`                                     |
+| Type check + GraphQL check     | `pnpm type-check`                                  |
+| Lint                           | `pnpm lint`                                        |
+| Format / check formatting      | `pnpm prettier` / `pnpm prettier:check`            |
+| Unit tests (Vitest)            | `pnpm test`                                        |
+| Meta Pixel funnel (Playwright) | `pnpm test:pixel` (see docs/META_PIXEL_TESTING.md) |
+| Sync Hydrogen agent skills     | `pnpm exec hydrogen skills sync`                   |
+| Dependency-boundary check      | `pnpm depcruise`                                   |
+| Full pre-PR gate (in Claude)   | the `/check` command — mirrors CI                  |
 
 ## Quality gate
 
