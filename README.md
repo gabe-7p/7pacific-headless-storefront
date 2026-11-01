@@ -2,7 +2,7 @@
 
 Headless storefront for **7Pacific** (DTC athletic apparel), built on **Shopify Hydrogen + Oxygen**. We're migrating the live store from a customized Impulse Liquid theme to Hydrogen, shipping in small, independently deployable units.
 
-- **Framework**: Hydrogen 2026.1 on React Router 7 · React 18 · Vite 6
+- **Framework**: Hydrogen 2026.4 on React Router 7 · React 18 · Vite 8
 - **Styling**: Tailwind CSS v4 + shadcn/ui (Radix headless primitives, vendored into `app/components/ui/`)
 - **Data**: Shopify Storefront API (typed via GraphQL codegen) — guest checkout, no customer accounts
 - **Hosting**: Oxygen (preview deploy per PR, production on `main`)

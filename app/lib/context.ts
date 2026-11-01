@@ -1,4 +1,5 @@
 import { createHydrogenContext } from '@shopify/hydrogen';
+import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import { CART_QUERY_FRAGMENT } from '~/lib/fragments';
 import { createPostHogClient } from '~/lib/posthog.server';
@@ -13,6 +14,11 @@ declare global {
   // Global augmentation must use `interface` — type aliases can't be merged into the global scope.
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HydrogenAdditionalContext extends AdditionalContextType {}
+
+  // Types `context.cart.get()` and every cart mutation as OUR cart fragment
+  // (CART_QUERY_FRAGMENT above) instead of Hydrogen's generic default shape.
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface HydrogenCustomCartFragment extends CartApiQueryFragment {}
 }
 
 /** Builds the per-request Hydrogen context (storefront client, cart, session). */

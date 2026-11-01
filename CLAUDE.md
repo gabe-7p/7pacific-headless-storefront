@@ -6,7 +6,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 
 ## Stack
 
-- **Framework**: Hydrogen 2026.1.1 on React Router 7 (loaders/actions, server-first), React 18, Vite 6
+- **Framework**: Hydrogen 2026.4.8 on React Router 7.16 (loaders/actions, server-first), React 18, Vite 8
 - **Hosting**: Oxygen (deploys from GitHub — preview per PR, production on `main`)
 - **Data**: Shopify Storefront API, typed via `@shopify/hydrogen-codegen` (guest checkout — no customer accounts)
 - **Styling**: Tailwind v4 (no CSS-in-JS, no runtime UI kit) + **shadcn/ui** for headless primitives — Radix behavior, vendored into `app/components/ui/` and styled with Tailwind
