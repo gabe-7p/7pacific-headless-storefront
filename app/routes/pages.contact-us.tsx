@@ -1,5 +1,5 @@
 import { Cache, gql } from '@shopify/hydrogen';
-import { Form, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { data, Form, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
@@ -36,18 +36,26 @@ export async function loader({ context }: Route.LoaderArgs) {
 
 type ContactResponse = FormResult<'name' | 'email' | 'message'>;
 
-export async function action({ request }: Route.ActionArgs): Promise<ContactResponse> {
+/** Same `{ ok, errors }` contract and status codes as routes/api.subscribe. */
+export async function action({ request }: Route.ActionArgs) {
+  if (request.method !== 'POST') {
+    return data<ContactResponse>(
+      { ok: false, errors: { message: 'Method not allowed' } },
+      { status: 405 }
+    );
+  }
+
   const form = await request.formData();
   const errors = collectErrors({
     name: validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE),
     email: validateEmail(readField(form, 'email')),
     message: validateRequired(readField(form, 'message'), REQUIRED_MESSAGE_MESSAGE),
   });
-  if (errors) return { ok: false, errors };
+  if (errors) return data<ContactResponse>({ ok: false, errors }, { status: 400 });
 
   // TODO: deliver the message (Shopify contact endpoint / email provider).
   // Storefront API has no contact mutation; wire this to the chosen provider.
-  return { ok: true };
+  return data<ContactResponse>({ ok: true });
 }
 
 const fieldClass =

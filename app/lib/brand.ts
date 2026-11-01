@@ -2,10 +2,11 @@
  * Brand content & config — the single source of truth for site-wide text and
  * links (ported from the live store, verified against the live DOM). Change it
  * here and it applies everywhere it's consumed (header logo, announcement,
- * footer, newsletter, social). English-only per our scope.
+ * footer, social). English-only per our scope.
  *
  * Visual design tokens (colors, fonts, layout sizes) live in
- * app/styles/tailwind.css; this file is for content/data.
+ * app/styles/tailwind.css; this file is for content/data. Signup copy (the
+ * roster + the drop waitlist) lives in app/content/join.ts.
  */
 
 import { STORE_LINKS } from '~/content/links';
@@ -35,21 +36,6 @@ export const BRAND = {
   social: [
     { platform: 'Instagram', href: 'https://www.instagram.com/7_pacific/' },
   ] satisfies Array<SocialLink>,
-
-  /**
-   * Signup copy (7PA-241) — acquisition through community, not price: no
-   * discount language, ever. One set of lines shared by the footer signup and
-   * the click-triggered "Join the roster" dialog (Gabe 2026-10-08), so the
-   * dialog continues the CTA that opened it. Homepage v2 (Oct 2026): the
-   * membership is the roster.
-   */
-  newsletter: {
-    heading: 'Join the roster',
-    body: 'We’re creating a community where competition and connection go hand in hand, bringing athletes together through training sessions, challenges, and experiences beyond the gym. Leave your email and we add your name to the book.',
-    placeholder: 'your@email.com',
-    submitLabel: 'Add my name',
-    successMessage: 'You’re in the book. See you at the next session.',
-  },
 
   /** Fallback footer links, used only if the Storefront `footer` menu is empty. */
   footerLinks: [

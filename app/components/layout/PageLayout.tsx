@@ -1,5 +1,5 @@
 import { CartDrawer } from '~/components/cart/CartDrawer';
-import { NewsletterDialogProvider } from '~/components/common/NewsletterDialog';
+import { JoinDialogProvider } from '~/components/common/JoinDialog';
 import { Announcement } from '~/components/layout/Announcement';
 import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
@@ -21,7 +21,7 @@ export const PageLayout = ({
 }: PageLayoutProps) => {
   return (
     <Aside.Provider>
-      <NewsletterDialogProvider>
+      <JoinDialogProvider>
         <CartDrawer />
         <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
         {/* Sticky topbar offset by the announcement height: the announcement
@@ -31,10 +31,11 @@ export const PageLayout = ({
           <Header header={header} publicStoreDomain={publicStoreDomain} />
         </div>
         <main>{children}</main>
-        {/* The footer signup is always present; the membership CTAs open the
-            same form in a dialog (click-triggered only, never on load). */}
+        {/* The footer signup is always present; the membership CTAs (and the
+            Coming Soon card) open the same form in a dialog — click-triggered
+            only, never on load. */}
         <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
-      </NewsletterDialogProvider>
+      </JoinDialogProvider>
     </Aside.Provider>
   );
 };

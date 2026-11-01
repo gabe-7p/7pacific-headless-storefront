@@ -7,7 +7,7 @@ import {
   HOME_HERO,
   HOME_ROSTER,
 } from '~/content/home';
-import { BRAND } from '~/lib/brand';
+import { JOIN_COPY } from '~/content/join';
 
 /**
  * The brand vocabulary gate (Brand Guidelines → Voice): binary, not a vibe
@@ -67,7 +67,7 @@ const HOMEPAGE_COPY = collectStrings([
   HOME_FIRST_DROP,
   HOME_CORE_VALUES,
   HOME_ROSTER,
-  BRAND.newsletter,
+  JOIN_COPY.newsletter,
 ]).filter((text) => !isUrl(text));
 
 const wordPattern = (word: string) => new RegExp(`(^|[^a-z])${word}(s|d|ed|ing)?([^a-z]|$)`, 'i');

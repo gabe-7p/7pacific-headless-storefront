@@ -31,6 +31,7 @@ export const HOMEPAGE_COLLECTION_HANDLE = 'homepage-first-drop';
 
 /**
  * Content files mark membership CTAs with this href instead of a real path;
- * `common/Cta` turns it into a button that opens the newsletter dialog.
+ * `common/Cta` turns it into a button that opens the `JoinDialog` on the
+ * newsletter list (copy in content/join.ts).
  */
 export const NEWSLETTER_HREF = '#newsletter';

@@ -5,7 +5,7 @@ import { DialogContent, DialogTitle } from '~/components/ui/dialog';
 import { cn } from '~/lib/cn';
 
 /**
- * The night-tier dialog shell shared by the newsletter and waitlist modals:
+ * The night-tier dialog shell shared by the `JoinDialog`'s two panels:
  * Carbon panel, night hairline border, and live's 2px brand radius.
  *
  * Width must be overridden on the `sm:` variant — the primitive ships

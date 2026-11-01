@@ -8,8 +8,8 @@ import type { MoneyLike } from '~/lib/money';
  * reaches PostHog as a *destination* on the Shopify analytics bus
  * (lib/analytics/posthog.client.ts): these builders map the bus payloads to
  * PostHog properties. `checkout_started` is the one browser event still
- * captured directly (a click, not a cart change); the form events are
- * captured server-side by their resource routes (routes/api.*).
+ * captured directly (a click, not a cart change); the two signup events are
+ * captured server-side by routes/api.subscribe, keyed by its `list` field.
  */
 export const ANALYTICS_EVENT = {
   productViewed: 'product_viewed',

@@ -12,6 +12,7 @@
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { DROP_TWO_LAUNCH } from '~/content/drop-two';
+import { WAITLIST_SUCCESS_MESSAGE } from '~/content/join';
 
 const PLACEHOLDER_IMAGE = { kind: 'placeholder', type: 'image' } satisfies MediaSlotSource;
 
@@ -36,8 +37,8 @@ intensity picks up.',
     namePlaceholder: 'Name',
     emailPlaceholder: 'Email',
     submitLabel: 'Sign Up',
-    /** Not in the mock — same voice as the homepage waitlist confirmation. */
-    successMessage: 'You’re on it. See you at first light.',
+    /** Not in the mock — the homepage waitlist confirmation, same list. */
+    successMessage: WAITLIST_SUCCESS_MESSAGE,
     /** Tall portrait panel beside the signup form. */
     media: PLACEHOLDER_IMAGE,
   },
