@@ -41,4 +41,5 @@ What this makes easy, what it costs, what we're explicitly not doing.
 | [0006](0006-shadcn-ui-for-headless-primitives.md) | shadcn/ui for headless primitives (refines 0002)     |
 | [0007](0007-motion-for-animation.md)              | Motion for animation, not GSAP (extends 0002)        |
 | [0008](0008-posthog-analytics.md)                 | PostHog for analytics + session replay               |
-| [0009](0009-stay-on-hydrogen-2026-04.md)          | Stay on Hydrogen 2026-04; migrate to 2026-10 later   |
+| [0009](0009-stay-on-hydrogen-2026-04.md)          | Stay on Hydrogen 2026-04 (superseded by 0010)        |
+| [0010](0010-hydrogen-2026-10-library.md)          | Hydrogen 2026-10 as a library inside React Router    |

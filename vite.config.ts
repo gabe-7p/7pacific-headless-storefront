@@ -1,13 +1,29 @@
 import { reactRouter } from '@react-router/dev/vite';
-import { hydrogen } from '@shopify/hydrogen/vite';
+import { localHttps } from '@shopify/hydrogen/vite';
 import { oxygen } from '@shopify/mini-oxygen/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
+// Hydrogen 2026.10 is a library: there is no `hydrogen()` plugin. Oxygen's
+// plugin runs the worker (workerd) locally and injects `.env`; React Router
+// owns routing and the build.
+const oxygenPlugins = oxygen();
+const oxygenPlugin = oxygenPlugins.find((plugin) => plugin.name === 'oxygen:main');
+if (!oxygenPlugin?.api) throw new Error('MiniOxygen plugin API is unavailable.');
+
+// MiniOxygen infers the compatibility date 2026-10-01 from Hydrogen 2026.10.x,
+// but its runtime doesn't support that date yet (the 2026-10 template carries
+// the same override). Remove once MiniOxygen handles inferred dates it can't run.
+oxygenPlugin.api.registerPluginOptions({ compatibilityDate: '2026-04-01' });
+
+// Local HTTPS is only needed for Customer Account flows (`pnpm dev:https`);
+// the plugin needs an explicit flag, it does not self-detect.
+const httpsEnabled = process.env.npm_lifecycle_event === 'dev:https';
+
 export default defineConfig({
-  plugins: [tailwindcss(), hydrogen(), oxygen(), reactRouter()],
+  plugins: [localHttps({ enabled: httpsEnabled }), tailwindcss(), ...oxygenPlugins, reactRouter()],
   resolve: {
-    // Vite 8 resolves tsconfig `paths` (the `~/*` alias) natively — no plugin.
+    // Vite 8 resolves tsconfig `paths` (the `~/*` alias) natively.
     tsconfigPaths: true,
   },
   build: {
@@ -16,12 +32,23 @@ export default defineConfig({
   },
   ssr: {
     optimizeDeps: {
-      // CJS deps pre-bundled for SSR to avoid CJS<>ESM "module is not defined" errors.
-      // The `react-router > x` form targets react-router's own nested copies.
-      include: ['react-router > set-cookie-parser', 'react-router > cookie', 'react-router'],
+      // CJS deps pre-bundled for the workerd SSR environment; without these,
+      // dev fails with "module is not defined" / "require is not defined".
+      include: [
+        'react',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'react-dom',
+        'react-dom/server',
+        'react-router > set-cookie-parser',
+        'react-router > cookie',
+        'react-router',
+      ],
     },
   },
   server: {
+    // Keep the dev URL the docs and PostHog dev flag have always used.
+    port: 3000,
     allowedHosts: ['.tryhydrogen.dev'],
   },
 });

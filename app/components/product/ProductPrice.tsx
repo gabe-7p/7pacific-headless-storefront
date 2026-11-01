@@ -1,13 +1,12 @@
-import type { MoneyV2 } from '@shopify/hydrogen/storefront-api-types';
-
 import { Price } from '~/components/common/Price';
+import type { MoneyLike } from '~/lib/money';
 
 export const ProductPrice = ({
   price,
   compareAtPrice,
 }: {
-  price?: MoneyV2;
-  compareAtPrice?: MoneyV2 | null;
+  price?: MoneyLike | null;
+  compareAtPrice?: MoneyLike | null;
 }) => {
   // font-medium, not bold — mono runs Regular/Medium only in the type system.
   return (

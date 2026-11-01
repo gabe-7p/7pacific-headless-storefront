@@ -1,31 +1,33 @@
 # 7Pacific Storefront — CLAUDE.md
 
-Headless storefront for 7Pacific (DTC athletic apparel), migrating from a Shopify Liquid theme (Impulse) to **Hydrogen + Oxygen**. We ship the migration as small, independently deployable units — live pages only, English-only, marketing copy as typed TS constants.
+Headless storefront for 7Pacific (DTC athletic apparel), migrated from a Shopify Liquid theme (Impulse) to **React Router 7 + Hydrogen (the 2026-10 library) on Oxygen**. We ship in small, independently deployable units — live pages only, English-only, marketing copy as typed TS constants.
 
 This file is auto-loaded into every agent session. Read it first; follow the linked rules when a change touches their area.
 
 ## Stack
 
-- **Framework**: Hydrogen 2026.4.8 on React Router 7.16 (loaders/actions, server-first), React 19, Vite 8
+- **Framework**: React Router 7.16 (loaders/actions, server-first, root middleware) + **Hydrogen 2026.10** as a _library_ — the Storefront client, request handlers (`/api/cart`, checkout, permalinks, the Storefront API proxy), the client-side cart and product-form stores, and the analytics bus. React 19, Vite 8. Hydrogen owns no routing, build or CSP; the app does.
 - **Hosting**: Oxygen (deploys from GitHub — preview per PR, production on `main`)
-- **Data**: Shopify Storefront API, typed via `@shopify/hydrogen-codegen` (guest checkout — no customer accounts)
+- **Data**: Shopify Storefront API 2026-10, typed in place by `@shopify/hydrogen/ts-plugin` (`gql()` documents, no codegen step; `hydrogen gql check` validates them). Guest checkout — no customer accounts
 - **Styling**: Tailwind v4 (no CSS-in-JS, no runtime UI kit) + **shadcn/ui** for headless primitives — Radix behavior, vendored into `app/components/ui/` and styled with Tailwind
 - **Language**: TypeScript (strict, `noUncheckedIndexedAccess`); package manager **pnpm**; Node 22
 
 ## Commands
 
-| Task                      | Command                                        |
-| ------------------------- | ---------------------------------------------- |
-| Dev server (mini-oxygen)  | `pnpm dev`                                     |
-| Build                     | `pnpm build`                                   |
-| Type check                | `pnpm type-check`                              |
-| Lint                      | `pnpm lint`                                    |
-| Format                    | `pnpm prettier` / check: `pnpm prettier:check` |
-| Unit tests (Vitest)       | `pnpm test`                                    |
-| Regenerate GraphQL types  | `pnpm graphql:generate`                        |
-| Dependency-boundary check | `pnpm depcruise`                               |
-| Add a shadcn/ui primitive | `pnpm dlx shadcn@latest add <name>`            |
-| Full pre-PR gate          | the `/check` command (mirrors CI)              |
+| Task                       | Command                                                                             |
+| -------------------------- | ----------------------------------------------------------------------------------- |
+| Dev server (mini-oxygen)   | `pnpm dev` (`vite dev`, http://localhost:3000)                                      |
+| Build                      | `pnpm build` (`react-router build` → `dist/`)                                       |
+| Preview the worker build   | `pnpm preview`                                                                      |
+| Deploy to Oxygen (CI)      | `pnpm deploy`                                                                       |
+| Type check + query check   | `pnpm type-check` (tsc + `hydrogen gql check`)                                      |
+| Lint                       | `pnpm lint`                                                                         |
+| Format                     | `pnpm prettier` / check: `pnpm prettier:check`                                      |
+| Unit tests (Vitest)        | `pnpm test`                                                                         |
+| Sync Hydrogen agent skills | `pnpm exec hydrogen skills sync` (after a Hydrogen bump; `skills check` runs in CI) |
+| Dependency-boundary check  | `pnpm depcruise`                                                                    |
+| Add a shadcn/ui primitive  | `pnpm dlx shadcn@latest add <name>`                                                 |
+| Full pre-PR gate           | the `/check` command (mirrors CI)                                                   |
 
 ## Repo map
 
@@ -35,11 +37,12 @@ app/
   routes/        one file per route (React Router flat convention); loader/action live here
   components/    presentational only — layout/ cart/ product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + store links (links.ts = the ONE place product/collection handles live)
-  lib/           fragments.ts, context.ts, session.ts, colors.ts, productContent.ts, cross-cutting utils (+ colocated *.test.ts)
+  lib/           storefront.ts (request-scoped client + router contexts), cart-handlers.ts / cart.ts (Hydrogen cart), product.ts / productQueries.ts (PDP), fragments.ts (gql documents + types), csp.ts, sitemap.ts, colors.ts, cross-cutting utils (+ colocated *.test.ts)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
-*.generated.d.ts storefront types (GENERATED — never edit)
+*-graphql-env.d.ts Storefront API schema environments written by the Hydrogen ts-plugin (gitignored, never edit)
+.claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit
 docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```
@@ -50,13 +53,13 @@ docs/            architecture.md, decisions/ (ADRs), doc index + lookup table
 
 Full detail in [.claude/rules/](.claude/rules/) — read the relevant file before changing that area:
 
-- [module-boundaries.md](.claude/rules/module-boundaries.md) — data fetching in loaders/`lib/`, components render typed props; no GraphQL in components.
-- [graphql-fragments.md](.claude/rules/graphql-fragments.md) — co-located `#graphql` strings `as const` + codegen; import generated types, never hand-write.
+- [module-boundaries.md](.claude/rules/module-boundaries.md) — the root middleware builds the request-scoped Storefront client; loaders read it from `storefrontClientContext` and fetch; components render typed props; no GraphQL in components.
+- [graphql-fragments.md](.claude/rules/graphql-fragments.md) — `gql()` documents with composed fragments, `Cache.long()/short()` on every read, types from `StorefrontApi.ResultOf`; never hand-write response types.
 - [naming-conventions.md](.claude/rules/naming-conventions.md) — `const` arrow components, `getX`/`getXOrThrow`, fragment/query naming.
 - [common-pitfalls.md](.claude/rules/common-pitfalls.md) — nullable Storefront fields, no waterfalls, never expose `PRIVATE_*`, no `any`.
 - [ui-components.md](.claude/rules/ui-components.md) — when to reach for a shadcn/ui primitive vs. hand-build, how to add/restyle one, the `components/ui/` lint exemption.
 
-The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; import generated GraphQL types; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
+The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; every Storefront read passes an explicit `cache`; the cart is read with `useCart`, never a loader promise; images through `common/Image`, prices through `common/Price`; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
 ## Brand single-sources (change once, applies everywhere)
 

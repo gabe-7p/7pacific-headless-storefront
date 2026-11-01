@@ -1,7 +1,6 @@
 import { ChevronDown } from 'lucide-react';
 import { type ReactNode, Suspense, useEffect, useState } from 'react';
 import { Await, NavLink } from 'react-router';
-import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
@@ -10,11 +9,12 @@ import { Logo } from '~/components/common/Logo';
 import { NewsletterForm } from '~/components/common/NewsletterForm';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
+import type { FooterData, HeaderData } from '~/lib/fragments';
 import { toInternalPath } from '~/lib/urls';
 
 type FooterProps = {
-  footer: Promise<FooterQuery | null>;
-  header: HeaderQuery;
+  footer: Promise<FooterData | null>;
+  header: HeaderData;
   publicStoreDomain: string;
 };
 
@@ -159,7 +159,7 @@ const FooterSupport = ({
   primaryDomainUrl,
   publicStoreDomain,
 }: {
-  menu: FooterQuery['menu'] | undefined;
+  menu: FooterData['menu'] | undefined;
   primaryDomainUrl: FooterProps['header']['shop']['primaryDomain']['url'];
   publicStoreDomain: string;
 }) => {

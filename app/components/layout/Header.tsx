@@ -1,19 +1,18 @@
-import { type CartViewPayload, useAnalytics, useOptimisticCart } from '@shopify/hydrogen';
-import { Suspense, useEffect, useState } from 'react';
-import { Await, NavLink, useAsyncValue, useLocation } from 'react-router';
-import type { CartApiQueryFragment, HeaderQuery } from 'storefrontapi.generated';
+import { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
 import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/lib/brand';
+import { useCart } from '~/lib/cart';
 import { cn } from '~/lib/cn';
+import type { HeaderData } from '~/lib/fragments';
 import { toInternalPath } from '~/lib/urls';
 
 type HeaderProps = {
-  header: HeaderQuery;
-  cart: Promise<CartApiQueryFragment | null>;
+  header: HeaderData;
   publicStoreDomain: string;
 };
 
@@ -35,7 +34,7 @@ const useScrolledPast = (threshold: number) => {
   return scrolled;
 };
 
-export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
+export const Header = ({ header, publicStoreDomain }: HeaderProps) => {
   const { shop, menu } = header;
   const { pathname } = useLocation();
   const scrolled = useScrolledPast(STICKY_THRESHOLD);
@@ -77,7 +76,7 @@ export const Header = ({ header, cart, publicStoreDomain }: HeaderProps) => {
           />
         </NavLink>
 
-        <HeaderCtas cart={cart} publicStoreDomain={publicStoreDomain} />
+        <HeaderCtas publicStoreDomain={publicStoreDomain} />
       </Container>
     </header>
   );
@@ -156,10 +155,7 @@ export const HeaderMenu = ({
   );
 };
 
-const HeaderCtas = ({
-  cart,
-  publicStoreDomain,
-}: Pick<HeaderProps, 'cart' | 'publicStoreDomain'>) => {
+const HeaderCtas = ({ publicStoreDomain }: Pick<HeaderProps, 'publicStoreDomain'>) => {
   return (
     <nav className="flex items-center justify-end gap-4" role="navigation">
       {/* Customer login lives on Shopify's hosted account portal, not this headless
@@ -175,7 +171,7 @@ const HeaderCtas = ({
         <UserIcon className="size-7" />
         <span className="sr-only">Log in</span>
       </a>
-      <CartToggle cart={cart} />
+      <CartBadge />
     </nav>
   );
 };
@@ -195,50 +191,35 @@ const HeaderMenuMobileToggle = () => {
   );
 };
 
-const CartBadge = ({ count }: { count: number | null }) => {
+/**
+ * The bag: a real /cart link that opens the drawer instead on a plain click
+ * (the drawer publishes `cart_viewed`). The count comes from the client cart
+ * store, so an optimistic add shows at once.
+ */
+const CartBadge = () => {
   const { open } = useAside();
-  const { publish, shop, cart, prevCart } = useAnalytics();
+  const count = useCart((state) => state.data.totalQuantity);
 
   return (
     <a
       href="/cart"
       className="relative inline-flex transition-opacity hover:opacity-70"
       aria-label={`Cart${count ? `, ${count} items` : ''}`}
+      aria-haspopup="dialog"
       onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
         e.preventDefault();
         open('cart');
-        publish('cart_viewed', {
-          cart,
-          prevCart,
-          shop,
-          url: window.location.href || '',
-        } as CartViewPayload);
       }}
     >
       <BagIcon className="size-7" />
-      {count !== null && count > 0 && (
+      {count > 0 && (
         <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-ink-night">
           {count}
         </span>
       )}
     </a>
   );
-};
-
-const CartToggle = ({ cart }: Pick<HeaderProps, 'cart'>) => {
-  return (
-    <Suspense fallback={<CartBadge count={null} />}>
-      <Await resolve={cart}>
-        <CartBanner />
-      </Await>
-    </Suspense>
-  );
-};
-
-const CartBanner = () => {
-  const originalCart = useAsyncValue() as CartApiQueryFragment | null;
-  const cart = useOptimisticCart(originalCart);
-  return <CartBadge count={cart?.totalQuantity ?? 0} />;
 };
 
 // Used only if the Storefront `main-menu` is empty; links come from BRAND.

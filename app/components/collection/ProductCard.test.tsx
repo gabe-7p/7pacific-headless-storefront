@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { cleanup, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import type { ProductCardFragment } from 'storefrontapi.generated';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { ProductCard } from '~/components/collection/ProductCard';
+import type { ProductCardData } from '~/lib/fragments';
 
 const image = (name: string) => ({
   id: `gid://shopify/MediaImage/${name}`,
@@ -21,7 +21,7 @@ const sibling = (handle: string, name: string, hex: string) => ({
 });
 
 /** Minimal fragment fixture — same shape codegen produces for ProductCard. */
-const TEE: ProductCardFragment = {
+const TEE: ProductCardData = {
   id: 'gid://shopify/Product/1',
   handle: 'tee-white',
   title: 'TRACEFIBER TEE - WHITE',
@@ -37,17 +37,17 @@ const TEE: ProductCardFragment = {
       ],
     },
   },
-} as ProductCardFragment;
+} as ProductCardData;
 
-const HAT: ProductCardFragment = {
+const HAT: ProductCardData = {
   ...TEE,
   handle: 'hat-white',
   title: 'MOTIONFRAME HAT - WHITE',
   images: { nodes: [image('hat-front')] }, // single image — no crossfade
   colorSiblings: { references: { nodes: [sibling('hat-white', 'White', '#ffffff')] } },
-} as ProductCardFragment;
+} as ProductCardData;
 
-const renderCard = (product: ProductCardFragment) =>
+const renderCard = (product: ProductCardData) =>
   render(
     <MemoryRouter>
       <ProductCard product={product} />

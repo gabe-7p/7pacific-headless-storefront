@@ -8,6 +8,7 @@ import {
   validateEmail,
   validateRequired,
 } from '~/lib/forms';
+import { posthogContext } from '~/lib/posthog.server';
 
 import type { Route } from './+types/api.waitlist';
 
@@ -38,7 +39,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   });
   if (errors) return data<WaitlistResponse>({ ok: false, errors }, { status: 400 });
 
-  context.posthog?.capture({ event: 'waitlist_joined' });
+  context.get(posthogContext)?.capture({ event: 'waitlist_joined' });
 
   return data<WaitlistResponse>({ ok: true });
 }

@@ -1,16 +1,15 @@
-import type { ProductCardFragment } from 'storefrontapi.generated';
-
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Container } from '~/components/common/Container';
 import { Scroller } from '~/components/common/Scroller';
 import { SectionHeader } from '~/components/common/SectionHeader';
+import type { ProductCardData } from '~/lib/fragments';
 
 /**
  * "PLANNING TO SWEAT MORE?" — recommended products (from the current product's
  * custom.recommended_products metafield references), three per view on desktop
  * and a swipe carousel on mobile.
  */
-export const Recommendations = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
+export const Recommendations = ({ products }: { products: ReadonlyArray<ProductCardData> }) => (
   <Container className="py-14 md:py-20">
     {/* Live left-aligns this heading and its subtitle at 40px. */}
     <SectionHeader

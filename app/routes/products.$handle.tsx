@@ -1,20 +1,13 @@
-import { usePostHog } from '@posthog/react';
-import {
-  Analytics,
-  getAdjacentAndFirstAvailableVariants,
-  getProductOptions,
-  getSelectedProductOptions,
-  useOptimisticVariant,
-  useSelectedOptionInUrlParam,
-} from '@shopify/hydrogen';
-import { Suspense, useEffect } from 'react';
-import { Await, useLoaderData } from 'react-router';
+import { Cache, getSelectedProductOptions } from '@shopify/hydrogen';
+import { Suspense } from 'react';
+import { Await, useLoaderData, useLocation, useNavigate } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
+import { ProductViewedTracker } from '~/components/layout/AnalyticsTrackers';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
@@ -26,15 +19,16 @@ import { Recommendations } from '~/components/product/Recommendations';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
-import { ANALYTICS_EVENT, productViewedProperties } from '~/lib/analytics';
 import { getColorSwatches } from '~/lib/colors';
-import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { deferQuery } from '~/lib/loaders';
 import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
+import { ProductProvider, useProductForm } from '~/lib/product';
 import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/productContent';
+import { PRODUCT_QUERY, type ProductData, RECOMMENDATIONS_QUERY } from '~/lib/productQueries';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 import { productUrl } from '~/lib/urls';
 
 import type { Route } from './+types/products.$handle';
@@ -52,109 +46,91 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
   ];
 };
 
-export async function loader(args: Route.LoaderArgs) {
-  const deferredData = loadDeferredData(args);
-  const criticalData = await loadCriticalData(args);
-
-  return { ...deferredData, ...criticalData };
-}
-
-/** Awaited before first byte — a failure here errors the whole page. */
-async function loadCriticalData({ context, params, request }: Route.LoaderArgs) {
+export async function loader({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
-  const { storefront } = context;
+  if (!handle) throw notFound('Product not found');
 
-  if (!handle) {
-    throw notFound('Product not found');
-  }
+  const storefront = context.get(storefrontClientContext);
 
-  const { product } = await storefront.query(PRODUCT_QUERY, {
-    variables: { handle, selectedOptions: getSelectedProductOptions(request) },
+  // Below the fold: "PLANNING TO SWEAT MORE?" from the curated
+  // recommended_products metafield. Deferred + guarded so a failure never
+  // 500s the PDP; returned as a promise and awaited in-component.
+  const recommendations = deferQuery(
+    storefront
+      .graphql(RECOMMENDATIONS_QUERY, { variables: { handle }, cache: Cache.long() })
+      .then(({ data }) => {
+        const nodes = data?.product?.recommended?.references?.nodes ?? [];
+        return (
+          nodes
+            // The metafield can reference other types; only products render.
+            .flatMap((node) => ('handle' in node ? [node] : []))
+            // Exclude the product being viewed; cap at 3 like live.
+            .filter((node) => node.handle !== handle)
+            .slice(0, 3)
+        );
+      })
+  );
+
+  // Above the fold — a failure here errors the whole page.
+  const { data, errors } = await storefront.graphql(PRODUCT_QUERY, {
+    variables: {
+      handle,
+      // The ?Size=… params pick the variant; unknown params are ignored.
+      selectedOptions: getSelectedProductOptions({
+        searchParams: new URL(request.url).searchParams,
+      }),
+    },
     // Price/availability-sensitive: keep the cache window short.
-    cache: storefront.CacheShort(),
+    cache: Cache.short(),
   });
-
-  if (!product?.id) {
-    throw notFound('Product not found');
-  }
+  if (errors) console.error(errors);
+  const product = data?.product;
+  if (!product?.id) throw notFound('Product not found');
 
   return {
     product,
+    recommendations,
     productDetails: parseJsonMetafield<Array<ProductDetailCard>>(product.productDetails),
     techStack: parseJsonMetafield<TechStackData>(product.techStack),
     specCard: parseJsonMetafield<SpecCardData>(product.specCard),
   };
 }
 
-/** Returned as promises and awaited in-component — must never throw. */
-function loadDeferredData({ context, params }: Route.LoaderArgs) {
-  const { handle } = params;
-
-  // No handle → the critical loader is about to 404; skip the deferred fetch.
-  if (!handle) return { recommendations: Promise.resolve(null) };
-
-  // "PLANNING TO SWEAT MORE?" — read the curated recommended_products metafield
-  // references. Deferred + guarded so a failure never 500s the PDP.
-  const recommendations = deferQuery(
-    context.storefront
-      .query(RECOMMENDATIONS_QUERY, {
-        variables: { handle },
-        cache: context.storefront.CacheLong(),
-      })
-      .then(({ product }) => {
-        const nodes = product?.recommended?.references?.nodes ?? [];
-        // Exclude the product being viewed; cap at 3 like live.
-        return nodes.filter((node) => node.handle !== handle).slice(0, 3);
-      })
-  );
-
-  return { recommendations };
-}
-
 const Product = () => {
+  const { product } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  return (
+    // The product-form store resolves size clicks client-side; `onSelect`
+    // keeps the URL in sync (replace, no scroll reset) and skips the loader
+    // when the selection resolved to a variant the page already has.
+    <ProductProvider
+      product={product}
+      onSelect={(result) => {
+        const target = productUrl(
+          result.selectedVariant?.product?.handle ?? product.handle,
+          result.selectedOptions
+        );
+        const current = `${location.pathname}${location.search}`;
+        if (target === current) return;
+        void navigate(target, {
+          replace: true,
+          preventScrollReset: true,
+          ...(result.status === 'resolved' ? { defaultShouldRevalidate: false } : {}),
+        });
+      }}
+    >
+      <ProductPage />
+    </ProductProvider>
+  );
+};
+
+const ProductPage = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
-  const posthog = usePostHog();
-
-  const selectedVariant = useOptimisticVariant(
-    product.selectedOrFirstAvailableVariant,
-    getAdjacentAndFirstAvailableVariants(product)
-  );
-
-  useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
-
-  // Primitive deps: `selectedVariant` is a fresh object on optimistic
-  // re-renders, and depending on it would re-fire the event for the same view.
-  const variantId = selectedVariant.id;
-  const variantPrice = selectedVariant.price.amount;
-  const variantCurrency = selectedVariant.price.currencyCode;
-  const variantAvailable = selectedVariant.availableForSale;
-  useEffect(() => {
-    posthog.capture(
-      ANALYTICS_EVENT.productViewed,
-      productViewedProperties({
-        product: { id: product.id, handle: product.handle },
-        variant: {
-          id: variantId,
-          price: { amount: variantPrice, currencyCode: variantCurrency },
-          availableForSale: variantAvailable,
-        },
-      })
-    );
-  }, [
-    posthog,
-    product.handle,
-    product.id,
-    variantId,
-    variantPrice,
-    variantCurrency,
-    variantAvailable,
-  ]);
-
-  const productOptions = getProductOptions({
-    ...product,
-    selectedOrFirstAvailableVariant: selectedVariant,
-  });
+  const { selectedVariant: formVariant } = useProductForm();
+  const selectedVariant = formVariant ?? product.selectedOrFirstAvailableVariant;
 
   const { title, descriptionHtml } = product;
 
@@ -165,6 +141,10 @@ const Product = () => {
 
   return (
     <>
+      <ProductViewedTracker
+        product={{ id: product.id, title: product.title, vendor: product.vendor }}
+        variant={selectedVariant ?? null}
+      />
       {/* The floating-card layout holds down to 769px (live's Impulse
           breakpoint), not Tailwind's `lg`; below that the hero stacks. `min-h`
           (not a fixed height) so a tall buy card grows the hero instead of
@@ -175,16 +155,12 @@ const Product = () => {
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
         {/* Mobile matches live's .product-background-image: 75% wide, 400px
-            tall, cover-center (not a letterboxed contain). The width goes
-            through the `width` prop, not a `w-3/4` class: `Image` writes an
-            inline `width:100%` that beats any width utility, which silently
-            made this box full-bleed and cropped a third off portrait shots. */}
+            tall, cover-center (not a letterboxed contain). */}
         {heroMobile && (
           <Image
             data={heroMobile}
-            width="75%"
             sizes="75vw"
-            className="mx-auto h-[400px] object-cover min-[769px]:hidden"
+            className="mx-auto h-[400px] w-3/4 object-cover min-[769px]:hidden"
           />
         )}
         {/* Desktop matches live's background-position: center — an off-center
@@ -244,11 +220,11 @@ const Product = () => {
                   currentHandle={product.handle}
                   size="lg"
                   alwaysRender
-                  selectedOptions={selectedVariant.selectedOptions}
+                  selectedOptions={selectedVariant?.selectedOptions}
                 />
               </div>
               <div className="mt-4">
-                <ProductForm productOptions={productOptions} />
+                <ProductForm handle={product.handle} />
               </div>
               {/* The fit line moves into the Spec Card's FIT row when a spec
                   card exists — don't render it twice. */}
@@ -256,11 +232,11 @@ const Product = () => {
                 <p className="mt-3 text-xs text-support italic">{product.fitNote.value}</p>
               )}
             </div>
-            <AddToCartBar selectedVariant={selectedVariant} />
+            <AddToCartBar product={product} />
           </div>
         </Container>
       </section>
-      <StickyAddToCart selectedVariant={selectedVariant} />
+      <StickyAddToCart product={product} />
       {productDetails && productDetails.length > 0 && <ProductDetails cards={productDetails} />}
       {techStack && <TechStack data={techStack} />}
       <BrandBanner />
@@ -271,177 +247,9 @@ const Product = () => {
           }
         </Await>
       </Suspense>
-      <Analytics.ProductView
-        data={{
-          products: [
-            {
-              id: product.id,
-              title: product.title,
-              price: selectedVariant?.price.amount || '0',
-              vendor: product.vendor,
-              variantId: selectedVariant?.id || '',
-              variantTitle: selectedVariant?.title || '',
-              quantity: 1,
-            },
-          ],
-        }}
-      />
     </>
   );
 };
 
-const PRODUCT_VARIANT_FRAGMENT = `#graphql
-  fragment ProductVariant on ProductVariant {
-    availableForSale
-    compareAtPrice {
-      amount
-      currencyCode
-    }
-    id
-    image {
-      __typename
-      id
-      url
-      altText
-      width
-      height
-    }
-    price {
-      amount
-      currencyCode
-    }
-    product {
-      title
-      handle
-    }
-    selectedOptions {
-      name
-      value
-    }
-    sku
-    title
-    unitPrice {
-      amount
-      currencyCode
-    }
-  }
-` as const;
-
-const PRODUCT_FRAGMENT = `#graphql
-  fragment Product on Product {
-    id
-    title
-    vendor
-    handle
-    descriptionHtml
-    description
-    encodedVariantExistence
-    encodedVariantAvailability
-    options {
-      name
-      optionValues {
-        name
-        firstSelectableVariant {
-          ...ProductVariant
-        }
-        swatch {
-          color
-          image {
-            previewImage {
-              url
-            }
-          }
-        }
-      }
-    }
-    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {
-      ...ProductVariant
-    }
-    adjacentVariants (selectedOptions: $selectedOptions) {
-      ...ProductVariant
-    }
-    seo {
-      description
-      title
-    }
-    fitNote: metafield(namespace: "custom", key: "fit_note") {
-      value
-    }
-    ...ColorSiblings
-    productDetails: metafield(namespace: "custom", key: "product_details") {
-      value
-    }
-    techStack: metafield(namespace: "custom", key: "tech_stack") {
-      value
-    }
-    # The Spec Card (7PA-231) — the locked seven-field JSON device
-    # (fabric/weight/use/seams/pockets/fit/origin); see lib/productContent.
-    specCard: metafield(namespace: "custom", key: "spec_card") {
-      value
-    }
-    # Edition device (7PA-246) — rendered above the product name.
-    editionNumber: metafield(namespace: "custom", key: "edition_number") {
-      value
-    }
-    editionStatus: metafield(namespace: "custom", key: "edition_status") {
-      value
-    }
-    # Dedicated PDP hero images (the theme's "Background Image" / "…Mobile"),
-    # per product. Falls back to the variant image when unset.
-    heroImage: metafield(namespace: "custom", key: "hero_image") {
-      reference {
-        ...MediaImageRef
-      }
-    }
-    heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {
-      reference {
-        ...MediaImageRef
-      }
-    }
-  }
-  fragment MediaImageRef on MediaImage {
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-  }
-  ${PRODUCT_VARIANT_FRAGMENT}
-  ${COLOR_SIBLINGS_FRAGMENT}
-` as const;
-
-const PRODUCT_QUERY = `#graphql
-  query Product(
-    $country: CountryCode
-    $handle: String!
-    $language: LanguageCode
-    $selectedOptions: [SelectedOptionInput!]!
-  ) @inContext(country: $country, language: $language) {
-    product(handle: $handle) {
-      ...Product
-    }
-  }
-  ${PRODUCT_FRAGMENT}
-` as const;
-
-const RECOMMENDATIONS_QUERY = `#graphql
-  ${PRODUCT_CARD_FRAGMENT}
-  query ProductRecommendations($handle: String!, $country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    product(handle: $handle) {
-      recommended: metafield(namespace: "custom", key: "recommended_products") {
-        references(first: 10) {
-          nodes {
-            ... on Product {
-              ...ProductCard
-            }
-          }
-        }
-      }
-    }
-  }
-` as const;
-
+export type { ProductData };
 export default Product;

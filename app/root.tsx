@@ -1,5 +1,6 @@
 import { usePostHog } from '@posthog/react';
-import { Analytics, getShopAnalytics, useNonce } from '@shopify/hydrogen';
+import { Cache, handleShopifyRedirects, handleShopifyRoutes } from '@shopify/hydrogen';
+import { ShopifyScripts } from '@shopify/hydrogen/react';
 import { useEffect } from 'react';
 import {
   isRouteErrorResponse,
@@ -11,6 +12,7 @@ import {
   type ShouldRevalidateFunction,
   useLocation,
   useMatches,
+  useNavigate,
   useRouteError,
   useRouteLoaderData,
 } from 'react-router';
@@ -19,14 +21,30 @@ import favicon from '~/assets/favicon.svg';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { NotFound } from '~/components/content/NotFound';
+import {
+  CartAnalyticsTracker,
+  PageViewedTracker,
+  PostHogBridge,
+} from '~/components/layout/AnalyticsTrackers';
+import { CartProvider } from '~/lib/cart';
+import { cartHandlers } from '~/lib/cart-handlers';
+import { envContext } from '~/lib/env';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 import { deferQuery } from '~/lib/loaders';
+import { useNonce } from '~/lib/nonce';
 import {
   getPostHogConfig,
   getRouteErrorException,
   POSTHOG_HOST_META,
   POSTHOG_KEY_META,
 } from '~/lib/posthog';
+import { routeTemplates } from '~/lib/route-templates';
+import {
+  createRequestStorefrontClient,
+  I18N,
+  storefrontClientContext,
+  storefrontRequestContext,
+} from '~/lib/storefront';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -35,9 +53,55 @@ import tailwindCss from './styles/tailwind.css?url';
 export type RootLoader = typeof loader;
 
 /**
- * Root data (menus, cart, shop analytics) only revalidates on mutations and
- * explicit useRevalidator calls — not on sub-navigations. Deliberate perf
- * trade-off: https://remix.run/docs/en/main/route/should-revalidate
+ * The request lifecycle (Hydrogen 2026.10 is a library we compose, not a
+ * framework that owns the request):
+ *   1. one private Storefront API client per request;
+ *   2. `handleShopifyRoutes` answers Shopify-owned URLs (/api/cart, checkout,
+ *      cart/buy permalinks, the Storefront API proxy, MCP, ?variant= redirects)
+ *      before the router runs;
+ *   3. loaders read the client from `storefrontClientContext`;
+ *   4. a 404 from the router falls through to Shopify's URL redirects;
+ *   5. `applyResponseHeaders` forwards Shopify's cookies/cache headers — it
+ *      MUST run on every app response or consent and checkout continuity break.
+ */
+export const middleware: Route.MiddlewareFunction[] = [
+  async ({ context, request }, next) => {
+    const env = context.get(envContext);
+    const storefrontClient = createRequestStorefrontClient(
+      request,
+      env,
+      context.cache,
+      context.waitUntil
+    );
+    const requestContext = storefrontClient.requestContext;
+
+    // Decided synchronously: a Promise<Response> for handler-owned paths, else null.
+    const shopifyRoute = handleShopifyRoutes({
+      request,
+      requestContext,
+      storefrontClient,
+      routeTemplates,
+      handlers: [cartHandlers],
+    });
+    if (shopifyRoute) return await shopifyRoute;
+
+    context.set(storefrontClientContext, storefrontClient);
+    context.set(storefrontRequestContext, requestContext);
+
+    const response = await next();
+    if (response.status === 404) {
+      const redirect = await handleShopifyRedirects({ request, storefrontClient, routeTemplates });
+      if (redirect) return redirect;
+    }
+    requestContext.applyResponseHeaders(response.headers);
+    return response;
+  },
+];
+
+/**
+ * Root data (menus, shop identity) only revalidates on mutations and explicit
+ * useRevalidator calls — not on sub-navigations. The cart lives in the client
+ * store now, so it never needs the root loader to re-run.
  */
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, currentUrl, nextUrl }) => {
   if (formMethod && formMethod !== 'GET') return true;
@@ -52,14 +116,8 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, current
  */
 export function links() {
   return [
-    {
-      rel: 'preconnect',
-      href: 'https://cdn.shopify.com',
-    },
-    {
-      rel: 'preconnect',
-      href: 'https://shop.app',
-    },
+    { rel: 'preconnect', href: 'https://cdn.shopify.com' },
+    { rel: 'preconnect', href: 'https://shop.app' },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
     // Legacy fallback (public/favicon.ico): browsers and tools that ignore the
     // SVG link probe /favicon.ico directly — without it that request 404s.
@@ -67,69 +125,58 @@ export function links() {
   ];
 }
 
-export async function loader(args: Route.LoaderArgs) {
-  const deferredData = loadDeferredData(args);
-  const criticalData = await loadCriticalData(args);
+export async function loader({ context, request }: Route.LoaderArgs) {
+  const env = context.get(envContext);
+  const storefront = context.get(storefrontClientContext);
 
-  const { storefront, env } = args.context;
+  // Below the fold: deferred and guarded (never throws).
+  const footer = deferQuery(
+    storefront
+      .graphql(FOOTER_QUERY, { variables: { footerMenuHandle: 'footer' }, cache: Cache.long() })
+      .then(({ data }) => data)
+  );
 
-  return {
-    ...deferredData,
-    ...criticalData,
-    publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
-    posthog: getPostHogConfig(env, import.meta.env.DEV),
-    shop: getShopAnalytics({
-      storefront,
-      publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
+  // Above the fold, in parallel: the header chrome and the visitor's cart.
+  // The cart is awaited so the first paint has it (no empty-then-filled flicker).
+  const [headerResult, cartResult] = await Promise.all([
+    storefront.graphql(HEADER_QUERY, {
+      variables: { headerMenuHandle: 'main-menu' },
+      cache: Cache.long(),
     }),
-    consent: {
-      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
-      storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
-      withPrivacyBanner: false,
-      country: args.context.storefront.i18n.country,
-      language: args.context.storefront.i18n.language,
-    },
-  };
-}
-
-/** Awaited before first byte — a failure here errors the whole page. */
-async function loadCriticalData({ context }: Route.LoaderArgs) {
-  const { storefront } = context;
-
-  const header = await storefront.query(HEADER_QUERY, {
-    cache: storefront.CacheLong(),
-    variables: { headerMenuHandle: 'main-menu' },
-  });
+    cartHandlers.get({ storefrontClient: storefront, request }),
+  ]);
+  if (headerResult.errors) console.error(headerResult.errors);
+  if (!headerResult.data) throw new Response('Shop unavailable', { status: 500 });
+  const header = headerResult.data;
 
   // Confirms the typed Storefront client is wired and returning live data.
-  // Dev-only — `header.shop.name` is a typed `shop { name }` result from HEADER_QUERY.
   if (import.meta.env.DEV) {
     // eslint-disable-next-line no-console -- intentional dev-only connectivity check (GD-4)
     console.log(`[storefront] Connected to "${header.shop.name}"`);
   }
 
-  return { header };
-}
-
-/** Returned as promises and awaited in-component — must never throw. */
-function loadDeferredData({ context }: Route.LoaderArgs) {
-  const { storefront, cart } = context;
-
-  const footer = deferQuery(
-    storefront.query(FOOTER_QUERY, {
-      cache: storefront.CacheLong(),
-      variables: { footerMenuHandle: 'footer' },
-    })
-  );
   return {
-    cart: cart.get(),
+    header,
     footer,
+    cartData: cartResult.data,
+    publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    posthog: getPostHogConfig(env, import.meta.env.DEV),
+    // What <ShopifyScripts> needs: shop identity for analytics + consent, and
+    // the active currency for browse events (they carry no price of their own).
+    shop: {
+      shopId: header.shop.id,
+      storefrontId: env.PUBLIC_STOREFRONT_ID ?? '',
+      myshopifyDomain: env.PUBLIC_STORE_DOMAIN,
+    },
+    currency: header.localization.country.currency.isoCode,
   };
 }
 
 export const Layout = ({ children }: { children?: React.ReactNode }) => {
   const nonce = useNonce();
-  const posthog = useRouteLoaderData<RootLoader>('root')?.posthog;
+  const navigate = useNavigate();
+  // Absent when the root loader itself failed (bare error page).
+  const rootData = useRouteLoaderData<RootLoader>('root');
 
   return (
     <html lang="en">
@@ -137,9 +184,23 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={tailwindCss}></link>
+        {/* Shopify's runtime: Standard Actions (the cart contract), the
+            analytics bus, Customer Privacy + the consent banner where a
+            visitor's region requires one (nothing in the US). */}
+        {rootData && (
+          <ShopifyScripts
+            shop={rootData.shop}
+            i18n={{ ...I18N, currency: rootData.currency }}
+            analytics={{ channel: 'hydrogen' }}
+            consent={{ mode: 'default-banner' }}
+            navigate={navigate}
+            routes={routeTemplates}
+            nonce={nonce}
+          />
+        )}
         {/* Runtime PostHog config for entry.client (per-Oxygen-environment; absent = off). */}
-        {posthog && <meta name={POSTHOG_KEY_META} content={posthog.key} />}
-        {posthog && <meta name={POSTHOG_HOST_META} content={posthog.host} />}
+        {rootData?.posthog && <meta name={POSTHOG_KEY_META} content={rootData.posthog.key} />}
+        {rootData?.posthog && <meta name={POSTHOG_HOST_META} content={rootData.posthog.host} />}
         <Meta />
         <Links />
       </head>
@@ -173,7 +234,10 @@ const App = () => {
   }
 
   return (
-    <Analytics.Provider cart={data.cart} shop={data.shop} consent={data.consent}>
+    <CartProvider initialData={data.cartData}>
+      <PageViewedTracker />
+      <CartAnalyticsTracker />
+      <PostHogBridge />
       {isBareChrome ? (
         <Outlet />
       ) : (
@@ -181,7 +245,7 @@ const App = () => {
           <Outlet />
         </PageLayout>
       )}
-    </Analytics.Provider>
+    </CartProvider>
   );
 };
 
@@ -241,9 +305,9 @@ export const ErrorBoundary = () => {
   if (!rootData) return content;
 
   return (
-    <Analytics.Provider cart={rootData.cart} shop={rootData.shop} consent={rootData.consent}>
+    <CartProvider initialData={rootData.cartData}>
       <PageLayout {...rootData}>{content}</PageLayout>
-    </Analytics.Provider>
+    </CartProvider>
   );
 };
 

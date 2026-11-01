@@ -1,40 +1,50 @@
-import { CartForm, type OptimisticCartLine } from '@shopify/hydrogen';
-import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types';
 import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
-import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout } from '~/components/cart/CartMain';
 import { Image } from '~/components/common/Image';
 import { Price } from '~/components/common/Price';
 import { useAside } from '~/components/layout/Aside';
+import { type CartLine, useCart, useCartForm } from '~/lib/cart';
+import { cn } from '~/lib/cn';
 import { productUrl } from '~/lib/urls';
 
-export type CartLine = OptimisticCartLine<CartApiQueryFragment>;
+const STEP_BUTTON =
+  'flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30';
 
 /**
- * A single cart line: product image, title, options, price, a quantity stepper,
- * and a remove control.
+ * A single cart line: product image, title, options, price, a quantity stepper
+ * and a remove control — one cart form per line, posting to `/api/cart`
+ * through the store (`register('set' | 'decrease' | 'increase' | 'remove')`).
+ * A line the server hasn't confirmed yet (`optimistic:` id) can't be edited.
  */
 export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartLine }) => {
-  const { id, merchandise } = line;
-  const { product, title, image, selectedOptions } = merchandise;
-  const lineItemUrl = productUrl(product.handle, selectedOptions);
+  const { id, merchandise, quantity } = line;
+  const { formProps, register } = useCartForm();
+  const lineError = useCart((state) => state.errors.lines.get(id));
+  const pending = useCart((state) => state.pending.lines.has(id));
   const { close } = useAside();
   const closeIfAside = () => layout === 'aside' && close();
 
+  const product = merchandise?.product;
+  const title = product?.title ?? merchandise?.title ?? 'Product';
+  const selectedOptions = merchandise?.selectedOptions ?? [];
+  const lineItemUrl = product?.handle ? productUrl(product.handle, selectedOptions) : '/cart';
+  const isOptimistic = id.startsWith('optimistic:');
+  const errorMessage = lineError?.userErrors[0]?.message;
+
   return (
-    <li className="py-4">
+    <li className={cn('py-4 transition-opacity', pending && 'opacity-60')} aria-busy={pending}>
       <div className="flex gap-4">
-        {image && (
+        {merchandise?.image && (
           <Link prefetch="intent" to={lineItemUrl} onClick={closeIfAside} className="flex-none">
             <Image
               alt={title}
               aspectRatio="1/1"
-              data={image}
-              height={96}
+              data={merchandise.image}
+              srcSetWidths={[80, 160, 240]}
+              sizes="80px"
               loading="lazy"
-              width={80}
               className="h-24 w-20 bg-field object-cover"
             />
           </Link>
@@ -47,7 +57,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
             onClick={closeIfAside}
             className="text-sm font-medium transition-opacity hover:opacity-70"
           >
-            {product.title}
+            {title}
           </Link>
           {selectedOptions.length > 0 && (
             <ul className="mt-1 text-sm text-ink">
@@ -58,115 +68,61 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
               ))}
             </ul>
           )}
-          <div className="mt-3 flex items-center justify-between gap-4">
-            <QuantityStepper line={line} />
+          <form {...formProps()} className="mt-3 flex items-center justify-between gap-4">
+            <button {...register('set')} />
+            <input type="hidden" {...register('lineId', { value: id })} />
+            <div className="border-border-subtle inline-flex items-center border">
+              <button
+                type="submit"
+                {...register('decrease')}
+                aria-label={quantity <= 1 ? 'Remove item' : 'Decrease quantity'}
+                disabled={isOptimistic}
+                className={STEP_BUTTON}
+              >
+                <Minus className="size-3.5" />
+              </button>
+              {/* The base layer styles every bare input; reset to a plain cell. */}
+              <input
+                {...register('quantity', { value: quantity, interactive: true })}
+                aria-label="Quantity"
+                aria-invalid={errorMessage ? true : undefined}
+                disabled={isOptimistic}
+                className="m-0 w-9 rounded-none border-0 bg-transparent p-0 text-center font-mono text-sm tabular-nums [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                type="submit"
+                {...register('increase')}
+                aria-label="Increase quantity"
+                disabled={isOptimistic}
+                className={STEP_BUTTON}
+              >
+                <Plus className="size-3.5" />
+              </button>
+            </div>
             <div className="font-mono text-sm font-medium">
               {/* Cart format ("$79.00") to match the subtotal, not the brand
                   format ("$79 USD") the PDP and product cards use. */}
-              {line.cost?.totalAmount ? (
-                <Price data={line.cost.totalAmount} variant="cart" />
-              ) : null}
+              <Price data={line.cost.totalAmount} variant="cart" />
             </div>
-          </div>
-          <CartLineRemoveForm lineIds={[id]}>
+          </form>
+          <form {...formProps()}>
+            <input type="hidden" {...register('lineId', { value: id })} />
             <button
-              disabled={!!line.isOptimistic}
               type="submit"
+              {...register('remove')}
+              disabled={isOptimistic}
               className="mt-2 cursor-pointer text-xs text-support transition-colors hover:text-ink disabled:cursor-default"
             >
               Remove
             </button>
-          </CartLineRemoveForm>
+          </form>
+          {errorMessage && (
+            <p className="mt-2 text-xs text-ember" role="alert">
+              {errorMessage}
+            </p>
+          )}
         </div>
       </div>
     </li>
   );
 };
-
-const QuantityStepper = ({ line }: { line: CartLine }) => {
-  const { id: lineId, quantity, isOptimistic } = line;
-  const prevQuantity = Math.max(0, quantity - 1);
-  const nextQuantity = quantity + 1;
-
-  const decreaseButton = (
-    <button
-      aria-label={quantity <= 1 ? 'Remove item' : 'Decrease quantity'}
-      disabled={!!isOptimistic}
-      name="decrease-quantity"
-      value={prevQuantity}
-      className="flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30"
-    >
-      <Minus className="size-3.5" />
-    </button>
-  );
-
-  return (
-    <div className="border-border-subtle inline-flex items-center border">
-      {quantity <= 1 ? (
-        <CartLineRemoveForm lineIds={[lineId]}>{decreaseButton}</CartLineRemoveForm>
-      ) : (
-        <CartLineUpdateButton lines={[{ id: lineId, quantity: prevQuantity }]}>
-          {decreaseButton}
-        </CartLineUpdateButton>
-      )}
-      <span className="min-w-8 text-center font-mono text-sm tabular-nums">{quantity}</span>
-      <CartLineUpdateButton lines={[{ id: lineId, quantity: nextQuantity }]}>
-        <button
-          aria-label="Increase quantity"
-          name="increase-quantity"
-          value={nextQuantity}
-          disabled={!!isOptimistic}
-          className="flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30"
-        >
-          <Plus className="size-3.5" />
-        </button>
-      </CartLineUpdateButton>
-    </div>
-  );
-};
-
-/** Wraps a submit button in a LinesRemove form. Shares the update fetcher key
-    so a pending quantity update and a remove cancel rather than race. */
-const CartLineRemoveForm = ({
-  lineIds,
-  children,
-}: {
-  lineIds: Array<string>;
-  children: React.ReactNode;
-}) => {
-  return (
-    <CartForm
-      fetcherKey={getUpdateKey(lineIds)}
-      route="/cart"
-      action={CartForm.ACTIONS.LinesRemove}
-      inputs={{ lineIds }}
-    >
-      {children}
-    </CartForm>
-  );
-};
-
-const CartLineUpdateButton = ({
-  children,
-  lines,
-}: {
-  children: React.ReactNode;
-  lines: Array<CartLineUpdateInput>;
-}) => {
-  const lineIds = lines.map((line) => line.id);
-
-  return (
-    <CartForm
-      fetcherKey={getUpdateKey(lineIds)}
-      route="/cart"
-      action={CartForm.ACTIONS.LinesUpdate}
-      inputs={{ lines }}
-    >
-      {children}
-    </CartForm>
-  );
-};
-
-/** Stable key so rapid +/- on the same line cancel rather than race. */
-const getUpdateKey = (lineIds: Array<string>) =>
-  [CartForm.ACTIONS.LinesUpdate, ...lineIds].join('-');

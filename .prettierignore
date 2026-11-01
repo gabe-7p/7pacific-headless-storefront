@@ -10,3 +10,8 @@ pnpm-lock.yaml
 # Byte-for-byte mirror of PRODUCT_CARD_FRAGMENT (see fragments.ide.test.ts) —
 # reformatting would break the exact-match sync test
 app/lib/fragments.ide.graphql
+
+# Hydrogen agent skills are synced from node_modules by `hydrogen skills sync` and hash-checked; never reformat them
+.claude/skills/hydrogen-*/
+.claude/skills/migrate-to-hydrogen-2026-10/
+.agents/skills/

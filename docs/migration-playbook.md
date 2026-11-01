@@ -62,8 +62,8 @@ an asset.
    Shopify Files / the live page's rendered `src`.
 3. **Vendor into the build.** Put static brand assets in `app/assets/` and import them
    (`import whiteLogo from '~/assets/white_logo.svg'` → Vite returns a URL string). Storefront
-   **product/CMS images come from the API** at render time — render those with Hydrogen's
-   `<Image data={...} sizes="..." />`, not a vendored copy.
+   **product/CMS images come from the API** at render time — render those with the repo's
+   `common/Image` (`<Image data={...} sizes="..." />`), not a vendored copy.
 4. **Verify fidelity.** Confirm the vendored asset's intrinsic dimensions / viewBox match the
    original (set correct `width`/`height` to avoid layout shift). For multi-tone assets (e.g. the
    logo on light vs. dark backgrounds) vendor each variant — see [Logo.tsx](../app/components/common/Logo.tsx).
@@ -79,9 +79,10 @@ of truth — read the relevant one before changing that area).
 - **Layering.** Data fetching/GraphQL lives in route **loaders/actions** and `app/lib/`; components
   are **presentational** and render typed props. No `context.storefront` or `#graphql` in a
   component. See [module-boundaries.md](../.claude/rules/module-boundaries.md).
-- **GraphQL.** Co-located `#graphql` template strings ending `as const`; shared shapes are fragments
-  in `app/lib/fragments.ts`; import generated types, never hand-write; run `pnpm graphql:generate`
-  after edits. See [graphql-fragments.md](../.claude/rules/graphql-fragments.md).
+- **GraphQL.** Co-located `gql()` documents with composed fragments (shared ones in
+  `app/lib/fragments.ts`), an explicit `cache` on every read, result types from
+  `StorefrontApi.ResultOf`; `hydrogen gql check` runs inside `pnpm type-check`. See
+  [graphql-fragments.md](../.claude/rules/graphql-fragments.md).
 - **Components.** `const` arrow functions, PascalCase, one per file; props as a `type`. Data helpers
   `getX` / `getXOrThrow` by null behavior. See [naming-conventions.md](../.claude/rules/naming-conventions.md).
 - **Styling.** Tailwind v4 only — no inline `style={{}}` (the dynamic-color swatch is the one
@@ -100,8 +101,8 @@ of truth — read the relevant one before changing that area).
   sibling handles via the `custom.color_siblings` metafield, read by [lib/colors.ts](../app/lib/colors.ts). See
   [common-pitfalls.md](../.claude/rules/common-pitfalls.md).
 - **Nullability.** Storefront fields are mostly nullable and `noUncheckedIndexedAccess` is on —
-  optional-chain and guard. Use `<Image>`/`<Money>`. Parallelize independent loader queries; defer +
-  `.catch` below-the-fold data.
+  optional-chain and guard. Use `common/Image` / `common/Price`. Parallelize independent loader
+  queries; defer below-the-fold data through `deferQuery`.
 
 ---
 

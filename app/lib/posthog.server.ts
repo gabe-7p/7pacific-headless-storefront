@@ -1,6 +1,7 @@
 // The edge build: Oxygen runs on workerd, and posthog-node's default (Node)
 // entry imports `path`/`process` and crashes MiniOxygen on load.
 import { PostHog } from 'posthog-node/edge';
+import { createContext } from 'react-router';
 
 import { getPostHogConfig } from '~/lib/posthog';
 
@@ -46,3 +47,8 @@ export const createPostHogClient = (env: Env, request: Request) => {
     },
   });
 };
+
+export type PostHogServerClient = ReturnType<typeof createPostHogClient>;
+
+/** The per-request server client on the router context (set in server.ts). */
+export const posthogContext = createContext<PostHogServerClient>();

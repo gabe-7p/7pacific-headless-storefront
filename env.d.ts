@@ -1,20 +1,30 @@
 /// <reference types="vite/client" />
 /// <reference types="react-router" />
 /// <reference types="@shopify/oxygen-workers-types" />
-/// <reference types="@shopify/hydrogen/react-router-types" />
 
 // Enhance TypeScript's built-in typings.
 import '@total-typescript/ts-reset';
 
+import type { CacheInstance } from '@shopify/hydrogen';
+
+import type { AppEnv } from './app/lib/env';
+
+/** What server.ts puts on the router context for every request. */
+type OxygenRouterContext = {
+  cache: CacheInstance;
+  env: Env;
+  waitUntil: ExecutionContext['waitUntil'];
+};
+
+declare module 'react-router' {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- module augmentation must be an interface
+  interface AppLoadContext extends OxygenRouterContext {}
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- module augmentation must be an interface
+  interface RouterContextProvider extends OxygenRouterContext {}
+}
+
 declare global {
-  // Merges into Hydrogen's global `Env` — must be an interface to augment it.
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface Env {
-    /** [public] PostHog project API key (`phc_…`) — unset = PostHog off. See lib/posthog.ts. */
-    PUBLIC_POSTHOG_KEY?: string;
-    /** [public] PostHog ingestion host, e.g. https://us.i.posthog.com */
-    PUBLIC_POSTHOG_HOST?: string;
-    /** [public] `true` to send events from `pnpm dev` (off by default). */
-    PUBLIC_POSTHOG_DEV?: string;
-  }
+  /** The Oxygen worker bindings (`.env` locally). Shape lives in app/lib/env.ts. */
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- global augmentation must be an interface
+  interface Env extends AppEnv {}
 }

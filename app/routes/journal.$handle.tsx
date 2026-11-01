@@ -1,3 +1,4 @@
+import { Cache, gql } from '@shopify/hydrogen';
 import { useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -8,6 +9,7 @@ import { notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { formatJournalDate, readingTimeMinutes } from '~/lib/journal';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/journal.$handle';
 
@@ -22,11 +24,11 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   const { handle } = params;
   if (!handle) throw notFound('Article not found');
 
-  const { blog } = await context.storefront.query(ARTICLE_QUERY, {
+  const { data } = await context.get(storefrontClientContext).graphql(ARTICLE_QUERY, {
     variables: { handle },
-    cache: context.storefront.CacheLong(),
+    cache: Cache.long(),
   });
-  const article = blog?.articleByHandle;
+  const article = data?.blog?.articleByHandle;
   if (!article) throw notFound('Article not found');
 
   return { article };
@@ -69,7 +71,7 @@ const Article = () => {
   );
 };
 
-const ARTICLE_QUERY = `#graphql
+const ARTICLE_QUERY = gql(`
   query JournalArticle($handle: String!, $country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     blog(handle: "journal") {
@@ -90,6 +92,6 @@ const ARTICLE_QUERY = `#graphql
       }
     }
   }
-` as const;
+`);
 
 export default Article;

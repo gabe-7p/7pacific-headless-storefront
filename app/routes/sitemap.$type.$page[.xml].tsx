@@ -1,26 +1,21 @@
-import { getSitemap } from '@shopify/hydrogen';
-
 import { CACHE_ONE_DAY, notFound } from '~/lib/http';
+import { getSitemap, isSitemapType } from '~/lib/sitemap';
+import { storefrontClientContext } from '~/lib/storefront';
 
-import { SITEMAP_TYPES } from './[sitemap.xml]';
 import type { Route } from './+types/sitemap.$type.$page[.xml]';
 
-export async function loader({ request, params, context: { storefront } }: Route.LoaderArgs) {
-  // Only emit child sitemaps for types whose URLs actually resolve — a
-  // /sitemap/blogs/1.xml full of 404ing /blogs/... URLs is worse than none.
-  if (!SITEMAP_TYPES.includes(params.type as (typeof SITEMAP_TYPES)[number])) {
+export async function loader({ request, params, context }: Route.LoaderArgs) {
+  const page = Number.parseInt(params.page ?? '', 10);
+  // Only emit child sitemaps for types whose URLs resolve on this storefront.
+  if (!params.type || !isSitemapType(params.type) || !Number.isInteger(page) || page < 1) {
     throw notFound('Sitemap not found');
   }
 
-  const response = await getSitemap({
-    storefront,
-    request,
-    params,
-    // English/US only — no localized URL variants exist.
-    getLink: ({ type, baseUrl, handle }) => `${baseUrl}/${type}/${handle}`,
+  const response = await getSitemap(context.get(storefrontClientContext), {
+    type: params.type,
+    page,
+    baseUrl: new URL(request.url).origin,
   });
-
   response.headers.set('Cache-Control', CACHE_ONE_DAY);
-
   return response;
 }

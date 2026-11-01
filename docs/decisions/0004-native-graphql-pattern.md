@@ -1,6 +1,6 @@
 # 0004. Hydrogen-native GraphQL pattern (no Apollo)
 
-- **Status**: Accepted
+- **Status**: Accepted; the codegen half is refined by [0010](0010-hydrogen-2026-10-library.md) — documents are now `gql()` calls typed in place by Hydrogen's TypeScript plugin, no `*.generated.d.ts`
 - **Date**: 2026-06-20
 
 ## Context

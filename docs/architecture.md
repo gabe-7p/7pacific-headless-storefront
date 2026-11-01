@@ -6,40 +6,47 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 
 | Layer     | Choice                                                                        |
 | --------- | ----------------------------------------------------------------------------- |
-| Framework | Hydrogen 2026.4 on **React Router 7** (not Remix), Vite 8                     |
+| Framework | **React Router 7** (middleware) + **Hydrogen 2026.10** as a library, Vite 8   |
 | Runtime   | Oxygen (Shopify's edge worker hosting)                                        |
 | UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives |
 | Data      | Shopify **Storefront API** (guest checkout — no customer accounts)            |
-| Types     | `@shopify/hydrogen-codegen` → `*.generated.d.ts`                              |
+| Types     | `gql()` documents typed in place by `@shopify/hydrogen/ts-plugin` (gql.tada)  |
 | Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                               |
 | Tooling   | pnpm, ESLint (flat), Prettier, dependency-cruiser                             |
 
 ## Request & data flow
 
-Hydrogen is **server-first**. Data is fetched on the edge in route loaders/actions; components only render.
+The app is **server-first**. Since Hydrogen 2026.10, Hydrogen is a library the app composes into one request lifecycle (the _root middleware_ in [app/root.tsx](../app/root.tsx)); it owns no routing, build or CSP.
 
 ```
-Browser ── request ──▶ Oxygen worker
+Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cache + waitUntil on the router context)
                          │
                          ▼
-              route loader / action  ──▶  context.storefront.query(...)  ──▶  Shopify Storefront API
-                         │                 context.cart
-                         ▼
-              typed data returned to the route
-                         │
-                         ▼
-              React components render (Tailwind + shadcn/ui primitives)  ──▶  HTML streamed to browser
+              root middleware (app/root.tsx)
+                ├─ createRequestStorefrontClient()        one private Storefront API client per request
+                ├─ handleShopifyRoutes()  ──▶ answers Shopify-owned URLs before the router:
+                │       /api/cart (cart store), /checkout, /cart/ID:QTY + /buy permalinks,
+                │       /api/<version>/graphql.json proxy, /api/mcp, /.well-known/ucp, ?variant= redirects
+                ├─ context.set(storefrontClientContext)   loaders read the client from here
+                ├─ next()  ──▶  route loader  ──▶  client.graphql(DOC, { variables, cache })  ──▶  Storefront API
+                │                  │
+                │                  ▼   typed data → React components render (Tailwind + shadcn/ui) → HTML streamed
+                ├─ 404? handleShopifyRedirects()          Shopify's URL redirect table, /admin
+                └─ requestContext.applyResponseHeaders()  Shopify's cookies/cache headers onto every response
 ```
 
-- **`context`** (built in [app/lib/context.ts](../app/lib/context.ts)) exposes `storefront`, `cart`, `session`, and `env` to every loader/action.
-- **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise and rendered with `<Suspense>`/`<Await>` so it doesn't block first byte.
-- **Independent queries run in parallel** (`Promise.all`) to avoid request waterfalls.
+- **The cart lives in the browser.** The root loader seeds `CartProvider` with `cartHandlers.get()`; every cart surface reads `useCart(selector)` and mutates through `useCartForm` / the product form, which post to `/api/cart` (optimistic lines settle when the handler confirms). No `/cart` action route, no loader promise for the cart.
+- **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product.ts](../app/lib/product.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
+- **Every Storefront read passes an explicit `cache`** (`Cache.long()` for menus/pages/journal/recommendations, `Cache.short()` for the PDP product and collection grids). There is no implicit default; a read without one hits the API every request.
+- **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery`) and rendered with `<Suspense>`/`<Await>`.
+- **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (tracker components in [components/layout/AnalyticsTrackers.tsx](../app/components/layout/AnalyticsTrackers.tsx)); destinations — Shopify's own analytics and PostHog ([lib/posthog.client.ts](../app/lib/posthog.client.ts)) — receive events only once Customer Privacy allows.
+- **CSP and the nonce are app code** ([lib/csp.ts](../app/lib/csp.ts), [lib/nonce.tsx](../app/lib/nonce.tsx)), set in `entry.server.tsx`.
 
 See [.claude/rules/module-boundaries.md](../.claude/rules/module-boundaries.md) for the loader-fetches / component-renders rule, and [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md) for caching, deferral, and nullability.
 
 ## GraphQL
 
-Queries are co-located `#graphql` tagged-template `const`s ending in `as const`; shared shapes are fragments in [app/lib/fragments.ts](../app/lib/fragments.ts). `pnpm graphql:generate` reads those strings and emits typed results into `storefrontapi.generated.d.ts`, which you import from — never hand-write response types. Full rules: [.claude/rules/graphql-fragments.md](../.claude/rules/graphql-fragments.md).
+Documents are `gql()` calls from `@shopify/hydrogen` — a query string plus the fragments it spreads — typed in place by the `@shopify/hydrogen/ts-plugin` entry in `tsconfig.json` (which writes the gitignored `*-graphql-env.d.ts` schema environments at the repo root). Shared fragments and the chrome queries live in [app/lib/fragments.ts](../app/lib/fragments.ts), the PDP's in [app/lib/productQueries.ts](../app/lib/productQueries.ts); result types come from `StorefrontApi.ResultOf<typeof DOC>`. `hydrogen gql check` (part of `pnpm type-check`) validates every document against the schema. Full rules: [.claude/rules/graphql-fragments.md](../.claude/rules/graphql-fragments.md).
 
 ## Code organization
 
@@ -57,7 +64,7 @@ app/
     content/     static-page compositions (OurStory, AthleteSigning, FirstLightTeaser)
     common/      shared primitives (Container, Heading, Cta, Prose, NewsletterDialog, …)
   content/       typed marketing copy + store links (links.ts)
-  lib/           fragments.ts, context.ts, session.ts, colors.ts, metafields.ts, seo.ts, … (+ colocated *.test.ts)
+  lib/           storefront.ts, cart-handlers.ts, cart.ts, product.ts, productQueries.ts, fragments.ts, csp.ts, sitemap.ts, colors.ts, … (+ colocated *.test.ts)
   styles/        tailwind.css — the single stylesheet (no separate globals)
 ```
 
@@ -93,29 +100,28 @@ The 9 live products are **separate Shopify products per color**, not Shopify var
 
 ## Environment & secrets
 
-Configuration is via environment variables, listed below. `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` and `SESSION_SECRET` are **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
+Configuration is via environment variables, listed below (shape in [app/lib/env.ts](../app/lib/env.ts), read in `server.ts` and the root middleware via `envContext`). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
 
-| Variable                        | Access | What it is                                                                                   |
-| ------------------------------- | ------ | -------------------------------------------------------------------------------------------- |
-| `PUBLIC_STORE_DOMAIN`           | public | myshopify domain, e.g. `7pacific.myshopify.com`                                              |
-| `PUBLIC_STOREFRONT_API_TOKEN`   | public | Public Storefront API access token                                                           |
-| `PRIVATE_STOREFRONT_API_TOKEN`  | secret | Private (delegate) Storefront API token, server-only                                         |
-| `PUBLIC_STOREFRONT_API_VERSION` | public | Storefront API version (`2026-04`); Hydrogen defaults it, set only to override               |
-| `PUBLIC_STOREFRONT_ID`          | public | Numeric storefront id, used by Shopify Analytics                                             |
-| `SESSION_SECRET`                | secret | Session cookie signing secret, generate with `openssl rand -hex 32`                          |
-| `PUBLIC_CHECKOUT_DOMAIN`        | public | Checkout domain, used by the consent API and checkout links                                  |
-| `PUBLIC_POSTHOG_KEY`            | public | PostHog project API key (`phc_…`); unset = PostHog off. Different key per Oxygen environment |
-| `PUBLIC_POSTHOG_HOST`           | public | PostHog ingestion host, `https://us.i.posthog.com`                                           |
-| `PUBLIC_POSTHOG_DEV`            | public | `true` to send events from `pnpm dev`; off by default, never set on Oxygen                   |
+| Variable                       | Access | What it is                                                                                   |
+| ------------------------------ | ------ | -------------------------------------------------------------------------------------------- |
+| `PUBLIC_STORE_DOMAIN`          | public | myshopify domain, e.g. `7pacific.myshopify.com`                                              |
+| `PUBLIC_STOREFRONT_API_TOKEN`  | public | Public Storefront API access token                                                           |
+| `PRIVATE_STOREFRONT_API_TOKEN` | secret | Private (delegate) Storefront API token, server-only                                         |
+| `PUBLIC_STOREFRONT_ID`         | public | Numeric storefront id, used by Shopify Analytics                                             |
+| `SESSION_SECRET`               | secret | Unused since the 2026.10 migration (guest checkout, no session); harmless to leave set       |
+| `PUBLIC_CHECKOUT_DOMAIN`       | public | Checkout domain, used by the consent API and checkout links                                  |
+| `PUBLIC_POSTHOG_KEY`           | public | PostHog project API key (`phc_…`); unset = PostHog off. Different key per Oxygen environment |
+| `PUBLIC_POSTHOG_HOST`          | public | PostHog ingestion host, `https://us.i.posthog.com`                                           |
+| `PUBLIC_POSTHOG_DEV`           | public | `true` to send events from `pnpm dev`; off by default, never set on Oxygen                   |
 
 ## Deployment
 
-Oxygen builds and deploys from GitHub:
+Oxygen builds and deploys from GitHub ([the workflow](../.github/workflows/oxygen-deployment-1000149496.yml) runs `shopify hydrogen deploy --assets-dir dist/client --worker-dir dist/server`; the CLI runs `pnpm build` first and uploads React Router's `dist/client` assets and the `dist/server/index.js` worker):
 
 - **Pull request** → Oxygen builds a **preview deployment** with its own URL. This is our primary way to verify a migrated unit against the real store (in place of E2E/visual-regression tooling for v1).
 - **`main`** → **production** deployment.
 
-CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality gate (type-check · lint · format · deps · unit tests · build) on every PR independently of the Oxygen build.
+CI ([.github/workflows/ci.yml](../.github/workflows/ci.yml)) runs the quality gate (skills check · type-check + `hydrogen gql check` · lint · format · deps · unit tests · build) on every PR independently of the Oxygen build.
 
 ## Migration context
 

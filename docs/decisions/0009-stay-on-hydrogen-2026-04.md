@@ -1,6 +1,6 @@
 # 0009. Stay on the Hydrogen 2026-04 line; migrate to 2026-10 as a separate project
 
-- **Status**: Accepted
+- **Status**: Superseded by [0010](0010-hydrogen-2026-10-library.md) (the migration shipped the same week)
 - **Date**: 2026-10-31
 
 ## Context

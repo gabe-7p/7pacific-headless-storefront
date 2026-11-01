@@ -27,6 +27,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build and Publish to Oxygen
-        run: pnpm exec shopify hydrogen deploy
+        # Hydrogen 2026.10: the CLI runs `pnpm build` (react-router build) itself
+        # and uploads the two outputs React Router writes under dist/.
+        run: pnpm exec shopify hydrogen deploy --assets-dir dist/client --worker-dir dist/server
         env:
           SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000149496 }}

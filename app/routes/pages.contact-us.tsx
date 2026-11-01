@@ -1,3 +1,4 @@
+import { Cache, gql } from '@shopify/hydrogen';
 import { Form, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -15,6 +16,7 @@ import {
   validateRequired,
 } from '~/lib/forms';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/pages.contact-us';
 
@@ -25,11 +27,11 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   // The live Contact page's static copy (intro, support email, returns block)
   // lives in the Shopify page body; render it above the form.
-  const { page } = await context.storefront.query(CONTACT_PAGE_QUERY, {
+  const { data } = await context.get(storefrontClientContext).graphql(CONTACT_PAGE_QUERY, {
     variables: { handle: 'contact-us' },
-    cache: context.storefront.CacheLong(),
+    cache: Cache.long(),
   });
-  return { page };
+  return { page: data?.page ?? null };
 }
 
 type ContactResponse = FormResult<'name' | 'email' | 'message'>;
@@ -138,7 +140,7 @@ const Contact = () => {
   );
 };
 
-const CONTACT_PAGE_QUERY = `#graphql
+const CONTACT_PAGE_QUERY = gql(`
   query ContactPage($handle: String!, $country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     page(handle: $handle) {
@@ -147,6 +149,6 @@ const CONTACT_PAGE_QUERY = `#graphql
       body
     }
   }
-` as const;
+`);
 
 export default Contact;

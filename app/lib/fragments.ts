@@ -1,114 +1,14 @@
-export const CART_QUERY_FRAGMENT = `#graphql
-  fragment Money on MoneyV2 {
-    currencyCode
-    amount
-  }
-  fragment CartLine on CartLine {
-    id
-    quantity
-    attributes {
-      key
-      value
-    }
-    cost {
-      totalAmount {
-        ...Money
-      }
-      amountPerQuantity {
-        ...Money
-      }
-      compareAtAmountPerQuantity {
-        ...Money
-      }
-    }
-    merchandise {
-      ... on ProductVariant {
-        id
-        availableForSale
-        compareAtPrice {
-          ...Money
-        }
-        price {
-          ...Money
-        }
-        requiresShipping
-        title
-        image {
-          id
-          url
-          altText
-          width
-          height
-        }
-        product {
-          handle
-          title
-          id
-          vendor
-        }
-        selectedOptions {
-          name
-          value
-        }
-      }
-    }
-  }
-  fragment CartApiQuery on Cart {
-    updatedAt
-    id
-    appliedGiftCards {
-      id
-      lastCharacters
-      amountUsed {
-        ...Money
-      }
-    }
-    checkoutUrl
-    totalQuantity
-    buyerIdentity {
-      countryCode
-      customer {
-        id
-        email
-        firstName
-        lastName
-        displayName
-      }
-      email
-      phone
-    }
-    lines(first: $numCartLines) {
-      nodes {
-        ...CartLine
-      }
-    }
-    cost {
-      subtotalAmount {
-        ...Money
-      }
-      totalAmount {
-        ...Money
-      }
-      totalDutyAmount {
-        ...Money
-      }
-      totalTaxAmount {
-        ...Money
-      }
-    }
-    note
-    attributes {
-      key
-      value
-    }
-    discountCodes {
-      code
-      applicable
-    }
-  }
-` as const;
+import { gql, type StorefrontApi } from '@shopify/hydrogen';
 
-const MENU_FRAGMENT = `#graphql
+// ---------------------------------------------------------------------------
+// Shared Storefront API documents. `gql()` returns a typed, branded query
+// string; compose fragments by spreading `...Name` and passing the fragment
+// document in the second argument. Types come from `StorefrontApi.ResultOf`.
+// Server-only: route loaders and lib/ import these, components import only
+// the exported *types* (erased at build time), so no query reaches the browser.
+// ---------------------------------------------------------------------------
+
+const MENU_ITEM_FRAGMENT = gql(`
   fragment MenuItem on MenuItem {
     id
     resourceId
@@ -117,91 +17,104 @@ const MENU_FRAGMENT = `#graphql
     type
     url
   }
-  fragment ChildMenuItem on MenuItem {
-    ...MenuItem
-  }
-  fragment ParentMenuItem on MenuItem {
-    ...MenuItem
-    items {
-      ...ChildMenuItem
-    }
-  }
-  fragment Menu on Menu {
-    id
-    items {
-      ...ParentMenuItem
-    }
-  }
-` as const;
+`);
 
-export const HEADER_QUERY = `#graphql
-  fragment Shop on Shop {
-    id
-    name
-    description
-    primaryDomain {
-      url
-    }
-    brand {
-      logo {
-        image {
-          url
-        }
+const PARENT_MENU_ITEM_FRAGMENT = gql(
+  `
+    fragment ParentMenuItem on MenuItem {
+      ...MenuItem
+      items {
+        ...MenuItem
       }
     }
-  }
-  query Header(
-    $country: CountryCode
-    $headerMenuHandle: String!
-    $language: LanguageCode
-  ) @inContext(language: $language, country: $country) {
-    shop {
-      ...Shop
-    }
-    menu(handle: $headerMenuHandle) {
-      ...Menu
-    }
-  }
-  ${MENU_FRAGMENT}
-` as const;
+  `,
+  [MENU_ITEM_FRAGMENT]
+);
 
-export const FOOTER_QUERY = `#graphql
-  query Footer(
-    $country: CountryCode
-    $footerMenuHandle: String!
-    $language: LanguageCode
-  ) @inContext(language: $language, country: $country) {
-    menu(handle: $footerMenuHandle) {
-      ...Menu
+const MENU_FRAGMENT = gql(
+  `
+    fragment Menu on Menu {
+      id
+      items {
+        ...ParentMenuItem
+      }
     }
-  }
-  ${MENU_FRAGMENT}
-` as const;
+  `,
+  [PARENT_MENU_ITEM_FRAGMENT]
+);
+
+/**
+ * Root chrome: the shop identity (+ the currency Shopify's scripts need for
+ * browse events) and the header menu. `@inContext` is filled from the client's
+ * i18n automatically.
+ */
+export const HEADER_QUERY = gql(
+  `
+    query Header($headerMenuHandle: String!, $country: CountryCode, $language: LanguageCode)
+      @inContext(language: $language, country: $country) {
+      shop {
+        id
+        name
+        description
+        primaryDomain {
+          url
+        }
+        brand {
+          logo {
+            image {
+              url
+            }
+          }
+        }
+      }
+      localization {
+        country {
+          currency {
+            isoCode
+          }
+        }
+      }
+      menu(handle: $headerMenuHandle) {
+        ...Menu
+      }
+    }
+  `,
+  [MENU_FRAGMENT]
+);
+
+export const FOOTER_QUERY = gql(
+  `
+    query Footer($footerMenuHandle: String!, $country: CountryCode, $language: LanguageCode)
+      @inContext(language: $language, country: $country) {
+      menu(handle: $footerMenuHandle) {
+        ...Menu
+      }
+    }
+  `,
+  [MENU_FRAGMENT]
+);
+
+export type HeaderData = StorefrontApi.ResultOf<typeof HEADER_QUERY>;
+export type FooterData = StorefrontApi.ResultOf<typeof FOOTER_QUERY>;
+export type MenuData = NonNullable<HeaderData['menu']>;
 
 // ---------------------------------------------------------------------------
-// Base building-block fragments.
-//
-// These are the shared, reusable shapes that feature queries compose with the
-// spread operator (e.g. `...ProductCard`). Keep them lean — only the fields
-// every consumer needs. Feature-specific extras (PDP galleries, tech-stack
-// metafields, etc.) belong in the query that needs them, not here.
-//
-// Codegen emits a `<Name>Fragment` type for each (e.g. `ProductCardFragment`),
-// importable from 'storefrontapi.generated'.
+// Base building-block fragments — only the fields every consumer needs.
+// Feature-specific extras (PDP hero metafields, tech stack, …) belong in the
+// query that needs them (lib/productQueries.ts), not here.
 // ---------------------------------------------------------------------------
 
 /**
  * Color = separate product: the ordered color family lives in the
  * custom.color_siblings metafield (each sibling carries its own name/hex).
- * Spread `...ColorSiblings` on a Product selection and interpolate this
- * string once per query/fragment that uses it.
  */
-export const COLOR_SIBLINGS_FRAGMENT = `#graphql
+export const COLOR_SIBLINGS_FRAGMENT = gql(`
   fragment ColorSiblings on Product {
     colorSiblings: metafield(namespace: "custom", key: "color_siblings") {
       references(first: 10) {
         nodes {
           ... on Product {
+            __typename
             handle
             colorName: metafield(namespace: "custom", key: "color_name") {
               value
@@ -214,50 +127,70 @@ export const COLOR_SIBLINGS_FRAGMENT = `#graphql
       }
     }
   }
-` as const;
+`);
 
-/**
- * The minimal product shape for grids, carousels, and recommendation rows.
- * Spread into a query alongside `${PRODUCT_CARD_FRAGMENT}`.
- */
-export const PRODUCT_CARD_FRAGMENT = `#graphql
-  fragment ProductCard on Product {
-    id
-    handle
-    title
-    featuredImage {
+/** The minimal product shape for grids, carousels, and recommendation rows. */
+export const PRODUCT_CARD_FRAGMENT = gql(
+  `
+    fragment ProductCard on Product {
       id
-      url
-      altText
-      width
-      height
-    }
-    # First two images: [0] is the resting card image, [1] crossfades in on
-    # hover (matches the live card's product-image-hover behavior).
-    images(first: 2) {
-      nodes {
+      handle
+      title
+      featuredImage {
         id
         url
         altText
         width
         height
       }
+      # First two images: [0] is the resting card image, [1] crossfades in on
+      # hover (matches the live card's product-image-hover behavior).
+      images(first: 2) {
+        nodes {
+          id
+          url
+          altText
+          width
+          height
+        }
+      }
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      # Edition device (7PA-246): ED. XX · STATUS, rendered in the card's mono
+      # spec strip.
+      editionNumber: metafield(namespace: "custom", key: "edition_number") {
+        value
+      }
+      editionStatus: metafield(namespace: "custom", key: "edition_status") {
+        value
+      }
+      ...ColorSiblings
     }
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
+  `,
+  [COLOR_SIBLINGS_FRAGMENT]
+);
+
+// A `gql()` fragment is a branded string, not a gql.tada document, so
+// `FragmentOf` does not apply. The fragment's data type is read off a shape
+// query that spreads it (never executed — it exists for the type alone).
+const PRODUCT_CARD_SHAPE_QUERY = gql(
+  `
+    query ProductCardShape {
+      products(first: 1) {
+        nodes {
+          ...ProductCard
+        }
       }
     }
-    # Edition device (7PA-246): ED. XX · STATUS, rendered in the card's mono
-    # spec strip.
-    editionNumber: metafield(namespace: "custom", key: "edition_number") {
-      value
-    }
-    editionStatus: metafield(namespace: "custom", key: "edition_status") {
-      value
-    }
-    ...ColorSiblings
-  }
-  ${COLOR_SIBLINGS_FRAGMENT}
-` as const;
+  `,
+  [PRODUCT_CARD_FRAGMENT]
+);
+
+/** The data a `<ProductCard>` renders — what `...ProductCard` selects. */
+export type ProductCardData = StorefrontApi.ResultOf<
+  typeof PRODUCT_CARD_SHAPE_QUERY
+>['products']['nodes'][number];
