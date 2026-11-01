@@ -62,9 +62,9 @@ app/
     product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
     collection/  ProductCard, MarketingSections
     home/        homepage sections
-    content/     static-page compositions (OurStory, AthleteSigning, FirstLightTeaser)
+    content/     static-page compositions (OurStory, FirstLightTeaser, athlete-signing/ — the signing page as a root + one file per section)
     common/      shared primitives (Container, Heading, Cta, Prose, NewsletterDialog, …)
-  content/       typed marketing copy + store links (links.ts)
+  content/       typed marketing copy + store links (links.ts); athlete-signing/ = types + one file per athlete + the handle registry
   lib/           storefront.ts, cart-handlers.ts, cart.ts, product/ (queries, store, content, display, colors), fragments.ts, csp.ts, sitemap.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
     analytics/   shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders) — no barrel: client and server stay separate imports
   styles/        tailwind.css — the single stylesheet (no separate globals)
