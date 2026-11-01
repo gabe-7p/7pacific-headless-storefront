@@ -20,6 +20,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 .playwright-mcp/
+# Playwright (pnpm test:pixel) run artifacts
+/test-results
+/playwright-report
 .firecrawl/
 
 # Local agent worktrees (contain a .git file — a blanket `git add .` records them as phantom submodules)

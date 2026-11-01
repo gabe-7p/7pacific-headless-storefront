@@ -60,7 +60,7 @@ Hydrogen 2026.10 has no implicit default: `graphql()` without a `cache` strategy
 
 ## CSP, the nonce and analytics are app-owned
 
-`lib/csp.ts` builds the header and `entry.server.tsx` sets the per-request nonce on React Router's `<Scripts>` and `<ShopifyScripts nonce>`. A dropped nonce leaves pages rendering while hydration (cart, size picker, analytics) is silently dead — check the browser console for CSP violations after touching either. Analytics destinations (Shopify's, PostHog) receive events only once Customer Privacy allows: a destination with no events in a consent-required region is working as designed, not broken.
+`lib/csp.ts` builds the header and `entry.server.tsx` sets the per-request nonce on React Router's `<Scripts>` and `<ShopifyScripts nonce>`. A dropped nonce leaves pages rendering while hydration (cart, size picker, analytics) is silently dead — check the browser console for CSP violations after touching either. Analytics destinations (Shopify's, PostHog, the Meta Pixel) receive events only once Customer Privacy allows: a destination with no events in a consent-required region is working as designed, not broken. The Meta Pixel adds two of its own: `fbevents.js` is injected lazily from the first delivered event (never from `setup()`), and Meta's script enforces the pixel's Traffic Permissions allow-list — on a domain that isn't listed (localhost, an unlisted preview) it logs a warning and sends nothing, which is configuration, not a bug (docs/META_PIXEL_TESTING.md §0).
 
 ## Images through `common/Image`, prices through `common/Price`
 

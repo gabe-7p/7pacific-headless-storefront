@@ -5,6 +5,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 ## Contents
 
 - [architecture.md](architecture.md) — stack, request/data flow, code organization, the module pattern, env model, deployment.
+- [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) — how to verify the Meta Pixel (DevTools, Pixel Helper, `pnpm test:pixel`, Events Manager) in 15 minutes.
 - [migration-playbook.md](migration-playbook.md) — the repeatable step-by-step process for porting a page/component from the live Liquid theme to Hydrogen (audit → assets → implement → visual + functional verify → done).
 - [decisions/](decisions/README.md) — Architecture Decision Records (the _why_ behind settled choices).
 
@@ -23,6 +24,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 | Porting a page/component from the live Liquid theme      | [migration-playbook.md](migration-playbook.md)                                                                                                                                   |
 | Touching products or color swatches                      | [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md) · [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)             |
 | Avoiding common bugs (nullability, waterfalls, secrets)  | [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)                                                                                                          |
+| Touching the Meta Pixel                                  | [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) · [decisions/0011-meta-pixel-as-bus-destination.md](decisions/0011-meta-pixel-as-bus-destination.md)                              |
 | Adding env vars                                          | [architecture.md](architecture.md#environment--secrets)                                                                                                                          |
 | Running the pre-PR gate / reviewing a PR                 | [.claude/commands/check.md](../.claude/commands/check.md) · [.claude/commands/review_pr.md](../.claude/commands/review_pr.md)                                                    |
 | Understanding why a choice was made                      | [decisions/](decisions/README.md)                                                                                                                                                |
