@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router';
 
-import { AthleteSigning } from '~/components/content/AthleteSigning';
+import { AthleteSigning } from '~/components/content/athlete-signing/AthleteSigning';
 import { getAthleteSigning } from '~/content/athlete-signing';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
