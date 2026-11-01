@@ -1,5 +1,5 @@
 import { Dialog as SheetPrimitive } from 'radix-ui';
-import * as React from 'react';
+import type * as React from 'react';
 
 import { CloseIcon } from '~/components/common/icons';
 import { cn } from '~/lib/cn';
@@ -20,18 +20,15 @@ function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Po
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
-// 7Pacific: forwardRef, because the Portal (Presence + Slot) attaches a ref to
-// each child — it needs the node to play the exit fade. shadcn's template
-// targets React 19 (ref as a prop); on React 18 a plain function component
-// drops the ref, warns "Function components cannot be given refs", and the
-// overlay vanishes instantly on close instead of fading out.
-const SheetOverlay = React.forwardRef<
-  React.ComponentRef<typeof SheetPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
->(function SheetOverlay({ className, ...props }, ref) {
+// Plain function component: on React 19 `ref` is an ordinary prop, so the
+// Portal's Presence can reach the overlay node for the exit fade without
+// forwardRef (stock shadcn shape).
+function SheetOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
   return (
     <SheetPrimitive.Overlay
-      ref={ref}
       data-slot="sheet-overlay"
       className={cn(
         'fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0',
@@ -40,7 +37,7 @@ const SheetOverlay = React.forwardRef<
       {...props}
     />
   );
-});
+}
 
 function SheetContent({
   className,

@@ -8,7 +8,7 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 | --------- | ----------------------------------------------------------------------------- |
 | Framework | Hydrogen 2026.4 on **React Router 7** (not Remix), Vite 8                     |
 | Runtime   | Oxygen (Shopify's edge worker hosting)                                        |
-| UI        | React 18 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives |
+| UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives |
 | Data      | Shopify **Storefront API** (guest checkout — no customer accounts)            |
 | Types     | `@shopify/hydrogen-codegen` → `*.generated.d.ts`                              |
 | Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                               |
