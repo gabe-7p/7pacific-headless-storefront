@@ -1,9 +1,9 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { Scroller } from '~/components/common/Scroller';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { PdpSection } from '~/components/product/PdpSection';
+import { imageWidths } from '~/lib/imageSizes';
 import type { ProductDetailCard } from '~/lib/productContent';
 
 const DetailCard = ({ card }: { card: ProductDetailCard }) => (
@@ -22,12 +22,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
       alt=""
       aspectRatio="5/6"
       crop="center"
-      srcSetOptions={{
-        intervals: 16,
-        startingWidth: 400,
-        incrementSize: 100,
-        placeholderWidth: 100,
-      }}
+      srcSetWidths={imageWidths(400, 100, 16)}
       sizes="(min-width: 1024px) min(calc((100vw - 6rem) / 3), 435px), (min-width: 640px) 45vw, 78vw"
       className="aspect-[32/45] w-full object-cover impulse:aspect-[5/6]"
     />

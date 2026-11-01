@@ -1,9 +1,9 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { LazyVideo } from '~/components/common/LazyVideo';
 import { HOME_ROSTER } from '~/content/home';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /**
  * "The Roster" — three full-bleed media bands stacked with no gap, with the
@@ -29,7 +29,7 @@ export const Roster = () => (
       height={HOME_ROSTER.image.height}
       alt={HOME_ROSTER.image.alt}
       loading="lazy"
-      sizes="100vw"
+      sizes={IMAGE_SIZES.full}
       className="block w-full object-cover"
     />
     {/* Band 3: two crops side by side; the box ratio matches the crops. */}

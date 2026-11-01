@@ -8,7 +8,6 @@ import { BaselineMasthead } from '~/components/content/BaselineMasthead';
 import { STORE_LINKS } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
-import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/collections.$handle';
@@ -47,8 +46,6 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
   if (!collection) {
     throw notFound('Collection not found');
   }
-
-  redirectIfHandleIsLocalized(request, { handle, data: collection });
 
   return { collection };
 }

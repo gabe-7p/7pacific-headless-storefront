@@ -1,5 +1,7 @@
 import { parseGid } from '@shopify/hydrogen';
 
+import { CACHE_ONE_DAY } from '~/lib/http';
+
 import type { Route } from './+types/[robots.txt]';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
@@ -16,8 +18,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     status: 200,
     headers: {
       'Content-Type': 'text/plain',
-
-      'Cache-Control': `max-age=${60 * 60 * 24}`,
+      'Cache-Control': CACHE_ONE_DAY,
     },
   });
 }
@@ -65,8 +66,8 @@ Crawl-delay: 1
 /**
  * This function generates disallow rules that generally follow what Shopify's
  * Online Store has as defaults for their robots.txt — minus rules for URLs
- * this storefront can't produce: no /blogs or /search routes (no blog, no
- * search UI), no /policies routes, and no collection sort/filter params (the
+ * this storefront can't produce: no /blogs or /search routes (the journal
+ * lives at /journal; there's no search UI), no /policies routes, and no collection sort/filter params (the
  * collection page renders the merchandised order, unsorted and unfiltered).
  */
 function generalDisallowRules({ shopId, sitemapUrl }: { shopId?: string; sitemapUrl?: string }) {

@@ -55,11 +55,11 @@ const recommended = storefront.query(RECOMMENDED_QUERY, ...).catch((error: Error
 
 The typed result is keyed off the literal query string. After editing a `#graphql` string, run `pnpm graphql:generate` (or rely on `pnpm dev`/`build`, which run `--codegen`). A stale type is caught by `pnpm type-check` in CI.
 
-## Use Hydrogen's `<Image>` and `<Money>`
+## Images through `common/Image`, prices through `common/Price`
 
-Render Storefront images with `<Image data={...} sizes="..." />` (responsive srcset, CDN sizing) and prices with `<Money data={...} />` — don't hand-roll `<img>` or format currency manually.
+Render Storefront and Shopify Files images with the repo's `common/Image` (`<Image data sizes />`, `sizes` presets in `lib/imageSizes.ts`) and every money value with `common/Price` (`brand` / `compact` / `cart` formats) — never a bare `<img>`, never Hydrogen's `Image`/`Money` directly at a call site, never hand-formatted currency. The two wrappers are the only files that import those Hydrogen components, so the implementation behind them can change without a call-site hunt; `common/Image.test.tsx` pins the rendered `srcset`/`sizes` contract.
 
-This is not just a bandwidth nicety. A bare `<img>` pointing at a full-size CDN file makes every visitor's browser shrink a 20-megapixel photo to a card, and the GPU path browsers use for that aliases fine, regular textures (the knit on the quarter-zip) into visible wave bands. Re-uploading at a different size does not fix it; the only fix is an image delivered at the slot's own pixel size, which `<Image>` with `sizes` (and `aspectRatio` + `crop` for a cropped slot) does. Metafield JSON that carries plain URLs (`product_details`) still goes through `<Image src=...>`, not `<img>`.
+The image rule is not just a bandwidth nicety. A bare `<img>` pointing at a full-size CDN file makes every visitor's browser shrink a 20-megapixel photo to a card, and the GPU path browsers use for that aliases fine, regular textures (the knit on the quarter-zip) into visible wave bands. Re-uploading at a different size does not fix it; the only fix is an image delivered at the slot's own pixel size, which `<Image>` with `sizes` (and `aspectRatio` + `crop` for a cropped slot) does. Metafield JSON that carries plain URLs (`product_details`) still goes through `<Image src=...>`, not `<img>`.
 
 ## The "color = separate product" data model
 

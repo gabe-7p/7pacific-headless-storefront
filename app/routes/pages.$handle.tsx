@@ -4,7 +4,6 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { notFound } from '~/lib/http';
-import { redirectIfHandleIsLocalized } from '~/lib/redirect';
 import { buildMeta } from '~/lib/seo';
 
 import type { Route } from './+types/pages.$handle';
@@ -20,7 +19,7 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
   });
 };
 
-export async function loader({ context, request, params }: Route.LoaderArgs) {
+export async function loader({ context, params }: Route.LoaderArgs) {
   if (!params.handle) {
     throw notFound('Page not found');
   }
@@ -35,8 +34,6 @@ export async function loader({ context, request, params }: Route.LoaderArgs) {
   if (!page) {
     throw notFound('Page not found');
   }
-
-  redirectIfHandleIsLocalized(request, { handle: params.handle, data: page });
 
   return {
     page,

@@ -4,12 +4,7 @@ import { Link } from 'react-router';
 
 import { useNewsletterDialog } from '~/components/common/NewsletterDialog';
 import { Button } from '~/components/ui/button';
-
-/**
- * Content files mark membership CTAs with this href instead of a real path;
- * `Cta` turns it into a button that opens the newsletter dialog.
- */
-export const NEWSLETTER_HREF = '#newsletter';
+import { NEWSLETTER_HREF } from '~/content/links';
 
 /**
  * The brand CTA label device: text + trailing ArrowRight. On hover (or

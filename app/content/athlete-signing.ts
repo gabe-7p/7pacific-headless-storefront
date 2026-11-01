@@ -306,7 +306,7 @@ const KENNETH_PIERCE = {
  * Test, "how to work out without a trainer." Base: Indianapolis, ~11.2K
  * followers.
  */
-export const OWEN_PLATT = {
+const OWEN_PLATT = {
   chrome: {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',

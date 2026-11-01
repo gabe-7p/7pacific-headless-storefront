@@ -5,8 +5,16 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { CONTACT } from '~/content/contact';
+import {
+  collectErrors,
+  type FormResult,
+  readField,
+  REQUIRED_MESSAGE_MESSAGE,
+  REQUIRED_NAME_MESSAGE,
+  validateEmail,
+  validateRequired,
+} from '~/lib/forms';
 import { buildMeta } from '~/lib/seo';
-import { EMAIL_RE, INVALID_EMAIL_MESSAGE } from '~/lib/validation';
 
 import type { Route } from './+types/pages.contact-us';
 
@@ -24,23 +32,20 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { page };
 }
 
-type ContactErrors = Partial<Record<'name' | 'email' | 'message', string>>;
+type ContactResponse = FormResult<'name' | 'email' | 'message'>;
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: Route.ActionArgs): Promise<ContactResponse> {
   const form = await request.formData();
-  const name = String(form.get('name') ?? '').trim();
-  const email = String(form.get('email') ?? '').trim();
-  const message = String(form.get('message') ?? '').trim();
-
-  const errors: ContactErrors = {};
-  if (!name) errors.name = 'Please enter your name.';
-  if (!EMAIL_RE.test(email)) errors.email = INVALID_EMAIL_MESSAGE;
-  if (!message) errors.message = 'Please enter a message.';
-  if (Object.keys(errors).length > 0) return { ok: false as const, errors };
+  const errors = collectErrors({
+    name: validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE),
+    email: validateEmail(readField(form, 'email')),
+    message: validateRequired(readField(form, 'message'), REQUIRED_MESSAGE_MESSAGE),
+  });
+  if (errors) return { ok: false, errors };
 
   // TODO: deliver the message (Shopify contact endpoint / email provider).
   // Storefront API has no contact mutation; wire this to the chosen provider.
-  return { ok: true as const };
+  return { ok: true };
 }
 
 const fieldClass =

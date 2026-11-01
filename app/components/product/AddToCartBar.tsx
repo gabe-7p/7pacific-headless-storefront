@@ -5,6 +5,7 @@ import { AddToCartButton } from '~/components/cart/AddToCartButton';
 import { CtaLabel } from '~/components/common/Cta';
 import { useAside } from '~/components/layout/Aside';
 import { buttonVariants } from '~/components/ui/button';
+import { ANALYTICS_EVENT, productAddedToCartProperties } from '~/lib/analytics';
 import { cn } from '~/lib/cn';
 
 /**
@@ -23,19 +24,10 @@ export const AddToCartBar = ({
 
   const handleAddToCart = () => {
     if (selectedVariant?.availableForSale) {
-      posthog.capture('product_added_to_cart', {
-        product_handle: selectedVariant.product.handle,
-        variant_id: selectedVariant.id,
-        variant_title: selectedVariant.title,
-        quantity: 1,
-        price: selectedVariant.price.amount,
-        currency: selectedVariant.price.currencyCode,
-      });
-      posthog.logger.info('cart add requested', {
-        product_handle: selectedVariant.product.handle,
-        variant_id: selectedVariant.id,
-        quantity: 1,
-      });
+      posthog.capture(
+        ANALYTICS_EVENT.productAddedToCart,
+        productAddedToCartProperties(selectedVariant)
+      );
     }
     open('cart');
   };

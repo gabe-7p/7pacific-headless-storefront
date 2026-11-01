@@ -1,4 +1,3 @@
-import { Image } from '@shopify/hydrogen';
 import { ArrowUpRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
@@ -6,12 +5,14 @@ import { Link } from 'react-router';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { InstagramIcon } from '~/components/common/icons';
+import { Image } from '~/components/common/Image';
 import { Logo } from '~/components/common/Logo';
 import { CornerBrackets, SectionLabel } from '~/components/common/Readout';
 import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent, ScaleMarkerPercent } from '~/content/athlete-signing';
 import { BRAND } from '~/lib/brand';
 import { cn } from '~/lib/cn';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** The page's recurring readout-label treatment — the shared spec-strip class. */
 const MONO_LABEL = SPEC_LINE_CLASS;
@@ -79,7 +80,7 @@ const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
         height={hero.image.height}
         alt={hero.image.alt}
         loading="lazy"
-        sizes="(min-width: 768px) 50vw, 100vw"
+        sizes={IMAGE_SIZES.half}
         className={cn(
           'absolute inset-0 size-full',
           hero.image.fit === 'contain' ? 'object-contain' : 'object-cover'

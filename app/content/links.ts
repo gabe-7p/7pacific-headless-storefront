@@ -28,3 +28,9 @@ export const STORE_LINKS = {
  * homepage. Not linked in any navigation.
  */
 export const HOMEPAGE_COLLECTION_HANDLE = 'homepage-first-drop';
+
+/**
+ * Content files mark membership CTAs with this href instead of a real path;
+ * `common/Cta` turns it into a button that opens the newsletter dialog.
+ */
+export const NEWSLETTER_HREF = '#newsletter';

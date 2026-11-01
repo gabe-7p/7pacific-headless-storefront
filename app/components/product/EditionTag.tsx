@@ -1,6 +1,6 @@
 import { cn } from '~/lib/cn';
 
-export type EditionStatus = 'live' | 'soon' | 'archived';
+type EditionStatus = 'live' | 'soon' | 'archived';
 
 const isEditionStatus = (value: string): value is EditionStatus =>
   value === 'live' || value === 'soon' || value === 'archived';

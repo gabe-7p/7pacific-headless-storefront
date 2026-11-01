@@ -1,9 +1,9 @@
-import { Image } from '@shopify/hydrogen';
-
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { PRODUCT_BRAND_BANNER } from '~/content/product-page';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /**
  * "For Intensity. Not Errands." brand section shown on every PDP — a hero
@@ -27,7 +27,7 @@ export const BrandBanner = () => {
             height={images.hero.height}
             alt=""
             loading="lazy"
-            sizes="(min-width: 1400px) 1360px, 100vw"
+            sizes={IMAGE_SIZES.pageWide}
             className="h-[22rem] w-full object-cover md:h-[30rem] lg:h-[34rem]"
           />
           <div className="absolute inset-0 flex justify-center px-6 pt-10 text-center md:justify-end md:pt-14 lg:pr-[6%]">
@@ -56,7 +56,7 @@ export const BrandBanner = () => {
             height={images.bottomLeft.height}
             alt=""
             loading="lazy"
-            sizes="(min-width: 1400px) 670px, 50vw"
+            sizes={IMAGE_SIZES.pageHalf}
             className="aspect-square w-full object-cover md:aspect-[4/3]"
           />
           <Image
@@ -65,7 +65,7 @@ export const BrandBanner = () => {
             height={images.bottomRight.height}
             alt=""
             loading="lazy"
-            sizes="(min-width: 1400px) 670px, 50vw"
+            sizes={IMAGE_SIZES.pageHalf}
             className="aspect-square w-full object-cover md:aspect-[4/3]"
           />
         </div>

@@ -23,7 +23,7 @@ export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
   const emailId = useId();
   const submitting = fetcher.state !== 'idle';
   const succeeded = fetcher.data?.ok === true;
-  const error = fetcher.data && !fetcher.data.ok ? fetcher.data.error : undefined;
+  const error = fetcher.data && !fetcher.data.ok ? fetcher.data.errors.email : undefined;
   const { placeholder, submitLabel, successMessage } = BRAND.newsletter;
 
   useEffect(() => {

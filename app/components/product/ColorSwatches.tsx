@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { cn } from '~/lib/cn';
 import type { ColorSwatch } from '~/lib/colors';
-import { getVariantUrl } from '~/lib/variants';
+import { productUrl } from '~/lib/urls';
 
 /**
  * Per-index stagger for the card-hover cascade — matches the live theme's
@@ -94,7 +94,7 @@ export const ColorSwatches = ({
               </span>
             )}
             <Link
-              to={getVariantUrl({ handle: swatch.handle, selectedOptions })}
+              to={productUrl(swatch.handle, selectedOptions)}
               prefetch="intent"
               title={cascade ? undefined : swatch.name}
               aria-label={swatch.name}

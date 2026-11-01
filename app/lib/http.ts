@@ -4,3 +4,6 @@
  * never `throw new Error` — that would surface as a 500.
  */
 export const notFound = (message = 'Not found') => new Response(message, { status: 404 });
+
+/** `Cache-Control` for the crawler surfaces (robots, sitemaps): one day. */
+export const CACHE_ONE_DAY = `max-age=${60 * 60 * 24}`;

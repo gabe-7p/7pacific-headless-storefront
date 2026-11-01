@@ -23,7 +23,7 @@ Review PR `$ARGUMENTS.pr` against our standards for the Hydrogen storefront.
 2. **Type safety** — no `any`; generated GraphQL types imported (never hand-written); nullable Storefront fields guarded (`noUncheckedIndexedAccess`); `import type` for type-only imports.
 3. **GraphQL & data fetching** — co-located `#graphql` `const`s ending `as const`, shared shapes as fragments ([graphql-fragments.md](../rules/graphql-fragments.md)); `Promise.all` (no waterfalls); deferred below-the-fold data `.catch`-guarded; sensible caching; `PRIVATE_*` tokens never client-side.
 4. **Accessibility** — semantic elements; `alt` on images; real, keyboard-reachable controls; labeled inputs; color isn't the only signal.
-5. **Performance** — Hydrogen `<Image>` with `sizes`; pagination on growable lists; defer below-the-fold work; no needless client JS.
+5. **Performance** — images through `common/Image` with `sizes` (presets in `lib/imageSizes.ts`), never a bare `<img>`; pagination on growable lists; defer below-the-fold work; no needless client JS.
 6. **SEO** — route `meta` (title/description), canonical + OG where relevant, product JSON-LD; legacy URLs preserved or 301'd.
 7. **Code style** — `const` arrow components (never `function`); Tailwind utilities, no inline `style={{}}`; self-documenting names; comments explain _why_; **docs updated alongside the change** (see CLAUDE.md → Documentation discipline).
 
