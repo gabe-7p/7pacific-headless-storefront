@@ -21,16 +21,38 @@ type PostHogEnv = {
 export const POSTHOG_KEY_META = 'posthog-key';
 export const POSTHOG_HOST_META = 'posthog-host';
 
+/** Where the request is being served from — decides whether PostHog runs. */
+export type PostHogRuntime = {
+  /** `import.meta.env.DEV`: a local `pnpm dev`. */
+  isDev: boolean;
+  /** The request's hostname. */
+  hostname: string;
+};
+
+/**
+ * Oxygen serves everything that isn't the custom domain — PR previews and the
+ * environments' own URLs — from `*.myshopify.dev`. Visits there are our own
+ * testing, not shoppers.
+ */
+export const isOxygenPreviewHost = (hostname: string): boolean =>
+  hostname.endsWith('.myshopify.dev');
+
 /**
  * Returns `null` when PostHog should stay off: no key/host configured, or a
- * local `pnpm dev` without the `PUBLIC_POSTHOG_DEV=true` opt-in (so day-to-day
- * dev traffic never lands in the project).
+ * local `pnpm dev` / an Oxygen preview host without the `PUBLIC_POSTHOG_DEV=true`
+ * opt-in — so neither day-to-day dev traffic nor preview-deployment testing
+ * lands in the project as sessions, even if an environment carries the
+ * production key.
  */
-export const getPostHogConfig = (env: PostHogEnv, isDev: boolean): PostHogConfig | null => {
+export const getPostHogConfig = (
+  env: PostHogEnv,
+  { isDev, hostname }: PostHogRuntime
+): PostHogConfig | null => {
   const key = env.PUBLIC_POSTHOG_KEY;
   const host = env.PUBLIC_POSTHOG_HOST;
   if (!key || !host) return null;
-  if (isDev && env.PUBLIC_POSTHOG_DEV !== 'true') return null;
+  const isTestTraffic = isDev || isOxygenPreviewHost(hostname);
+  if (isTestTraffic && env.PUBLIC_POSTHOG_DEV !== 'true') return null;
   return { key, host };
 };
 

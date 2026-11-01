@@ -25,7 +25,7 @@ import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
 import { getColorSwatches } from '~/lib/product/colors';
 import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/product/content';
 import { PRODUCT_QUERY, type ProductData, RECOMMENDATIONS_QUERY } from '~/lib/product/queries';
-import { ProductProvider, useProductForm } from '~/lib/product/store';
+import { ProductProvider, resolveSelectedVariant, useProductForm } from '~/lib/product/store';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
 import { productUrl } from '~/lib/urls';
@@ -129,7 +129,7 @@ const ProductPage = () => {
   const { product, productDetails, techStack, specCard, recommendations } =
     useLoaderData<typeof loader>();
   const { selectedVariant: formVariant } = useProductForm();
-  const selectedVariant = formVariant ?? product.selectedOrFirstAvailableVariant;
+  const selectedVariant = resolveSelectedVariant(formVariant, product);
 
   const { title, descriptionHtml } = product;
 
