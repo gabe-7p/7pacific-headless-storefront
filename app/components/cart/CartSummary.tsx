@@ -1,22 +1,22 @@
 import { usePostHog } from '@posthog/react';
-import { CartForm, type OptimisticCart } from '@shopify/hydrogen';
-import { useEffect, useRef } from 'react';
-import { useFetcher } from 'react-router';
-import type { CartApiQueryFragment } from 'storefrontapi.generated';
 
 import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
 import { Price } from '~/components/common/Price';
 import { Button } from '~/components/ui/button';
 import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics';
+import { useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 
-type CartSummaryProps = {
-  cart: OptimisticCart<CartApiQueryFragment | null>;
-  layout: CartLayout;
-};
+export const CartSummary = ({ layout }: { layout: CartLayout }) => {
+  const subtotal = useCart((state) => state.data.cost.subtotalAmount);
+  const pending = useCart((state) => state.pending);
+  const revalidating = useCart((state) => state.revalidating === true);
+  // Totals are the server's; while a price-affecting change is in flight they
+  // read as pending rather than showing a stale number at full strength.
+  const totalsPending =
+    (pending.cost ?? (pending.lines.size > 0 || pending.discountCodes.size > 0)) || revalidating;
 
-export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
   return (
     <div
       aria-labelledby="cart-summary"
@@ -31,29 +31,29 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
             'border-border-subtle border-t lg:w-80 lg:flex-none lg:border-t-0 lg:bg-panel lg:p-6'
       )}
     >
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-baseline justify-between" aria-busy={totalsPending}>
         {/* Live's drawer letterspaces the label; the /cart page keeps it plain. */}
         <span
           className={cn('text-sm', layout === 'aside' && 'text-[9.6px] tracking-[0.3em] uppercase')}
         >
           Subtotal
         </span>
-        <span className="font-mono text-sm font-medium">
+        <span
+          className={cn(
+            'font-mono text-sm font-medium transition-opacity',
+            totalsPending && 'opacity-50'
+          )}
+        >
           {/* Cart format ("$74.00"): the live cart shows cents without a
               currency suffix. Product cards and the PDP use the brand format. */}
-          {cart?.cost?.subtotalAmount?.amount ? (
-            <Price data={cart.cost.subtotalAmount} variant="cart" />
-          ) : (
-            '-'
-          )}
+          <Price data={subtotal} variant="cart" /> {subtotal?.amount ? null : '-'}
         </span>
       </div>
 
-      {/* Discount / gift-card entry only on the full cart page (cleaner drawer) */}
+      {/* Discount entry only on the full cart page (cleaner drawer) */}
       {layout === 'page' && (
-        <div className="mt-4 space-y-3 text-sm">
-          <CartDiscounts discountCodes={cart?.discountCodes} />
-          <CartGiftCard giftCardCodes={cart?.appliedGiftCards} />
+        <div className="mt-4 text-sm">
+          <CartDiscounts />
         </div>
       )}
 
@@ -61,21 +61,21 @@ export const CartSummary = ({ cart, layout }: CartSummaryProps) => {
       <p className="mt-3 text-center text-xs text-support">
         Shipping, taxes, and discount codes calculated at checkout.
       </p>
-      <CartCheckoutActions cart={cart} layout={layout} />
+      <CartCheckoutActions layout={layout} />
     </div>
   );
 };
 
-const CartCheckoutActions = ({ cart, layout }: CartSummaryProps) => {
+const CartCheckoutActions = ({ layout }: { layout: CartLayout }) => {
   const posthog = usePostHog();
-  const checkoutUrl = cart?.checkoutUrl;
+  const cart = useCart((state) => state.data);
 
-  if (!checkoutUrl) return null;
+  if (!cart.checkoutUrl) return null;
   return (
     // The cart's one Ember moment (7PA-230) — the brand variant's mono-caps
     // arrow-slide device, full width.
     <Cta
-      href={checkoutUrl}
+      href={cart.checkoutUrl}
       variant="brand"
       size="lg"
       className="mt-5 w-full"
@@ -88,151 +88,58 @@ const CartCheckoutActions = ({ cart, layout }: CartSummaryProps) => {
   );
 };
 
-const CartDiscounts = ({
-  discountCodes,
-}: {
-  discountCodes?: CartApiQueryFragment['discountCodes'];
-}) => {
-  const codes: Array<string> =
-    discountCodes?.filter((discount) => discount.applicable)?.map(({ code }) => code) || [];
+/** Discount codes: one remove form per applied code, one apply form. */
+const CartDiscounts = () => {
+  const { formProps, register } = useCartForm();
+  const discountCodes = useCart((state) => state.data.discountCodes);
+  const errors = useCart((state) => state.errors.discountCodes);
+  const codes = discountCodes.filter((discount) => discount.applicable).map(({ code }) => code);
+  const errorMessage = [...errors.values()].flatMap((group) => group.userErrors)[0]?.message;
 
   return (
     <div>
-      <dl hidden={!codes.length} className="flex items-center justify-between">
-        <dt className="text-support">Discount(s)</dt>
-        <UpdateDiscountForm>
-          <div className="flex items-center gap-2">
-            <code>{codes?.join(', ')}</code>
-            <button type="submit" className="underline" aria-label="Remove discount">
-              Remove
-            </button>
-          </div>
-        </UpdateDiscountForm>
-      </dl>
-
-      <UpdateDiscountForm discountCodes={codes}>
-        <div className="flex gap-2">
-          <label htmlFor="discount-code-input" className="sr-only">
-            Discount code
-          </label>
-          <input
-            id="discount-code-input"
-            type="text"
-            name="discountCode"
-            placeholder="Discount code"
-            className="border-border-subtle flex-1 border px-2 py-1.5"
-          />
-          <Button type="submit" variant="outline" size="sm" aria-label="Apply discount code">
-            Apply
-          </Button>
-        </div>
-      </UpdateDiscountForm>
-    </div>
-  );
-};
-
-const UpdateDiscountForm = ({
-  discountCodes,
-  children,
-}: {
-  discountCodes?: Array<string>;
-  children: React.ReactNode;
-}) => {
-  return (
-    <CartForm
-      route="/cart"
-      action={CartForm.ACTIONS.DiscountCodesUpdate}
-      inputs={{ discountCodes: discountCodes || [] }}
-    >
-      {children}
-    </CartForm>
-  );
-};
-
-const CartGiftCard = ({
-  giftCardCodes,
-}: {
-  giftCardCodes: CartApiQueryFragment['appliedGiftCards'] | undefined;
-}) => {
-  const giftCardCodeInput = useRef<HTMLInputElement>(null);
-  const giftCardAddFetcher = useFetcher({ key: 'gift-card-add' });
-
-  useEffect(() => {
-    if (giftCardAddFetcher.data && giftCardCodeInput.current) {
-      giftCardCodeInput.current.value = '';
-    }
-  }, [giftCardAddFetcher.data]);
-
-  return (
-    <div>
-      {giftCardCodes && giftCardCodes.length > 0 && (
-        <dl className="space-y-1">
-          <dt className="text-support">Applied Gift Card(s)</dt>
-          {giftCardCodes.map((giftCard) => (
-            <RemoveGiftCardForm key={giftCard.id} giftCardId={giftCard.id}>
-              <div className="flex items-center gap-2">
-                <code>***{giftCard.lastCharacters}</code>
-                <Price data={giftCard.amountUsed} variant="cart" />
-                <button type="submit" className="underline">
+      {codes.length > 0 && (
+        <dl className="flex items-center justify-between">
+          <dt className="text-support">Discount(s)</dt>
+          <dd className="flex items-center gap-3">
+            {codes.map((code) => (
+              <form key={code} {...formProps()} className="flex items-center gap-2">
+                <input type="hidden" {...register('discountCode', { value: code })} />
+                <code>{code}</code>
+                <button
+                  type="submit"
+                  {...register('discount-remove')}
+                  className="underline"
+                  aria-label={`Remove discount ${code}`}
+                >
                   Remove
                 </button>
-              </div>
-            </RemoveGiftCardForm>
-          ))}
+              </form>
+            ))}
+          </dd>
         </dl>
       )}
 
-      <AddGiftCardForm fetcherKey="gift-card-add">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            name="giftCardCode"
-            placeholder="Gift card code"
-            ref={giftCardCodeInput}
-            className="border-border-subtle flex-1 border px-2 py-1.5"
-          />
-          <Button
-            type="submit"
-            variant="outline"
-            size="sm"
-            disabled={giftCardAddFetcher.state !== 'idle'}
-          >
-            Apply
-          </Button>
-        </div>
-      </AddGiftCardForm>
+      <form {...formProps()} className="mt-2 flex gap-2">
+        <label htmlFor="discount-code-input" className="sr-only">
+          Discount code
+        </label>
+        <input
+          id="discount-code-input"
+          type="text"
+          {...register('discountCode', { defaultValue: '' })}
+          placeholder="Discount code"
+          className="border-border-subtle m-0 flex-1 rounded-none border px-2 py-1.5"
+        />
+        <Button type="submit" {...register('discount-apply')} variant="outline" size="sm">
+          Apply
+        </Button>
+      </form>
+      {errorMessage && (
+        <p className="mt-2 text-xs text-ember" role="alert">
+          {errorMessage}
+        </p>
+      )}
     </div>
-  );
-};
-
-const AddGiftCardForm = ({
-  fetcherKey,
-  children,
-}: {
-  fetcherKey?: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <CartForm fetcherKey={fetcherKey} route="/cart" action={CartForm.ACTIONS.GiftCardCodesAdd}>
-      {children}
-    </CartForm>
-  );
-};
-
-const RemoveGiftCardForm = ({
-  giftCardId,
-  children,
-}: {
-  giftCardId: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <CartForm
-      route="/cart"
-      action={CartForm.ACTIONS.GiftCardCodesRemove}
-      inputs={{ giftCardCodes: [giftCardId] }}
-    >
-      {children}
-    </CartForm>
   );
 };

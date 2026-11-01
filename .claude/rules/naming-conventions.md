@@ -17,16 +17,19 @@ Single-record fetch/lookup helpers reveal their not-found behavior in the name:
 // ✅ returns null when not found — caller must check
 export const getProductByHandle = async (
   { handle }: { handle: string },
-  storefront: Storefront
+  storefront: StorefrontClient
 ) => {
-  const { product } = await storefront.query(PRODUCT_QUERY, { variables: { handle } });
-  return product; // may be null
+  const { data } = await storefront.graphql(PRODUCT_QUERY, {
+    variables: { handle },
+    cache: Cache.short(),
+  });
+  return data?.product ?? null; // may be null
 };
 
 // ✅ throws when not found — caller gets a guaranteed value
 export const getProductByHandleOrThrow = async (
   { handle }: { handle: string },
-  storefront: Storefront
+  storefront: StorefrontClient
 ) => {
   const product = await getProductByHandle({ handle }, storefront);
   if (!product) throw new Response('Product not found', { status: 404 });
@@ -38,9 +41,9 @@ Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists` for single-record f
 
 ## GraphQL
 
-- Query/mutation string constants: **`SCREAMING_SNAKE_CASE`** ending in `_QUERY` / `_MUTATION` / `_FRAGMENT` (e.g. `PRODUCT_QUERY`, `CART_QUERY_FRAGMENT`).
-- Fragment names: **PascalCase** (`ProductCard`, `CollectionCard`) → codegen emits `ProductCardFragment`.
-- Operation names: PascalCase (`query Product` → `ProductQuery`). See [graphql-fragments.md](graphql-fragments.md).
+- Document constants (`gql()` calls): **`SCREAMING_SNAKE_CASE`** ending in `_QUERY` / `_MUTATION` / `_FRAGMENT` (e.g. `PRODUCT_QUERY`, `PRODUCT_CARD_FRAGMENT`).
+- Fragment names: **PascalCase** (`ProductCard`, `ColorSiblings`); the exported data type is `<Name>Data` (`ProductCardData`), read off `StorefrontApi.ResultOf`.
+- Operation names: PascalCase (`query Product`). See [graphql-fragments.md](graphql-fragments.md).
 
 ## Files & routes
 

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import type { ProductFragment } from 'storefrontapi.generated';
 
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { cn } from '~/lib/cn';
+import type { ProductData } from '~/lib/productQueries';
 
 /**
  * Mobile/tablet sticky add-to-cart bar (7PA-166). The in-card bar can't pin via
@@ -11,11 +11,7 @@ import { cn } from '~/lib/cn';
  * again when it returns. From 769px up (live's breakpoint, where the floating
  * card appears) the static in-card bar takes over.
  */
-export const StickyAddToCart = ({
-  selectedVariant,
-}: {
-  selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
-}) => {
+export const StickyAddToCart = ({ product }: { product: ProductData }) => {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(false);
 
@@ -44,7 +40,7 @@ export const StickyAddToCart = ({
           pinned ? 'translate-y-0' : 'translate-y-full'
         )}
       >
-        <AddToCartBar selectedVariant={selectedVariant} />
+        <AddToCartBar product={product} />
       </div>
     </>
   );

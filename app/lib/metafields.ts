@@ -26,7 +26,10 @@ type MetafieldImage = {
   height?: number | null;
 };
 
-type ImageReferenceMetafield = { reference?: { image?: MetafieldImage | null } | null } | null;
+type ImageReferenceMetafield = {
+  // A file_reference resolves to a union of media types; only MediaImage has `image`.
+  reference?: { __typename?: string; image?: MetafieldImage | null } | null;
+} | null;
 
 /**
  * Pull the `<Image data>`-shaped image out of a `file_reference` (image)

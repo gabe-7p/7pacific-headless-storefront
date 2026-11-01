@@ -79,19 +79,30 @@ describe('Image', () => {
     expect(widths).toHaveLength(16);
   });
 
-  it('passes loading, alt overrides and a plain src through', () => {
-    const img = renderImg(
-      <Image
-        src={KNIT.url}
-        width={KNIT.width}
-        height={KNIT.height}
-        alt=""
-        loading="lazy"
-        sizes="100vw"
-      />
-    );
+  it('sizes the box inline: width 100% + the source aspect ratio (beats an aspect-* utility)', () => {
+    const img = renderImg(<Image data={KNIT} sizes="33vw" className="aspect-square" />);
+    expect(img.style.width).toBe('100%');
+    expect(img.style.aspectRatio).toBe(`${KNIT.width}/${KNIT.height}`);
     expect(img.getAttribute('loading')).toBe('lazy');
+  });
+
+  it('keeps a percentage width (the PDP mobile hero is 75% wide)', () => {
+    const img = renderImg(<Image data={KNIT} width="75%" sizes="75vw" />);
+    expect(img.style.width).toBe('75%');
+  });
+
+  it('fixed mode: a plain src with intrinsic dimensions ships a 1x/2x/3x density srcset at that size', () => {
+    const img = renderImg(<Image src={KNIT.url} width={2130} height={2662} alt="" />);
+    const candidates = parseSrcSet(img.getAttribute('srcset') ?? '');
+    expect(candidates.map((c) => c.descriptor)).toEqual(['1x', '2x', '3x']);
+    expect(candidates[0]?.url.searchParams.get('width')).toBe('2130');
+    expect(candidates[0]?.url.searchParams.get('height')).toBe('2662');
+    expect(candidates[0]?.url.searchParams.get('crop')).toBe('center');
+    expect(candidates[1]?.url.searchParams.get('width')).toBe('4260');
+    expect(img.getAttribute('width')).toBe('2130');
+    expect(img.getAttribute('height')).toBe('2662');
+    expect(img.style.aspectRatio).toBe('2130/2662');
     expect(img.getAttribute('alt')).toBe('');
-    expect(img.getAttribute('srcset')).toContain('width=');
+    expect(img.getAttribute('sizes')).toBeNull();
   });
 });

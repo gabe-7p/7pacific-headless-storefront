@@ -29,6 +29,8 @@ export default [
       '**/build/',
       '**/dist/',
       '**/*.generated.d.ts',
+      // Written at the project root by @shopify/hydrogen/ts-plugin (gitignored).
+      '**/*-graphql-env.d.ts',
       '**/.react-router/',
     ],
   },

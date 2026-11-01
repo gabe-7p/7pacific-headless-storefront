@@ -35,7 +35,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Type-check
+      - name: Hydrogen agent skills in sync with the installed package
+        run: pnpm exec hydrogen skills check
+
+      - name: Type-check (+ Storefront API query validation)
         run: pnpm type-check
 
       - name: Lint

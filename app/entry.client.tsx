@@ -1,11 +1,12 @@
 import { PostHogProvider } from '@posthog/react';
-import { NonceProvider } from '@shopify/hydrogen';
 import { posthog } from 'posthog-js';
 import { startTransition, StrictMode } from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 
+import { NonceProvider } from '~/lib/nonce';
 import { POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/posthog';
+import { initPostHog } from '~/lib/posthog.client';
 
 // Runtime config rendered into <head> by root.tsx `Layout` (see lib/posthog.ts).
 // Absent → PostHog stays uninitialized and every capture is a no-op.
@@ -15,21 +16,7 @@ const posthogKey = readMeta(POSTHOG_KEY_META);
 const posthogHost = readMeta(POSTHOG_HOST_META);
 
 if (posthogKey && posthogHost) {
-  posthog.init(posthogKey, {
-    api_host: posthogHost,
-    // Pinned defaults: pageviews on every history change (client-side
-    // navigations included), plus pageleave.
-    defaults: '2026-05-30',
-    capture_exceptions: true,
-    // Tag the app's own fetches (loader/action requests) with the visitor's
-    // ids, so lib/posthog.server.ts can attribute server-side events.
-    tracing_headers: [window.location.hostname],
-    session_recording: { maskAllInputs: true },
-    logs: {
-      serviceName: 'storefront-web',
-      environment: import.meta.env.MODE,
-    },
-  });
+  initPostHog({ key: posthogKey, host: posthogHost });
 }
 
 if (!window.location.origin.includes('webcache.googleusercontent.com')) {

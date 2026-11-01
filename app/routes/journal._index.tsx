@@ -1,3 +1,4 @@
+import { Cache, gql } from '@shopify/hydrogen';
 import { Link, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -6,6 +7,7 @@ import { JOURNAL } from '~/content/journal';
 import { notFound } from '~/lib/http';
 import { formatJournalDate } from '~/lib/journal';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/journal._index';
 
@@ -13,12 +15,12 @@ export const meta: Route.MetaFunction = () =>
   buildMeta({ title: JOURNAL.title, description: JOURNAL.tagline });
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { blog } = await context.storefront.query(JOURNAL_QUERY, {
+  const { data } = await context.get(storefrontClientContext).graphql(JOURNAL_QUERY, {
     // Curated, rarely-changing content.
-    cache: context.storefront.CacheLong(),
+    cache: Cache.long(),
   });
-  if (!blog) throw notFound('Journal not found');
-  return { articles: blog.articles.nodes };
+  if (!data?.blog) throw notFound('Journal not found');
+  return { articles: data.blog.articles.nodes };
 }
 
 const Journal = () => {
@@ -55,7 +57,7 @@ const Journal = () => {
   );
 };
 
-const JOURNAL_QUERY = `#graphql
+const JOURNAL_QUERY = gql(`
   query Journal($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     blog(handle: "journal") {
@@ -70,6 +72,6 @@ const JOURNAL_QUERY = `#graphql
       }
     }
   }
-` as const;
+`);
 
 export default Journal;

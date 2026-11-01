@@ -1,12 +1,12 @@
-import type { CartQueryDataReturn } from '@shopify/hydrogen';
-import { CartForm } from '@shopify/hydrogen';
-import { data, type HeadersFunction, useLoaderData } from 'react-router';
+import { useEffect } from 'react';
 
 import { CartMain } from '~/components/cart/CartMain';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
 import { STORE_LINKS } from '~/content/links';
+import { useCart } from '~/lib/cart';
 import { buildMeta } from '~/lib/seo';
+import { publishCartViewed } from '~/lib/shopifyAnalytics';
 
 import type { Route } from './+types/cart';
 
@@ -14,106 +14,21 @@ export const meta: Route.MetaFunction = () => {
   return buildMeta({ title: 'Cart' });
 };
 
-export const headers: HeadersFunction = ({ actionHeaders }) => actionHeaders;
-
-export async function action({ request, context }: Route.ActionArgs) {
-  const { cart, posthog } = context;
-
-  const formData = await request.formData();
-
-  const { action, inputs } = CartForm.getFormInput(formData);
-
-  if (!action) {
-    throw new Error('No action provided');
-  }
-
-  let status = 200;
-  let result: CartQueryDataReturn;
-
-  switch (action) {
-    case CartForm.ACTIONS.LinesAdd:
-      result = await cart.addLines(inputs.lines);
-      break;
-    case CartForm.ACTIONS.LinesUpdate:
-      result = await cart.updateLines(inputs.lines);
-      break;
-    case CartForm.ACTIONS.LinesRemove:
-      result = await cart.removeLines(inputs.lineIds);
-      break;
-    case CartForm.ACTIONS.DiscountCodesUpdate: {
-      const formDiscountCode = inputs.discountCode;
-
-      // The submitted code plus any codes already applied on the cart.
-      const discountCodes = (formDiscountCode ? [formDiscountCode] : []) as Array<string>;
-      discountCodes.push(...inputs.discountCodes);
-
-      result = await cart.updateDiscountCodes(discountCodes);
-      break;
-    }
-    case CartForm.ACTIONS.GiftCardCodesAdd: {
-      const formGiftCardCode = inputs.giftCardCode;
-
-      const giftCardCodes = (formGiftCardCode ? [formGiftCardCode] : []) as Array<string>;
-
-      result = await cart.addGiftCardCodes(giftCardCodes);
-      break;
-    }
-    case CartForm.ACTIONS.GiftCardCodesRemove: {
-      const appliedGiftCardIds = inputs.giftCardCodes as Array<string>;
-      result = await cart.removeGiftCardCodes(appliedGiftCardIds);
-      break;
-    }
-    case CartForm.ACTIONS.BuyerIdentityUpdate: {
-      result = await cart.updateBuyerIdentity({
-        ...inputs.buyerIdentity,
-      });
-      break;
-    }
-    default:
-      throw new Error(`${action} cart action is not defined`);
-  }
-
-  const cartId = result?.cart?.id;
-  const headers = cartId ? cart.setCartId(result.cart.id) : new Headers();
-  const { cart: cartResult, errors, warnings } = result;
-
-  posthog?.capture({
-    event: 'cart_modified',
-    properties: {
-      action,
-      total_quantity: cartResult?.totalQuantity,
-      error_count: errors?.length ?? 0,
-      warning_count: warnings?.length ?? 0,
-    },
-  });
-
-  const redirectTo = formData.get('redirectTo') ?? null;
-  if (typeof redirectTo === 'string') {
-    status = 303;
-    headers.set('Location', redirectTo);
-  }
-
-  return data(
-    {
-      cart: cartResult,
-      errors,
-      warnings,
-      analytics: {
-        cartId,
-      },
-    },
-    { status, headers }
-  );
-}
-
-export async function loader({ context }: Route.LoaderArgs) {
-  const { cart } = context;
-  return await cart.get();
-}
-
+/**
+ * The full cart page. Cart data comes from the client store (`useCart`),
+ * which the root loader seeds; mutations post to `/api/cart` through the
+ * line/discount forms, so this route has no loader or action of its own.
+ */
 const Cart = () => {
-  const cart = useLoaderData<typeof loader>();
-  const hasItems = (cart?.totalQuantity ?? 0) > 0;
+  const totalQuantity = useCart((state) => state.data.totalQuantity);
+  const cart = useCart((state) => state.data);
+  const hasItems = totalQuantity > 0;
+
+  useEffect(() => {
+    publishCartViewed(cart);
+    // Once per visit to the page, not per cart change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">
@@ -127,7 +42,7 @@ const Cart = () => {
           </TextLink>
         )}
       </div>
-      <CartMain layout="page" cart={cart} />
+      <CartMain layout="page" />
     </div>
   );
 };

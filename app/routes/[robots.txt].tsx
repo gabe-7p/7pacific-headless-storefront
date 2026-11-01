@@ -1,17 +1,19 @@
-import { parseGid } from '@shopify/hydrogen';
+import { Cache, gql } from '@shopify/hydrogen';
 
 import { CACHE_ONE_DAY } from '~/lib/http';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/[robots.txt]';
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url);
 
-  const { shop } = await context.storefront.query(ROBOTS_QUERY, {
-    cache: context.storefront.CacheLong(),
-  });
+  const { data } = await context
+    .get(storefrontClientContext)
+    .graphql(ROBOTS_QUERY, { cache: Cache.long() });
 
-  const shopId = parseGid(shop.id).id;
+  // The numeric id out of `gid://shopify/Shop/123` — the checkout paths use it.
+  const shopId = data?.shop.id.split('/').pop();
   const body = robotsTxtData({ url: url.origin, shopId });
 
   return new Response(body, {
@@ -67,11 +69,13 @@ Crawl-delay: 1
  * This function generates disallow rules that generally follow what Shopify's
  * Online Store has as defaults for their robots.txt — minus rules for URLs
  * this storefront can't produce: no /blogs or /search routes (the journal
- * lives at /journal; there's no search UI), no /policies routes, and no collection sort/filter params (the
+ * lives at /journal; there's no search UI), no /policies routes, plus
+ * `/api/` (Hydrogen's cart/proxy/MCP endpoints are not pages), and no collection sort/filter params (the
  * collection page renders the merchandised order, unsorted and unfiltered).
  */
 function generalDisallowRules({ shopId, sitemapUrl }: { shopId?: string; sitemapUrl?: string }) {
   return `Disallow: /admin
+Disallow: /api/
 Disallow: /cart
 Disallow: /orders
 Disallow: /checkouts/
@@ -90,11 +94,10 @@ Disallow: /.well-known/shopify/monorail
 ${sitemapUrl ? `Sitemap: ${sitemapUrl}` : ''}`;
 }
 
-const ROBOTS_QUERY = `#graphql
-  query StoreRobots($country: CountryCode, $language: LanguageCode)
-   @inContext(country: $country, language: $language) {
+const ROBOTS_QUERY = gql(`
+  query StoreRobots {
     shop {
       id
     }
   }
-` as const;
+`);

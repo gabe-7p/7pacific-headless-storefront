@@ -1,10 +1,10 @@
 # 7Pacific Storefront
 
-Headless storefront for **7Pacific** (DTC athletic apparel), built on **Shopify Hydrogen + Oxygen**. We're migrating the live store from a customized Impulse Liquid theme to Hydrogen, shipping in small, independently deployable units.
+Headless storefront for **7Pacific** (DTC athletic apparel): a **React Router 7** app with **Shopify Hydrogen 2026.10** (the library: Storefront client, cart, product form, analytics) on **Oxygen**. Migrated from a customized Impulse Liquid theme in small, independently deployable units.
 
-- **Framework**: Hydrogen 2026.4 on React Router 7 · React 19 · Vite 8
+- **Framework**: React Router 7 + Hydrogen 2026.10 · React 19 · Vite 8
 - **Styling**: Tailwind CSS v4 + shadcn/ui (Radix headless primitives, vendored into `app/components/ui/`)
-- **Data**: Shopify Storefront API (typed via GraphQL codegen) — guest checkout, no customer accounts
+- **Data**: Shopify Storefront API 2026-10 (`gql()` documents typed in place by Hydrogen's TypeScript plugin) — guest checkout, no customer accounts
 - **Hosting**: Oxygen (preview deploy per PR, production on `main`)
 
 New here? Read [CLAUDE.md](CLAUDE.md) for conventions and [docs/](docs/README.md) for architecture and decisions.
@@ -37,21 +37,17 @@ pnpm shopify hydrogen link      # one-time: link this repo to the Hydrogen store
 pnpm shopify hydrogen env pull  # writes real values into .env
 ```
 
-Or write `.env` by hand. Every variable is listed in [docs/architecture.md](docs/architecture.md#environment--secrets). `SESSION_SECRET` can be generated locally:
-
-```bash
-openssl rand -hex 32
-```
+Or write `.env` by hand. Every variable is listed in [docs/architecture.md](docs/architecture.md#environment--secrets).
 
 > `.env` is gitignored and holds secrets — never commit it. See [docs/architecture.md](docs/architecture.md#environment--secrets) for which vars are public vs secret.
 
 ## Develop
 
 ```bash
-pnpm dev          # mini-oxygen dev server at http://localhost:3000 (runs codegen)
+pnpm dev          # Vite + MiniOxygen (workerd) dev server at http://localhost:3000
 ```
 
-On boot you should see `[storefront] Connected to "<your shop>"` — confirmation the Storefront client is wired correctly.
+On boot you should see `[storefront] Connected to "<your shop>"` — confirmation the Storefront client is wired correctly. `GET /api/cart` returning `{"cart":null}` confirms Hydrogen's request handlers run in the root middleware.
 
 ## Common commands
 
@@ -60,21 +56,21 @@ On boot you should see `[storefront] Connected to "<your shop>"` — confirmatio
 | Dev server                   | `pnpm dev`                              |
 | Production build             | `pnpm build`                            |
 | Preview the production build | `pnpm preview`                          |
-| Type check                   | `pnpm type-check`                       |
+| Type check + GraphQL check   | `pnpm type-check`                       |
 | Lint                         | `pnpm lint`                             |
 | Format / check formatting    | `pnpm prettier` / `pnpm prettier:check` |
 | Unit tests (Vitest)          | `pnpm test`                             |
-| Regenerate GraphQL types     | `pnpm graphql:generate`                 |
+| Sync Hydrogen agent skills   | `pnpm exec hydrogen skills sync`        |
 | Dependency-boundary check    | `pnpm depcruise`                        |
 | Full pre-PR gate (in Claude) | the `/check` command — mirrors CI       |
 
 ## Quality gate
 
-Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): type-check, lint, format check, dependency rules, and build. Locally, a commit triggers the same checks on staged files via husky + lint-staged.
+Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): skills check, type-check (incl. `hydrogen gql check`), lint, format check, dependency rules, unit tests, and build. Locally, a commit triggers the same checks on staged files via husky + lint-staged.
 
 ## Deploy
 
-Oxygen deploys automatically from GitHub:
+Oxygen deploys automatically from GitHub (the workflow runs `shopify hydrogen deploy --assets-dir dist/client --worker-dir dist/server`, which builds first):
 
 - **Every PR** → a preview URL (smoke-test the migrated unit against the real store).
 - **`main`** → production.
@@ -87,7 +83,7 @@ See [docs/architecture.md](docs/architecture.md#deployment) for the deploy pipel
 app/
   routes/        one file per route; data loaders/actions live here
   components/    presentational components — layout/ cart/ product/ search/ common/ ui/ (shadcn primitives)
-  lib/           GraphQL fragments, context, session, shared utilities
+  lib/           storefront client + router contexts, cart/product stores, gql documents, csp, sitemap, shared utilities
   styles/        Tailwind + minimal globals
 docs/            architecture, decision records, doc index
 .claude/         agent settings, /check & /review_pr commands, coding rules

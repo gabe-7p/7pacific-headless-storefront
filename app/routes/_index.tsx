@@ -1,3 +1,4 @@
+import { Cache, gql } from '@shopify/hydrogen';
 import { useLoaderData } from 'react-router';
 
 import { FadeIn, MotionProvider } from '~/components/common/Motion';
@@ -12,6 +13,7 @@ import { FEATURE_FLAGS } from '~/content/flags';
 import { HOMEPAGE_COLLECTION_HANDLE } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/_index';
 
@@ -26,23 +28,23 @@ export const meta: Route.MetaFunction = () => {
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
+  const storefront = context.get(storefrontClientContext);
+
   // Grid order is merchant-controlled: the manual homepage collection's
   // product order IS the display order (reorder in Shopify admin).
-  const { collection } = await context.storefront.query(HOME_PRODUCTS_QUERY, {
+  const { data } = await storefront.graphql(HOME_PRODUCTS_QUERY, {
     variables: { handle: HOMEPAGE_COLLECTION_HANDLE },
-    cache: context.storefront.CacheLong(),
+    cache: Cache.long(),
   });
 
-  if (collection?.products.nodes.length) {
-    return { products: collection.products.nodes };
+  if (data?.collection?.products.nodes.length) {
+    return { products: data.collection.products.nodes };
   }
 
   // Fall back to all products only if the collection is missing/empty, so a
   // misconfigured collection never blanks the homepage.
-  const { products } = await context.storefront.query(HOME_PRODUCTS_FALLBACK_QUERY, {
-    cache: context.storefront.CacheLong(),
-  });
-  return { products: products.nodes };
+  const fallback = await storefront.graphql(HOME_PRODUCTS_FALLBACK_QUERY, { cache: Cache.long() });
+  return { products: fallback.data?.products.nodes ?? [] };
 }
 
 const Homepage = () => {
@@ -76,30 +78,34 @@ const Homepage = () => {
   );
 };
 
-const HOME_PRODUCTS_QUERY = `#graphql
-  ${PRODUCT_CARD_FRAGMENT}
-  query HomeProducts($handle: String!, $country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
+const HOME_PRODUCTS_QUERY = gql(
+  `
+    query HomeProducts($handle: String!, $country: CountryCode, $language: LanguageCode)
+      @inContext(country: $country, language: $language) {
+      collection(handle: $handle) {
+        products(first: 12) {
+          nodes {
+            ...ProductCard
+          }
+        }
+      }
+    }
+  `,
+  [PRODUCT_CARD_FRAGMENT]
+);
+
+const HOME_PRODUCTS_FALLBACK_QUERY = gql(
+  `
+    query HomeProductsFallback($country: CountryCode, $language: LanguageCode)
+      @inContext(country: $country, language: $language) {
       products(first: 12) {
         nodes {
           ...ProductCard
         }
       }
     }
-  }
-` as const;
-
-const HOME_PRODUCTS_FALLBACK_QUERY = `#graphql
-  ${PRODUCT_CARD_FRAGMENT}
-  query HomeProductsFallback($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 12) {
-      nodes {
-        ...ProductCard
-      }
-    }
-  }
-` as const;
+  `,
+  [PRODUCT_CARD_FRAGMENT]
+);
 
 export default Homepage;

@@ -1,9 +1,8 @@
-import type { ProductCardFragment } from 'storefrontapi.generated';
-
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Container } from '~/components/common/Container';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { HOME_FIRST_DROP } from '~/content/home';
+import type { ProductCardData } from '~/lib/fragments';
 
 /**
  * "The Starting Lineup" — heading + the full-catalog product grid. Mirrors the
@@ -12,7 +11,7 @@ import { HOME_FIRST_DROP } from '~/content/home';
  * collection). The section id is the hero's secondary-CTA anchor until the
  * Shoot #2 film is live.
  */
-export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardFragment> }) => (
+export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardData> }) => (
   <Container id="starting-lineup" className="scroll-mt-(--header-h) py-9 md:py-12">
     <SectionHeader
       heading={HOME_FIRST_DROP.heading}

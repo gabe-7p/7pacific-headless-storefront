@@ -11,7 +11,7 @@ Code conventions for the 7Pacific Hydrogen storefront. Always follow these in co
 
 3. **Data fetching lives in loaders/actions and `lib/`, never in components.** Components receive typed props and render them. See `.claude/rules/module-boundaries.md`.
 
-4. **GraphQL is co-located ``#graphql`` template strings ending in `as const`**; shared shapes are fragments in `app/lib/fragments.ts`. Import generated types from `storefrontapi.generated` — never hand-write response types. See `.claude/rules/graphql-fragments.md`.
+4. **GraphQL is `gql()` documents** (from `@shopify/hydrogen`) with fragments composed through the second argument; shared shapes live in `app/lib/fragments.ts`. Types come from `StorefrontApi.ResultOf<typeof DOC>` — never hand-write response types. Every read passes an explicit `cache` (`Cache.long()` / `Cache.short()`). Loaders read the client from `storefrontClientContext`; the cart is read with `useCart`, never a loader. See `.claude/rules/graphql-fragments.md`.
 
 5. **Tailwind utility classes only — no inline `style={{}}` objects.** Use `clsx`/variants for conditional classes. For behaviorally-hard interactive widgets (modal/drawer, dropdown, select, accordion, tooltip) use a shadcn/ui primitive from `app/components/ui/` (Radix behavior, Tailwind-styled, no runtime kit); hand-build everything visual/brand. See `.claude/rules/ui-components.md`.
 
@@ -25,7 +25,7 @@ Code conventions for the 7Pacific Hydrogen storefront. Always follow these in co
 
 10. **Comments explain *why*, not *what*** — code should be self-documenting through good names. Marketing/product copy lives in typed `content/*.ts`, not inline in JSX.
 
-11. **Never edit generated files** (`*.generated.d.ts`, `.react-router/types/*`) — change the source and regenerate with `pnpm graphql:generate`.
+11. **Never edit generated or synced files** (`.react-router/types/*`, the root `*-graphql-env.d.ts`, `.claude/skills/hydrogen-*`) — change the source; the Hydrogen ts-plugin and `hydrogen skills sync` regenerate them.
 
 12. **Never expose `PRIVATE_*` / secret env vars to the browser** — they are server-only (loaders/actions).
 

@@ -1,14 +1,16 @@
-import { Analytics, getPaginationVariables } from '@shopify/hydrogen';
+import { Cache, gql } from '@shopify/hydrogen';
 import { redirect, useLoaderData } from 'react-router';
 
+import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
-import { PaginatedResourceSection } from '~/components/common/PaginatedResourceSection';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
+import { CollectionViewedTracker } from '~/components/layout/AnalyticsTrackers';
 import { STORE_LINKS } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/collections.$handle';
 
@@ -17,6 +19,8 @@ import type { Route } from './+types/collections.$handle';
     generic title/description header, so both entry points to ED. 01 — the nav's
     Shop link and /drops/baseline — read the same above the fold. */
 const SHOP_ALL_HANDLE = STORE_LINKS.shopAll.replace('/collections/', '');
+
+const PAGE_SIZE = 24;
 
 export const meta: Route.MetaFunction = ({ loaderData }) => {
   return buildMeta({
@@ -27,35 +31,39 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
 
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   const { handle } = params;
-  const { storefront } = context;
-  const paginationVariables = getPaginationVariables(request, { pageBy: 24 });
-
   if (!handle) throw redirect('/');
 
-  const { collection } = await storefront.query(COLLECTION_QUERY, {
-    // Product listings change with availability/merchandising: short cache.
-    cache: storefront.CacheShort(),
+  const url = new URL(request.url);
+  const { data, errors } = await context.get(storefrontClientContext).graphql(COLLECTION_QUERY, {
     // No sort or filter variables: the collection's own merchandised order is
     // the display order (drag to reorder in the Shopify admin).
-    variables: {
-      handle,
-      ...paginationVariables,
-    },
+    variables: { handle, first: PAGE_SIZE, after: url.searchParams.get('after') || undefined },
+    // Product listings change with availability/merchandising: short cache.
+    cache: Cache.short(),
   });
+  if (errors) console.error(errors);
+  const collection = data?.collection;
+  if (!collection) throw notFound('Collection not found');
 
-  if (!collection) {
-    throw notFound('Collection not found');
-  }
-
-  return { collection };
+  const { products, ...rest } = collection;
+  return {
+    collection: rest,
+    products: products.nodes,
+    pageInfo: products.pageInfo,
+    // Everything but the cursor: a change here resets the accumulated grid.
+    dataSearch: handle,
+  };
 }
 
 const Collection = () => {
-  const { collection } = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<typeof loader>();
+  const { collection } = loaderData;
+  const { nodes, pageInfo, isLoading, loadMore } = useLoadMore(loaderData);
   const isShopAll = collection.handle === SHOP_ALL_HANDLE;
 
   return (
     <div>
+      <CollectionViewedTracker id={collection.id} handle={collection.handle} />
       {isShopAll ? (
         <BaselineMasthead withDropLink />
       ) : (
@@ -75,55 +83,52 @@ const Collection = () => {
           the viewport (matches live) — intentionally not wrapped in the
           max-width Container the rest of the site uses. */}
       <div className="w-full px-5 pb-10">
-        <PaginatedResourceSection
-          connection={collection.products}
-          resourcesClassName="grid grid-cols-1 gap-5 lg:grid-cols-2"
-        >
-          {({ node: product }) => (
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          {nodes.map((product) => (
             <ProductCard key={product.id} product={product} label={product.label?.value} />
-          )}
-        </PaginatedResourceSection>
-
-        <Analytics.CollectionView
-          data={{ collection: { id: collection.id, handle: collection.handle } }}
+          ))}
+        </div>
+        <LoadMore
+          pathname={`/collections/${collection.handle}`}
+          pageInfo={pageInfo}
+          isLoading={isLoading}
+          onLoad={loadMore}
         />
       </div>
     </div>
   );
 };
 
-const COLLECTION_QUERY = `#graphql
-  ${PRODUCT_CARD_FRAGMENT}
-  query Collection(
-    $handle: String!
-    $country: CountryCode
-    $language: LanguageCode
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
-  ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
-      id
-      handle
-      title
-      description
-      products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
-        nodes {
-          ...ProductCard
-          label: metafield(namespace: "theme", key: "label") {
-            value
+const COLLECTION_QUERY = gql(
+  `
+    query Collection(
+      $handle: String!
+      $first: Int!
+      $after: String
+      $country: CountryCode
+      $language: LanguageCode
+    ) @inContext(country: $country, language: $language) {
+      collection(handle: $handle) {
+        id
+        handle
+        title
+        description
+        products(first: $first, after: $after) {
+          nodes {
+            ...ProductCard
+            label: metafield(namespace: "theme", key: "label") {
+              value
+            }
           }
-        }
-        pageInfo {
-          hasPreviousPage
-          hasNextPage
-          endCursor
-          startCursor
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }
     }
-  }
-` as const;
+  `,
+  [PRODUCT_CARD_FRAGMENT]
+);
 
 export default Collection;

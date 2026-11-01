@@ -1,3 +1,4 @@
+import { Cache, gql } from '@shopify/hydrogen';
 import { useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -5,6 +6,7 @@ import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
+import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/pages.$handle';
 
@@ -24,20 +26,16 @@ export async function loader({ context, params }: Route.LoaderArgs) {
     throw notFound('Page not found');
   }
 
-  const { page } = await context.storefront.query(PAGE_QUERY, {
-    variables: {
-      handle: params.handle,
-    },
-    cache: context.storefront.CacheLong(),
+  const { data } = await context.get(storefrontClientContext).graphql(PAGE_QUERY, {
+    variables: { handle: params.handle },
+    cache: Cache.long(),
   });
 
-  if (!page) {
+  if (!data?.page) {
     throw notFound('Page not found');
   }
 
-  return {
-    page,
-  };
+  return { page: data.page };
 }
 
 const Page = () => {
@@ -53,7 +51,7 @@ const Page = () => {
   );
 };
 
-const PAGE_QUERY = `#graphql
+const PAGE_QUERY = gql(`
   query Page(
     $language: LanguageCode,
     $country: CountryCode,
@@ -71,6 +69,6 @@ const PAGE_QUERY = `#graphql
       }
     }
   }
-` as const;
+`);
 
 export default Page;

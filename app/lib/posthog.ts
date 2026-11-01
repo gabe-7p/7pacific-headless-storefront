@@ -10,7 +10,7 @@
  */
 import type { ErrorResponse } from 'react-router';
 
-type PostHogConfig = { key: string; host: string };
+export type PostHogConfig = { key: string; host: string };
 
 type PostHogEnv = {
   PUBLIC_POSTHOG_KEY?: string;

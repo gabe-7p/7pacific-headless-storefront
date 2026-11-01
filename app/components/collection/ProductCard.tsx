@@ -1,5 +1,4 @@
 import { Link } from 'react-router';
-import type { ProductCardFragment } from 'storefrontapi.generated';
 
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
@@ -7,12 +6,13 @@ import { Price } from '~/components/common/Price';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { getColorSwatches } from '~/lib/colors';
+import type { ProductCardData } from '~/lib/fragments';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { getShortTitle } from '~/lib/productDisplay';
 import { productUrl } from '~/lib/urls';
 
 type ProductCardProps = {
-  product: ProductCardFragment;
+  product: ProductCardData;
   /** Optional badge text (e.g. the `theme.label` metafield, "Sold out"). */
   label?: string | null;
   /** Eager-load the featured image (for above-the-fold cards). Default lazy. */

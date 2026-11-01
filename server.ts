@@ -1,38 +1,38 @@
-import { createRequestHandler, storefrontRedirect } from '@shopify/hydrogen';
+import { createRequestHandler, RouterContextProvider } from 'react-router';
 import * as serverBuild from 'virtual:react-router/server-build';
 
-import { createHydrogenRouterContext } from '~/lib/context';
+import { envContext } from '~/lib/env';
+import { createPostHogClient, posthogContext } from '~/lib/posthog.server';
 
+/**
+ * The Oxygen worker entry. Hydrogen 2026.10 is a library, so this is a plain
+ * React Router request handler: it threads the worker bindings (env, the
+ * sub-request cache, waitUntil) onto the router context, and the root
+ * middleware in app/root.tsx builds the Storefront client and runs Shopify's
+ * request handlers per request.
+ */
 export default {
   async fetch(request: Request, env: Env, executionContext: ExecutionContext): Promise<Response> {
-    let posthog: HydrogenAdditionalContext['posthog'];
+    const posthog = createPostHogClient(env, request);
 
     try {
-      const hydrogenContext = await createHydrogenRouterContext(request, env, executionContext);
-      posthog = hydrogenContext.posthog;
-
-      const handleRequest = createRequestHandler({
-        build: serverBuild,
-        mode: process.env.NODE_ENV,
-        getLoadContext: () => hydrogenContext,
-      });
-
-      const response = await handleRequest(request);
-
-      if (hydrogenContext.session.isPending) {
-        response.headers.set('Set-Cookie', await hydrogenContext.session.commit());
-      }
-
-      if (response.status === 404) {
-        // Shopify-configured URL redirects; passes the 404 through when none match.
-        return storefrontRedirect({
-          request,
-          response,
-          storefront: hydrogenContext.storefront,
+      const url = new URL(request.url);
+      if (url.pathname.includes('//')) {
+        return new Response(null, {
+          status: 301,
+          headers: { location: url.pathname.replace(/[/]+/g, '/') },
         });
       }
 
-      return response;
+      const routerContext = new RouterContextProvider();
+      routerContext.cache = await caches.open('hydrogen-v1');
+      routerContext.env = env;
+      routerContext.waitUntil = executionContext.waitUntil.bind(executionContext);
+      routerContext.set(envContext, env);
+      routerContext.set(posthogContext, posthog);
+
+      const handleRequest = createRequestHandler(serverBuild, process.env.NODE_ENV);
+      return await handleRequest(request, routerContext as never);
     } catch (error) {
       console.error(error);
       posthog?.captureException(error);

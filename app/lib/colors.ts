@@ -15,7 +15,10 @@
 
 export type ColorSwatch = { handle: string; name: string; hex: string };
 
+// Metafield references are a union of every referenceable type; non-products
+// carry only `__typename` and are skipped below.
 type SiblingNode = {
+  __typename?: string;
   handle?: string;
   colorName?: { value?: string | null } | null;
   colorHex?: { value?: string | null } | null;
