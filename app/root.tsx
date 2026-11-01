@@ -117,7 +117,10 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     footer,
     cartData: cartResult.data,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
-    posthog: getPostHogConfig(env, import.meta.env.DEV),
+    posthog: getPostHogConfig(env, {
+      isDev: import.meta.env.DEV,
+      hostname: new URL(request.url).hostname,
+    }),
     // Meta Pixel (lib/analytics/meta-pixel.client.ts): the ID reaches the
     // browser through this loader, never through a client-side env read.
     metaPixelId: env.PUBLIC_META_PIXEL_ID || null,

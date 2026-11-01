@@ -62,6 +62,11 @@ Hydrogen 2026.10 has no implicit default: `graphql()` without a `cache` strategy
 
 `lib/csp.ts` builds the header and `entry.server.tsx` sets the per-request nonce on React Router's `<Scripts>` and `<ShopifyScripts nonce>`. A dropped nonce leaves pages rendering while hydration (cart, size picker, analytics) is silently dead — check the browser console for CSP violations after touching either. Analytics destinations (Shopify's, PostHog, the Meta Pixel) receive events only once Customer Privacy allows: a destination with no events in a consent-required region is working as designed, not broken. The Meta Pixel adds two of its own: `fbevents.js` is injected lazily from the first delivered event (never from `setup()`), and Meta's script enforces the pixel's Traffic Permissions allow-list — on a domain that isn't listed (localhost, an unlisted preview) it logs a warning and sends nothing, which is configuration, not a bug (docs/META_PIXEL_TESTING.md §0).
 
+Two bus mechanics bite when touching the trackers (`components/analytics/Trackers.tsx`) or the PostHog bridge (`lib/analytics/posthog.client.ts`):
+
+- **The bus buffers and replays.** Events published before a destination is ready (the PDP's `product_viewed` fires on hydration, before the root's `PostHogBridge` effect) are replayed the moment the destination's `setup` resolves — so the PostHog destination's `setup` is async and resolves only after `applyConsent` has opted the SDK in. Resolve it earlier and the replay lands in an opted-out SDK, which drops the events without a trace.
+- **`ProductProvider` re-hydrates one render late.** On a client-side navigation between color siblings the store still holds the previous product's variant for one render; `resolveSelectedVariant` (`lib/product/store.ts`) falls back to the loader's selection until the store catches up. Read the PDP's variant through it, never `formVariant ?? product.selectedOrFirstAvailableVariant`, or `product_viewed` fires twice per swatch click with mismatched ids.
+
 ## Images through `common/Image`, prices through `common/Price`
 
 Render Storefront and Shopify Files images with the repo's `common/Image` (`<Image data sizes />`, `sizes` presets in `lib/imageSizes.ts`) and every money value with `common/Price` (`brand` / `compact` / `cart` formats) — never a bare `<img>`, never hand-formatted currency. `common/Image.test.tsx` pins the rendered `srcset`/`sizes`/inline-style contract. Two things about `Image` that bite: it writes an inline `width` + `aspect-ratio` (from the source dimensions) that **beats any `aspect-*` or `w-*` utility** on the call site — narrow a box with the `width="75%"` prop, and know that `aspect-square` on a 4:5 product image is dead; and a `src` image given a numeric `width`/`height` switches to _fixed_ mode (1x/2x/3x at that size, full resolution), while `data` images are _fluid_ (width-descriptor ladder + `sizes`).
@@ -113,6 +118,8 @@ Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry im
 ## Runtime config beats `VITE_*`
 
 `import.meta.env.VITE_*` is inlined at **build** time, so every Oxygen environment gets the same value. Anything that differs between Production and Preview (like the PostHog project key) is a `PUBLIC_*` Oxygen var, read from `context.env` and passed to the client through the root loader.
+
+PostHog has a second gate on top of the env: `getPostHogConfig` (`lib/analytics/posthog.ts`) returns `null` for `pnpm dev` and for any `*.myshopify.dev` host (Oxygen previews and the environments' own URLs) unless `PUBLIC_POSTHOG_DEV=true`, so our own testing never lands in the project as sessions — don't bypass it by reading the key somewhere else.
 
 ## No `any`
 

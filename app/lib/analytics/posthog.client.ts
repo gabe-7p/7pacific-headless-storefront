@@ -61,7 +61,18 @@ const getCustomerPrivacy = () => {
   return customerPrivacy?.analyticsProcessingAllowed ? customerPrivacy : null;
 };
 
-/** Registers PostHog as a destination on the bus and follows consent. Runs once. */
+/**
+ * Registers PostHog as a destination on the bus and follows consent. Runs once.
+ *
+ * `setup` resolves only after PostHog mirrors Shopify's consent decision. The
+ * bus buffers everything published before a destination is ready — the PDP's
+ * `product_viewed` fires on hydration, before this bridge runs — and replays
+ * the buffer the moment setup resolves; replayed into a still-opted-out SDK
+ * those events are silently dropped (the hydration product view went missing
+ * on most page loads). If the Customer Privacy API never arrives, setup
+ * resolves anyway: PostHog stays opted out, which is the right outcome, and
+ * the bus stops holding events for it.
+ */
 const bridgePostHogToShopify = (analytics: StorefrontAnalytics) => {
   if (bridged) return;
   bridged = true;
@@ -89,17 +100,27 @@ const bridgePostHogToShopify = (analytics: StorefrontAnalytics) => {
           posthog.capture(ANALYTICS_EVENT.cartUpdated, cartUpdatedProperties(payload))
         ),
       ];
-      return () => unsubscribe.forEach((off) => off());
+      const teardown = () => unsubscribe.forEach((off) => off());
+
+      return new Promise<() => void>((resolve) => {
+        whenShopifyReady(
+          getCustomerPrivacy,
+          (customerPrivacy) => {
+            applyConsent(customerPrivacy);
+            resolve(teardown);
+          },
+          { onGiveUp: () => resolve(teardown) }
+        );
+      });
     },
   });
 
-  // Wait for the Customer Privacy API, then follow every later consent change
-  // through its DOM event.
+  // Every later consent change (the banner, the preferences dialog) arrives
+  // through this DOM event.
   document.addEventListener('visitorConsentCollected', () => {
     const customerPrivacy = getCustomerPrivacy();
     if (customerPrivacy) applyConsent(customerPrivacy);
   });
-  whenShopifyReady(getCustomerPrivacy, applyConsent);
 };
 
 /**

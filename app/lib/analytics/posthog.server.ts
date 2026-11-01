@@ -18,7 +18,10 @@ import { getPostHogConfig } from '~/lib/analytics/posthog';
  * client lives for exactly one request.
  */
 export const createPostHogClient = (env: Env, request: Request) => {
-  const config = getPostHogConfig(env, import.meta.env.DEV);
+  const config = getPostHogConfig(env, {
+    isDev: import.meta.env.DEV,
+    hostname: new URL(request.url).hostname,
+  });
   if (!config) return undefined;
 
   const distinctId = request.headers.get('X-POSTHOG-DISTINCT-ID');
