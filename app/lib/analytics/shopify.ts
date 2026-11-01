@@ -7,8 +7,8 @@ export { AnalyticsEvent };
 /**
  * The Shopify analytics bus that `<ShopifyScripts>` creates at
  * `window.Shopify.analytics` (browser only). Route and cart surfaces publish
- * to it; Shopify's own analytics and the PostHog destination consume from it,
- * gated by Customer Privacy consent.
+ * to it; Shopify's own analytics, the PostHog destination and the Meta Pixel
+ * destination consume from it, gated by Customer Privacy consent.
  */
 export const getAnalytics = (): StorefrontAnalytics | null =>
   typeof window === 'undefined' ? null : (window.Shopify?.analytics ?? null);

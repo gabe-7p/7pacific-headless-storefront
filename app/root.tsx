@@ -20,6 +20,7 @@ import {
 import favicon from '~/assets/favicon.svg';
 import {
   CartAnalyticsTracker,
+  MetaPixelBridge,
   PageViewedTracker,
   PostHogBridge,
 } from '~/components/analytics/Trackers';
@@ -202,6 +203,7 @@ const App = () => {
       <PageViewedTracker />
       <CartAnalyticsTracker />
       <PostHogBridge />
+      <MetaPixelBridge pixelId={data.metaPixelId} />
       {isBareChrome ? (
         <Outlet />
       ) : (

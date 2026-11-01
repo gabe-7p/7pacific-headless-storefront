@@ -3,14 +3,16 @@ import type { MoneyV2 } from '@shopify/hydrogen/storefront-api-types';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 
+import { connectMetaPixelToShopify } from '~/lib/analytics/meta-pixel.client';
 import { connectPostHogToShopify } from '~/lib/analytics/posthog.client';
 import { AnalyticsEvent, getAnalytics } from '~/lib/analytics/shopify';
+import { useNonce } from '~/lib/nonce';
 
 /**
  * Route-driven events for the Shopify analytics bus. Nothing publishes
  * itself: each surface mounts the tracker it owns, and cart deltas come from
  * `useCartAnalytics` (once, inside `CartProvider`). Destinations (Shopify
- * analytics, PostHog) receive them once Customer Privacy allows.
+ * analytics, PostHog, the Meta Pixel) receive them once Customer Privacy allows.
  */
 export const PageViewedTracker = () => {
   const { pathname, search } = useLocation();
@@ -70,5 +72,19 @@ export const CollectionViewedTracker = ({ id, handle }: { id: string; handle: st
 /** Registers PostHog as a bus destination and syncs its consent (client only). */
 export const PostHogBridge = () => {
   useEffect(() => connectPostHogToShopify(), []);
+  return null;
+};
+
+/**
+ * Registers the Meta Pixel as a bus destination (client only). `pixelId` is
+ * the root loader's `PUBLIC_META_PIXEL_ID`; null = pixel off, nothing loads.
+ * The nonce lets the lazily injected fbevents.js pass the CSP.
+ */
+export const MetaPixelBridge = ({ pixelId }: { pixelId: string | null }) => {
+  const nonce = useNonce();
+  useEffect(() => {
+    if (!pixelId) return;
+    return connectMetaPixelToShopify({ pixelId, nonce });
+  }, [pixelId, nonce]);
   return null;
 };
