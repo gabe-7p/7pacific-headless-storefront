@@ -33,7 +33,7 @@ import {
   POSTHOG_KEY_META,
 } from '~/lib/analytics/posthog';
 import { CartProvider } from '~/lib/cart';
-import { cartHandlers } from '~/lib/cart-handlers';
+import { cartHandlers } from '~/lib/cart.server';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 import { deferQuery } from '~/lib/http';
 import { useNonce } from '~/lib/nonce';

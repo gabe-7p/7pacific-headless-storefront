@@ -1,7 +1,7 @@
 import type { CartDataFromHandlers } from '@shopify/hydrogen';
 import { createCartComponents } from '@shopify/hydrogen/react';
 
-import type { cartHandlers } from '~/lib/cart-handlers';
+import type { cartHandlers } from '~/lib/cart.server';
 
 /** The cart as the store holds it, typed from the server handlers' query. */
 export type CartData = CartDataFromHandlers<typeof cartHandlers>;

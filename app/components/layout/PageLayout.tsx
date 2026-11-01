@@ -1,14 +1,9 @@
-import { useEffect, useRef } from 'react';
-
-import { CartMain } from '~/components/cart/CartMain';
+import { CartDrawer } from '~/components/cart/CartDrawer';
 import { NewsletterDialogProvider } from '~/components/common/NewsletterDialog';
 import { Announcement } from '~/components/layout/Announcement';
-import { Aside, useAside } from '~/components/layout/Aside';
+import { Aside } from '~/components/layout/Aside';
 import { Footer } from '~/components/layout/Footer';
 import { Header, HeaderMenu } from '~/components/layout/Header';
-import { publishCartViewed } from '~/lib/analytics/shopify';
-import { useCart } from '~/lib/cart';
-import { registerCartDrawerOpener } from '~/lib/cartDrawer';
 import type { FooterData, HeaderData } from '~/lib/fragments';
 
 type PageLayoutProps = {
@@ -27,7 +22,7 @@ export const PageLayout = ({
   return (
     <Aside.Provider>
       <NewsletterDialogProvider>
-        <CartAside />
+        <CartDrawer />
         <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
         {/* Sticky topbar offset by the announcement height: the announcement
             scrolls away with the page while the header pins — mirrors live. */}
@@ -41,33 +36,6 @@ export const PageLayout = ({
         <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
       </NewsletterDialogProvider>
     </Aside.Provider>
-  );
-};
-
-/**
- * The cart drawer. Opens from the header bag and the PDP's add-to-cart via
- * `useAside`, and from Shopify's `openCart` standard action (permalinks,
- * agents) via the lib/cartDrawer registry; publishes `cart_viewed` each time
- * it opens.
- */
-const CartAside = () => {
-  const { type, open } = useAside();
-  const cart = useCart((state) => state.data);
-  const cartRef = useRef(cart);
-  cartRef.current = cart;
-
-  useEffect(() => {
-    registerCartDrawerOpener(() => open('cart'));
-  }, [open]);
-
-  useEffect(() => {
-    if (type === 'cart') publishCartViewed(cartRef.current);
-  }, [type]);
-
-  return (
-    <Aside type="cart" heading="Cart">
-      <CartMain layout="aside" />
-    </Aside>
   );
 };
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
 
+import { useCartDrawer } from '~/components/cart/CartDrawer';
 import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
@@ -197,7 +198,7 @@ const HeaderMenuMobileToggle = () => {
  * store, so an optimistic add shows at once.
  */
 const CartBadge = () => {
-  const { open } = useAside();
+  const { open: openCart } = useCartDrawer();
   const count = useCart((state) => state.data.totalQuantity);
 
   return (
@@ -209,7 +210,7 @@ const CartBadge = () => {
       onClick={(e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
         e.preventDefault();
-        open('cart');
+        openCart();
       }}
     >
       <BagIcon className="size-7" />

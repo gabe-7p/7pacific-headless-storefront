@@ -1,7 +1,7 @@
 import { canAddToCart } from '@shopify/hydrogen';
 
+import { useCartDrawer } from '~/components/cart/CartDrawer';
 import { CtaLabel } from '~/components/common/Cta';
-import { useAside } from '~/components/layout/Aside';
 import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
 import type { ProductData } from '~/lib/product/queries';
@@ -17,14 +17,14 @@ import { useProductForm } from '~/lib/product/store';
  */
 export const AddToCartBar = ({ product }: { product: ProductData }) => {
   const { options, selectedVariant, register, formProps, pending } = useProductForm();
-  const { open } = useAside();
+  const { open: openCart } = useCartDrawer();
   const addable = canAddToCart(product, options);
 
   return (
     // The base layer caps every `form` at 400px from md up; the bar has to span
     // its card (and the full viewport when sticky), so opt this one out.
     <div className="[&>form]:max-w-none">
-      <form {...formProps({ afterSubmit: () => open('cart') })}>
+      <form {...formProps({ afterSubmit: openCart })}>
         <input type="hidden" {...register('merchandiseId', {})} />
         <input type="hidden" {...register('quantity', { value: 1 })} />
         {/* The PDP's one Ember moment (7PA-230) — the `brand` CTA device
