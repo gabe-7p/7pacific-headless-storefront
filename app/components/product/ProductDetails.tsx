@@ -16,7 +16,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
         wave bands when a browser shrinks them 6x to a card, and no upload
         size fixes that. `sizes` mirrors the Scroller's 3-up basis, and the
         100px srcset steps keep any remaining browser scaling under ~10%
-        (Hydrogen's 200px default left a 15% shrink that still showed). */}
+        (`common/Image`'s 200px default left a 15% shrink that still showed). */}
     <Image
       src={card.imageUrl}
       alt=""

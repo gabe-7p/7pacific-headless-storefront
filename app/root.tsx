@@ -1,5 +1,5 @@
 import { usePostHog } from '@posthog/react';
-import { Cache, handleShopifyRedirects, handleShopifyRoutes } from '@shopify/hydrogen';
+import { Cache } from '@shopify/hydrogen';
 import { ShopifyScripts } from '@shopify/hydrogen/react';
 import { useEffect } from 'react';
 import {
@@ -28,9 +28,8 @@ import {
 } from '~/components/layout/AnalyticsTrackers';
 import { CartProvider } from '~/lib/cart';
 import { cartHandlers } from '~/lib/cart-handlers';
-import { envContext } from '~/lib/env';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
-import { deferQuery } from '~/lib/loaders';
+import { deferQuery } from '~/lib/http';
 import { useNonce } from '~/lib/nonce';
 import {
   getPostHogConfig,
@@ -38,13 +37,8 @@ import {
   POSTHOG_HOST_META,
   POSTHOG_KEY_META,
 } from '~/lib/posthog';
-import { routeTemplates } from '~/lib/route-templates';
-import {
-  createRequestStorefrontClient,
-  I18N,
-  storefrontClientContext,
-  storefrontRequestContext,
-} from '~/lib/storefront';
+import { shopifyMiddleware } from '~/lib/shopifyMiddleware';
+import { I18N, routeTemplates, storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -52,51 +46,8 @@ import tailwindCss from './styles/tailwind.css?url';
 
 export type RootLoader = typeof loader;
 
-/**
- * The request lifecycle (Hydrogen 2026.10 is a library we compose, not a
- * framework that owns the request):
- *   1. one private Storefront API client per request;
- *   2. `handleShopifyRoutes` answers Shopify-owned URLs (/api/cart, checkout,
- *      cart/buy permalinks, the Storefront API proxy, MCP, ?variant= redirects)
- *      before the router runs;
- *   3. loaders read the client from `storefrontClientContext`;
- *   4. a 404 from the router falls through to Shopify's URL redirects;
- *   5. `applyResponseHeaders` forwards Shopify's cookies/cache headers — it
- *      MUST run on every app response or consent and checkout continuity break.
- */
-export const middleware: Route.MiddlewareFunction[] = [
-  async ({ context, request }, next) => {
-    const env = context.get(envContext);
-    const storefrontClient = createRequestStorefrontClient(
-      request,
-      env,
-      context.cache,
-      context.waitUntil
-    );
-    const requestContext = storefrontClient.requestContext;
-
-    // Decided synchronously: a Promise<Response> for handler-owned paths, else null.
-    const shopifyRoute = handleShopifyRoutes({
-      request,
-      requestContext,
-      storefrontClient,
-      routeTemplates,
-      handlers: [cartHandlers],
-    });
-    if (shopifyRoute) return await shopifyRoute;
-
-    context.set(storefrontClientContext, storefrontClient);
-    context.set(storefrontRequestContext, requestContext);
-
-    const response = await next();
-    if (response.status === 404) {
-      const redirect = await handleShopifyRedirects({ request, storefrontClient, routeTemplates });
-      if (redirect) return redirect;
-    }
-    requestContext.applyResponseHeaders(response.headers);
-    return response;
-  },
-];
+/** Every request runs through Hydrogen's lifecycle first — see lib/shopifyMiddleware. */
+export const middleware: Route.MiddlewareFunction[] = [shopifyMiddleware];
 
 /**
  * Root data (menus, shop identity) only revalidates on mutations and explicit
@@ -126,7 +77,7 @@ export function links() {
 }
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const env = context.get(envContext);
+  const { env } = context;
   const storefront = context.get(storefrontClientContext);
 
   // Below the fold: deferred and guarded (never throws).

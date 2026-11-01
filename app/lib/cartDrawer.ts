@@ -1,8 +1,9 @@
 /**
  * The cart drawer is a Radix Sheet owned by `layout/Aside`; its open function
- * lives in React state. This tiny registry lets non-React callers reach it:
- * the product form's `afterSubmit`, and Shopify's `openCart` standard action
- * (cart/buy permalinks, agents, apps), which is wired once the runtime loads.
+ * lives in React state. This tiny registry lets the one non-React caller reach
+ * it: Shopify's `openCart` standard action (cart/buy permalinks, agents, apps),
+ * which is wired once the runtime loads. React callers (the header bag,
+ * `product/AddToCartBar`) call `useAside().open('cart')` directly.
  */
 let opener: (() => void) | null = null;
 let configured = false;
@@ -24,5 +25,3 @@ export const registerCartDrawerOpener = (open: () => void) => {
   opener = open;
   configureOpenCartAction();
 };
-
-export const openCartDrawer = () => opener?.();

@@ -12,9 +12,10 @@ type NewsletterFormProps = {
 
 /**
  * The one newsletter signup form — owns the /api/newsletter fetcher,
- * submitting/succeeded states, and BRAND.newsletter copy. The footer is the
- * single signup per page (7PA-241: acquisition through community, not price —
- * the old site-wide popup and its boxed variant are gone).
+ * submitting/succeeded states, and BRAND.newsletter copy. It renders in two
+ * places: always in the footer, and in `NewsletterDialog` when a membership
+ * CTA is clicked (7PA-241: acquisition through community, not price — the old
+ * on-load site-wide popup and its boxed variant are gone).
  */
 export const NewsletterForm = ({ onSuccess }: NewsletterFormProps) => {
   const fetcher = useFetcher<NewsletterResponse>();

@@ -20,7 +20,7 @@ const sibling = (handle: string, name: string, hex: string) => ({
   colorHex: { value: hex },
 });
 
-/** Minimal fragment fixture — same shape codegen produces for ProductCard. */
+/** Minimal fixture — the `ProductCardData` shape derived from the ProductCard fragment. */
 const TEE: ProductCardData = {
   id: 'gid://shopify/Product/1',
   handle: 'tee-white',

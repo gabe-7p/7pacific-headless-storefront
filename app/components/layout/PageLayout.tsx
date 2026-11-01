@@ -45,8 +45,8 @@ export const PageLayout = ({
 };
 
 /**
- * The cart drawer. Opens from the header bag, from the PDP's add-to-cart
- * (`afterSubmit`) and from Shopify's `openCart` standard action (permalinks,
+ * The cart drawer. Opens from the header bag and the PDP's add-to-cart via
+ * `useAside`, and from Shopify's `openCart` standard action (permalinks,
  * agents) via the lib/cartDrawer registry; publishes `cart_viewed` each time
  * it opens.
  */

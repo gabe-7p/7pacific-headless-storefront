@@ -22,7 +22,7 @@ const first = collection.products.nodes[0]?.title;
 
 ## Don't expose private tokens to the browser
 
-`PUBLIC_*` env vars are safe client-side; `PRIVATE_STOREFRONT_API_TOKEN` and `SESSION_SECRET` are **server-only**. Never reference them in component code or pass them through loader return data.
+`PUBLIC_*` env vars are safe client-side; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only**. Never reference it in component code or pass it through loader return data.
 
 ## Avoid request waterfalls
 
@@ -42,7 +42,7 @@ const [productResult, recommendedResult] = await Promise.all([
 
 ## Defer below-the-fold data — and guard it
 
-Critical (above-the-fold) data is `await`ed; below-the-fold data is returned as a promise and rendered with `<Suspense>`/`<Await>`. Deferred queries go through `deferQuery` (`lib/loaders.ts`), which logs and resolves to null so a failure doesn't 500 the page.
+Critical (above-the-fold) data is `await`ed; below-the-fold data is returned as a promise and rendered with `<Suspense>`/`<Await>`. Deferred queries go through `deferQuery` (`lib/http.ts`), which logs and resolves to null so a failure doesn't 500 the page.
 
 ```ts
 const recommended = deferQuery(
