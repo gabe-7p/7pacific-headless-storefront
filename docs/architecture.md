@@ -104,16 +104,18 @@ The 9 live products are **separate Shopify products per color**, not Shopify var
 
 Configuration is via environment variables, listed below (shape in [app/lib/env.ts](../app/lib/env.ts); `server.ts` puts the worker env on the router context, and the middleware and loaders read it as `context.env` — declared in `env.d.ts`). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild. See [ADR 0008](decisions/0008-posthog-analytics.md).
 
-| Variable                       | Access | What it is                                                                                   |
-| ------------------------------ | ------ | -------------------------------------------------------------------------------------------- |
-| `PUBLIC_STORE_DOMAIN`          | public | myshopify domain, e.g. `7pacific.myshopify.com`                                              |
-| `PUBLIC_STOREFRONT_API_TOKEN`  | public | Public Storefront API access token                                                           |
-| `PRIVATE_STOREFRONT_API_TOKEN` | secret | Private (delegate) Storefront API token, server-only                                         |
-| `PUBLIC_STOREFRONT_ID`         | public | Numeric storefront id, used by Shopify Analytics                                             |
-| `PUBLIC_CHECKOUT_DOMAIN`       | public | Checkout domain, used by the consent API and checkout links                                  |
-| `PUBLIC_POSTHOG_KEY`           | public | PostHog project API key (`phc_…`); unset = PostHog off. Different key per Oxygen environment |
-| `PUBLIC_POSTHOG_HOST`          | public | PostHog ingestion host, `https://us.i.posthog.com`                                           |
-| `PUBLIC_POSTHOG_DEV`           | public | `true` to send events from `pnpm dev`; off by default, never set on Oxygen                   |
+| Variable                          | Access | What it is                                                                                   |
+| --------------------------------- | ------ | -------------------------------------------------------------------------------------------- |
+| `PUBLIC_STORE_DOMAIN`             | public | myshopify domain, e.g. `7pacific.myshopify.com`                                              |
+| `PUBLIC_STOREFRONT_API_TOKEN`     | public | Public Storefront API access token                                                           |
+| `PRIVATE_STOREFRONT_API_TOKEN`    | secret | Private (delegate) Storefront API token, server-only                                         |
+| `PUBLIC_STOREFRONT_ID`            | public | Numeric storefront id, used by Shopify Analytics                                             |
+| `PUBLIC_CHECKOUT_DOMAIN`          | public | Checkout domain, used by the consent API and checkout links                                  |
+| `PUBLIC_POSTHOG_KEY`              | public | PostHog project API key (`phc_…`); unset = PostHog off. Different key per Oxygen environment |
+| `PUBLIC_POSTHOG_HOST`             | public | PostHog ingestion host, `https://us.i.posthog.com`                                           |
+| `PUBLIC_POSTHOG_DEV`              | public | `true` to send events from `pnpm dev`; off by default, never set on Oxygen                   |
+| `PUBLIC_META_PIXEL_ID`            | public | Meta Pixel ID, the same one the Facebook & Instagram app uses on checkout; unset = no pixel  |
+| `PUBLIC_META_DOMAIN_VERIFICATION` | public | Optional Meta domain-verification token; renders the `facebook-domain-verification` meta tag |
 
 `SESSION_SECRET` (the classic Hydrogen session cookie key) is no longer read anywhere — the store has no customer accounts and the cart is identified by Shopify's own cookies — so it can be deleted from every Oxygen environment.
 

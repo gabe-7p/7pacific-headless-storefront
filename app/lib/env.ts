@@ -16,4 +16,8 @@ export type AppEnv = {
   PUBLIC_POSTHOG_HOST?: string;
   /** [public] `true` to send events from `pnpm dev` (off by default). */
   PUBLIC_POSTHOG_DEV?: string;
+  /** [public] Meta Pixel ID (shared with the Facebook & Instagram app) — unset = pixel off. See lib/analytics/meta-pixel.client.ts. */
+  PUBLIC_META_PIXEL_ID?: string;
+  /** [public] Meta domain-verification token — renders the `facebook-domain-verification` meta tag when set. */
+  PUBLIC_META_DOMAIN_VERIFICATION?: string;
 };
