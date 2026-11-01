@@ -155,12 +155,15 @@ const ProductPage = () => {
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
         {/* Mobile matches live's .product-background-image: 75% wide, 400px
-            tall, cover-center (not a letterboxed contain). */}
+            tall, cover-center (not a letterboxed contain). The width goes
+            through the `width` prop, not a `w-3/4` class: `Image` sizes the
+            box with an inline width that beats any width utility. */}
         {heroMobile && (
           <Image
             data={heroMobile}
+            width="75%"
             sizes="75vw"
-            className="mx-auto h-[400px] w-3/4 object-cover min-[769px]:hidden"
+            className="mx-auto h-[400px] object-cover min-[769px]:hidden"
           />
         )}
         {/* Desktop matches live's background-position: center — an off-center
