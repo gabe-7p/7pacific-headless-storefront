@@ -22,7 +22,7 @@ export const PaginatedResourceSection = <NodesType,>({
   resourcesClassName,
 }: {
   connection: React.ComponentProps<typeof Pagination<NodesType>>['connection'];
-  children: React.FunctionComponent<{ node: NodesType; index: number }>;
+  children: (props: { node: NodesType; index: number }) => React.ReactNode;
   resourcesClassName?: string;
 }) => {
   return (
