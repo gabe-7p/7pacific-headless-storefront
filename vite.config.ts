@@ -74,6 +74,5 @@ export default defineConfig({
   server: {
     // Keep the dev URL the docs and PostHog dev flag have always used.
     port: 3000,
-    allowedHosts: ['.tryhydrogen.dev'],
   },
 });

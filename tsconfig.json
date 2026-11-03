@@ -3,11 +3,9 @@
     "env.d.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
-    "app/**/*.d.ts",
     "e2e/**/*.ts",
     "*.ts",
     "*.tsx",
-    "*.d.ts",
     ".react-router/types/**/*"
   ],
   "exclude": ["node_modules", "dist", "build"],
@@ -30,13 +28,11 @@
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
-    "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "types": ["@shopify/oxygen-workers-types", "node", "react-router", "vite/client"],
     "paths": {
-      "~/*": ["app/*"]
+      "~/*": ["./app/*"]
     },
     "noEmit": true,
     "rootDirs": [".", "./.react-router/types"],

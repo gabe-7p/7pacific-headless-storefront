@@ -33,7 +33,7 @@ export default {
       routerContext.set(posthogContext, posthog);
 
       const handleRequest = createRequestHandler(serverBuild, process.env.NODE_ENV);
-      return await handleRequest(request, routerContext as never);
+      return await handleRequest(request, routerContext);
     } catch (error) {
       console.error(error);
       posthog?.captureException(error);
