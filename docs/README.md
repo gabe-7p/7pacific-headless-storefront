@@ -8,6 +8,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 - [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) — how to verify the Meta Pixel (DevTools, Pixel Helper, `pnpm test:pixel`, Events Manager) in 15 minutes.
 - [migration-playbook.md](migration-playbook.md) — the repeatable step-by-step process for porting a page/component from the live Liquid theme to Hydrogen (audit → assets → implement → visual + functional verify → done).
 - [decisions/](decisions/README.md) — Architecture Decision Records (the _why_ behind settled choices).
+- [tech-debt-plan.md](tech-debt-plan.md) — the ranked cleanup backlog from the 2026-11-03 audit: twelve stacked PRs (dead code → docs → helpers → tokens → enforcement → structural), evidence per item, decisions pending, and what was deliberately left out.
 
 ## If you're working on X, read Y
 
@@ -27,6 +28,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 | Touching the Meta Pixel                                  | [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) · [decisions/0011-meta-pixel-as-bus-destination.md](decisions/0011-meta-pixel-as-bus-destination.md)                              |
 | Adding env vars                                          | [architecture.md](architecture.md#environment--secrets)                                                                                                                          |
 | Running the pre-PR gate / reviewing a PR                 | [.claude/commands/check.md](../.claude/commands/check.md) · [.claude/commands/review_pr.md](../.claude/commands/review_pr.md)                                                    |
+| Paying down debt / picking the next cleanup PR           | [tech-debt-plan.md](tech-debt-plan.md)                                                                                                                                           |
 | Understanding why a choice was made                      | [decisions/](decisions/README.md)                                                                                                                                                |
 
 ## Keeping docs current
