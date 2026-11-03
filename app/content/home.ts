@@ -37,12 +37,9 @@ export const HOME_HERO = {
   /**
    * Text-treatment secondary CTA (renders in chalk, so the one-Ember-moment
    * rule still holds). TODO: point at the Shoot #2 founder video once it is
-   * live — until then it anchors to the Starting Lineup grid (FirstDrop's id).
+   * live — until then it links to Our Story.
    */
   secondaryCta: { label: 'Read the Story', href: STORE_LINKS.ourStory },
-  /** Mono spec lines under the CTAs — parked in Hero, not rendered. */
-  coordinates: '37.78°N · 122.51°W',
-  tagline: 'Lands End · 5:47 AM',
   /** 1080p rendition (full-bleed, above the fold); the poster is the clip's
       first frame, so nothing jumps when playback starts. */
   backgroundVideo: {
