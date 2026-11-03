@@ -1,35 +1,36 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { Image } from '~/components/common/Image';
+import { LazyVideo } from '~/components/common/LazyVideo';
 import { PRODUCT_BRAND_BANNER } from '~/content/product-page';
-import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /**
- * "For Intensity. Not Errands." brand section shown on every PDP — a hero
- * lifestyle image with the headline, community copy, and membership CTA
- * overlaid top-right, followed by a two-image row. Mirrors the live section.
+ * "For Intensity. Not Errands." brand section shown on every PDP — a wide
+ * training loop with the headline, community copy, and membership CTA
+ * overlaid top-right. Mirrors the live section's horizontal band (the
+ * two-photo row beneath it was dropped, Nov 2026).
  */
 export const BrandBanner = () => {
-  const { headingLines, body, cta, images } = PRODUCT_BRAND_BANNER;
+  const { headingLines, body, cta, video } = PRODUCT_BRAND_BANNER;
   return (
     // Live's `.bottom-product-photography`: inside page-width (not full-bleed)
-    // with 20px / 60px vertical padding, so the row breathes against the dark
+    // with 20px / 60px vertical padding, so the band breathes against the dark
     // Tech Stack above and the recommendations below.
-    <section className="bg-field py-5 text-ink md:py-15">
+    <section className="bg-field py-5 md:py-15">
       <Container>
-        {/* Bounded rather than natural height: contained, the source images are
-            tall enough that `h-auto` let this one dominate the page. */}
-        <div className="relative mb-4 md:mb-5">
-          <Image
-            src={images.hero.url}
-            width={images.hero.width}
-            height={images.hero.height}
-            alt=""
-            loading="lazy"
-            sizes={IMAGE_SIZES.pageWide}
-            className="h-[22rem] w-full object-cover md:h-[30rem] lg:h-[34rem]"
+        {/* Bounded rather than natural height: the 16:9 source would run
+            ~765px tall at page width and dominate the page. The loop fills
+            the box absolutely so its own ratio never sizes it. */}
+        <div className="relative h-[22rem] overflow-hidden bg-field-night text-ink-night md:h-[30rem] lg:h-[34rem]">
+          <LazyVideo
+            src={video.src}
+            poster={video.poster}
+            label={video.label}
+            className="absolute inset-0 size-full object-cover"
           />
+          {/* Legibility wash — the same 15% the Roster bands use; the footage
+              is dark already, so the copy renders in the night tokens. */}
+          <div className="pointer-events-none absolute inset-0 bg-black/15" />
           <div className="absolute inset-0 flex justify-center px-6 pt-10 text-center md:justify-end md:pt-14 lg:pr-[6%]">
             <div className="max-w-md">
               {/* Live: 60px / 500 / -0.02em (tight negative tracking). */}
@@ -39,35 +40,13 @@ export const BrandBanner = () => {
                 lines={headingLines}
                 className="text-[2.25rem] leading-[1.1] tracking-[-0.02em] md:text-[3.4rem]"
               />
-              <p className="mx-auto mt-4 max-w-sm text-sm text-support">{body}</p>
+              <p className="mx-auto mt-4 max-w-sm text-sm text-support-night">{body}</p>
               {/* Secondary — the PDP's one Ember moment is Add to Cart (7PA-230). */}
               <Cta to={cta.href} className="mt-6">
                 {cta.label}
               </Cta>
             </div>
           </div>
-        </div>
-        {/* Live's 20px gutter (15px on mobile). The desktop crop is 4:3 rather
-            than the old 4:5 so the pair reads as a band, not two tall panels. */}
-        <div className="grid grid-cols-2 gap-4 md:gap-5">
-          <Image
-            src={images.bottomLeft.url}
-            width={images.bottomLeft.width}
-            height={images.bottomLeft.height}
-            alt=""
-            loading="lazy"
-            sizes={IMAGE_SIZES.pageHalf}
-            className="aspect-square w-full object-cover md:aspect-[4/3]"
-          />
-          <Image
-            src={images.bottomRight.url}
-            width={images.bottomRight.width}
-            height={images.bottomRight.height}
-            alt=""
-            loading="lazy"
-            sizes={IMAGE_SIZES.pageHalf}
-            className="aspect-square w-full object-cover md:aspect-[4/3]"
-          />
         </div>
       </Container>
     </section>

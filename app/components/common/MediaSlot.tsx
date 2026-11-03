@@ -18,6 +18,10 @@ const RATIOS = {
   video: 'aspect-video',
   /** Extra-wide cinematic band — 16:9 on mobile, 21:8 from sm. */
   wide: 'aspect-video sm:aspect-[21/8]',
+  /** A 16:9 loop shown at 70% of its height from sm (160:63 — a touch
+      shallower than the Roster band's 80% crop), full 16:9 on mobile: near
+      the `wide` band's proportions without losing a third of the frame. */
+  loop: 'aspect-video sm:aspect-[160/63]',
   /** Landscape grid cell — 16:10 stacked on mobile, 4:3 from sm. */
   landscape: 'aspect-[16/10] sm:aspect-[4/3]',
   /** Drop-page product tile (the PLP card itself crops square). */

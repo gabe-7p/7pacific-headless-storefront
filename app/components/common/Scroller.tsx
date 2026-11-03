@@ -4,13 +4,13 @@ import { cn } from '~/lib/cn';
 
 /**
  * Items visible per view at each tier. `gap-4` (1rem) between items, so the
- * desktop basis subtracts (perView - 1) gaps before dividing.
+ * desktop basis subtracts (perView - 1) gaps before dividing. (A denser 4-up
+ * tier served the PDP recommendations until they became a grid, Nov 2026 —
+ * add it back here if a 4-up row returns.)
  */
 const PER_VIEW = {
   /** Default: 3 across on desktop (PDP detail cards). */
   3: '[&>*]:basis-[78%] sm:[&>*]:basis-[45%] lg:[&>*]:basis-[calc((100%-2rem)/3)]',
-  /** Denser: 4 across, for smaller cards (recommendations). */
-  4: '[&>*]:basis-[62%] sm:[&>*]:basis-[38%] lg:[&>*]:basis-[calc((100%-3rem)/4)]',
 } as const;
 
 /**

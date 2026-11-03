@@ -128,29 +128,31 @@ const Standard = () => (
         subtitle={BASELINE_DROP.standard.subtitle}
       />
     </Container>
+    {/* The band is the sled-push loop at 70% of its height (Gabe, Nov
+        2026) — `loop` sits near the old `wide` band's proportions. */}
     <GradedMedia
       media={BASELINE_DROP.standard.banner}
-      ratio="wide"
+      ratio="loop"
       className="border-t border-border-subtle"
     />
-    {/* The three day photos run edge-to-edge under the wide band, split by
-        1px slivers — the same 1px above them. The caption frames below butt
+    {/* The three day photos run edge-to-edge under the band, split by 1px
+        slivers — the same 1px above them. The caption frames below butt
         together with single shared hairlines (only the photos keep the gap),
-        so the row reads as one continuous strip (Gabe 2026-08-25). Seam
-        geometry rides first/last variants, not column counting. */}
-    <div className="mt-px grid gap-y-5 md:grid-cols-3">
+        so the row reads as one continuous strip (Gabe 2026-08-25). The
+        sliver is the grid's own column gap, not padding on the photo: a
+        padded photo is 1px narrower than its neighbour and, through the
+        aspect ratio, a fraction shorter — the third caption sat ~1px lower
+        than the other two. Each frame reaches 1px into the gap (-mr-px) to
+        keep the strip continuous; the last has no gap to bridge. */}
+    <div className="mt-px grid gap-y-5 md:grid-cols-3 md:gap-x-px">
       {BASELINE_DROP.standard.days.map((day) => (
         <div key={day.index} className="group flex flex-col">
-          <GradedMedia
-            media={day.media}
-            ratio="landscape"
-            className="md:pr-px md:group-last:pr-0"
-          />
+          <GradedMedia media={day.media} ratio="landscape" />
           {/* Hairline frame closes around the caption — the photo caps the
               top, and from md only the first frame keeps its left border so
               adjacent frames share one hairline. flex-1 levels the three
               frames to the tallest (Gabe 2026-08-25). */}
-          <div className="flex-1 border-x border-b border-border-subtle px-4 pt-3.5 pb-5 md:border-l-0 md:group-first:border-l md:px-5 md:pt-4 md:pb-6">
+          <div className="flex-1 border-x border-b border-border-subtle px-4 pt-3.5 pb-5 md:-mr-px md:border-l-0 md:px-5 md:pt-4 md:pb-6 md:group-first:border-l md:group-last:mr-0">
             <p className="text-[10px] font-bold tracking-caps text-ink uppercase md:text-[11px]">
               {`${day.index}:\u2002${day.title}`}
             </p>
