@@ -14,12 +14,12 @@ import { getAnalytics } from '~/lib/analytics/shopify';
 import { whenShopifyReady } from '~/lib/shopifyRuntime';
 
 /**
- * PostHog in the browser (Option C, Oct 2026):
+ * PostHog in the browser:
  *
  * 1. The SDK boots opted OUT, with session replay off, so nothing is captured
  *    until Shopify's Customer Privacy API says analytics are allowed for this
- *    visitor. US visitors (consent not required) are allowed immediately, so
- *    today's behaviour holds there; EU/UK visitors wait for the banner.
+ *    visitor. US visitors (consent not required) are allowed immediately;
+ *    EU/UK visitors wait for the banner.
  * 2. The commerce funnel comes from the Shopify analytics bus: PostHog is a
  *    *destination*, so product/collection/cart views and the cart deltas
  *    (`product_added_to_cart`, …) arrive consent-gated and already normalised.

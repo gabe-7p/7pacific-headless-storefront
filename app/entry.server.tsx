@@ -13,8 +13,8 @@ export default async function handleRequest(
   reactRouterContext: EntryContext,
   context: RouterContextProvider
 ) {
-  // CSP is app-owned since Hydrogen 2026.10 (lib/csp.ts). One nonce per
-  // request, threaded to <Scripts> and <ShopifyScripts> through NonceProvider.
+  // CSP is app-owned (lib/csp.ts). One nonce per request, threaded to
+  // <Scripts> and <ShopifyScripts> through NonceProvider.
   const nonce = createNonce();
   const csp = createCsp({ nonce, env: context.get(oxygenContext).env });
 

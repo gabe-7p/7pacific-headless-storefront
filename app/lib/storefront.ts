@@ -49,8 +49,7 @@ const getBuyerIp = (headers: Headers): string => {
 
 /**
  * One private Storefront API client per request. The private token stays
- * server-side; `cache` + `waitUntil` give catalog reads the Oxygen sub-request
- * cache (opt in per query with `cache: Cache.long()` / `Cache.short()`).
+ * server-side. Caching: see .claude/rules/graphql-fragments.md.
  */
 export const createRequestStorefrontClient = (
   request: Request,

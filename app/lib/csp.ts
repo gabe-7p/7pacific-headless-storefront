@@ -1,11 +1,10 @@
 import { getPostHogOrigins } from '~/lib/analytics/posthog';
 
 /**
- * The Content-Security-Policy header, app-owned since Hydrogen 2026.10
- * (classic's `createContentSecurityPolicy` is gone). Same allowlist as before:
- * self + Shopify's CDN/scripts, its analytics and perf-kit collectors, the
- * checkout and store domains for the Storefront API and consent calls, PostHog's ingestion + assets hosts, and
- * `blob:` workers for the session-replay recorder, and the Meta Pixel hosts
+ * The Content-Security-Policy header. Allowlist: self + Shopify's
+ * CDN/scripts, its analytics and perf-kit collectors, the checkout and store
+ * domains for the Storefront API and consent calls, PostHog's ingestion + assets
+ * hosts, `blob:` workers for the session-replay recorder, and the Meta Pixel hosts
  * (fbevents.js from connect.facebook.net, beacons + the tracking image on
  * www.facebook.com). Fonts are self-hosted.
  * Every script tag carries the per-request nonce (React Router's `<Scripts>`
@@ -42,7 +41,7 @@ export const createCsp = ({
       ...metaPixel,
     ],
     'font-src': ["'self'", 'https://cdn.shopify.com'],
-    // Explicit (was inherited from default-src) so the pixel's tracking image can be added.
+    // Explicit so the pixel's tracking image can be added.
     'img-src': ["'self'", ...shopifyScripts, 'https://www.facebook.com'],
     'script-src': [
       "'self'",

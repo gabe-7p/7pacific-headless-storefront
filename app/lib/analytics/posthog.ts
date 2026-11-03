@@ -40,9 +40,7 @@ export const isOxygenPreviewHost = (hostname: string): boolean =>
 /**
  * Returns `null` when PostHog should stay off: no key/host configured, or a
  * local `pnpm dev` / an Oxygen preview host without the `PUBLIC_POSTHOG_DEV=true`
- * opt-in — so neither day-to-day dev traffic nor preview-deployment testing
- * lands in the project as sessions, even if an environment carries the
- * production key.
+ * opt-in.
  */
 export const getPostHogConfig = (
   env: PostHogEnv,

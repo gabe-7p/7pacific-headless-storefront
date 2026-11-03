@@ -1,7 +1,6 @@
 /**
- * Shared form-handling primitives for the resource routes and the contact
- * page: one way to read a field, one email rule, one `{ ok, errors }` result
- * shape — so each form component reads the same contract.
+ * Shared form primitives: one way to read a field, one email rule, one
+ * `{ ok, errors }` result shape.
  */
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

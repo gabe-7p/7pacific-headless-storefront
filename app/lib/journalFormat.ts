@@ -11,7 +11,6 @@ export const formatJournalDate = (publishedAt?: string | null): string => {
   if (!publishedAt) return '';
   const date = new Date(publishedAt);
   if (Number.isNaN(date.getTime())) return '';
-  // DATE_LOCALE is en-GB on purpose: day-first ("14 JUL 2026"), see lib/i18n.ts.
   return new Intl.DateTimeFormat(DATE_LOCALE, {
     day: '2-digit',
     month: 'short',

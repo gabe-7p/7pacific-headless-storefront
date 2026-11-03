@@ -5,11 +5,9 @@ import { createPostHogClient, posthogContext } from '~/lib/analytics/posthog.ser
 import { oxygenContext } from '~/lib/oxygen';
 
 /**
- * The Oxygen worker entry. Hydrogen 2026.10 is a library, so this is a plain
- * React Router request handler: it threads the worker bindings (env, the
- * sub-request cache, waitUntil) onto the router context, and the root
- * middleware (app/lib/shopifyMiddleware.ts) builds the Storefront client and
- * runs Shopify's request handlers per request.
+ * The Oxygen worker entry: threads the worker bindings (env, cache, waitUntil)
+ * onto the router context; the root middleware (app/lib/shopifyMiddleware.ts)
+ * does the rest.
  */
 export default {
   async fetch(request: Request, env: Env, executionContext: ExecutionContext): Promise<Response> {

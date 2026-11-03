@@ -4,8 +4,8 @@ import type { MoneyLike } from '~/lib/money';
 
 /**
  * PostHog event names and payload builders in one place, so every capture
- * site sends the same fields. Since Hydrogen 2026.10 the commerce funnel
- * reaches PostHog as a *destination* on the Shopify analytics bus
+ * site sends the same fields. The commerce funnel reaches PostHog as a
+ * *destination* on the Shopify analytics bus
  * (lib/analytics/posthog.client.ts): these builders map the bus payloads to
  * PostHog properties. `checkout_started` is the one browser event still
  * captured directly (a click, not a cart change); the two signup events are
