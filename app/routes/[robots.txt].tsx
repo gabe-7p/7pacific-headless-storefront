@@ -5,9 +5,7 @@ import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/[robots.txt]';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url);
-
+export async function loader({ url, context }: Route.LoaderArgs) {
   const { data } = await context
     .get(storefrontClientContext)
     .graphql(ROBOTS_QUERY, { cache: Cache.long() });

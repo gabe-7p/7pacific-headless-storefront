@@ -79,7 +79,7 @@ export function links() {
   ];
 }
 
-export async function loader({ context, request }: Route.LoaderArgs) {
+export async function loader({ context, request, url }: Route.LoaderArgs) {
   const { env } = context;
   const storefront = context.get(storefrontClientContext);
 
@@ -119,7 +119,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     posthog: getPostHogConfig(env, {
       isDev: import.meta.env.DEV,
-      hostname: new URL(request.url).hostname,
+      hostname: url.hostname,
     }),
     // Meta Pixel (lib/analytics/meta-pixel.client.ts): the ID reaches the
     // browser through this loader, never through a client-side env read.

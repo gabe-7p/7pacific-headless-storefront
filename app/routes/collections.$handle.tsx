@@ -29,11 +29,10 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
   });
 };
 
-export async function loader({ context, params, request }: Route.LoaderArgs) {
+export async function loader({ context, params, url }: Route.LoaderArgs) {
   const { handle } = params;
   if (!handle) throw redirect('/');
 
-  const url = new URL(request.url);
   const { data, errors } = await context.get(storefrontClientContext).graphql(COLLECTION_QUERY, {
     // No sort or filter variables: the collection's own merchandised order is
     // the display order (drag to reorder in the Shopify admin).

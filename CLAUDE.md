@@ -46,6 +46,7 @@ public/          static files served at the web root as-is (favicon.ico, llms.tx
 .claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit
 docs/            architecture.md, decisions/ (ADRs), META_PIXEL_TESTING.md (the pixel checklist), doc index + lookup table
 e2e/             the Playwright Meta Pixel funnel test (`pnpm test:pixel`; playwright.config.ts at the root)
+patches/         pnpm patches applied at install (`patchedDependencies` in pnpm-workspace.yaml) — today one: @react-router/dev 7.16's Vite `envFile` deprecation, dropped with the React Router 8 upgrade
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```
 
