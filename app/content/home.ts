@@ -241,9 +241,9 @@ export const HOME_CORE_VALUES = {
       // 720p rendition — the slot never renders wider than ~800px.
       media: {
         kind: 'video',
-        src: shopifyVideo('a95812eca828487099cdec6e8c2ac7ff', 'HD-720p-4.5Mbps-99273348'),
-        poster: shopifyVideoThumbnail('a95812eca828487099cdec6e8c2ac7ff', { v: 1793246440 }),
-        label: 'Athletes dapping each other up on the track between reps',
+        src: shopifyVideo('2b9c960bb36242588e82355739c40cd2', 'HD-720p-4.5Mbps-99846692'),
+        poster: shopifyVideoThumbnail('2b9c960bb36242588e82355739c40cd2', { v: 1793699864 }),
+        label: 'Athletes dapping each other up on the bleachers at the track',
       },
     },
     {
