@@ -32,3 +32,6 @@ yarn-error.log*
 
 # Local media tests: point a public/media symlink at a folder of big files; never commit it
 /public/media
+
+# Superpowers plan workspaces (local scratch: ledgers, briefs, review packages)
+.superpowers/
