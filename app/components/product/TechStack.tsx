@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import effortIcon from '~/assets/effort-percents.svg';
 import gripTapeIcon from '~/assets/grip-tape-icon.svg';
 import perforationsIcon from '~/assets/perforations-icon.svg';
@@ -47,7 +49,7 @@ const Feature = ({ feature }: { feature: TechFeature }) => (
   </div>
 );
 
-const Column = ({ label, children }: { label: string; children: React.ReactNode }) => (
+const Column = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="flex flex-col items-center gap-2.5 impulse:items-start">
     <Heading as="h4" variant="caps" size="none" className={ROW_TITLE}>
       {label}

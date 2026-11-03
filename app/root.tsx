@@ -1,7 +1,7 @@
 import { usePostHog } from '@posthog/react';
 import { Cache } from '@shopify/hydrogen';
 import { ShopifyScripts } from '@shopify/hydrogen/react';
-import { useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 import {
   isRouteErrorResponse,
   Links,
@@ -51,7 +51,7 @@ import tailwindCss from './styles/tailwind.css?url';
 export type RootLoader = typeof loader;
 
 /** Every request runs through Hydrogen's lifecycle first — see lib/shopifyMiddleware. */
-export const middleware: Route.MiddlewareFunction[] = [shopifyMiddleware];
+export const middleware: Array<Route.MiddlewareFunction> = [shopifyMiddleware];
 
 /**
  * Root data (menus, shop identity) only revalidates on mutations and explicit
@@ -107,12 +107,6 @@ export async function loader({ context, request, url }: Route.LoaderArgs) {
   if (!headerResult.data) throw new Response('Shop unavailable', { status: 500 });
   const header = headerResult.data;
 
-  // Confirms the typed Storefront client is wired and returning live data.
-  if (import.meta.env.DEV) {
-    // eslint-disable-next-line no-console -- intentional dev-only connectivity check (GD-4)
-    console.log(`[storefront] Connected to "${header.shop.name}"`);
-  }
-
   return {
     header,
     footer,
@@ -137,7 +131,7 @@ export async function loader({ context, request, url }: Route.LoaderArgs) {
   };
 }
 
-export const Layout = ({ children }: { children?: React.ReactNode }) => {
+export const Layout = ({ children }: { children?: ReactNode }) => {
   const nonce = useNonce();
   const navigate = useNavigate();
   // Absent when the root loader itself failed (bare error page).
