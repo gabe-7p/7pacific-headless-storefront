@@ -155,7 +155,7 @@ export const PRODUCT_CARD_FRAGMENT = gql(
   [COLOR_SIBLINGS_FRAGMENT]
 );
 
-// Type-only shape query (never executed): see graphql-fragments.md → "Types".
+// Type-only shape query (never executed): see graphql-fragments.md → "Rules".
 const PRODUCT_CARD_SHAPE_QUERY = gql(
   `
     query ProductCardShape {

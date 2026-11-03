@@ -3,7 +3,7 @@ description: 7Pacific Hydrogen storefront conventions. Read CLAUDE.md and .claud
 globs:
 alwaysApply: true
 ---
-Read `CLAUDE.md` and the files in `.claude/rules/` before changing code — they are the single source of the conventions (components, GraphQL, boundaries, naming, pitfalls, UI primitives). ESLint and dependency-cruiser enforce the mechanical ones; do not restate them here.
+Read `CLAUDE.md` and the files in `.claude/rules/` before changing code — they are the single source of the conventions (components, GraphQL, boundaries, naming, pitfalls, UI primitives). ESLint and `/check` enforce the mechanical ones (dependency-cruiser layer rules will join them); do not restate them here.
 
 Rules that no linter catches:
 
