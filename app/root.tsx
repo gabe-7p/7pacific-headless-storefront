@@ -40,6 +40,7 @@ import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 import { deferQuery } from '~/lib/http';
 import { MARKET } from '~/lib/i18n';
 import { useNonce } from '~/lib/nonce';
+import { oxygenContext } from '~/lib/oxygen';
 import { shopifyMiddleware } from '~/lib/shopifyMiddleware';
 import { routeTemplates, storefrontClientContext } from '~/lib/storefront';
 
@@ -80,7 +81,7 @@ export function links() {
 }
 
 export async function loader({ context, request, url }: Route.LoaderArgs) {
-  const { env } = context;
+  const { env } = context.get(oxygenContext);
   const storefront = context.get(storefrontClientContext);
 
   // Below the fold: deferred and guarded (never throws).
@@ -170,7 +171,8 @@ export const Layout = ({ children }: { children?: React.ReactNode }) => {
           <meta name="facebook-domain-verification" content={rootData.metaDomainVerification} />
         )}
         <Meta />
-        <Links />
+        {/* React Router 8 defaults this nonce from <ServerRouter nonce> on the server only; pass it on both sides or the dev critical-CSS link warns on hydration. */}
+        <Links nonce={nonce} />
       </head>
       {/* bg-field: the brand's Court field — the page ground per Meridian on Carbon. */}
       <body className="bg-field font-sans text-nav-text antialiased">

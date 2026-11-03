@@ -1,12 +1,12 @@
 # 7Pacific Storefront — CLAUDE.md
 
-Headless storefront for 7Pacific (DTC athletic apparel), migrated from a Shopify Liquid theme (Impulse) to **React Router 7 + Hydrogen (the 2026-10 library) on Oxygen**. We ship in small, independently deployable units — live pages only, English-only, marketing copy as typed TS constants.
+Headless storefront for 7Pacific (DTC athletic apparel), migrated from a Shopify Liquid theme (Impulse) to **React Router 8 + Hydrogen (the 2026-10 library) on Oxygen**. We ship in small, independently deployable units — live pages only, English-only, marketing copy as typed TS constants.
 
 This file is auto-loaded into every agent session. Read it first; follow the linked rules when a change touches their area.
 
 ## Stack
 
-- **Framework**: React Router 7.16 (loaders/actions, server-first, root middleware) + **Hydrogen 2026.10** as a _library_ — the Storefront client, request handlers (`/api/cart`, checkout, permalinks, the Storefront API proxy), the client-side cart and product-form stores, and the analytics bus. React 19, Vite 8. Hydrogen owns no routing, build or CSP; the app does.
+- **Framework**: React Router 8.5 (loaders/actions, server-first, root middleware; raw requests pass through, so routing logic reads the `url` arg) + **Hydrogen 2026.10** as a _library_ — the Storefront client, request handlers (`/api/cart`, checkout, permalinks, the Storefront API proxy), the client-side cart and product-form stores, and the analytics bus. React 19, Vite 8. Hydrogen owns no routing, build or CSP; the app does.
 - **Hosting**: Oxygen (deploys from GitHub — preview per PR, production on `main`)
 - **Data**: Shopify Storefront API 2026-10, typed in place by `@shopify/hydrogen/ts-plugin` (`gql()` documents, no codegen step; `hydrogen gql check` validates them). Guest checkout — no customer accounts
 - **Styling**: Tailwind v4 (no CSS-in-JS, no runtime UI kit) + **shadcn/ui** for headless primitives — Radix behavior, vendored into `app/components/ui/` and styled with Tailwind
@@ -38,7 +38,7 @@ app/
   routes/        one file per route (React Router flat convention); loader/action live here (+ colocated *.test.ts, ignored by routes.ts)
   components/    presentational only — layout/ analytics/ cart/ (CartDrawer + useCartDrawer, CartMain, CartLineItem, CartSummary) product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + brand content — links.ts (`HANDLES` = the ONE place a Shopify handle lives + `STORE_LINKS`), brand.ts (name, wordmark, announcement, social, fallback nav), media.ts (external media ids), join.ts, membership.ts, …
-  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), i18n.ts (`MARKET`, `MONEY_LOCALE`, `DATE_LOCALE`), urls.ts (every URL shape: `productUrl`, `collectionUrl`, `pageUrl`, `journalUrl`, `cartUrl`, `youtubeWatchUrl`), cart.server.ts (the `/api/cart` handlers) / cart.ts (the client store: `CartProvider`, `useCart`, `useCartForm`), product/ (PDP: queries.ts gql documents + types, store.ts product-form store, content.ts metafield JSON shapes, display.ts short titles/size labels, colors.ts swatches), fragments.ts (shared gql fragments + chrome queries), http.ts (notFound, deferQuery), csp.ts, sitemap.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders, meta-pixel.ts = Meta event mapping + `toMetaContentId`, meta-pixel.client.ts = the pixel as a bus destination; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
+  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), i18n.ts (`MARKET`, `MONEY_LOCALE`, `DATE_LOCALE`), urls.ts (every URL shape: `productUrl`, `collectionUrl`, `pageUrl`, `journalUrl`, `cartUrl`, `youtubeWatchUrl`), cart.server.ts (the `/api/cart` handlers) / cart.ts (the client store: `CartProvider`, `useCart`, `useCartForm`), product/ (PDP: queries.ts gql documents + types, store.ts product-form store, content.ts metafield JSON shapes, display.ts short titles/size labels, colors.ts swatches), fragments.ts (shared gql fragments + chrome queries), http.ts (notFound, deferQuery), oxygen.ts (the `oxygenContext` key: env + sub-request cache + waitUntil, set by server.ts), csp.ts, sitemap.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders, meta-pixel.ts = Meta event mapping + `toMetaContentId`, meta-pixel.client.ts = the pixel as a bus destination; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
@@ -46,7 +46,6 @@ public/          static files served at the web root as-is (favicon.ico, llms.tx
 .claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit
 docs/            architecture.md, decisions/ (ADRs), META_PIXEL_TESTING.md (the pixel checklist), doc index + lookup table
 e2e/             the Playwright Meta Pixel funnel test (`pnpm test:pixel`; playwright.config.ts at the root)
-patches/         pnpm patches applied at install (`patchedDependencies` in pnpm-workspace.yaml) — today one: @react-router/dev 7.16's Vite `envFile` deprecation, dropped with the React Router 8 upgrade
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```
 

@@ -1,8 +1,9 @@
 /**
  * The Oxygen worker environment (`.env` locally; a linked storefront injects
- * these on Oxygen). `env.d.ts` merges this into the global `Env` and declares
- * it on the router context, so `server.ts`, the root middleware and loaders
- * read one shape as `context.env`.
+ * these on Oxygen). `env.d.ts` merges this into the global `Env`; `server.ts`
+ * threads it onto the router context under `oxygenContext` (lib/oxygen.ts), so
+ * the root middleware, loaders and entry.server read one shape via
+ * `context.get(oxygenContext).env`.
  */
 export type AppEnv = {
   PUBLIC_STORE_DOMAIN: string;

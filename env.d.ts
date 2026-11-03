@@ -5,23 +5,10 @@
 // Enhance TypeScript's built-in typings.
 import '@total-typescript/ts-reset';
 
-import type { CacheInstance } from '@shopify/hydrogen';
-
 import type { AppEnv } from './app/lib/env';
 
-/** What server.ts puts on the router context for every request. */
-type OxygenRouterContext = {
-  cache: CacheInstance;
-  env: Env;
-  waitUntil: ExecutionContext['waitUntil'];
-};
-
-declare module 'react-router' {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- module augmentation must be an interface
-  interface AppLoadContext extends OxygenRouterContext {}
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- module augmentation must be an interface
-  interface RouterContextProvider extends OxygenRouterContext {}
-}
+// The worker bindings (env, cache, waitUntil) travel on the router context
+// under the typed `oxygenContext` key — see app/lib/oxygen.ts.
 
 declare global {
   /** The Oxygen worker bindings (`.env` locally). Shape lives in app/lib/env.ts. */

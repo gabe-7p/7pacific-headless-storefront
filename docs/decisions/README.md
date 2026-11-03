@@ -31,16 +31,17 @@ What this makes easy, what it costs, what we're explicitly not doing.
 
 ## Index
 
-| ADR                                               | Decision                                             |
-| ------------------------------------------------- | ---------------------------------------------------- |
-| [0001](0001-hydrogen-over-liquid.md)              | Migrate from Liquid (Impulse) to Hydrogen + Oxygen   |
-| [0002](0002-tailwind-for-styling.md)              | Tailwind CSS for styling (no UI kit)                 |
-| [0003](0003-lean-tooling.md)                      | Lean tooling — drop Playwright/Storybook/Sentry/etc. |
-| [0004](0004-native-graphql-pattern.md)            | Hydrogen-native GraphQL pattern (no Apollo)          |
-| [0005](0005-color-as-separate-product.md)         | Keep "color = separate product" data model for v1    |
-| [0006](0006-shadcn-ui-for-headless-primitives.md) | shadcn/ui for headless primitives (refines 0002)     |
-| [0007](0007-motion-for-animation.md)              | Motion for animation, not GSAP (extends 0002)        |
-| [0008](0008-posthog-analytics.md)                 | PostHog for analytics + session replay               |
-| [0009](0009-stay-on-hydrogen-2026-04.md)          | Stay on Hydrogen 2026-04 (superseded by 0010)        |
-| [0010](0010-hydrogen-2026-10-library.md)          | Hydrogen 2026-10 as a library inside React Router    |
-| [0011](0011-meta-pixel-as-bus-destination.md)     | Meta Pixel as a consent-gated bus destination        |
+| ADR                                               | Decision                                                  |
+| ------------------------------------------------- | --------------------------------------------------------- |
+| [0001](0001-hydrogen-over-liquid.md)              | Migrate from Liquid (Impulse) to Hydrogen + Oxygen        |
+| [0002](0002-tailwind-for-styling.md)              | Tailwind CSS for styling (no UI kit)                      |
+| [0003](0003-lean-tooling.md)                      | Lean tooling — drop Playwright/Storybook/Sentry/etc.      |
+| [0004](0004-native-graphql-pattern.md)            | Hydrogen-native GraphQL pattern (no Apollo)               |
+| [0005](0005-color-as-separate-product.md)         | Keep "color = separate product" data model for v1         |
+| [0006](0006-shadcn-ui-for-headless-primitives.md) | shadcn/ui for headless primitives (refines 0002)          |
+| [0007](0007-motion-for-animation.md)              | Motion for animation, not GSAP (extends 0002)             |
+| [0008](0008-posthog-analytics.md)                 | PostHog for analytics + session replay                    |
+| [0009](0009-stay-on-hydrogen-2026-04.md)          | Stay on Hydrogen 2026-04 (superseded by 0010)             |
+| [0010](0010-hydrogen-2026-10-library.md)          | Hydrogen 2026-10 as a library inside React Router         |
+| [0011](0011-meta-pixel-as-bus-destination.md)     | Meta Pixel as a consent-gated bus destination             |
+| [0012](0012-react-router-8.md)                    | React Router 8: typed context keys, explicit worker entry |
