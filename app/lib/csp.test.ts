@@ -36,6 +36,11 @@ describe('createCsp', () => {
     expect(csp['img-src']).toContain('https://www.facebook.com');
   });
 
+  it("allows Shopify's performance kit to post its metrics", () => {
+    const csp = directives(createCsp({ nonce: 'n', env }));
+    expect(csp['connect-src']).toContain('https://otlp-http-production.shopifysvc.com');
+  });
+
   it('keeps the img-src sources that default-src used to cover', () => {
     const csp = directives(createCsp({ nonce: 'n', env }));
     expect(csp['img-src']).toContain("'self'");
