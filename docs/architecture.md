@@ -23,6 +23,7 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
                          │
                          ▼
               root middleware (app/lib/shopifyMiddleware.ts)
+                ├─ data request? (`.data`, `future.v8_passThroughRequests`) → bodyless copy at the normalized `url` for Hydrogen
                 ├─ createRequestStorefrontClient()        one private Storefront API client per request
                 ├─ handleShopifyRoutes()  ──▶ answers Shopify-owned URLs before the router:
                 │       /api/cart (cart store), /checkout, /cart/ID:QTY + /buy permalinks,

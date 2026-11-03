@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@react-router/dev@7.16.0': 3bd99ca91cbfa9d1e8e7568ac1aef3b88016d2a904630bca16dfbbc4e9f2b89c
+
 importers:
 
   .:
@@ -80,10 +83,10 @@ importers:
         version: 1.64.1
       '@react-router/dev':
         specifier: 7.16.0
-        version: 7.16.0(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
+        version: 7.16.0(patch_hash=3bd99ca91cbfa9d1e8e7568ac1aef3b88016d2a904630bca16dfbbc4e9f2b89c)(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
       '@react-router/fs-routes':
         specifier: 7.16.0
-        version: 7.16.0(@react-router/dev@7.16.0(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0))(typescript@5.9.3)
+        version: 7.16.0(@react-router/dev@7.16.0(patch_hash=3bd99ca91cbfa9d1e8e7568ac1aef3b88016d2a904630bca16dfbbc4e9f2b89c)(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0))(typescript@5.9.3)
       '@shopify/cli':
         specifier: 4.8.1
         version: 4.8.1
@@ -6207,7 +6210,7 @@ snapshots:
 
   '@radix-ui/rect@1.1.2': {}
 
-  '@react-router/dev@7.16.0(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)':
+  '@react-router/dev@7.16.0(patch_hash=3bd99ca91cbfa9d1e8e7568ac1aef3b88016d2a904630bca16dfbbc4e9f2b89c)(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)':
     dependencies:
       '@babel/core': 7.29.7
       '@babel/generator': 7.29.7
@@ -6256,9 +6259,9 @@ snapshots:
       - tsx
       - yaml
 
-  '@react-router/fs-routes@7.16.0(@react-router/dev@7.16.0(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0))(typescript@5.9.3)':
+  '@react-router/fs-routes@7.16.0(@react-router/dev@7.16.0(patch_hash=3bd99ca91cbfa9d1e8e7568ac1aef3b88016d2a904630bca16dfbbc4e9f2b89c)(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0))(typescript@5.9.3)':
     dependencies:
-      '@react-router/dev': 7.16.0(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
+      '@react-router/dev': 7.16.0(patch_hash=3bd99ca91cbfa9d1e8e7568ac1aef3b88016d2a904630bca16dfbbc4e9f2b89c)(@types/node@22.20.5)(jiti@2.7.0)(lightningcss@1.33.0)(react-router@7.16.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@5.9.3)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
       minimatch: 9.0.9
     optionalDependencies:
       typescript: 5.9.3

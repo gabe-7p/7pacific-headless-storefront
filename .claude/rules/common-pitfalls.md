@@ -121,6 +121,21 @@ Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry im
 
 PostHog has a second gate on top of the env: `getPostHogConfig` (`lib/analytics/posthog.ts`) returns `null` for `pnpm dev` and for any `*.myshopify.dev` host (Oxygen previews and the environments' own URLs) unless `PUBLIC_POSTHOG_DEV=true`, so our own testing never lands in the project as sessions — don't bypass it by reading the key somewhere else.
 
+## Read the location from `url`, not `request.url`
+
+`react-router.config.ts` opts into `future.v8_passThroughRequests` (the React Router 8 default): loaders, actions and middleware receive the **raw** request, so on a client-side navigation or fetcher call `request.url` is `/products/x.data?_routes=…`, not `/products/x`. Every args object also carries `url: URL`, the normalized location with the `.data` suffix and `_routes`/`index` params removed. Routing logic — path checks, `searchParams`, `origin`/`hostname` for sitemaps and PostHog — reads `url`; `request` is for headers, method and body.
+
+```ts
+// ❌ BAD — `after` still parses, but the pathname has `.data` on data requests
+const after = new URL(request.url).searchParams.get('after');
+// ✅ GOOD
+export async function loader({ url }: Route.LoaderArgs) {
+  const after = url.searchParams.get('after');
+}
+```
+
+Hydrogen's `handleShopifyRoutes` / `handleShopifyRedirects` match on `request.url` and know nothing about `.data`, so the root middleware (`lib/shopifyMiddleware.ts`) hands them a copy at the normalized `url` whenever the two differ. That copy carries **no body** on purpose: `new Request(url, request)` locks the original stream, and the newsletter fetcher's POST to `/api/subscribe` still has to read it. The only handler that reads a body (`/api/cart`) is a direct fetch, never a `.data` request, so it always gets the original object. `future.v8_trailingSlashAwareDataRequests` is on too: data requests for `/a/b/` are `/a/b/_.data` (root: `/_.data`) — anything that pattern-matches `.data` URLs (CDN rules, the Playwright pixel harness) must accept that shape.
+
 ## No `any`
 
 `no-explicit-any` is a warning we treat as a defect — it hides type mismatches. Use `unknown` + narrowing, generics, or the generated types instead.
@@ -131,4 +146,4 @@ PostHog has a second gate on top of the env: `getPostHogConfig` (`lib/analytics/
 
 ## Hydrogen is a library now — don't reach for the classic framework APIs
 
-Since [ADR 0010](../../docs/decisions/0010-hydrogen-2026-10-library.md) the repo runs Hydrogen 2026.10 (`^2026.10`). `createHydrogenContext`, `hydrogenRoutes`, `hydrogenPreset`, `CartForm`, `useOptimisticCart`, `Analytics.Provider`, `<Image>`, `<Money>`, `<Pagination>`, `getSitemap*`, `storefrontRedirect` and `createContentSecurityPolicy` no longer exist; the packaged skills under `.claude/skills/hydrogen-*` are the version-correct reference (resync with `hydrogen skills sync` after a bump; `skills check` runs in CI, so never hand-edit or reformat them).
+Since [ADR 0010](../../docs/decisions/0010-hydrogen-2026-10-library.md) the repo runs Hydrogen 2026.10 (`^2026.10`). It runs on React Router 7.16 with every `v8_*` future flag set explicitly (`react-router.config.ts`), and one pnpm patch: `patches/@react-router__dev@7.16.0.patch` swaps the `envFile: false` that 7.16 passes to Vite for `envDir: false` (Vite 8.1+ deprecated the former and warned six times per `pnpm dev`; upstream fixed it only in 8.1.0). Both the flags and the patch go away with the React Router 8 upgrade. `createHydrogenContext`, `hydrogenRoutes`, `hydrogenPreset`, `CartForm`, `useOptimisticCart`, `Analytics.Provider`, `<Image>`, `<Money>`, `<Pagination>`, `getSitemap*`, `storefrontRedirect` and `createContentSecurityPolicy` no longer exist; the packaged skills under `.claude/skills/hydrogen-*` are the version-correct reference (resync with `hydrogen skills sync` after a bump; `skills check` runs in CI, so never hand-edit or reformat them).

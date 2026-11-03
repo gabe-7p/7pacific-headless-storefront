@@ -4,11 +4,8 @@ import { storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/[sitemap.xml]';
 
-export async function loader({ request, context }: Route.LoaderArgs) {
-  const response = await getSitemapIndex(
-    context.get(storefrontClientContext),
-    new URL(request.url).origin
-  );
+export async function loader({ url, context }: Route.LoaderArgs) {
+  const response = await getSitemapIndex(context.get(storefrontClientContext), url.origin);
   response.headers.set('Cache-Control', CACHE_ONE_DAY);
   return response;
 }

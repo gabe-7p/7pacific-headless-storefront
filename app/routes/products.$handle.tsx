@@ -45,7 +45,7 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
   ];
 };
 
-export async function loader({ context, params, request }: Route.LoaderArgs) {
+export async function loader({ context, params, url }: Route.LoaderArgs) {
   const { handle } = params;
   if (!handle) throw notFound('Product not found');
 
@@ -76,7 +76,7 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
       handle,
       // The ?Size=… params pick the variant; unknown params are ignored.
       selectedOptions: getSelectedProductOptions({
-        searchParams: new URL(request.url).searchParams,
+        searchParams: url.searchParams,
       }),
     },
     // Price/availability-sensitive: keep the cache window short.
