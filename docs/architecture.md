@@ -65,7 +65,7 @@ app/
     home/        homepage sections
     content/     static-page compositions (OurStory, FirstLightTeaser, athlete-signing/ — the signing page as a root + one file per section)
     common/      shared primitives (Container, Heading, Cta, Prose, JoinForm + JoinDialog/useJoinDialog, …)
-  content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, wordmark, announcement, social, fallback nav), media.ts (external media ids); athlete-signing/ = types + one file per athlete + the handle registry
+  content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, announcement, social, fallback nav), media.ts (external media ids); athlete-signing/ = types + one file per athlete + the handle registry
   lib/           storefront.ts, i18n.ts (MARKET, MONEY_LOCALE, DATE_LOCALE), urls.ts (every URL shape), cart.server.ts, cart.ts, product/ (queries, store, content, display, colors), fragments.ts, csp.ts, sitemap.ts, shopifyRuntime.ts, … (+ colocated *.test.ts)
     analytics/   shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders) — no barrel: client and server stay separate imports
   styles/        tailwind.css — the single stylesheet (no separate globals)
