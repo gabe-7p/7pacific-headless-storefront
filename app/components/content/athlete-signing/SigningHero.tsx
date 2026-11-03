@@ -1,11 +1,10 @@
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
 import { cn } from '~/lib/cn';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
-
-import { MONO_LABEL } from './monoLabel';
 
 const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
   <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/4 md:aspect-auto md:h-full md:min-h-[560px]">
@@ -23,20 +22,25 @@ const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
         )}
       />
     )}
-    <span className={cn(MONO_LABEL, 'text-support-night absolute top-4 left-4')}>
+    <span className={cn(SPEC_LINE_CLASS, 'text-support-night absolute top-4 left-4')}>
       {hero.modeLabel}
     </span>
-    <span className={cn(MONO_LABEL, 'text-support-night absolute bottom-4 left-4 max-md:hidden')}>
+    <span
+      className={cn(SPEC_LINE_CLASS, 'text-support-night absolute bottom-4 left-4 max-md:hidden')}
+    >
       {hero.locationLine}
     </span>
     {hero.camLine && (
       <span
-        className={cn(MONO_LABEL, 'text-support-night absolute right-4 bottom-4 max-md:hidden')}
+        className={cn(
+          SPEC_LINE_CLASS,
+          'text-support-night absolute right-4 bottom-4 max-md:hidden'
+        )}
       >
         {hero.camLine}
       </span>
     )}
-    <span className={cn(MONO_LABEL, 'text-support-night absolute right-4 bottom-4 md:hidden')}>
+    <span className={cn(SPEC_LINE_CLASS, 'text-support-night absolute right-4 bottom-4 md:hidden')}>
       {hero.locationLine}
     </span>
   </div>
@@ -46,10 +50,10 @@ export const SigningHero = ({ content }: { content: AthleteSigningContent }) => 
   <Container className="py-10 md:py-16 lg:py-20">
     <div className="grid gap-8 md:grid-cols-2 md:grid-rows-[auto_1fr] md:gap-x-12 md:gap-y-10 lg:gap-x-16">
       <div className="md:col-start-1 md:row-start-1">
-        <p className={cn(MONO_LABEL, 'text-support-night max-md:hidden')}>
+        <p className={cn(SPEC_LINE_CLASS, 'text-support-night max-md:hidden')}>
           {content.transmissionLine}
         </p>
-        <p className={cn(MONO_LABEL, 'text-support-night md:hidden')}>{content.eyebrowLine}</p>
+        <p className={cn(SPEC_LINE_CLASS, 'text-support-night md:hidden')}>{content.eyebrowLine}</p>
         <Heading
           as="h1"
           size="none"
@@ -65,7 +69,7 @@ export const SigningHero = ({ content }: { content: AthleteSigningContent }) => 
         {(content.hero.shotLine || content.hero.camLine) && (
           <div
             className={cn(
-              MONO_LABEL,
+              SPEC_LINE_CLASS,
               'text-support-night mt-3 flex items-center justify-between md:hidden'
             )}
           >
@@ -79,7 +83,7 @@ export const SigningHero = ({ content }: { content: AthleteSigningContent }) => 
         <p className="text-ink-night max-w-[44ch] text-lg leading-relaxed md:text-xl">
           {content.body}
         </p>
-        <p className={cn(MONO_LABEL, 'text-support-night mt-8 max-md:hidden')}>
+        <p className={cn(SPEC_LINE_CLASS, 'text-support-night mt-8 max-md:hidden')}>
           {content.signedLine}
         </p>
       </div>

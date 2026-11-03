@@ -2,10 +2,9 @@ import { ArrowUpRight } from 'lucide-react';
 
 import { InstagramIcon } from '~/components/common/icons';
 import { SectionLabel } from '~/components/common/Readout';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
 import { cn } from '~/lib/cn';
-
-import { MONO_LABEL } from './monoLabel';
 
 /**
  * "The Creator" module — typed copy only: handle, tagline, and the athlete's
@@ -32,7 +31,7 @@ export const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['
             key={name}
             className="border-border-subtle-night flex items-baseline justify-between gap-4 border-t py-3"
           >
-            <dt className={cn(MONO_LABEL, 'text-support-night shrink-0 text-[0.65rem]')}>
+            <dt className={cn(SPEC_LINE_CLASS, 'text-support-night shrink-0 text-[0.65rem]')}>
               Series {String(index + 1).padStart(2, '0')}
             </dt>
             <dd className="text-ink-night text-right font-mono text-sm tracking-caps uppercase">
@@ -47,7 +46,7 @@ export const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['
         target="_blank"
         rel="noreferrer"
         className={cn(
-          MONO_LABEL,
+          SPEC_LINE_CLASS,
           'text-ink-night mt-6 inline-flex items-center gap-1.5 transition-opacity duration-300 ease-(--ease-brand) hover:opacity-70'
         )}
       >

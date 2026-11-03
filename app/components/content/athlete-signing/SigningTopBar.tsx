@@ -2,11 +2,10 @@ import { Link } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Logo } from '~/components/common/Logo';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
 import { BRAND } from '~/content/brand';
 import { cn } from '~/lib/cn';
-
-import { MONO_LABEL } from './monoLabel';
 
 export const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrome'] }) => (
   <header className="border-b border-border-subtle-night">
@@ -16,8 +15,10 @@ export const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrom
       <Link prefetch="intent" to="/" aria-label={BRAND.name}>
         <Logo tone="light" className="h-5 md:h-6" />
       </Link>
-      <span className={cn(MONO_LABEL, 'text-support-night max-md:hidden')}>{chrome.badge}</span>
-      <span className={cn(MONO_LABEL, 'flex items-center gap-2 text-ink-night')}>
+      <span className={cn(SPEC_LINE_CLASS, 'text-support-night max-md:hidden')}>
+        {chrome.badge}
+      </span>
+      <span className={cn(SPEC_LINE_CLASS, 'flex items-center gap-2 text-ink-night')}>
         <span
           aria-hidden
           className="bg-brand size-1.5 animate-pulse rounded-full motion-reduce:animate-none"
@@ -26,7 +27,7 @@ export const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrom
       </span>
     </Container>
     <Container className="border-t border-border-subtle-night py-3 md:hidden">
-      <span className={cn(MONO_LABEL, 'text-support-night flex items-center gap-2.5')}>
+      <span className={cn(SPEC_LINE_CLASS, 'text-support-night flex items-center gap-2.5')}>
         <span aria-hidden className="border-border-subtle/60 size-2.5 border" />
         {chrome.urlLine}
       </span>
