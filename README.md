@@ -47,7 +47,7 @@ Or write `.env` by hand. Every variable is listed in [docs/architecture.md](docs
 pnpm dev          # Vite + MiniOxygen (workerd) dev server at http://localhost:3000
 ```
 
-On boot you should see `[storefront] Connected to "<your shop>"` — confirmation the Storefront client is wired correctly. `GET /api/cart` returning `{"cart":null}` confirms Hydrogen's request handlers run in the root middleware.
+`GET /api/cart` returning `{"cart":null}` confirms Hydrogen's request handlers run in the root middleware.
 
 ## Common commands
 

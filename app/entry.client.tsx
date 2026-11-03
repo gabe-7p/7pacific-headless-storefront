@@ -19,20 +19,18 @@ if (posthogKey && posthogHost) {
   initPostHog({ key: posthogKey, host: posthogHost });
 }
 
-if (!window.location.origin.includes('webcache.googleusercontent.com')) {
-  startTransition(() => {
-    const existingNonce = document.querySelector<HTMLScriptElement>('script[nonce]')?.nonce;
+startTransition(() => {
+  const existingNonce = document.querySelector<HTMLScriptElement>('script[nonce]')?.nonce;
 
-    hydrateRoot(
-      document,
-      <StrictMode>
-        <NonceProvider value={existingNonce}>
-          {/* Always mounted, so usePostHog() is never undefined — even with PostHog off. */}
-          <PostHogProvider client={posthog}>
-            <HydratedRouter />
-          </PostHogProvider>
-        </NonceProvider>
-      </StrictMode>
-    );
-  });
-}
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <NonceProvider value={existingNonce}>
+        {/* Always mounted, so usePostHog() is never undefined — even with PostHog off. */}
+        <PostHogProvider client={posthog}>
+          <HydratedRouter />
+        </PostHogProvider>
+      </NonceProvider>
+    </StrictMode>
+  );
+});
