@@ -76,9 +76,8 @@ export const PostHogBridge = () => {
 };
 
 /**
- * Registers the Meta Pixel as a bus destination (client only). `pixelId` is
- * the root loader's `PUBLIC_META_PIXEL_ID`; null = pixel off, nothing loads.
- * The nonce lets the lazily injected fbevents.js pass the CSP.
+ * Registers the Meta Pixel as a bus destination (client only); a null
+ * `pixelId` means the pixel is off. The nonce lets the lazily injected fbevents.js pass the CSP.
  */
 export const MetaPixelBridge = ({ pixelId }: { pixelId: string | null }) => {
   const nonce = useNonce();
