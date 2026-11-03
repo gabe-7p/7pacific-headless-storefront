@@ -44,7 +44,7 @@ const isPlainActivation = (event: MouseEvent<HTMLAnchorElement>) =>
  * real size option (e.g. the hat) render a single "One Size" cell like live.
  * Add-to-cart lives in a separate AddToCartBar flush at the card bottom.
  */
-export const ProductForm = ({ handle }: { handle: string }) => {
+export const ProductForm = () => {
   const { options, register } = useProductForm();
 
   // "Title" is Shopify's placeholder option for single-variant products.
@@ -117,7 +117,7 @@ export const ProductForm = ({ handle }: { handle: string }) => {
                 return (
                   <Link
                     key={name}
-                    to={productUrl(value.handle ?? handle, value.selectedOptions)}
+                    to={productUrl(value.handle, value.selectedOptions)}
                     replace
                     preventScrollReset
                     aria-current={selected ? 'true' : undefined}

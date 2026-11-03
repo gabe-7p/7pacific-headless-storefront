@@ -24,7 +24,7 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
 import { getColorSwatches } from '~/lib/product/colors';
 import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/product/content';
-import { PRODUCT_QUERY, type ProductData, RECOMMENDATIONS_QUERY } from '~/lib/product/queries';
+import { PRODUCT_QUERY, RECOMMENDATIONS_QUERY } from '~/lib/product/queries';
 import { ProductProvider, resolveSelectedVariant, useProductForm } from '~/lib/product/store';
 import { buildMeta } from '~/lib/seo';
 import { storefrontClientContext } from '~/lib/storefront';
@@ -226,7 +226,7 @@ const ProductPage = () => {
                 />
               </div>
               <div className="mt-4">
-                <ProductForm handle={product.handle} />
+                <ProductForm />
               </div>
               {/* The fit line moves into the Spec Card's FIT row when a spec
                   card exists — don't render it twice. */}
@@ -253,5 +253,4 @@ const ProductPage = () => {
   );
 };
 
-export type { ProductData };
 export default Product;
