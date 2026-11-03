@@ -17,12 +17,9 @@ const COMPATIBILITY_DATE = '2026-04-01';
 oxygenPlugin.api.registerPluginOptions({ compatibilityDate: COMPATIBILITY_DATE });
 
 /**
- * `dist/server/oxygen.json` tells Oxygen which workerd compatibility date the
- * worker was built for (`shopify hydrogen deploy` uploads it next to index.js).
- * MiniOxygen 4.2 only emits it on the classic `vite build --ssr` path, which
- * React Router 8's Environment API build never takes, so the app emits it from
- * the ssr environment itself. Drop this once MiniOxygen's plugin supports the
- * Environment API build.
+ * Emits `dist/server/oxygen.json` (the workerd compatibility date Oxygen reads)
+ * from the ssr environment — ADR 0012. Drop this once MiniOxygen's plugin
+ * supports the Environment API build.
  */
 const oxygenManifest = (): Plugin => ({
   name: 'app:oxygen-manifest',
@@ -49,10 +46,7 @@ export default defineConfig({
   environments: {
     ssr: {
       build: {
-        // React Router 8 builds the ssr environment from this input (falling
-        // back to its own server build, which has no `fetch` handler); the
-        // worker entry wraps that build. MiniOxygen's `build.ssr` default only
-        // applies to the classic `vite build --ssr` path.
+        // The worker entry wraps React Router's server build (ADR 0012).
         rollupOptions: { input: 'server.ts' },
       },
     },

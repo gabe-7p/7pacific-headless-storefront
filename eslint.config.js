@@ -243,10 +243,7 @@ export default [
     },
   },
   {
-    // Generated shadcn/ui primitives (Radix + Tailwind). These are vendored
-    // source we restyle but don't author from scratch, so they don't follow
-    // the repo's component conventions (const-arrow, no-explicit-any). Exempt
-    // them rather than rewriting generated code. See .claude/rules/ui-components.md.
+    // Generated shadcn/ui source — exempt, see .claude/rules/ui-components.md
     files: ['app/components/ui/**/*.{ts,tsx}'],
     rules: {
       'react/function-component-definition': 'off',

@@ -10,10 +10,8 @@ import { installPixelCapture, isStubMode, readEnvVar, SETTLE_MS, TRAFFIC_BLOCKED
  * Env: PUBLIC_META_PIXEL_ID (from .env), TEST_PRODUCT_HANDLE (optional; the
  * default is the first product in the shop-all collection grid).
  *
- * `pnpm test:pixel` serves a local stand-in for fbevents.js (META_PIXEL_STUB=1,
- * see e2e/pixel.ts), so it runs offline. `pnpm test:pixel:live` loads Meta's
- * real script, which needs the test host (localhost) on the pixel's Traffic
- * Permissions allow-list.
+ * Stub vs live mode and the Traffic Permissions caveat: e2e/pixel.ts and
+ * docs/META_PIXEL_TESTING.md §0.
  *
  * Not covered: Search — the storefront has no search route yet, so nothing
  * publishes `search_viewed`. The destination's mapping is unit-tested in

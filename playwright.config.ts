@@ -7,9 +7,7 @@ import { defineConfig } from '@playwright/test';
  * Mode, which double-invokes effects and can publish a page view twice, so
  * "exactly one event" assertions only hold against a production build.
  *
- * `pnpm test:pixel` serves a local stand-in for fbevents.js (META_PIXEL_STUB=1,
- * see e2e/pixel.ts); `pnpm test:pixel:live` loads Meta's real script, which
- * needs the test host on the pixel's Traffic Permissions allow-list.
+ * Stub vs live mode: see e2e/pixel.ts.
  *
  * Attach to a server that is already running (dev or preview) instead with
  * `PIXEL_BASE_URL=http://localhost:3000 pnpm test:pixel`.
