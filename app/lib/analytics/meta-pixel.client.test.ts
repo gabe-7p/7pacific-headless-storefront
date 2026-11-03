@@ -120,7 +120,7 @@ describe('connectMetaPixelToShopify', () => {
     expect(window.fbq).toBeUndefined();
   });
 
-  it('loads fbevents.js with the nonce and queues init before the first track', () => {
+  it('loads fbevents.js with the nonce and queues autoConfig off, then init, before the first track', () => {
     runSetup();
     callbacks.page_viewed?.({});
     const script = document.querySelector<HTMLScriptElement>(
@@ -128,7 +128,9 @@ describe('connectMetaPixelToShopify', () => {
     );
     expect(script?.nonce).toBe('abc');
     expect(script?.async).toBe(true);
+    // Order matters to fbevents.js: `set autoConfig` is ignored after `init`.
     expect(queued()).toEqual([
+      ['set', 'autoConfig', false, '123'],
       ['init', '123'],
       ['track', 'PageView'],
     ]);
@@ -140,6 +142,7 @@ describe('connectMetaPixelToShopify', () => {
     callbacks.page_viewed?.({});
     expect(document.querySelectorAll('script[src*="fbevents"]').length).toBe(1);
     expect(queued().filter((call) => call[0] === 'init').length).toBe(1);
+    expect(queued().filter((call) => call[0] === 'set').length).toBe(1);
   });
 
   it('maps ViewContent, AddToCart and Search and skips null params', () => {
@@ -153,14 +156,12 @@ describe('connectMetaPixelToShopify', () => {
     );
     callbacks.search_viewed?.({ searchTerm: '' });
     callbacks.search_viewed?.({ searchTerm: 'shorts' });
-    expect(queued().map((call) => (call[0] === 'init' ? 'init' : call[1]))).toEqual([
-      'init',
-      'ViewContent',
-      'AddToCart',
-      'Search',
-    ]);
-    expect(queued()[2]?.[2]).toMatchObject({ num_items: 1, value: 74, currency: 'USD' });
-    expect(queued()[3]?.[2]).toEqual({ search_string: 'shorts' });
+    const tracked = queued().filter((call) => call[0] === 'track');
+    expect(queued()[0]?.[0]).toBe('set');
+    expect(queued()[1]?.[0]).toBe('init');
+    expect(tracked.map((call) => call[1])).toEqual(['ViewContent', 'AddToCart', 'Search']);
+    expect(tracked[1]?.[2]).toMatchObject({ num_items: 1, value: 74, currency: 'USD' });
+    expect(tracked[2]?.[2]).toEqual({ search_string: 'shorts' });
   });
 
   it('setup cleanup unsubscribes everything', () => {

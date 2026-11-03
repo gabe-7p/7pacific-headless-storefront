@@ -13,6 +13,8 @@ How to confirm the Meta Pixel fires correctly on the storefront, in about 15 min
 
 The pixel loads only after Shopify's Customer Privacy API allows analytics (immediately for US visitors; after the banner elsewhere).
 
+**Every event is a GET** (`Request Method: GET`, type `img`, ~1.3 KB). Meta's **Automatic Configuration** is switched off (`fbq('set', 'autoConfig', false, …)` before `init`), because with it on fbevents.js scrapes the page and appends ~8 KB to each event, anything over 2048 URL characters is sent as a `navigator.sendBeacon` POST instead, and those beacons were exactly the events Events Manager never showed (every `AddToCart`, and `ViewContent` on every product whose meta description is longer than the hat's). Off also means **no** `SubscribedButtonClick` automatic events and no `[Meta Pixel] - Invalid parameter format for currency` warning in the console. If you ever see a `POST` to `facebook.com/tr/` (type `ping`) again, autoConfig is back on — check that the `set` call still precedes `init` in `app/lib/analytics/meta-pixel.client.ts`.
+
 ## 0. Before you start (one-time)
 
 1. **Pixel ID.** `.env` must contain `PUBLIC_META_PIXEL_ID=<your pixel id>` (the same ID the Facebook & Instagram app uses). Oxygen's Production and Preview environments need the same variable.
@@ -36,7 +38,7 @@ Expected: `➜  Local: http://localhost:3000/`. Open that URL in Chrome, press `
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Load the homepage                                    | 1 request: `ev: PageView`, `id: <your pixel id>`                                                                                                                                                          |
 | Click a product                                      | 1 more `ev: PageView` and 1 `ev: ViewContent` with `cd[content_ids]: ["shopify_US_<product>_<variant>"]`, `cd[content_type]: product`, `cd[content_name]`, `cd[value]: <unit price>`, `cd[currency]: USD` |
-| Click **Add to cart**                                | 1 `ev: AddToCart` with `cd[num_items]: 1`, `cd[value]` = the unit price, `cd[currency]`, `cd[content_ids]`                                                                                                |
+| Click **Add to cart**                                | 1 `ev: AddToCart` with `cd[num_items]: 1`, `cd[value]` = the unit price, `cd[currency]`, `cd[content_ids]` (and no `ev: SubscribedButtonClick` — that is Meta's automatic configuration, which is off)    |
 | In the cart drawer, click **+** once                 | 1 more `ev: AddToCart`, again `cd[num_items]: 1` (if it says `2`, that is a bug: it is sending the cart total)                                                                                            |
 | Click **−** or **Remove**                            | nothing new (removals are not Meta events)                                                                                                                                                                |
 | Reload a product page while the cart still has items | only `PageView` + `ViewContent`, **no** `AddToCart` (a pre-existing cart must not re-fire)                                                                                                                |

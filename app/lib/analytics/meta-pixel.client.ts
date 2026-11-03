@@ -63,7 +63,21 @@ const createFbqStub = (): Fbq => {
   return stub;
 };
 
-/** Creates `window.fbq`, injects fbevents.js (nonced) and queues `init` — once. */
+/**
+ * Creates `window.fbq`, injects fbevents.js (nonced) and queues `init` — once.
+ *
+ * Automatic Configuration is switched off first (`set autoConfig false` must
+ * precede `init`). With it on, fbevents.js scrapes every page (meta
+ * description, stock/price selectors from the pixel's old "automatic events"
+ * rules) and appends ~8 KB to each event; anything over 2048 URL characters
+ * is then sent as a `navigator.sendBeacon` POST instead of a GET image, and
+ * those beacons were the events Events Manager never showed (every
+ * `AddToCart`, and `ViewContent` on every product whose description is
+ * longer than a tweet). Off, every event is a ~1.3 KB GET, and Meta's
+ * automatic `SubscribedButtonClick` events and its "Invalid parameter format
+ * for currency" warning stop too. We publish every standard event ourselves,
+ * so nothing is lost.
+ */
 const ensureFbq = ({ pixelId, nonce }: MetaPixelOptions): Fbq => {
   if (fbq) return fbq;
   fbq = window.fbq ?? createFbqStub();
@@ -76,6 +90,7 @@ const ensureFbq = ({ pixelId, nonce }: MetaPixelOptions): Fbq => {
     if (nonce) script.nonce = nonce;
     document.head.appendChild(script);
   }
+  fbq('set', 'autoConfig', false, pixelId);
   fbq('init', pixelId);
   return fbq;
 };
