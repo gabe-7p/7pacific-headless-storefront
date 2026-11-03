@@ -14,21 +14,21 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 
 ## Commands
 
-| Task                           | Command                                                                                    |
-| ------------------------------ | ------------------------------------------------------------------------------------------ |
-| Dev server (mini-oxygen)       | `pnpm dev` (`vite dev`, http://localhost:3000)                                             |
-| Build                          | `pnpm build` (`react-router build` → `dist/`)                                              |
-| Preview the worker build       | `pnpm preview`                                                                             |
-| Deploy to Oxygen (CI)          | `pnpm deploy`                                                                              |
-| Type check + query check       | `pnpm type-check` (tsc + `hydrogen gql check`)                                             |
-| Lint                           | `pnpm lint`                                                                                |
-| Format                         | `pnpm prettier` / check: `pnpm prettier:check`                                             |
-| Unit tests (Vitest)            | `pnpm test`                                                                                |
-| Meta Pixel funnel (Playwright) | `pnpm test:pixel` (offline stub) / `pnpm test:pixel:live` — see docs/META_PIXEL_TESTING.md |
-| Sync Hydrogen agent skills     | `pnpm exec hydrogen skills sync` (after a Hydrogen bump; `skills check` runs in CI)        |
-| Dependency-boundary check      | `pnpm depcruise`                                                                           |
-| Add a shadcn/ui primitive      | `pnpm dlx shadcn@latest add <name>`                                                        |
-| Full pre-PR gate               | the `/check` command (mirrors CI)                                                          |
+| Task                           | Command                                                                                         |
+| ------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Dev server (mini-oxygen)       | `pnpm dev` (`hydrogen skills check --mode=warn && vite dev`, http://localhost:3000)             |
+| Build                          | `pnpm build` (`react-router build` → `dist/`)                                                   |
+| Preview the worker build       | `pnpm preview`                                                                                  |
+| Deploy to Oxygen (CI)          | `pnpm deploy`                                                                                   |
+| Type check + query check       | `pnpm type-check` (`react-router typegen`, `tsc --noEmit`, `hydrogen gql check --fail-on-warn`) |
+| Lint                           | `pnpm lint`                                                                                     |
+| Format                         | `pnpm prettier` / check: `pnpm prettier:check`                                                  |
+| Unit tests (Vitest)            | `pnpm test`                                                                                     |
+| Meta Pixel funnel (Playwright) | `pnpm test:pixel` (offline stub) / `pnpm test:pixel:live` — see docs/META_PIXEL_TESTING.md      |
+| Sync Hydrogen agent skills     | `pnpm exec hydrogen skills sync` (after a Hydrogen bump; `skills check` runs in CI)             |
+| Dependency-boundary check      | `pnpm depcruise`                                                                                |
+| Add a shadcn/ui primitive      | `pnpm dlx shadcn@latest add <name>`                                                             |
+| Full pre-PR gate               | the `/check` command (mirrors CI)                                                               |
 
 ## Repo map
 
@@ -38,13 +38,14 @@ app/
   routes/        one file per route (React Router flat convention); loader/action live here (+ colocated *.test.ts, ignored by routes.ts)
   components/    presentational only — layout/ analytics/ cart/ (CartDrawer + useCartDrawer, CartMain, CartLineItem, CartSummary) product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + brand content — links.ts (`HANDLES` = the ONE place a Shopify handle lives + `STORE_LINKS`), brand.ts (name, announcement, social, fallback nav), media.ts (external media ids), join.ts, membership.ts, …
-  lib/           shopifyMiddleware.ts (the root middleware: Hydrogen's request lifecycle), storefront.ts (request-scoped client, router context, route templates), i18n.ts (`MARKET`, `MONEY_LOCALE`, `DATE_LOCALE`), urls.ts (every URL shape: `productUrl`, `collectionUrl`, `pageUrl`, `journalUrl`, `cartUrl`, `youtubeWatchUrl`), cart.server.ts (the `/api/cart` handlers) / cart.ts (the client store: `CartProvider`, `useCart`, `useCartForm`), product/ (PDP: queries.ts gql documents + types, store.ts product-form store, content.ts metafield JSON shapes, display.ts short titles/size labels, colors.ts swatches), fragments.ts (shared gql fragments + chrome queries), http.ts (notFound, deferQuery), oxygen.ts (the `oxygenContext` key: env + sub-request cache + waitUntil, set by server.ts), csp.ts, sitemap.ts, shopifyRuntime.ts (the one wait-for-`window.Shopify` poll), analytics/ (shopify.ts = the bus, posthog.ts = config, posthog.client.ts / posthog.server.ts = the SDKs, posthog.events.ts = event names + builders, meta-pixel.ts = Meta event mapping + `toMetaContentId`, meta-pixel.client.ts = the pixel as a bus destination; no barrel — import by path), cross-cutting utils (+ colocated *.test.ts)
+  lib/           request wiring (`shopifyMiddleware.ts`, `storefront.ts`, `oxygen.ts`, `csp.ts`), data (`fragments.ts`, `product/`, `cart*.ts`), `analytics/`, and cross-cutting helpers (`urls.ts`, `i18n.ts`, `money.ts`, …) + colocated *.test.ts — file-by-file in [docs/architecture.md](docs/architecture.md#code-organization)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
-public/          static files served at the web root as-is (favicon.ico, llms.txt — the GEO brand summary, copy mirrors Notion)
+public/          static files served at the web root as-is (favicon.ico, og-home.jpg, topography.jpg, llms.txt — the GEO brand summary, copy mirrors Notion)
 *-graphql-env.d.ts Storefront API schema environments written by the Hydrogen ts-plugin (gitignored, never edit)
-.claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit
-docs/            architecture.md, decisions/ (ADRs), META_PIXEL_TESTING.md (the pixel checklist), doc index + lookup table
+.claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit; `logs-*` and `replay-vision-*` are PostHog wizard output; `.agents/skills/` is a tracked twin written by the same sync
+.codex/ .cursor/ .husky/ .vscode/  per-tool config (Codex/Cursor read CLAUDE.md; husky runs lint-staged on commit)
+docs/            architecture.md, decisions/ (ADRs), runbooks/ (add-a-product), META_PIXEL_TESTING.md (the pixel checklist), tech-debt-plan.md (the cleanup backlog), migration-playbook.md (historical), doc index + lookup table
 e2e/             the Playwright Meta Pixel funnel test (`pnpm test:pixel`; playwright.config.ts at the root)
 .claude/         settings.json (hooks), commands/ (/check, /review_pr), rules/
 ```
@@ -61,7 +62,7 @@ Full detail in [.claude/rules/](.claude/rules/) — read the relevant file befor
 - [common-pitfalls.md](.claude/rules/common-pitfalls.md) — nullable Storefront fields, no waterfalls, never expose `PRIVATE_*`, no `any`.
 - [ui-components.md](.claude/rules/ui-components.md) — when to reach for a shadcn/ui primitive vs. hand-build, how to add/restyle one, the `components/ui/` lint exemption.
 
-The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; every Storefront read passes an explicit `cache`; the cart is read with `useCart`, never a loader promise; images through `common/Image`, prices through `common/Price`; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint, dependency-cruiser, and `/check` enforce these (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
+The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; every Storefront read passes an explicit `cache`; the cart is read with `useCart`, never a loader promise; images through `common/Image`, prices through `common/Price`; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint and `/check` enforce these (dependency-cruiser layer rules will join them; see docs/tech-debt-plan.md) (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
 ## Brand single-sources (change once, applies everywhere)
 
@@ -75,30 +76,22 @@ Never hardcode brand values inline — edit the one source and every consumer fo
 - **Signup** (the roster newsletter + the drop waitlist) → one flow: copy in [app/content/join.ts](app/content/join.ts), one `common/JoinForm` posting a `list` field to `/api/subscribe`, one `common/JoinDialog` (`useJoinDialog().open(list)`; `Cta` opens the newsletter for `NEWSLETTER_HREF`). Never add a second signup form or endpoint — add a list.
 - **Media on Shopify Files** (every image/video/poster URL) → built by the helpers in [app/lib/shopifyFiles.ts](app/lib/shopifyFiles.ts) (`shopifyImage`, `shopifyVideo`, `shopifyVideoThumbnail`, …) from the filename or media id Files shows — never a pasted `https://cdn.shopify.com/…` string, so the CDN roots live in one place.
 - **SEO** (title format, default meta) → [app/lib/seo.ts](app/lib/seo.ts) (`buildMeta()`).
-- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`, `SpecLine`, `BrandDialog`, `Readout`, `Image`, `Price`). All titles render through `Heading` (multi-line via its `lines` prop); all CTAs through `Cta` (label in, arrow + variant handled once); mono spec-strip labels through `SpecLine`; night-tier modals through the `BrandDialog` shell; file/HUD chapter labels and corner brackets through `Readout`; every image through `Image` (`sizes` presets in `lib/imageSizes.ts`) and every price through `Price` — never hand-roll these class recipes at a callsite, and never import Hydrogen's `Image`/`Money` outside those two files.
+- **Repeated UI** → shared components in `app/components/common/` (`Container`, `Logo`, `Heading`, `Cta`, `SpecLine`, `BrandDialog`, `Readout`, `Image`, `Price`). All titles render through `Heading` (multi-line via its `lines` prop); all CTAs through `Cta` (label in, arrow + variant handled once); mono spec-strip labels through `SpecLine`; night-tier modals through the `BrandDialog` shell; file/HUD chapter labels and corner brackets through `Readout`; every image through `Image` (`sizes` presets in `lib/imageSizes.ts`) and every price through `Price` — never hand-roll these class recipes at a callsite, never import `formatMoney` outside `lib/money.ts`, and never use a bare `<img>` outside `common/Image`.
 
 ## Domain note: color = separate product
 
-The 9 live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/product/colors.ts` — don't model color as a `ProductVariant` selectedOption.
+Live products are **separate Shopify products per color**, not variants. The color family lives in Shopify product metafields (`custom.color_name`/`color_hex`/`color_siblings`), read via `lib/product/colors.ts` — don't model color as a `ProductVariant` selectedOption.
 
-## How to add/swap a product or color (Shopify-only — no deploy)
-
-1. **Create the product** in Shopify admin (one product per color, handle ending in the color suffix, e.g. `…-slate`). Publish it to the **7Pacific Headless Storefront** channel.
-2. **Set its color metafields**: `custom.color_name` ("Slate"), `custom.color_hex` (`#8A8F98`), `custom.color_siblings` (ordered list of ALL products in the color family, **including the new product itself**).
-3. **Update every sibling's `custom.color_siblings`** to include the new product (the list is the swatch row, in display order).
-4. **Set the PDP content metafields**: `custom.hero_image` + `custom.hero_image_mobile` (file_reference — the desktop/mobile PDP hero, falls back to the variant image if unset), `custom.spec_card` (JSON — the locked seven-key Spec Card: `fabric`/`weight`/`use`/`seams`/`pockets`/`fit`/`origin`; omit a key rather than invent a value, the row is skipped), and if it's a new product type also `custom.fit_note`, `custom.product_details` (JSON), `custom.tech_stack` (JSON), `custom.recommended_products`.
-   - ⚠️ **`custom.product_details` is per-color, not per-product-type.** Its `imageUrl`s are absolute CDN URLs, so copying a sibling's JSON verbatim (the captions ARE shared) silently ships another color's photos on the PDP. Swap every `imageUrl` to that color's own shot; keep `caption`/`subcaption`. Nothing in code can catch this — product images carry no alt text, so there's no way to map a photo to a caption automatically.
-5. **Add it to collections**: `baseline` (the shop-all collection page, titled BASELINE) and `homepage-first-drop` (drag into position — its order IS the homepage grid order).
-6. Only if a CTA should target it: update [app/content/links.ts](app/content/links.ts) — the one place product/collection handles appear in code.
+Adding/swapping a product or color is Shopify-only (no deploy) — see [docs/runbooks/add-a-product.md](docs/runbooks/add-a-product.md).
 
 ## Documentation discipline
 
 **When you change code, update the documentation that describes it — in the same change, not later.** A PR that drifts from its docs is incomplete. Specifically:
 
-- Changed a **convention or pattern**? Update the relevant `.claude/rules/*.md` (and the Cursor mirror at `.cursor/rules/code-style.mdc`) in the same commit.
+- Changed a **convention or pattern**? Update the relevant `.claude/rules/*.md` in the same commit.
 - Added/renamed/moved a **script, command, env var, or top-level directory**? Update this `CLAUDE.md` (Commands / Repo map) and the env var table in [docs/architecture.md](docs/architecture.md#environment--secrets).
 - Introduced a **new pattern worth following** (or a sharp edge worth avoiding)? Add it to the right rule file so the next agent inherits it.
-- Made a **decision that wasn't obvious**? Record the _why_ where future readers will look (rule file, or `docs/` once it exists).
+- Made a **decision that wasn't obvious**? Record the _why_ where future readers will look (rule file, or `docs/`).
 
 If a change makes any doc here wrong, fixing the doc is part of the task — treat stale docs as a defect, the same as a failing test. When unsure where something belongs, leave a clear note in the PR description.
 
