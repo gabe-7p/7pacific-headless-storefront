@@ -40,8 +40,7 @@ export const OWEN_PLATT = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // Owen's founder message in Shopify Files (portrait, 28s) — Shopify's
-    // 720p transcode; poster is the custom thumbnail set in Shopify admin.
+    // Poster: the custom thumbnail set in Shopify admin.
     src: shopifyVideo('4e59f563e64348948ba8e23ccbdddd1e', 'HD-720p-4.5Mbps-91367435'),
     poster: shopifyVideoPoster('Screenshot_2026-08-11_at_5.17.33_PM.png'),
     captions: '',

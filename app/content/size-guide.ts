@@ -1,12 +1,9 @@
 /**
  * The PDP size guide — the measurement table and "how to measure" explainer
- * behind the SIZE GUIDE link on the buy card's SIZE row (rendered by
- * `components/product/SizeGuide`).
+ * (rendered by `components/product/SizeGuide`).
  *
- * Sizing is identical across the apparel range, so it lives here as a typed
- * constant rather than a per-product metafield. The numbers are body
- * measurements (measure yourself), not garment measurements — Gabe supplied
- * both unit tables, 2026-09-18; they are locked, edit them here only.
+ * Sizing is identical across the apparel range, so it lives here rather than
+ * in a per-product metafield. The numbers are body, not garment, measurements.
  */
 
 import { shopifyImage } from '~/lib/shopifyFiles';

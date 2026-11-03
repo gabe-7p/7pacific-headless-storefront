@@ -39,9 +39,7 @@ type TeaserSectionProps = {
 };
 
 /**
- * One teaser card: photo or looping video with a centered overlay — mono
- * eyebrow, display title, and the same xs outline Cta the tenet cards use.
- * The shared aspect ratio (not natural media height) is what keeps
+ * One teaser card: photo or looping video with a centered overlay. The shared aspect ratio (not natural media height) is what keeps
  * opposite-orientation media rendering as equal cards. It lives on the
  * WRAPPER, with the media absolutely filling it (object-cover) — the app's
  * `common/Image` sets an inline aspect-ratio from its width/height props,
@@ -87,10 +85,8 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
 );
 
 /**
- * The shared two-card teaser section: section title (+ optional subtitle and
- * countdown) over two photo-overlay cards. Purely presentational — each
- * instance (DropTwo, BaselineIntro) supplies content from `content/home.ts`
- * and its own Cta elements, so per-card behavior stays at the callsite.
+ * The shared two-card teaser section (DropTwo, BaselineIntro): section title
+ * (+ optional subtitle and countdown) over two photo-overlay cards.
  */
 export const TeaserSection = ({ heading, subtitle, countdown, cards }: TeaserSectionProps) => (
   <Container className="py-9 md:py-12">

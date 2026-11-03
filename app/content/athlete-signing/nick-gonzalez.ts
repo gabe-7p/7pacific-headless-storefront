@@ -43,9 +43,7 @@ export const NICK_GONZALEZ = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // Nick's founder message in Shopify Files (portrait, 32s) — Shopify's
-    // 720p transcode; poster is Shopify's auto-generated preview (no custom
-    // thumbnail set for this video yet).
+    // Poster: Shopify's auto-generated preview (no custom thumbnail yet).
     src: shopifyVideo('d28bb7a756df42b3a46ea28c7ea9b7e9', 'HD-720p-1.6Mbps-96972241'),
     poster: shopifyVideoPoster('d28bb7a756df42b3a46ea28c7ea9b7e9.thumbnail.0000000000.jpg'),
     captions: '',

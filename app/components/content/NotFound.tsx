@@ -8,12 +8,9 @@ import { NOT_FOUND_PAGE } from '~/content/not-found';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /**
- * The 404 view, rendered by the root ErrorBoundary. Split editorial: the
- * coordinates spec line and the locked sentence on the left, the Lands End
- * trail photograph on the right (stacked copy-then-photo on mobile). Must stay
- * free of layout-context dependencies — when the root loader itself fails it
- * renders bare, outside PageLayout (MotionProvider is self-contained here for
- * that reason).
+ * The 404 view, rendered by the root ErrorBoundary. Must stay free of
+ * layout-context dependencies — when the root loader itself fails it renders
+ * bare, outside PageLayout (MotionProvider is self-contained for that reason).
  *
  * Entrance choreography: the coordinates type on like a GPS acquiring a fix
  * (an Ember caret flicks twice, then rests — the page's one Ember moment),
@@ -22,12 +19,10 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
  */
 export const NotFound = () => (
   <MotionProvider>
-    {/* Live doesn't centre the 404 vertically — it sits a fixed distance below
-        the header, flush with the page gutter.
-        Past --page-max the centring margin is the gutter, so the padding drops
-        to zero — that's what puts live's text 20px from the viewport edge.
-        Both gutters use arbitrary min-widths so Tailwind orders them by width
-        (a named `md:` would sort after `min-[1440px]:` and win at 1440). */}
+    {/* Measured on live: a fixed distance below the header (120px / 155px from
+        768), text 20px from the viewport edge past --page-max. Arbitrary
+        min-widths throughout — see common-pitfalls.md (named vs arbitrary
+        breakpoints). */}
     <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
       <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
         <div>

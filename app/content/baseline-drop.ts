@@ -1,11 +1,8 @@
 /**
  * /drops/baseline — the ED. 01 "BASELINE" drop page (route drops.baseline.tsx
- * → components/content/BaselineDrop). Copy is transcribed verbatim from Gabe's
- * approved Claude Design mock (`BASELINE Drop Page.dc.html`, turn 4a — content
- * sections left-aligned, closer centered; 2026-08-24) plus Gabe's live
- * design-review revisions. All display strings are sentence case here and
- * uppercased by CSS, per the display-face rule. Every media field is a
- * `MediaSlotSource` — per-photo crop anchoring rides each source as `focus`.
+ * → components/content/BaselineDrop). Display strings are sentence case here
+ * and uppercased by CSS. Every media field is a `MediaSlotSource` — per-photo
+ * crop anchoring rides each source as `focus`.
  */
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
@@ -32,10 +29,8 @@ months with real athletes before it earned a spot with us.',
       receipts, the training standard) for the build story behind the kit. */
   dropLink: { label: 'How We Built It', href: STORE_LINKS.baselineDrop },
 
-  /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop (Shopify
-      file 52942265516349 + its CDN poster frame). 720p rendition, the repo's
-      standard for background loops (the 1080p cut is 43 MB). The mock's
-      "SOUND OFF · TAP FOR AUDIO" badge ships once there is an audio toggle. */
+  /** The recorded drop film — 16:9, full-bleed, autoplay/muted/loop. 720p: the
+      1080p cut is 43 MB. */
   film: {
     kind: 'video',
     src: shopifyVideo('002c07ce613b4b15893c9fdf493295c9', 'HD-720p-4.5Mbps-92527050'),

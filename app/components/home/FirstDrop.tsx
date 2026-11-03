@@ -5,10 +5,8 @@ import { HOME_FIRST_DROP } from '~/content/home';
 import type { ProductCardData } from '~/lib/fragments';
 
 /**
- * "The Starting Lineup" — heading + the full-catalog product grid. Mirrors the
- * live `main-collection` section; renders the typed products the loader
- * fetched (all live products, ordered by the manual homepage-first-drop
- * collection).
+ * "The Starting Lineup" — heading + the full-catalog product grid, in the
+ * order of the manual homepage collection (HANDLES.homepageCollection).
  */
 export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardData> }) => (
   <Container className="py-9 md:py-12">

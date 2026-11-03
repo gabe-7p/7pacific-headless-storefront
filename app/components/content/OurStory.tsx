@@ -15,7 +15,7 @@ import { OUR_STORY } from '~/content/our-story';
 import { cn } from '~/lib/cn';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
-/** Body copy: 14px Inter at 1.6 (Gabe 2026-10-08 — the guideline floor). */
+/** Body copy: 14px Inter at 1.6 (the guideline floor). */
 const BODY = 'text-sm leading-[1.6] text-ink-night';
 /** Chapter statements — one step under the hero. `leading-` repeats per size
     because `text-*` utilities reset line-height. */
@@ -175,7 +175,7 @@ const Mission = () => {
 };
 
 /** 03 KIT — heading with the four passages in one readable column beside it
-    (Gabe 2026-10-08: the 2×2 grid was hard to scan), then the wide band and
+    (the 2×2 grid was hard to scan), then the wide band and
     the captioned strip. Strip seams are 1px of the night hairline. */
 const Kit = () => {
   const { kit } = OUR_STORY;
@@ -270,9 +270,7 @@ const Roster = () => {
  * Our Story — "The File". A Night Session page that tells the story as an
  * athlete's issued file: hero → 01 status → 02 mission → 03 kit → 04 roster
  * (letter + sign-off). The file ends on the sign-off — there is no closing
- * band. Presentational: renders the typed copy and media slots from
- * content/our-story.ts. Owns its MotionProvider (NotFound precedent). The
- * 72px faint grid is AthleteSigning's.
+ * band. Owns its MotionProvider (NotFound precedent).
  */
 export const OurStory = () => (
   <MotionProvider>

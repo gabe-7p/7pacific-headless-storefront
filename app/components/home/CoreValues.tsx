@@ -63,8 +63,7 @@ const Media = ({ media }: { media: CoreValue['media'] }) =>
 /**
  * "How We Train" — four alternating rows pairing each rule card with its
  * media (wide media ~2/3, narrow card ~1/3, sides alternating per row; single
- * column below md). Layout mirrors the live `core-values-homepage-v2`
- * section; the copy is homepage v2 (content/home.ts).
+ * column below md).
  */
 export const CoreValues = () => {
   const { heading, subtitle, values } = HOME_CORE_VALUES;

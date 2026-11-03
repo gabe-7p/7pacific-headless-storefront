@@ -2,10 +2,7 @@ import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
 
 /**
  * THE single place a Shopify handle may appear in app code — when a handle
- * changes in Shopify, update it here and every query and CTA follows. URL
- * shapes come from lib/urls.ts; this file only supplies the handles.
- * (Nav/footer links come from Shopify menus; the links below are the
- * marketing-CTA targets baked into page content.)
+ * changes in Shopify, update it here and every query and CTA follows.
  */
 export const HANDLES = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue

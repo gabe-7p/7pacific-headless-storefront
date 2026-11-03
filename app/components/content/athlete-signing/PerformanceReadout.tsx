@@ -4,8 +4,7 @@ import type { AthleteSigningContent, ScaleMarkerPercent } from '~/content/athlet
 import { cn } from '~/lib/cn';
 
 /**
- * Static map for the readout-scale marker — `markerPercent` is a 5%-step
- * union so every class exists literally for Tailwind to generate.
+ * Static map for the readout-scale marker — see `ScaleMarkerPercent`.
  */
 const MARKER_LEFT: Record<ScaleMarkerPercent, string> = {
   0: 'left-[0%]',
