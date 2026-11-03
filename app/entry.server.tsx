@@ -4,6 +4,7 @@ import { type EntryContext, type RouterContextProvider, ServerRouter } from 'rea
 
 import { createCsp, createNonce } from '~/lib/csp';
 import { NonceProvider } from '~/lib/nonce';
+import { oxygenContext } from '~/lib/oxygen';
 
 export default async function handleRequest(
   request: Request,
@@ -15,7 +16,7 @@ export default async function handleRequest(
   // CSP is app-owned since Hydrogen 2026.10 (lib/csp.ts). One nonce per
   // request, threaded to <Scripts> and <ShopifyScripts> through NonceProvider.
   const nonce = createNonce();
-  const csp = createCsp({ nonce, env: context.env });
+  const csp = createCsp({ nonce, env: context.get(oxygenContext).env });
 
   const body = await renderToReadableStream(
     <NonceProvider value={nonce}>

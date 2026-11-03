@@ -6,7 +6,7 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 
 | Layer     | Choice                                                                        |
 | --------- | ----------------------------------------------------------------------------- |
-| Framework | **React Router 7** (middleware) + **Hydrogen 2026.10** as a library, Vite 8   |
+| Framework | **React Router 8** (middleware) + **Hydrogen 2026.10** as a library, Vite 8   |
 | Runtime   | Oxygen (Shopify's edge worker hosting)                                        |
 | UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives |
 | Data      | Shopify **Storefront API** (guest checkout — no customer accounts)            |
@@ -23,7 +23,7 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
                          │
                          ▼
               root middleware (app/lib/shopifyMiddleware.ts)
-                ├─ data request? (`.data`, `future.v8_passThroughRequests`) → bodyless copy at the normalized `url` for Hydrogen
+                ├─ data request? (`.data` — React Router 8 passes raw requests) → bodyless copy at the normalized `url` for Hydrogen
                 ├─ createRequestStorefrontClient()        one private Storefront API client per request
                 ├─ handleShopifyRoutes()  ──▶ answers Shopify-owned URLs before the router:
                 │       /api/cart (cart store), /checkout, /cart/ID:QTY + /buy permalinks,
@@ -103,7 +103,7 @@ The 9 live products are **separate Shopify products per color**, not Shopify var
 
 ## Environment & secrets
 
-Configuration is via environment variables, listed below (shape in [app/lib/env.ts](../app/lib/env.ts); `server.ts` puts the worker env on the router context, and the middleware and loaders read it as `context.env` — declared in `env.d.ts`). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild — and `getPostHogConfig` (`lib/analytics/posthog.ts`) keeps PostHog off on `*.myshopify.dev` hosts regardless, so preview-deployment testing never shows up as shopper sessions even when an environment carries the production key. See [ADR 0008](decisions/0008-posthog-analytics.md).
+Configuration is via environment variables, listed below (shape in [app/lib/env.ts](../app/lib/env.ts); `server.ts` puts the worker bindings on the router context under the typed `oxygenContext` key ([app/lib/oxygen.ts](../app/lib/oxygen.ts)), and the middleware, loaders and `entry.server` read `context.get(oxygenContext).env`). `PUBLIC_*` vars are safe in the browser; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only** and must never reach client code. Locally they live in gitignored `.env`; in production they're set per-environment in Oxygen (`shopify hydrogen env pull/push`). PostHog's `PUBLIC_POSTHOG_*` vars are read at request time (not inlined by Vite), so Production and Preview can point at different PostHog projects without a rebuild — and `getPostHogConfig` (`lib/analytics/posthog.ts`) keeps PostHog off on `*.myshopify.dev` hosts regardless, so preview-deployment testing never shows up as shopper sessions even when an environment carries the production key. See [ADR 0008](decisions/0008-posthog-analytics.md).
 
 | Variable                          | Access | What it is                                                                                            |
 | --------------------------------- | ------ | ----------------------------------------------------------------------------------------------------- |

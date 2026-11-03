@@ -1,8 +1,8 @@
 # 7Pacific Storefront
 
-Headless storefront for **7Pacific** (DTC athletic apparel): a **React Router 7** app with **Shopify Hydrogen 2026.10** (the library: Storefront client, cart, product form, analytics) on **Oxygen**. Migrated from a customized Impulse Liquid theme in small, independently deployable units.
+Headless storefront for **7Pacific** (DTC athletic apparel): a **React Router 8** app with **Shopify Hydrogen 2026.10** (the library: Storefront client, cart, product form, analytics) on **Oxygen**. Migrated from a customized Impulse Liquid theme in small, independently deployable units.
 
-- **Framework**: React Router 7 + Hydrogen 2026.10 · React 19 · Vite 8
+- **Framework**: React Router 8 + Hydrogen 2026.10 · React 19 · Vite 8
 - **Styling**: Tailwind CSS v4 + shadcn/ui (Radix headless primitives, vendored into `app/components/ui/`)
 - **Data**: Shopify Storefront API 2026-10 (`gql()` documents typed in place by Hydrogen's TypeScript plugin) — guest checkout, no customer accounts
 - **Hosting**: Oxygen (preview deploy per PR, production on `main`)

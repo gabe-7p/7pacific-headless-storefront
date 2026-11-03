@@ -13,11 +13,3 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
   workerd: true
-#
-# Patched packages (`pnpm patch`). `@react-router/dev` 7.16 passes `envFile: false`
-# to Vite, which Vite 8.1+ deprecated — every `pnpm dev` printed the warning six
-# times. This is a backport of the upstream fix (remix-run/react-router#15230,
-# shipped only in @react-router/dev 8.1.0; no 7.x release carries it). Delete the
-# patch and this entry when the repo moves to React Router 8.
-patchedDependencies:
-  '@react-router/dev@7.16.0': patches/@react-router__dev@7.16.0.patch

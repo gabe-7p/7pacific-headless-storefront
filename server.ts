@@ -2,6 +2,7 @@ import { createRequestHandler, RouterContextProvider } from 'react-router';
 import * as serverBuild from 'virtual:react-router/server-build';
 
 import { createPostHogClient, posthogContext } from '~/lib/analytics/posthog.server';
+import { oxygenContext } from '~/lib/oxygen';
 
 /**
  * The Oxygen worker entry. Hydrogen 2026.10 is a library, so this is a plain
@@ -24,9 +25,11 @@ export default {
       }
 
       const routerContext = new RouterContextProvider();
-      routerContext.cache = await caches.open('hydrogen-v1');
-      routerContext.env = env;
-      routerContext.waitUntil = executionContext.waitUntil.bind(executionContext);
+      routerContext.set(oxygenContext, {
+        env,
+        cache: await caches.open('hydrogen-v1'),
+        waitUntil: executionContext.waitUntil.bind(executionContext),
+      });
       routerContext.set(posthogContext, posthog);
 
       const handleRequest = createRequestHandler(serverBuild, process.env.NODE_ENV);

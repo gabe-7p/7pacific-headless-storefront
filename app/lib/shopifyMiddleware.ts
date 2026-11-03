@@ -1,6 +1,7 @@
 import { handleShopifyRedirects, handleShopifyRoutes } from '@shopify/hydrogen';
 
 import { cartHandlers } from '~/lib/cart.server';
+import { oxygenContext } from '~/lib/oxygen';
 import {
   createRequestStorefrontClient,
   routeTemplates,
@@ -34,12 +35,8 @@ export const shopifyMiddleware: Route.MiddlewareFunction = async (
       ? request
       : new Request(url, { method: request.method, headers: request.headers });
 
-  const storefrontClient = createRequestStorefrontClient(
-    shopifyRequest,
-    context.env,
-    context.cache,
-    context.waitUntil
-  );
+  const { env, cache, waitUntil } = context.get(oxygenContext);
+  const storefrontClient = createRequestStorefrontClient(shopifyRequest, env, cache, waitUntil);
   const requestContext = storefrontClient.requestContext;
 
   // Decided synchronously: a Promise<Response> for handler-owned paths, else null.
