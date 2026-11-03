@@ -15,13 +15,11 @@ import { pageUrl } from '~/lib/urls';
 
 type SocialPlatform = 'Instagram';
 type SocialLink = { platform: SocialPlatform; href: string };
-export type NavLink = { title: string; url: string };
+type NavLink = { title: string; url: string };
 
 export const BRAND = {
   /** Legal/display name (also the Storefront shop.name). */
   name: '7Pacific',
-  /** Logotype shown in the header/footer. */
-  wordmark: 'Pacific',
 
   /**
    * Announcement spec strip (7PA-242): mono caps. The one shipping fact,
@@ -29,7 +27,6 @@ export const BRAND = {
    */
   announcement: {
     message: 'FREE SHIPPING ON ORDERS $200+',
-    href: '',
   },
 
   social: [

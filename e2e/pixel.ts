@@ -19,7 +19,7 @@ import type { Page, Request } from '@playwright/test';
  * script, so the run is offline and immune to the pixel's Traffic
  * Permissions (which block domains that aren't allow-listed, like localhost).
  */
-export type PixelHit = { ev: string; id: string; cd: Record<string, string>; method: string };
+type PixelHit = { ev: string; id: string; cd: Record<string, string>; method: string };
 
 export const SETTLE_MS = 1500;
 
@@ -30,7 +30,7 @@ export const isStubMode = () => process.env.META_PIXEL_STUB === '1';
 
 const PIXEL_ENDPOINT = /^https:\/\/www\.facebook\.com\/tr\/?(\?|$)/;
 
-export const parsePixelRequest = (request: Request): PixelHit | null => {
+const parsePixelRequest = (request: Request): PixelHit | null => {
   const url = new URL(request.url());
   if (!PIXEL_ENDPOINT.test(url.origin + url.pathname + (url.search ? '?' : ''))) return null;
   const params = new URLSearchParams(url.search);

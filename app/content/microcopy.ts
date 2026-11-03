@@ -5,7 +5,5 @@
  */
 export const MICROCOPY = {
   emptyCart: "Cart's empty. Try the new drop.",
-  /** Ready for the search surface — no search route exists yet (7PA-243). */
-  searchNoResults: 'Nothing for that. Try a single word.',
   notFound: '404. We took a wrong turn at Lands End. Try the homepage.',
 } as const;

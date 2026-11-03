@@ -79,7 +79,7 @@ const isFixedWidth = (width: number | string) =>
   typeof width === 'number' || /\d(px|em|rem)$/.test(width);
 
 /** A CDN URL resized (and cropped) through `ImageTransformInput` params, appended, never concatenated. */
-export const shopifyImageUrl = (
+const shopifyImageUrl = (
   url: string,
   { width, height, crop }: { width?: number; height?: number; crop?: Crop }
 ): string => {
