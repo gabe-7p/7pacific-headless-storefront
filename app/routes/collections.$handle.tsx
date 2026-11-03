@@ -66,8 +66,6 @@ const Collection = () => {
       {isShopAll ? (
         <BaselineMasthead withDropLink />
       ) : (
-        // The generic collection header; the shop-all page gets the masthead
-        // above instead, which carries its own h1 and intro copy.
         <header className="w-full px-5 pt-10 pb-8">
           <Heading as="h1" size="lg">
             {collection.title}

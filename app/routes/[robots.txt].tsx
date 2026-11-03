@@ -64,12 +64,10 @@ Crawl-delay: 1
 }
 
 /**
- * This function generates disallow rules that generally follow what Shopify's
- * Online Store has as defaults for their robots.txt — minus rules for URLs
- * this storefront can't produce: no /blogs or /search routes (the journal
- * lives at /journal; there's no search UI), no /policies routes, plus
- * `/api/` (Hydrogen's cart/proxy/MCP endpoints are not pages), and no collection sort/filter params (the
- * collection page renders the merchandised order, unsorted and unfiltered).
+ * Disallow rules that follow Shopify's Online Store defaults, minus rules for
+ * URLs this storefront can't produce: no /blogs, /search or /policies routes,
+ * no collection sort/filter params (the collection page renders the
+ * merchandised order), plus `/api/` (cart/proxy/MCP endpoints are not pages).
  */
 function generalDisallowRules({ shopId, sitemapUrl }: { shopId?: string; sitemapUrl?: string }) {
   return `Disallow: /admin

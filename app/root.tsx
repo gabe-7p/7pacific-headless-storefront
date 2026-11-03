@@ -56,7 +56,7 @@ export const middleware: Array<Route.MiddlewareFunction> = [shopifyMiddleware];
 /**
  * Root data (menus, shop identity) only revalidates on mutations and explicit
  * useRevalidator calls — not on sub-navigations. The cart lives in the client
- * store now, so it never needs the root loader to re-run.
+ * store, so it never needs the root loader to re-run.
  */
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, currentUrl, nextUrl }) => {
   if (formMethod && formMethod !== 'GET') return true;
@@ -143,9 +143,8 @@ export const Layout = ({ children }: { children?: ReactNode }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={tailwindCss}></link>
-        {/* Shopify's runtime: Standard Actions (the cart contract), the
-            analytics bus, Customer Privacy + the consent banner where a
-            visitor's region requires one (nothing in the US). */}
+        {/* Shopify's runtime; the consent banner shows only where a region
+            requires one (nothing in the US). */}
         {rootData && (
           <ShopifyScripts
             shop={rootData.shop}
@@ -179,10 +178,8 @@ export const Layout = ({ children }: { children?: ReactNode }) => {
 };
 
 /**
- * Route-level layout options. A route opts out of the site chrome
- * (announcement/header/footer) with `export const handle: RouteHandle =
- * { chrome: false }` — it then owns its full page, including a `main`
- * landmark (see routes/athletes.$handle.tsx).
+ * Route-level layout options: `{ chrome: false }` opts a route out of the site
+ * chrome; it then owns its `main` landmark (docs/architecture.md).
  */
 export type RouteHandle = { chrome?: boolean };
 

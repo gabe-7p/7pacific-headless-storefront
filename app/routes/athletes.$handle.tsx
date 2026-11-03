@@ -11,8 +11,6 @@ import type { Route } from './+types/athletes.$handle';
 // Signing pages render their own bars instead of the site chrome.
 export const handle: RouteHandle = { chrome: false };
 
-// No fetching — the loader just resolves the typed content constant for the
-// handle (404 on unknown) so meta and the component share one lookup.
 export async function loader({ params }: Route.LoaderArgs) {
   const athlete = getAthleteSigning(params.handle);
   if (!athlete) throw notFound('Athlete not found');
