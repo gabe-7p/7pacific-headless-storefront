@@ -81,12 +81,10 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
 };
 
 /**
- * Footer section that collapses into a tap-to-expand accordion row on mobile
- * AND tablet (matching live, which switches to columns at 769px — one past
- * Tailwind's `md`, hence the `impulse:` variants) but renders as a plain,
- * always-open column above that. The heading lives here so the same title
- * doubles as the accordion trigger. Opens by default so SSR/desktop show
- * content; collapses only once mounted on a narrow viewport.
+ * Footer section that collapses into a tap-to-expand accordion row below the
+ * `impulse:` breakpoint (769px; see common-pitfalls.md) and is a plain,
+ * always-open column above it. Opens by default so SSR/desktop show content;
+ * collapses only once mounted on a narrow viewport.
  */
 const FooterCollapsible = ({ title, children }: { title: string; children: ReactNode }) => {
   const [open, setOpen] = useState(true);

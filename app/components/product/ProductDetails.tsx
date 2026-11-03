@@ -11,12 +11,10 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
     {/* Live crops these portrait — 32:45 on mobile, 5:6 (500x600) from 769px up
         (its breakpoint, not Tailwind's `lg`). A square crop cut the legs and
         waistband out of the compositions. */}
-    {/* Sized and cropped by the CDN (`aspectRatio` + `crop`), never by the
-        browser: the shoot's 20-megapixel knit close-ups alias into visible
-        wave bands when a browser shrinks them 6x to a card, and no upload
-        size fixes that. `sizes` mirrors the Scroller's 3-up basis, and the
-        100px srcset steps keep any remaining browser scaling under ~10%
-        (`common/Image`'s 200px default left a 15% shrink that still showed). */}
+    {/* Sized and cropped by the CDN, never the browser (aliasing: see
+        common-pitfalls.md → Images). 100px srcset steps keep browser scaling
+        under ~10% (`common/Image`'s 200px default left a 15% shrink that still
+        showed). */}
     <Image
       src={card.imageUrl}
       alt=""
@@ -35,8 +33,8 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
 
 /**
  * "PRODUCT DETAILS" — dark section of image cards (caption + subcaption),
- * three per view on desktop and a swipe carousel on mobile. Mirrors the live
- * section; rendered only for products that have detail cards.
+ * three per view on desktop and a swipe carousel on mobile. Rendered only for
+ * products that have detail cards.
  */
 export const ProductDetails = ({ cards }: { cards: ReadonlyArray<ProductDetailCard> }) => (
   <PdpSection>

@@ -22,9 +22,7 @@ const IMAGE = {
  * marker, so the content files stay declarative; the homepage Coming Soon
  * card opens the waitlist the same way.
  *
- * Note this reinstates a signup outside the footer, which 7PA-241 had removed
- * on the "no interruption modals" rule. It is click-triggered only — nothing
- * opens on load or on exit intent — so it interrupts no one who didn't ask.
+ * Click-triggered only (7PA-241) — nothing opens on load or on exit intent.
  */
 export const JoinDialogProvider = ({ children }: { children: ReactNode }) => {
   // The list stays set while the dialog closes so the exit fade doesn't flip

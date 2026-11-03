@@ -33,10 +33,9 @@ type ColorSwatchesProps = {
    */
   alwaysRender?: boolean;
   /**
-   * Card-hover mode (product grids): swatches animate in one-by-one
-   * left-to-right while the parent `group` is hovered, styled like the live
-   * card swatches (24px, white border, black outline when active) with a
-   * color-name tooltip pill above each. The PDP row leaves this off.
+   * Card-hover mode (product grids): swatches animate in one-by-one while the
+   * parent `group` is hovered, each with a color-name tooltip. The PDP row
+   * leaves this off.
    */
   cascade?: boolean;
   /**
@@ -51,9 +50,7 @@ type ColorSwatchesProps = {
 };
 
 /**
- * One swatch per color in the product's family, each linking to the sibling
- * color product (separate-product-per-color model). The current color is
- * highlighted.
+ * One swatch per color in the product's family, linking to each sibling.
  */
 export const ColorSwatches = ({
   swatches,

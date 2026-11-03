@@ -4,8 +4,7 @@ import { Container } from '~/components/common/Container';
 import { cn } from '~/lib/cn';
 
 /**
- * Dark full-width PDP content section (PRODUCT DETAILS, TECH STACK). Wraps its
- * children in the page Container with vertical padding.
+ * Dark full-width PDP content section (PRODUCT DETAILS, TECH STACK).
  */
 export const PdpSection = ({
   children,

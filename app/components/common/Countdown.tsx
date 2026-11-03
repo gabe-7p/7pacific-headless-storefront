@@ -42,14 +42,8 @@ type CountdownProps = {
 /**
  * Live countdown to a drop. State starts null so the server render and the
  * first client render agree (the `useScrolledPast` SSR pattern); real values
- * land on mount and tick every second. The row is always fully laid out —
- * two-character placeholders + tabular-nums mean no shift when values arrive.
- * `getTimeLeft` clamps at zero, so past the target the timer holds at
- * 00 · 00 · 00 · 00.
- *
- * Each tick also records which unit changed furthest to the left, and ONE
- * macOS-style Ember insertion caret renders to that number's left: seconds
- * most ticks, but a minute rollover moves the caret to MIN, and so on.
+ * land on mount and tick every second. `getTimeLeft` clamps at zero, so past
+ * the target the timer holds at 00 · 00 · 00 · 00.
  */
 export const Countdown = ({ dropIso, labels, size = 'md', className }: CountdownProps) => {
   const [state, setState] = useState<{ timeLeft: TimeLeft | null; caretIndex: number }>({

@@ -31,10 +31,8 @@ const RATIOS = {
 export type MediaSlotRatio = keyof typeof RATIOS;
 
 /**
- * Named crop anchors for an image slot whose source doesn't match the box
- * ratio — the focal point is a fact about the photo, so it rides the source
- * (same union → static-class device as RATIOS). Extend as art direction
- * needs.
+ * Named crop anchors for a slot whose source doesn't match the box ratio —
+ * the focal point is a fact about the photo, so it rides the source.
  */
 const FOCUS = {
   /** Keep the top of the frame (faces in a portrait source, landscape box). */
@@ -65,9 +63,8 @@ type MediaSlotProps = {
 };
 
 /**
- * A fixed-aspect media box: a quiet panel until the real asset is supplied,
- * then the image (object-cover) or an autoplaying muted loop — the same
- * treatment the homepage marketing videos use.
+ * A fixed-aspect media box: a quiet panel until the asset is supplied, then
+ * the image (object-cover) or an autoplaying muted loop.
  */
 export const MediaSlot = ({ media, ratio, loading = 'lazy', className }: MediaSlotProps) => {
   const box = cn('w-full', RATIOS[ratio], className);

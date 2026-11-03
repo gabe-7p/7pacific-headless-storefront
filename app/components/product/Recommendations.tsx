@@ -18,16 +18,11 @@ export const Recommendations = ({ products }: { products: ReadonlyArray<ProductC
     <Container className="py-14 md:py-20">
       {/* Live left-aligns this heading and its subtitle at 40px. */}
       <SectionHeader heading={heading} subtitle={subtitle} scale="panel" />
-      {/* The spread is capped at 66rem and left-aligned under the heading
-          (Gabe, Nov 2026): the video column is `stretch`, so from md its box
-          is as tall as two card rows, and at full container width that ran
-          past a MacBook viewport. Capped, with a 13/12 split and a 40px
-          gutter, 1440 gives ~232px cards and a ~528×704 video box (ratio
-          0.75 — the 9:16 clip shows its full width and loses ~25% of its
-          height top/bottom); the right quarter of the page stays empty on
-          purpose. The reference's 36/64 split is out for the same reason —
-          at 36% the box ran ~1:2.4 and cropped a quarter of the clip's
-          width. */}
+      {/* Capped at 66rem and left-aligned under the heading (Gabe's decision):
+          at full width the stretched video box ran past a MacBook viewport.
+          At 1440 the 13/12 split and 40px gutter give ~232px cards and a
+          ~528×704 video box (ratio 0.75); the right quarter stays empty on
+          purpose. */}
       <div className="grid grid-cols-1 gap-4 md:max-w-[66rem] md:grid-cols-[minmax(0,13fr)_minmax(0,12fr)] md:gap-10">
         {/* 4:5 on mobile (the clip is 9:16, so it crops top/bottom); from md
             the box has no ratio of its own and fills the row — the video

@@ -41,13 +41,7 @@ type JoinFormProps = {
 /**
  * The one signup form — owns the /api/subscribe fetcher, the submitting and
  * succeeded states, and per-field errors for whichever list it's pointed at.
- * It renders in four places: the footer (newsletter, mail-glyph submit), the
- * `JoinDialog` for either list, and the FIRST LIGHT Early Access block
- * (waitlist, inline row). On success the form is replaced by the
- * confirmation line.
- *
- * Signups are click-triggered only (7PA-241: acquisition through community,
- * not price — the old on-load site-wide popup is gone).
+ * On success the form is replaced by the confirmation line.
  */
 export const JoinForm = ({
   list,

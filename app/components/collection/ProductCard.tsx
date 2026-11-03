@@ -24,8 +24,7 @@ type ProductCardProps = {
  * with a shadow, the product's second image crossfades in, and the color
  * swatches rise from the bottom edge of the image one-by-one (left to right),
  * each with a color-name tooltip and linking to its sibling color product.
- * Presentational: renders the typed `ProductCardFragment` it's given and
- * fetches nothing.
+ * Renders the typed `ProductCardData` it's given.
  */
 export const ProductCard = ({ product, label, priority = false }: ProductCardProps) => {
   const { handle, title, featuredImage, priceRange } = product;
@@ -87,8 +86,8 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
           </Link>
         </Heading>
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
-            separator), Carbon at 80%, price lives here in mono. The edition
-            device (7PA-246) leads it, carrying its own status color. */}
+            separator), Graphite (`text-support`), price lives here in mono.
+            The edition device leads it. */}
         <span className="text-support tracking-spec font-mono text-[11px] uppercase">
           <EditionTag
             number={product.editionNumber?.value}

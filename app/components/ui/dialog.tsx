@@ -21,9 +21,6 @@ function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.C
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
-// Plain function component: on React 19 `ref` is an ordinary prop, so the
-// Portal's Presence can reach the overlay node for the exit fade without
-// forwardRef (stock shadcn shape).
 function DialogOverlay({
   className,
   ...props

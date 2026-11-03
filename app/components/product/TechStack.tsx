@@ -17,8 +17,8 @@ const ICONS: Record<TechIcon, string> = {
 };
 
 // Live's three tiers (its media queries use max-width, so the boundary px
-// belong to the *smaller* tier — iPad portrait at 768 stacks — hence the exact
-// min-[769px]/min-[1025px] variants rather than Tailwind's md/lg at 768/1024):
+// belong to the *smaller* tier — iPad portrait at 768 stacks — hence the
+// `impulse:`/`impulse-lg:` variants (769/1025) rather than md/lg:
 //   ≤768   stacked single column, centered
 //   769-1024  grid 1fr / 2fr / 1fr, left-aligned, gap 30
 //   ≥1025  grid 1fr / 1.3fr / 1fr, gap 20

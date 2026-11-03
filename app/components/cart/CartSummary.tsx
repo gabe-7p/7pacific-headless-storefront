@@ -44,8 +44,6 @@ export const CartSummary = ({ layout }: { layout: CartLayout }) => {
             totalsPending && 'opacity-50'
           )}
         >
-          {/* Cart format ("$74.00"): the live cart shows cents without a
-              currency suffix. Product cards and the PDP use the brand format. */}
           <Price data={subtotal} variant="cart" /> {subtotal?.amount ? null : '-'}
         </span>
       </div>
@@ -72,8 +70,7 @@ const CartCheckoutActions = ({ layout }: { layout: CartLayout }) => {
 
   if (!cart.checkoutUrl) return null;
   return (
-    // The cart's one Ember moment (7PA-230) — the brand variant's mono-caps
-    // arrow-slide device, full width.
+    // The cart's one Ember moment.
     <Cta
       href={cart.checkoutUrl}
       variant="brand"

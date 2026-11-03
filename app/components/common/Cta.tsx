@@ -7,15 +7,10 @@ import { Button } from '~/components/ui/button';
 import { NEWSLETTER_HREF } from '~/content/links';
 
 /**
- * The brand CTA label device: text + trailing ArrowRight. On hover (or
- * focus-visible) of the enclosing `group/cta` button, the whole track slides
- * right by one icon+gap slot — a second arrow enters from the left edge while
- * the trailing arrow exits past the right one, both clipped by the
- * overflow-hidden wrapper. One transform, no opacity fades.
- *
- * Size-agnostic by design: the slide distance reads the `--cta-slide` var and
- * the gap inherits from the button, both published per size by the Button
- * `size` variants (ui/button.tsx) — sizing facts live there, in one place.
+ * The brand CTA label device: text + trailing ArrowRight — see
+ * ui-components.md › CtaLabel. The slide distance reads the `--cta-slide` var
+ * and the gap inherits from the button, both published per size by the Button
+ * `size` variants (ui/button.tsx).
  */
 export const CtaLabel = ({ children }: { children: ReactNode }) => (
   <span data-cta-label className="inline-flex [gap:inherit] overflow-hidden">
@@ -51,13 +46,9 @@ type CtaProps = {
 };
 
 /**
- * The brand CTA — mono caps label + trailing ArrowRight (on hover the whole
- * label slides right: a second arrow enters from the left while the trailing
- * one exits, via `CtaLabel`). ALL link/button CTAs render through this so the
- * icon and its behavior are defined once — don't hand-assemble `Button` +
- * arrow at callsites. The one exception is `product/AddToCartBar` (the
- * product-form store's submit, `register('addToCart')`), which composes
- * `buttonVariants` + `CtaLabel` directly.
+ * The brand CTA — mono caps label + trailing ArrowRight (via `CtaLabel`). ALL
+ * link/button CTAs render through this; don't hand-assemble `Button` + arrow.
+ * The one exception is `product/AddToCartBar` (see ui-components.md).
  */
 export const Cta = ({
   variant = 'brand-outline',

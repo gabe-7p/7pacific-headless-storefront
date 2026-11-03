@@ -12,10 +12,8 @@ const SPEC_ROWS = [
 ] as const satisfies ReadonlyArray<readonly [string, keyof SpecCardData]>;
 
 /**
- * The Spec Card — the brand's signature PDP device (7PA-231): seven fields in
- * JetBrains Mono, caps labels at the spec-strip tracking. Data comes from the
- * `custom.spec_card` JSON metafield; rows with no value are omitted rather
- * than invented (e.g. WEIGHT waits for real measured grams).
+ * The Spec Card: the `custom.spec_card` metafield (see lib/product/content.ts).
+ * Rows with no value are omitted rather than invented.
  */
 export const SpecCard = ({ data }: { data: SpecCardData }) => {
   const rows = SPEC_ROWS.filter(([, key]) => data[key]);
