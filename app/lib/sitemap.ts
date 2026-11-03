@@ -14,8 +14,6 @@ import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
 export const SITEMAP_TYPES = ['products', 'collections', 'pages', 'journal'] as const;
 export type SitemapType = (typeof SITEMAP_TYPES)[number];
 
-/** The API's ARTICLE sitemap mixes every blog's articles with bare handles, so
-    the journal page is built from the journal blog itself (HANDLES.journalBlog). */
 const SITEMAP_PAGE_SIZE = 250;
 
 const SITEMAP_INDEX_QUERY = gql(`
@@ -114,17 +112,17 @@ const resourceItems = async (
   }));
 };
 
-const journalItems = async (
-  client: StorefrontClient,
-  page: number
-): Promise<Array<SitemapItem>> => {
+/**
+ * The API's ARTICLE sitemap mixes every blog's articles with bare handles, so
+ * the journal page is built from the journal blog itself (HANDLES.journalBlog).
+ * One page only: the index query caps the count at 250 articles.
+ */
+const journalItems = async (client: StorefrontClient): Promise<Array<SitemapItem>> => {
   const { data, errors } = await client.graphql(JOURNAL_SITEMAP_QUERY, {
     variables: { blogHandle: HANDLES.journalBlog, first: SITEMAP_PAGE_SIZE },
     cache: Cache.long(),
   });
   if (errors) console.error(errors);
-  // One page of articles for now; a second page would need cursor pagination.
-  if (page !== 1) return [];
   return (data?.blog?.articles.nodes ?? []).map(({ handle, publishedAt }) => ({
     handle,
     lastmod: publishedAt,
@@ -164,7 +162,7 @@ export const getSitemap = async (
   { type, page, baseUrl }: { type: SitemapType; page: number; baseUrl: string }
 ) => {
   const items = await (type === 'journal'
-    ? journalItems(client, page)
+    ? journalItems(client)
     : resourceItems(client, type, page));
 
   const urls = items.map(
