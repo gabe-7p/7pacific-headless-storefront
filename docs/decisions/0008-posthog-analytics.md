@@ -1,6 +1,6 @@
 # 0008. PostHog for product analytics and session replay
 
-- **Status**: Accepted (revisits the "Sentry later" note in [0003](0003-lean-tooling.md)). **Addendum 2026-11-01** ([0010](0010-hydrogen-2026-10-library.md)): the commerce funnel now reaches PostHog as a consent-gated destination on the Shopify analytics bus and the SDK opts in from Customer Privacy — see `lib/posthog.client.ts`; the "PostHog runs for every visitor" and "hand-placed commerce events" lines below describe the 2026.4 setup.
+- **Status**: Accepted (revisits the "Sentry later" note in [0003](0003-lean-tooling.md)). **Addendum 2026-11-01** ([0010](0010-hydrogen-2026-10-library.md)): the commerce funnel now reaches PostHog as a consent-gated destination on the Shopify analytics bus and the SDK opts in from Customer Privacy — see [`lib/analytics/posthog.client.ts`](../../app/lib/analytics/posthog.client.ts); the "PostHog runs for every visitor" and "hand-placed commerce events" lines below describe the 2026.4 setup. The server client is [`lib/analytics/posthog.server.ts`](../../app/lib/analytics/posthog.server.ts) on `posthogContext` (not `context.posthog`), config is [`lib/analytics/posthog.ts`](../../app/lib/analytics/posthog.ts), no `cart_modified` event exists (the event names are in `posthog.events.ts`), and the CSP allowance lives in [`lib/csp.ts`](../../app/lib/csp.ts).
 - **Date**: 2026-09-23
 
 ## Context

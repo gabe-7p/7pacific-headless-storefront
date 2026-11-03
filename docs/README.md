@@ -6,7 +6,8 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 
 - [architecture.md](architecture.md) — stack, request/data flow, code organization, the module pattern, env model, deployment.
 - [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) — how to verify the Meta Pixel (DevTools, Pixel Helper, `pnpm test:pixel`, Events Manager) in 15 minutes.
-- [migration-playbook.md](migration-playbook.md) — the repeatable step-by-step process for porting a page/component from the live Liquid theme to Hydrogen (audit → assets → implement → visual + functional verify → done).
+- [runbooks/add-a-product.md](runbooks/add-a-product.md) — add or swap a product or color in Shopify (no deploy).
+- [migration-playbook.md](migration-playbook.md) — **historical**: the process used to port the Liquid theme to Hydrogen (the port is complete).
 - [decisions/](decisions/README.md) — Architecture Decision Records (the _why_ behind settled choices).
 - [tech-debt-plan.md](tech-debt-plan.md) — the ranked cleanup backlog from the 2026-11-03 audit: twelve stacked PRs (dead code → docs → helpers → tokens → enforcement → structural), evidence per item, decisions pending, and what was deliberately left out.
 
@@ -22,7 +23,9 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 | Adding/naming a component or data helper                 | [.claude/rules/naming-conventions.md](../.claude/rules/naming-conventions.md)                                                                                                    |
 | Building UI / using a shadcn/ui primitive                | [.claude/rules/ui-components.md](../.claude/rules/ui-components.md) · [decisions/0006-shadcn-ui-for-headless-primitives.md](decisions/0006-shadcn-ui-for-headless-primitives.md) |
 | Building a new feature / module                          | [architecture.md](architecture.md#the-module-pattern-how-features-grow)                                                                                                          |
-| Porting a page/component from the live Liquid theme      | [migration-playbook.md](migration-playbook.md)                                                                                                                                   |
+| Adding or swapping a product/color in Shopify            | [runbooks/add-a-product.md](runbooks/add-a-product.md)                                                                                                                           |
+| Changing marketing copy / adding an athlete page         | [CLAUDE.md → Brand single-sources](../CLAUDE.md#brand-single-sources-change-once-applies-everywhere) · `app/content/athlete-signing/index.ts` header                             |
+| Reading how the Liquid port was done (historical)        | [migration-playbook.md](migration-playbook.md)                                                                                                                                   |
 | Touching products or color swatches                      | [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md) · [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)             |
 | Avoiding common bugs (nullability, waterfalls, secrets)  | [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)                                                                                                          |
 | Touching the Meta Pixel                                  | [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) · [decisions/0011-meta-pixel-as-bus-destination.md](decisions/0011-meta-pixel-as-bus-destination.md)                              |
