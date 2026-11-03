@@ -16,10 +16,6 @@ export const IMAGE_SIZES = {
   full: '100vw',
   /** The 384px dialog side panel, hidden below `sm`. */
   dialogPanel: '(min-width: 640px) 384px, 0px',
-  /** A page-width image inside the 1360px container. */
-  pageWide: '(min-width: 1400px) 1360px, 100vw',
-  /** One of a pair inside the 1360px container. */
-  pageHalf: '(min-width: 1400px) 670px, 50vw',
 } as const;
 
 /** An explicit srcset ladder: `imageWidths(400, 100, 16)` → 400, 500, … 1900. */

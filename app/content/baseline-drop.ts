@@ -83,13 +83,17 @@ you the receipts.',
       'You take training seriously. So do we, just with fabric. This was built for \
 athletes who train with intent: speed work, intervals, iron, even the run you swore \
 would be easy on Saturday. We got you.',
-    /** Extra-wide band under the header. */
+    /** Wide band under the header — the sled-push loop, shown at 70% of
+        its 16:9 height (the `loop` ratio). 1080p: full-bleed, and the clip
+        is under nine seconds. */
     banner: {
-      kind: 'image',
-      src: shopifyImage('24_121_7pacific_03806.jpg', { v: 1759043281, width: 1200 }),
-      alt: 'Athlete driving battle ropes on a foggy clifftop',
-      focus: 'upper', // 3:2 source in the 21:8 band — keep the athlete's head
+      kind: 'video',
+      src: shopifyVideo('9600b71822db44d9a13c4ae7a79befa0', 'HD-1080p-7.2Mbps-99807243'),
+      poster: shopifyVideoThumbnail('9600b71822db44d9a13c4ae7a79befa0', { v: 1793672192 }),
     } satisfies MediaSlotSource,
+    /** All three day photos are 4:5 portraits in the 4:3 box, so each
+        shows ~60% of its height — the subjects fill their frames, so the
+        centered default crop holds. */
     days: [
       {
         index: '01',
@@ -97,8 +101,8 @@ would be easy on Saturday. We got you.',
         body: 'Vertical work, plyos, olympic lifts, sprinting, the list goes on. Every piece has breathability built in.',
         media: {
           kind: 'image',
-          src: shopifyImage('24_121_7pacific_07344.jpg', { v: 1759115958, width: 1200 }),
-          alt: 'Three athletes working battle ropes and med balls on the beach',
+          src: shopifyImage('zach_squatting.jpg', { v: 1793673080, width: 1200 }),
+          alt: 'Athlete at the bottom of a back squat under a loaded barbell',
         },
       },
       {
@@ -107,8 +111,8 @@ would be easy on Saturday. We got you.',
         body: 'Hyrox sims, circuits, comp prep. A stay-put fit and sweat-wicking fabric from station one to the finishline.',
         media: {
           kind: 'image',
-          src: shopifyImage('running.png', { v: 1756374530, width: 1200 }),
-          alt: 'Pack of runners mid-stride in training gear',
+          src: shopifyImage('sandbag_lunges.jpg', { v: 1793673081, width: 1200 }),
+          alt: 'Athlete lunging with a sandbag across the shoulders while a partner pushes a sled behind',
         },
       },
       {
@@ -117,9 +121,8 @@ would be easy on Saturday. We got you.',
         body: 'Tempo runs, long intervals, 103° afternoons. Feather-light and breathable enough to disappear by mile six.',
         media: {
           kind: 'image',
-          src: shopifyImage('two_walking_to_workout_cropped.png', { v: 1758602930 }),
-          alt: 'Two athletes carrying kettlebells and a slam ball to a workout',
-          focus: 'top', // near-square source in the landscape box — keep the faces
+          src: shopifyImage('stretching_on_ground.jpg', { v: 1793672327, width: 1200 }),
+          alt: 'Athlete in sunglasses stretching on the ground against a concrete block',
         },
       },
     ],
