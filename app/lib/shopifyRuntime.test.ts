@@ -94,10 +94,6 @@ describe('whenShopifyReady', () => {
 });
 
 describe('selectors', () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
   it('read nothing until the runtime piece exists', () => {
     vi.stubGlobal('window', {});
     expect(getAnalyticsBus()).toBeNull();

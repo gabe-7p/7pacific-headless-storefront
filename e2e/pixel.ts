@@ -3,6 +3,8 @@ import path from 'node:path';
 
 import type { Page, Request } from '@playwright/test';
 
+import { META_PIXEL_SCRIPT_URL } from '~/lib/analytics/meta-pixel';
+
 /**
  * Helpers for the Meta Pixel funnel test.
  *
@@ -56,19 +58,25 @@ export const installPixelCapture = async (page: Page) => {
   });
   if (isStubMode()) {
     const body = readFileSync(path.resolve(process.cwd(), 'e2e/fbevents-stub.js'), 'utf8');
-    await page.route(/https:\/\/connect\.facebook\.net\/en_US\/fbevents\.js/, (route) =>
+    await page.route(META_PIXEL_SCRIPT_URL, (route) =>
       route.fulfill({ status: 200, contentType: 'application/javascript', body })
     );
   }
-  await page.route(/https:\/\/www\.facebook\.com\/tr\/?(\?|$)/, async (route) => {
+  await page.route(PIXEL_ENDPOINT, async (route) => {
     const hit = parsePixelRequest(route.request());
     if (hit) hits.push(hit);
     await route.fulfill({ status: 200, body: '' });
   });
+  const last = (ev: string) => hits.filter((hit) => hit.ev === ev).at(-1);
   return {
     hits,
     count: (ev: string) => hits.filter((hit) => hit.ev === ev).length,
-    last: (ev: string) => hits.filter((hit) => hit.ev === ev).at(-1),
+    last,
+    lastOrThrow: (ev: string) => {
+      const hit = last(ev);
+      if (!hit) throw new Error(`No ${ev} hit captured`);
+      return hit;
+    },
   };
 };
 

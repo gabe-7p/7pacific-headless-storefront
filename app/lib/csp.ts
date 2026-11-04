@@ -1,3 +1,4 @@
+import { META_PIXEL_BEACON_ORIGIN, META_PIXEL_SCRIPT_ORIGIN } from '~/lib/analytics/meta-pixel';
 import { getPostHogOrigins } from '~/lib/analytics/posthog';
 
 /**
@@ -19,7 +20,7 @@ export const createCsp = ({
   env: Pick<Env, 'PUBLIC_STORE_DOMAIN' | 'PUBLIC_CHECKOUT_DOMAIN' | 'PUBLIC_POSTHOG_HOST'>;
 }): string => {
   const shopifyScripts = ['https://cdn.shopify.com', 'https://shopify.com'];
-  const metaPixel = ['https://www.facebook.com', 'https://connect.facebook.net'];
+  const metaPixel = [META_PIXEL_BEACON_ORIGIN, META_PIXEL_SCRIPT_ORIGIN];
   const posthog = getPostHogOrigins(env.PUBLIC_POSTHOG_HOST);
   const storeOrigins = [env.PUBLIC_CHECKOUT_DOMAIN, env.PUBLIC_STORE_DOMAIN]
     .filter((domain): domain is string => Boolean(domain))
@@ -42,12 +43,12 @@ export const createCsp = ({
     ],
     'font-src': ["'self'", 'https://cdn.shopify.com'],
     // Explicit so the pixel's tracking image can be added.
-    'img-src': ["'self'", ...shopifyScripts, 'https://www.facebook.com'],
+    'img-src': ["'self'", ...shopifyScripts, META_PIXEL_BEACON_ORIGIN],
     'script-src': [
       "'self'",
       ...shopifyScripts,
       ...posthog,
-      'https://connect.facebook.net',
+      META_PIXEL_SCRIPT_ORIGIN,
       `'nonce-${nonce}'`,
     ],
     'worker-src': ["'self'", 'blob:'],

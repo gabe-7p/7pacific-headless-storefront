@@ -85,7 +85,7 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
     await expectExactly('PageView', 3);
     await expectExactly('ViewContent', 1);
 
-    const { cd } = pixel.last('ViewContent')!;
+    const { cd } = pixel.lastOrThrow('ViewContent');
     const contentIds = JSON.parse(cd['content_ids'] ?? 'null') as unknown;
     expect(Array.isArray(contentIds) && contentIds.length === 1).toBe(true);
     expect((contentIds as Array<string>)[0]).toMatch(CONTENT_ID);
@@ -106,7 +106,7 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
     await expectExactly('AddToCart', 1);
     await expect(page.getByRole('dialog')).toBeVisible();
 
-    const { cd } = pixel.last('AddToCart')!;
+    const { cd } = pixel.lastOrThrow('AddToCart');
     expect(cd['num_items']).toBe('1');
     expect(Number(cd['value'])).toBeGreaterThan(0);
     expect(cd['currency']).toMatch(/^[A-Z]{3}$/);
