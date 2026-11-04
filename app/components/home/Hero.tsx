@@ -1,6 +1,6 @@
-import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { HeroContent, HeroShell } from '~/components/common/HeroShell';
 import { Scrim } from '~/components/common/Scrim';
 import { SpecLine } from '~/components/common/SpecLine';
 import { HOME_HERO } from '~/content/home';
@@ -12,9 +12,7 @@ import { HOME_HERO } from '~/content/home';
  * still the primary CTA alone. Sits under the transparent overlay header.
  */
 export const Hero = () => (
-  // -mt pulls the hero up beneath the sticky header (transparent overlay);
-  // the announcement bar above it stays opaque.
-  <section className="bg-field-night relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-ink-night md:min-h-[44rem]">
+  <HeroShell className="bg-field-night items-center text-ink-night">
     {/* Plain autoplay video, not LazyVideo: above the fold it must start
         before hydration. The poster is the clip's first frame. */}
     <video
@@ -30,7 +28,7 @@ export const Hero = () => (
     {/* Live's .custom-hero-overlay verbatim: a flat rgba(0,0,0,0.10) wash over
         the whole frame, nothing graded. */}
     <Scrim strength="10" />
-    <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
+    <HeroContent clearance="lg" className="items-start gap-5 py-16">
       {/* Spec-strip tier: JetBrains Mono caps at +0.1em. */}
       <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>
       {/* Hero display tier, -0.005em, lh 0.95. Each line is a nowrap block so
@@ -55,6 +53,6 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
-    </Container>
-  </section>
+    </HeroContent>
+  </HeroShell>
 );

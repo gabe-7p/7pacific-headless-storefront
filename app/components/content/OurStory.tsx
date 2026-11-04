@@ -2,6 +2,7 @@ import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { GradedMedia, GrainVeil } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
+import { HeroContent, HeroShell } from '~/components/common/HeroShell';
 import { Image } from '~/components/common/Image';
 import { LiveDot } from '~/components/common/LiveDot';
 import type { MediaSlotRatio, MediaSlotSource } from '~/components/common/MediaSlot';
@@ -37,7 +38,7 @@ const FramedMedia = ({ media, ratio }: { media: MediaSlotSource; ratio: MediaSlo
 const FileHero = () => {
   const { hero } = OUR_STORY;
   return (
-    <section className="relative -mt-(--header-h) flex min-h-[34rem] flex-col overflow-hidden md:min-h-[44rem]">
+    <HeroShell className="flex-col">
       <SettleIn className="absolute inset-0">
         <Image
           src={hero.image.src}
@@ -56,7 +57,7 @@ const FileHero = () => {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-field-night/80 to-transparent"
       />
       <GrainVeil />
-      <Container className="relative z-10 flex flex-1 flex-col justify-between pt-[calc(var(--header-h)+1.5rem)] pb-8 md:pb-12">
+      <HeroContent clearance="sm" className="flex-1 justify-between pb-8 md:pb-12">
         <TypeOnReadout className="text-support-night">{hero.readout}</TypeOnReadout>
         <FadeIn
           delay={0.3}
@@ -72,8 +73,8 @@ const FileHero = () => {
             {hero.cta.label}
           </Cta>
         </FadeIn>
-      </Container>
-    </section>
+      </HeroContent>
+    </HeroShell>
   );
 };
 

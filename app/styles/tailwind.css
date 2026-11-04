@@ -259,6 +259,8 @@
   --page-max: 1400px;
   --header-h: 3.375rem; /* 54px */
   --announcement-h: 1.75rem; /* 28px */
+  --hero-min-h: 34rem; /* common/HeroShell */
+  --hero-min-h-md: 44rem;
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
   /* Film grain for night-surface photography (Our Story "The File"): a tiled
      160px fractal-noise SVG, laid over a photo as `bg-[image:var(--grain)]`
