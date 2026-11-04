@@ -41,9 +41,7 @@ export const DAKOTAH_RIEMER = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // Dakotah's founder message in Shopify Files (portrait, 35s) — Shopify's
-    // 720p transcode; poster is Shopify's auto-generated preview (no custom
-    // thumbnail set for this video yet).
+    // Poster: Shopify's auto-generated preview (no custom thumbnail yet).
     src: shopifyVideo('8c133fee98e7483cab2d4aebb6758c83', 'HD-720p-1.6Mbps-96972281'),
     poster: shopifyVideoPoster('8c133fee98e7483cab2d4aebb6758c83.thumbnail.0000000000.jpg'),
     captions: '',

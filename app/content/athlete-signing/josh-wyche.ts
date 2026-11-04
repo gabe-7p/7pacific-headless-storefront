@@ -39,8 +39,7 @@ export const JOSH_WYCHE = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // IMG-0006 in Shopify Files (portrait, 40s) — Shopify's 720p transcode;
-    // poster is the custom preview thumbnail set in Shopify admin.
+    // Poster: the custom thumbnail set in Shopify admin.
     src: shopifyVideo('b01389f236234449b4e379bb39620772', 'HD-720p-4.5Mbps-89659216'),
     poster: shopifyVideoPoster(
       'Screenshot_2026-07-22_at_11.02.10_PM_0f4117ad-5577-48b3-8fee-1c8c77662097.png'

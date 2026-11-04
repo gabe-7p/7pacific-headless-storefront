@@ -4,9 +4,8 @@ import { formatPrice, type MoneyLike, type PriceFormat } from '~/lib/money';
 type PriceVariant = PriceFormat;
 
 /**
- * The one price element — every money value on the site renders through it,
- * in JetBrains Mono per the brand type rule that numbers, prices and specs
- * live in mono. Formats live in lib/money.ts (`brand` / `compact` / `cart`).
+ * The one price element — every money value renders through it, in mono.
+ * Formats live in lib/money.ts (`brand` / `compact` / `cart`).
  */
 export const Price = ({
   data,

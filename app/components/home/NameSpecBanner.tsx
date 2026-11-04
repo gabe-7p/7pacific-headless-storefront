@@ -64,11 +64,10 @@ const CellSet = ({
 const SETS_PER_HALF = 4;
 
 /**
- * The Name/Spec product banner (approved prototype, Jul 2026): a full-bleed,
- * one-row marquee directly below the homepage hero — three product-family
- * cells (display name over a mono spec line) plus a Shop All cell, scrolling
- * rightward on a 50s loop that keeps rolling under the cursor (no hover-pause,
- * per Gabe 2026-07-24); reduced-motion users get a static, horizontally
+ * The Name/Spec product banner: a full-bleed, one-row marquee directly below
+ * the homepage hero — three product-family cells (display name over a mono
+ * spec line) plus a Shop All cell, scrolling rightward on the
+ * `--animate-marquee-right` loop with no hover-pause; reduced-motion users get a static, horizontally
  * scrollable strip instead (the duplicate sets are dropped so nothing repeats).
  */
 export const NameSpecBanner = () => (

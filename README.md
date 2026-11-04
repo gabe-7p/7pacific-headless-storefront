@@ -51,23 +51,11 @@ pnpm dev          # Vite + MiniOxygen (workerd) dev server at http://localhost:3
 
 ## Common commands
 
-| Task                           | Command                                            |
-| ------------------------------ | -------------------------------------------------- |
-| Dev server                     | `pnpm dev`                                         |
-| Production build               | `pnpm build`                                       |
-| Preview the production build   | `pnpm preview`                                     |
-| Type check + GraphQL check     | `pnpm type-check`                                  |
-| Lint                           | `pnpm lint`                                        |
-| Format / check formatting      | `pnpm prettier` / `pnpm prettier:check`            |
-| Unit tests (Vitest)            | `pnpm test`                                        |
-| Meta Pixel funnel (Playwright) | `pnpm test:pixel` (see docs/META_PIXEL_TESTING.md) |
-| Sync Hydrogen agent skills     | `pnpm exec hydrogen skills sync`                   |
-| Dependency-boundary check      | `pnpm depcruise`                                   |
-| Full pre-PR gate (in Claude)   | the `/check` command — mirrors CI                  |
+See the Commands table in [CLAUDE.md](CLAUDE.md#commands) (dev, build, type-check, lint, format, tests, `pnpm test:pixel` / `pnpm test:pixel:live`, skills sync, depcruise, deploy).
 
 ## Quality gate
 
-Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): skills check, type-check (incl. `hydrogen gql check`), lint, format check, dependency rules, unit tests, and build. Locally, a commit triggers the same checks on staged files via husky + lint-staged.
+Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): skills check, type-check (incl. `hydrogen gql check`), lint, format check, dependency rules, unit tests, and build. Locally, a commit runs type-check, ESLint and Prettier on staged files via husky + lint-staged; CI runs the full gate (the `/check` command mirrors it).
 
 ## Deploy
 
@@ -80,15 +68,6 @@ See [docs/architecture.md](docs/architecture.md#deployment) for the deploy pipel
 
 ## Project layout
 
-```
-app/
-  routes/        one file per route; data loaders/actions live here
-  components/    presentational components — layout/ cart/ product/ search/ common/ ui/ (shadcn primitives)
-  lib/           storefront client + router contexts, cart/product stores, gql documents, csp, sitemap, shared utilities
-  styles/        Tailwind + minimal globals
-docs/            architecture, decision records, doc index
-.claude/         agent settings, /check & /review_pr commands, coding rules
-CLAUDE.md        conventions + entry point for humans and coding agents
-```
+See the repo map in [CLAUDE.md](CLAUDE.md#repo-map).
 
 Full detail in [docs/architecture.md](docs/architecture.md).

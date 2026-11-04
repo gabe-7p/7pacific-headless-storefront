@@ -7,8 +7,7 @@ import { PRODUCT_BRAND_BANNER } from '~/content/product-page';
 /**
  * "For Intensity. Not Errands." brand section shown on every PDP — a wide
  * training loop with the headline, community copy, and membership CTA
- * overlaid top-right. Mirrors the live section's horizontal band (the
- * two-photo row beneath it was dropped, Nov 2026).
+ * overlaid top-right.
  */
 export const BrandBanner = () => {
   const { headingLines, body, cta, video } = PRODUCT_BRAND_BANNER;
@@ -41,7 +40,7 @@ export const BrandBanner = () => {
                 className="text-[2.25rem] leading-[1.1] tracking-[-0.02em] md:text-[3.4rem]"
               />
               <p className="mx-auto mt-4 max-w-sm text-sm text-support-night">{body}</p>
-              {/* Secondary — the PDP's one Ember moment is Add to Cart (7PA-230). */}
+              {/* Secondary — the PDP's one Ember moment is Add to Cart. */}
               <Cta to={cta.href} className="mt-6">
                 {cta.label}
               </Cta>

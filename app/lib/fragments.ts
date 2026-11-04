@@ -1,11 +1,8 @@
 import { gql, type StorefrontApi } from '@shopify/hydrogen';
 
 // ---------------------------------------------------------------------------
-// Shared Storefront API documents. `gql()` returns a typed, branded query
-// string; compose fragments by spreading `...Name` and passing the fragment
-// document in the second argument. Types come from `StorefrontApi.ResultOf`.
-// Server-only: route loaders and lib/ import these, components import only
-// the exported *types* (erased at build time), so no query reaches the browser.
+// Shared Storefront API documents — see .claude/rules/graphql-fragments.md.
+// Components import only the exported *types*, so no query reaches the browser.
 // ---------------------------------------------------------------------------
 
 const MENU_ITEM_FRAGMENT = gql(`
@@ -89,12 +86,6 @@ export const FOOTER_QUERY = gql(
 export type HeaderData = StorefrontApi.ResultOf<typeof HEADER_QUERY>;
 export type FooterData = StorefrontApi.ResultOf<typeof FOOTER_QUERY>;
 
-// ---------------------------------------------------------------------------
-// Base building-block fragments — only the fields every consumer needs.
-// Feature-specific extras (PDP hero metafields, tech stack, …) belong in the
-// query that needs them (lib/product/queries.ts), not here.
-// ---------------------------------------------------------------------------
-
 /**
  * Color = separate product: the ordered color family lives in the
  * custom.color_siblings metafield (each sibling carries its own name/hex).
@@ -151,8 +142,7 @@ export const PRODUCT_CARD_FRAGMENT = gql(
           currencyCode
         }
       }
-      # Edition device (7PA-246): ED. XX · STATUS, rendered in the card's mono
-      # spec strip.
+      # Edition device: ED. XX · STATUS, rendered in the card's mono spec strip.
       editionNumber: metafield(namespace: "custom", key: "edition_number") {
         value
       }
@@ -165,9 +155,7 @@ export const PRODUCT_CARD_FRAGMENT = gql(
   [COLOR_SIBLINGS_FRAGMENT]
 );
 
-// A `gql()` fragment is a branded string, not a gql.tada document, so
-// `FragmentOf` does not apply. The fragment's data type is read off a shape
-// query that spreads it (never executed — it exists for the type alone).
+// Type-only shape query (never executed): see graphql-fragments.md → "Rules".
 const PRODUCT_CARD_SHAPE_QUERY = gql(
   `
     query ProductCardShape {

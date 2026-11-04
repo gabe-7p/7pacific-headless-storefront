@@ -138,7 +138,7 @@ const Contact = () => {
               />
               {errors?.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
             </div>
-            {/* Secondary — the contact page carries no Ember moment (7PA-230). */}
+            {/* Secondary — the contact page carries no Ember moment. */}
             <Cta type="submit" disabled={submitting} className="w-full sm:w-auto">
               {submitting ? 'Sending…' : CONTACT.submitLabel}
             </Cta>

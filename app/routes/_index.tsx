@@ -30,8 +30,6 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   const storefront = context.get(storefrontClientContext);
 
-  // Grid order is merchant-controlled: the manual homepage collection's
-  // product order IS the display order (reorder in Shopify admin).
   const { data } = await storefront.graphql(HOME_PRODUCTS_QUERY, {
     variables: { handle: HANDLES.homepageCollection },
     cache: Cache.long(),
@@ -52,22 +50,13 @@ const Homepage = () => {
   return (
     <MotionProvider>
       <Hero />
-      {/* The Name/Spec marquee sits flush below the hero, painted on load
-          (no scroll-reveal gate) so the banner never pops in or shifts. */}
+      {/* Fold group: painted on load (no scroll-reveal gate) so nothing pops in
+          or shifts. DropTwo is toggled by FEATURE_FLAGS.dropTwoTeaser. */}
       <NameSpecBanner />
-      {/* Baseline intro sits right under the banner, near the fold — painted
-          on load (no scroll-reveal gate) like the other fold sections; it
-          deepens the story (drop page + film). */}
       <BaselineIntro />
-      {/* Drop 02 teaser follows the Baseline intro, near the fold — painted
-          on load (no scroll-reveal gate) so the countdown never pops in.
-          Toggled by FEATURE_FLAGS.dropTwoTeaser (content/flags.ts). */}
       {FEATURE_FLAGS.dropTwoTeaser && <DropTwo />}
-      {/* First Drop is the primary above/at-the-fold content — render it
-          immediately (no scroll-reveal gate) so it's painted on load rather
-          than staying invisible until 30% scrolls into view. The lower
-          sections keep the scroll-triggered fade. */}
       <FirstDrop products={products} />
+      {/* The lower sections keep the scroll-triggered fade. */}
       <FadeIn>
         <CoreValues />
       </FadeIn>

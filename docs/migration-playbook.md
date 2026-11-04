@@ -1,16 +1,17 @@
 # Migration Playbook: Liquid → Hydrogen
 
+> **Historical.** The Impulse → Hydrogen port is complete and nothing is left to port. This is kept as a record of the process; the conventions live in [CLAUDE.md](../CLAUDE.md) and [.claude/rules/](../.claude/rules/), and the viewport verification loop now lives in [ui-components.md](../.claude/rules/ui-components.md) › "Matching live".
+
 The repeatable, step-by-step process for porting one page or component from the live Impulse
 Liquid theme to this Hydrogen storefront with **high visual and functional fidelity**. Follow it in
 order for every migration unit; don't skip the verification loop.
 
 ## Reference sources (the ground truth)
 
-| Source                                                                  | Use it for                                                                        |
-| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| **Live storefront** — https://7pacificapparel.com                       | The source of truth for look, feel, spacing, type, color, motion, and behavior.   |
-| **Liquid codebase** — `/Users/gabrieldalessandro/shopify-storefront-v2` | Section/snippet structure, exact asset names + their Shopify source, JS behavior. |
-| This repo's `.claude/rules/*` + [CLAUDE.md](../CLAUDE.md)               | How the React/TS/Tailwind code must be written (boundaries, naming, fragments).   |
+| Source                                                    | Use it for                                                                      |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **Live storefront** — https://7pacificapparel.com         | The source of truth for look, feel, spacing, type, color, motion, and behavior. |
+| This repo's `.claude/rules/*` + [CLAUDE.md](../CLAUDE.md) | How the React/TS/Tailwind code must be written (boundaries, naming, fragments). |
 
 **Rule of the playbook: always compare against the live site, never against your memory of it.**
 Open both side by side; re-screenshot after every change. "Close enough" is not done.
@@ -73,36 +74,7 @@ an asset.
 
 ## 3. Implementation conventions
 
-Translate Liquid into React + TypeScript following the repo rules (the rules files are the source
-of truth — read the relevant one before changing that area).
-
-- **Layering.** Data fetching/GraphQL lives in route **loaders/actions** and `app/lib/`; components
-  are **presentational** and render typed props. No `context.storefront` or `#graphql` in a
-  component. See [module-boundaries.md](../.claude/rules/module-boundaries.md).
-- **GraphQL.** Co-located `gql()` documents with composed fragments (shared ones in
-  `app/lib/fragments.ts`), an explicit `cache` on every read, result types from
-  `StorefrontApi.ResultOf`; `hydrogen gql check` runs inside `pnpm type-check`. See
-  [graphql-fragments.md](../.claude/rules/graphql-fragments.md).
-- **Components.** `const` arrow functions, PascalCase, one per file; props as a `type`. Data helpers
-  `getX` / `getXOrThrow` by null behavior. See [naming-conventions.md](../.claude/rules/naming-conventions.md).
-- **Styling.** Tailwind v4 only — no inline `style={{}}` (the dynamic-color swatch is the one
-  documented exception), no CSS-in-JS. Reach for a **shadcn/ui primitive** in `app/components/ui/`
-  only for behaviorally-hard widgets (modal/drawer, dropdown, select, accordion, tooltip);
-  hand-build everything visual. See [ui-components.md](../.claude/rules/ui-components.md).
-- **Brand single-sources — never hardcode.** Colors/font → `app/styles/tailwind.css` `@theme`
-  (use `bg-nav`, `text-brand`, …). Layout/motion (page width, header heights, easing) →
-  `tailwind.css` `:root` (use `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`).
-  Content/links (name, wordmark, announcement, social, newsletter, fallback nav) →
-  [app/content/brand.ts](../app/content/brand.ts); Shopify handles → `HANDLES` in [app/content/links.ts](../app/content/links.ts); URL shapes → [app/lib/urls.ts](../app/lib/urls.ts); market/locales → [app/lib/i18n.ts](../app/lib/i18n.ts). SEO titles → [app/lib/seo.ts](../app/lib/seo.ts).
-  Repeated UI → `app/components/common/` (`Container`, `Logo`, `Heading`). If a brand value would be
-  reused, put it in its single source and import it — don't redefine it inline.
-- **Content.** Marketing/product copy → typed `content/*.ts` constants, not JSX literals.
-- **Domain gotcha.** Color = a separate Shopify product (not a variant); switch colors by navigating
-  sibling handles via the `custom.color_siblings` metafield, read by [lib/product/colors.ts](../app/lib/product/colors.ts). See
-  [common-pitfalls.md](../.claude/rules/common-pitfalls.md).
-- **Nullability.** Storefront fields are mostly nullable and `noUncheckedIndexedAccess` is on —
-  optional-chain and guard. Use `common/Image` / `common/Price`. Parallelize independent loader
-  queries; defer below-the-fold data through `deferQuery`.
+See [CLAUDE.md](../CLAUDE.md) and the files in [.claude/rules/](../.claude/rules/).
 
 ---
 
@@ -198,5 +170,4 @@ A migrated unit is complete only when **all** pass:
 
 ---
 
-_This playbook is the standard process for the Impulse → Hydrogen migration. If you discover a
-better step, update this file in the same PR._
+_Historical record of the Impulse → Hydrogen migration process._

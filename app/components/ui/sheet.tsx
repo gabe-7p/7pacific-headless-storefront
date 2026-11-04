@@ -20,9 +20,6 @@ function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Po
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
-// Plain function component: on React 19 `ref` is an ordinary prop, so the
-// Portal's Presence can reach the overlay node for the exit fade without
-// forwardRef (stock shadcn shape).
 function SheetOverlay({
   className,
   ...props

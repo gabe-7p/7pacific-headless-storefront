@@ -8,9 +8,7 @@
  *   custom.color_siblings  — ordered product references for the whole color
  *                            family, INCLUDING the product itself
  *
- * Adding a product/color is a Shopify-only task: set the three metafields on
- * the new product and append it to every sibling's color_siblings list. No
- * code changes required (the old hand-maintained lib/colorMap.ts is gone).
+ * Adding a product/color: docs/runbooks/add-a-product.md.
  */
 
 import type { ProductCardData } from '~/lib/fragments';

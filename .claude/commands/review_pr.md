@@ -1,5 +1,5 @@
 ---
-name: review-pr
+name: review_pr
 description: Review a pull request against 7Pacific's Hydrogen engineering standards
 arguments:
   pr: The PR number or GitHub URL to review (optional — will prompt if not provided)
@@ -13,7 +13,7 @@ Review PR `$ARGUMENTS.pr` against our standards for the Hydrogen storefront.
 
 1. **Fetch the PR**: `gh pr view` and `gh pr diff`.
 2. **Check CI**: `gh pr checks`.
-3. **Read the standards**: the files in [.claude/rules/](../rules/) are the source of truth — read the ones the diff touches (module boundaries, naming, GraphQL fragments, common pitfalls).
+3. **Read the standards**: the files in [.claude/rules/](../rules/) are the source of truth — read the ones the diff touches (module boundaries, naming, GraphQL fragments, common pitfalls, UI components).
 4. **Analyze the diff** against the dimensions below.
 5. **Output the review** in the format below.
 
@@ -24,8 +24,10 @@ Review PR `$ARGUMENTS.pr` against our standards for the Hydrogen storefront.
 3. **GraphQL & data fetching** — `gql()` documents, shared shapes as fragments, an explicit `cache` on every read ([graphql-fragments.md](../rules/graphql-fragments.md)); `Promise.all` (no waterfalls); deferred below-the-fold data through `deferQuery`; `PRIVATE_*` tokens never client-side.
 4. **Accessibility** — semantic elements; `alt` on images; real, keyboard-reachable controls; labeled inputs; color isn't the only signal.
 5. **Performance** — images through `common/Image` with `sizes` (presets in `lib/imageSizes.ts`), never a bare `<img>`; pagination on growable lists; defer below-the-fold work; no needless client JS.
-6. **SEO** — route `meta` (title/description), canonical + OG where relevant, product JSON-LD; legacy URLs preserved or 301'd.
+6. **SEO** — route `meta` (title/description), canonical + OG where relevant, all through `buildMeta()` from `lib/seo.ts`; legacy URLs preserved or 301'd.
 7. **Code style** — `const` arrow components (never `function`); Tailwind utilities, no inline `style={{}}`; self-documenting names; comments explain _why_; **docs updated alongside the change** (see CLAUDE.md → Documentation discipline).
+8. **Brand single-sources** (CLAUDE.md) — role tokens, never raw palette names; handles from `HANDLES` and paths from `lib/urls.ts`; media URLs from `lib/shopifyFiles.ts`; titles, CTAs, prices and images through `Heading` / `Cta` / `Price` / `Image`.
+9. **Loader URLs** — loaders and middleware read the normalized `url`, not `request.url` (React Router 8 passes raw requests; ADR 0012).
 
 ## Output Format
 

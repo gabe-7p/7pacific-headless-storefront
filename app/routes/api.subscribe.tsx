@@ -31,10 +31,6 @@ const EVENT_BY_LIST: Record<JoinList, string> = {
  * a message per failed field (400), `list` for an unknown list (400) or a
  * non-POST (405).
  *
- * The live Liquid theme posted the newsletter to Shopify's `form 'customer'`
- * with the contact tagged `prospect,newsletter`. Headless has no equivalent
- * built-in endpoint, so this resource route validates and confirms.
- *
  * TODO(GD): wire to the marketing provider (Shopify Email / Klaviyo via the
  * Admin API) once credentials are configured — out of scope for now, per
  * Gabe (2026-08-03). The response shape stays the same when that lands.

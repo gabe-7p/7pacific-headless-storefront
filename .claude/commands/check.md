@@ -1,14 +1,14 @@
 ---
 name: check
-description: Run the full pre-PR quality gate (format, lint, types, deps, tests, build)
+description: Run the full pre-PR quality gate (skills, types, lint, format, deps, tests, build)
 ---
 
 Run these checks in sequence — the same gate CI enforces ([.github/workflows/ci.yml](../../.github/workflows/ci.yml)). Stop on the first failure and report what failed.
 
-1. **Format**: `pnpm prettier --write $(git diff --name-only --diff-filter=ACMR HEAD -- '*.ts' '*.tsx' '*.css' '*.json' '*.md')`
-2. **Skills** (Hydrogen's agent skills match the installed package): `pnpm exec hydrogen skills check`
-3. **Type check** (includes `hydrogen gql check`, the Storefront API query validation): `pnpm type-check`
-4. **Lint**: `pnpm lint`
+1. **Skills** (Hydrogen's agent skills match the installed package): `pnpm exec hydrogen skills check`
+2. **Type check** (includes `hydrogen gql check`, the Storefront API query validation): `pnpm type-check`
+3. **Lint**: `pnpm lint`
+4. **Format**: `pnpm prettier:check` (on failure, `pnpm prettier` fixes it)
 5. **Dependency rules**: `pnpm depcruise`
 6. **Unit tests**: `pnpm test`
 7. **Build**: `pnpm build`
@@ -17,10 +17,10 @@ After all checks complete (or one fails), print a summary:
 
 ```
 ## Pre-PR Check Results
-- Format:     PASS/FAIL
 - Skills:     PASS/FAIL
 - Type check: PASS/FAIL
 - Lint:       PASS/FAIL
+- Format:     PASS/FAIL
 - Deps:       PASS/FAIL
 - Tests:      PASS/FAIL
 - Build:      PASS/FAIL

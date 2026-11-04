@@ -1,13 +1,9 @@
-# Single-package repo: this file exists only to hold pnpm settings (their home
-# in pnpm v10+). No `packages:` list — this is not a monorepo.
+# Single-package repo: this file only holds pnpm settings (no `packages:` list).
 #
-# Allow these dependencies to run their install/build scripts. pnpm blocks
-# build scripts by default. `workerd` is MiniOxygen's runtime, `esbuild` is
-# Vite 8's optional peer (its postinstall picks the platform binary),
-# `unrs-resolver` is pulled in by eslint-import-resolver-typescript, and
-# `core-js` by posthog-js. `allowBuilds` is the pnpm 11 setting (a
-# package→boolean map); an entry set to `false` would explicitly BLOCK that
-# package's scripts.
+# Dependencies allowed to run install/build scripts (pnpm blocks them by
+# default): `workerd` is MiniOxygen's runtime, `esbuild` is Vite 8's optional
+# peer (its postinstall picks the platform binary), `unrs-resolver` is pulled in
+# by eslint-import-resolver-typescript, `core-js` by posthog-js.
 allowBuilds:
   core-js: true
   esbuild: true

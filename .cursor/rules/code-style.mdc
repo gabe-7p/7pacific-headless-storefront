@@ -1,32 +1,13 @@
 ---
-description:
+description: 7Pacific Hydrogen storefront conventions. Read CLAUDE.md and .claude/rules/*.md; this file adds only what ESLint does not enforce.
 globs:
 alwaysApply: true
 ---
-Code conventions for the 7Pacific Hydrogen storefront. Always follow these in code changes. The full rationale for each lives in `.claude/rules/` — read those when a change touches the relevant area.
+Read `CLAUDE.md` and the files in `.claude/rules/` before changing code — they are the single source of the conventions (components, GraphQL, boundaries, naming, pitfalls, UI primitives). ESLint and `/check` enforce the mechanical ones (dependency-cruiser layer rules will join them); do not restate them here.
 
-1. **Components are `const` arrow functions** — never the `function` keyword. One component per file, PascalCase, named after the file. (Enforced by ESLint `react/function-component-definition`.) Exception: generated shadcn/ui primitives in `app/components/ui/` use the `function` keyword and are ESLint-exempt — don't rewrite them. See `.claude/rules/ui-components.md`.
+Rules that no linter catches:
 
-2. **No `any`.** Use `unknown` + narrowing, generics, or the `StorefrontApi.ResultOf` types Hydrogen derives from `gql()` documents. The `no-explicit-any` warning is treated as a defect.
-
-3. **Data fetching lives in loaders/actions and `lib/`, never in components.** Components receive typed props and render them. See `.claude/rules/module-boundaries.md`.
-
-4. **GraphQL is `gql()` documents** (from `@shopify/hydrogen`) with fragments composed through the second argument; shared shapes live in `app/lib/fragments.ts`. Types come from `StorefrontApi.ResultOf<typeof DOC>` — never hand-write response types. Every read passes an explicit `cache` (`Cache.long()` / `Cache.short()`). Loaders read the client from `storefrontClientContext`; the cart is read with `useCart`, never a loader. See `.claude/rules/graphql-fragments.md`.
-
-5. **Tailwind utility classes only — no inline `style={{}}` objects.** Use `clsx`/variants for conditional classes. For behaviorally-hard interactive widgets (modal/drawer, dropdown, select, accordion, tooltip) use a shadcn/ui primitive from `app/components/ui/` (Radix behavior, Tailwind-styled, no runtime kit); hand-build everything visual/brand. See `.claude/rules/ui-components.md`.
-
-6. **Handle nullable Storefront fields** with optional chaining/guards (`noUncheckedIndexedAccess` is on).
-
-7. **`import type` for type-only imports** (enforced by `consistent-type-imports`); define object shapes with `type`, not `interface`.
-
-8. **Prefer `Array<T>` over `T[]`** for array annotations.
-
-9. **Prefer `const` and a functional style; avoid `let`** where an expression reads as clearly.
-
-10. **Comments explain *why*, not *what*** — code should be self-documenting through good names. Marketing/product copy lives in typed `content/*.ts`, not inline in JSX.
-
-11. **Never edit generated or synced files** (`.react-router/types/*`, the root `*-graphql-env.d.ts`, `.claude/skills/hydrogen-*`) — change the source; the Hydrogen ts-plugin and `hydrogen skills sync` regenerate them.
-
-12. **Never expose `PRIVATE_*` / secret env vars to the browser** — they are server-only (loaders/actions).
-
-13. **Update docs in the same change as the code.** If you change a convention, script, env var, or directory, update `CLAUDE.md` / `.claude/rules/*` / the env var table in `docs/architecture.md` accordingly. Stale docs are a defect. See `CLAUDE.md` → Documentation discipline.
+1. **Copy lives in `content/*.ts`, not inline in JSX.**
+2. **Brand values have one source** — role tokens (never raw palette names), `HANDLES` + `lib/urls.ts` for handles and paths, `lib/shopifyFiles.ts` for media URLs, `Heading`/`Cta`/`Price`/`Image` for titles, CTAs, prices and images. See CLAUDE.md → Brand single-sources.
+3. **Every Storefront read passes an explicit `cache`** (`Cache.long()` / `Cache.short()`).
+4. **Update docs in the same change as the code** — CLAUDE.md, `.claude/rules/*`, `docs/architecture.md`. Stale docs are a defect.

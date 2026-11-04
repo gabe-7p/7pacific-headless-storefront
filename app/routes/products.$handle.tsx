@@ -51,9 +51,7 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
 
   const storefront = context.get(storefrontClientContext);
 
-  // Below the fold: "PLANNING TO SWEAT MORE?" from the curated
-  // recommended_products metafield. Deferred + guarded so a failure never
-  // 500s the PDP; returned as a promise and awaited in-component.
+  // Below the fold: "PLANNING TO SWEAT MORE?" (custom.recommended_products), deferred.
   const recommendations = deferQuery(
     storefront
       .graphql(RECOMMENDATIONS_QUERY, { variables: { handle }, cache: Cache.long() })
@@ -144,19 +142,15 @@ const ProductPage = () => {
         product={{ id: product.id, title: product.title, vendor: product.vendor }}
         variant={selectedVariant ?? null}
       />
-      {/* The floating-card layout holds down to 769px (live's Impulse
-          breakpoint), not Tailwind's `lg`; below that the hero stacks. `min-h`
-          (not a fixed height) so a tall buy card grows the hero instead of
-          overflowing it under the header and past the fold; the vertical
-          padding keeps the card inset like live's. */}
+      {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
+          of overflowing it under the header and past the fold. */}
       <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
-        {/* Mobile matches live's .product-background-image: 75% wide, 400px
-            tall, cover-center (not a letterboxed contain). The width goes
-            through the `width` prop, not a `w-3/4` class: `Image` sizes the
-            box with an inline width that beats any width utility. */}
+        {/* Mobile: 75% wide, 400px tall, cover-center (measured on live). Width
+            goes through the `width` prop — `Image`'s inline width beats any
+            width utility. */}
         {heroMobile && (
           <Image
             data={heroMobile}

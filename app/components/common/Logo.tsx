@@ -4,11 +4,9 @@ import { BRAND } from '~/content/brand';
 import { cn } from '~/lib/cn';
 
 /**
- * The sport-tag lockup (7PA-245) — the final D9 V5 artwork from the brand's
- * Logo & Assets: boxed race-bib "7" + PACIFIC wordmark. `tone` picks the
- * variant by surface luminance: 'dark' = the Light-Bg file for light
- * surfaces (default), 'light' = the Dk-Bg file for dark/overlay surfaces
- * (hero header, footer). Never recolor these outside the artwork itself.
+ * The sport-tag lockup: boxed race-bib "7" + PACIFIC wordmark. `tone` picks the
+ * file: 'dark' = the Light-Bg file for light surfaces (default), 'light' = the
+ * Dk-Bg file for dark/overlay surfaces. Never recolor.
  */
 export const Logo = ({
   tone = 'dark',

@@ -13,10 +13,8 @@ const STEP_BUTTON =
   'flex size-8 cursor-pointer items-center justify-center transition-opacity hover:opacity-60 disabled:cursor-default disabled:opacity-30';
 
 /**
- * A single cart line: product image, title, options, price, a quantity stepper
- * and a remove control — one cart form per line, posting to `/api/cart`
- * through the store (`register('set' | 'decrease' | 'increase' | 'remove')`).
- * A line the server hasn't confirmed yet (`optimistic:` id) can't be edited.
+ * A single cart line. A line the server hasn't confirmed yet (`optimistic:` id)
+ * can't be edited.
  */
 export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartLine }) => {
   const { id, merchandise, quantity } = line;
@@ -100,8 +98,6 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
               </button>
             </div>
             <div className="font-mono text-sm font-medium">
-              {/* Cart format ("$79.00") to match the subtotal, not the brand
-                  format ("$79 USD") the PDP and product cards use. */}
               <Price data={line.cost.totalAmount} variant="cart" />
             </div>
           </form>

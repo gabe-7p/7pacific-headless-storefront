@@ -41,10 +41,8 @@ const registerOpener = (open: () => void) => {
 };
 
 /**
- * The cart drawer: `layout/Aside` (the shared Radix Sheet) around the cart
- * contents. Registers itself as the `openCart` target and publishes
- * `cart_viewed` each time it opens — the same event the /cart page publishes
- * on mount, so a cart view is counted once per open, not per cart change.
+ * The cart drawer. Registers itself as the `openCart` target and publishes
+ * `cart_viewed` once per open (not per cart change).
  */
 export const CartDrawer = () => {
   const { isOpen, open } = useCartDrawer();

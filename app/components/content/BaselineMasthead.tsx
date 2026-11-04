@@ -6,17 +6,10 @@ import { SpecLine } from '~/components/common/SpecLine';
 import { BASELINE_DROP } from '~/content/baseline-drop';
 
 /**
- * The BASELINE masthead: live dot + edition line, the headline (the status
- * line stacks under it on mobile, joins it inline from md), and the intro
- * paragraph.
- *
- * Shared by the /drops/baseline editorial page (where it sits above the drop
- * film) and the /collections/baseline shop-all page, so the two entry points
- * to the drop open on the same block — one owner for the copy and its scale.
- *
- * `withDropLink` adds the CTA out to /drops/baseline — set on the collection
- * page, where the build story is a click away, and left off on the drop page,
- * which would only be linking to itself.
+ * The BASELINE masthead, shared by the /drops/baseline editorial page and the
+ * /collections/baseline shop-all page so both entry points open on the same
+ * block. `withDropLink` adds the CTA out to /drops/baseline — set on the
+ * collection page, left off on the drop page (it would link to itself).
  */
 export const BaselineMasthead = ({ withDropLink = false }: { withDropLink?: boolean }) => (
   <Container className="pt-8 pb-6 md:pt-14 md:pb-10">

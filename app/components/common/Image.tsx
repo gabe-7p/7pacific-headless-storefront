@@ -2,9 +2,7 @@ import type { CSSProperties, ImgHTMLAttributes } from 'react';
 
 /**
  * The storefront's image element — the ONE place Shopify CDN images are
- * rendered. Hydrogen 2026.10 ships no Image component, so this is a faithful
- * port of the classic one's two modes, because the live pages were built
- * against its exact output:
+ * rendered. Two modes:
  *
  * - **Fluid** (the default, `width` is a percentage): a width-descriptor
  *   `srcset` ladder of CDN-resized URLs capped at the source size, `sizes`
@@ -17,10 +15,7 @@ import type { CSSProperties, ImgHTMLAttributes } from 'react';
  *   Content photos pass their intrinsic size here, which is why they ship at
  *   full resolution.
  *
- * Either way the CDN delivers the slot's own pixel size, so the browser
- * never shrinks a 20-megapixel photo itself (the knit-aliasing pitfall in
- * .claude/rules/common-pitfalls.md). `Image.test.tsx` pins the contract.
- * The inline style is the documented exception to the no-inline-style rule:
+ * `Image.test.tsx` pins the contract. The inline style is the documented exception to the no-inline-style rule:
  * a per-image ratio can't be a Tailwind class.
  */
 

@@ -135,8 +135,6 @@ export const HeaderMenu = ({
           </NavLink>
         );
       })}
-      {/* Account is a first-class menu item now (7PA-235 locked nav), so the
-          drawer no longer needs its own Log in link. */}
       {isMobile &&
         BRAND.social
           .filter((social) => social.platform === 'Instagram')
@@ -159,11 +157,8 @@ export const HeaderMenu = ({
 const HeaderCtas = ({ publicStoreDomain }: Pick<HeaderProps, 'publicStoreDomain'>) => {
   return (
     <nav className="flex items-center justify-end gap-4" role="navigation">
-      {/* Customer login lives on Shopify's hosted account portal, not this headless
-          storefront (we don't use the Customer Account API). `{store-domain}/account`
-          302-redirects to it; the myshopify domain is always Shopify-served, so this
-          link survives the custom-domain cutover. Desktop-only (the cart shows at
-          every width). */}
+      {/* Shopify's hosted account portal (on the myshopify domain, which survives
+          the custom-domain cutover); desktop-only. */}
       <a
         href={`https://${publicStoreDomain}/account`}
         className="hidden items-center transition-opacity hover:opacity-70 impulse:inline-flex"

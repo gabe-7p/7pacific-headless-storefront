@@ -1,15 +1,11 @@
 /**
- * Our Story page — "The File". Copy from the Oct 2026 Notion revamp ("Revamp
- * of Our Story page", under Website); that page is the source of truth, so
- * edit it there first, then here. The page tells the story as an athlete's
- * issued file: four numbered chapters (status, mission, kit, roster), ending
- * on the founder's sign-off. Rendered by app/components/content/OurStory.tsx.
+ * Our Story page — "The File". Notion is the source of truth — edit there
+ * first, then here. Four numbered chapters (status, mission, kit, roster),
+ * ending on the founder's sign-off. Rendered by components/content/OurStory.tsx.
  *
- * Photography is STAND-IN: the brand world calls for direct-flash, night-
- * session shots and the library only holds the fog/daylight shoot. Every
- * photo is a `MediaSlotSource`, so swapping in the new shoot is a one-line
- * change per slot, no component edits. The mono labels (chapter titles,
- * readout, roster fields, strip captions) are art direction, not body copy.
+ * Photography is STAND-IN until the night shoot; each photo is a
+ * `MediaSlotSource`, so the swap is one line per slot. The mono labels are art
+ * direction, not body copy.
  */
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';

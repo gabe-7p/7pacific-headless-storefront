@@ -1,8 +1,6 @@
 name: CI
 
-# Quality gate: runs on every PR and on pushes to main.
-# Complements the Oxygen deploy workflow — this fails the PR if code doesn't
-# type-check, lint, format, satisfy the dependency rules, or build.
+# Complements the Oxygen deploy workflow. Mirrored step-for-step by the /check command.
 on:
   pull_request:
   push:

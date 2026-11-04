@@ -5,11 +5,9 @@ import type { StorefrontClient } from '~/lib/storefront';
 import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
 
 /**
- * Sitemaps, app-owned since Hydrogen 2026.10 (classic's `getSitemapIndex` /
- * `getSitemap` are gone and were typed for the classic client). Same URL
- * shapes as before, plus the journal: the Storefront API's `sitemap` field
- * pages every resource type 250 at a time, so the index advertises one child
- * sitemap per page and each child renders that page.
+ * Sitemaps: the Storefront API's `sitemap` field pages every resource type 250
+ * at a time, so the index advertises one child sitemap per page and each child
+ * renders that page.
  */
 export const SITEMAP_TYPES = ['products', 'collections', 'pages', 'journal'] as const;
 export type SitemapType = (typeof SITEMAP_TYPES)[number];

@@ -42,12 +42,8 @@ const DATA_CELL = 'py-3 text-center font-mono text-[11px] text-ink sm:text-[13px
  * (rendered by `ProductForm`) that opens a right-side drawer holding the
  * measurement table (imperial/metric) and the how-to-measure explainer.
  *
- * It composes the `Sheet` primitive directly rather than going through
- * `layout/Aside` — Aside's recipe is fixed (350/450px, opaque field, left-aligned
- * h-16 header with the floating close icon), and this panel needs its own width,
- * a translucent ground, and a centred title with a text CLOSE. Open state stays
- * local: the trigger lives inside the buy card, so the cart drawer (behind this
- * one's scrim and focus trap) can't be opened alongside it.
+ * Composes `Sheet` directly — see ui-components.md → Drawers. Open state stays
+ * local: the cart drawer can't be opened alongside it.
  */
 export const SizeGuide = () => {
   const [unit, setUnit] = useState<Unit>('in');
@@ -61,9 +57,7 @@ export const SizeGuide = () => {
           {title}
         </Eyebrow>
       </SheetTrigger>
-      {/* The one translucent surface in the storefront: the product reads
-          through the panel at 80% with only a whisper of blur, so the guide
-          stays an overlay on the shot rather than a wall over it. */}
+      {/* The one translucent surface: see ui-components.md → Drawers. */}
       <SheetContent
         side="right"
         showCloseButton={false}
@@ -102,11 +96,8 @@ export const SizeGuide = () => {
               </button>
             ))}
           </div>
-          {/* Fixed layout so the three measurement columns stay equal instead of
-              sizing to their widest value — auto layout makes the grid ragged
-              as the numbers change between units. The outline is Carbon so the
-              grid holds its edge against the product showing through; the
-              interior hairlines stay subtle so it reads as one device. */}
+          {/* `table-fixed` keeps the three measurement columns equal as the
+              numbers change between units. */}
           <table className="w-full table-fixed border border-ink">
             <caption className="sr-only">
               Body measurements in {unit === 'in' ? 'inches' : 'centimetres'}

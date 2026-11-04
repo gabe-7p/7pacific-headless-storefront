@@ -64,12 +64,10 @@ type SettleInProps = {
 };
 
 /**
- * Fade + slow scale-settle for photography: starts a touch large (1.04) and
- * eases to rest over 1.2s on the brand curve — one slow exhale, then
- * stillness (the 404's Lands End photograph). Fires on mount and ends at
- * rest by design: no loops. The scale overshoots the element's box, so give
- * the parent `overflow-hidden` when the bleed would touch a neighbor. Must
- * render inside a `<MotionProvider>`.
+ * Fade + slow scale-settle for photography (1.04 → 1 over 1.2s, once). The
+ * scale overshoots the element's box, so give the parent `overflow-hidden`
+ * when the bleed would touch a neighbor. Must render inside a
+ * `<MotionProvider>`.
  */
 export const SettleIn = ({ children, delay = 0, className }: SettleInProps) => (
   <m.div

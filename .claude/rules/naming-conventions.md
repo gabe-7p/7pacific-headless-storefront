@@ -15,6 +15,8 @@ Single-record fetch/lookup helpers reveal their not-found behavior in the name:
 
 ```ts
 // ✅ returns null when not found — caller must check
+// (illustrative: no shared instance exists yet — PR 3 of the tech-debt stack adds
+// `queryStorefront` / `queryStorefrontOrThrow` in lib/storefront.ts)
 export const getProductByHandle = async (
   { handle }: { handle: string },
   storefront: StorefrontClient
@@ -32,7 +34,7 @@ export const getProductByHandleOrThrow = async (
   storefront: StorefrontClient
 ) => {
   const product = await getProductByHandle({ handle }, storefront);
-  if (!product) throw new Response('Product not found', { status: 404 });
+  if (!product) throw notFound('Product not found');
   return product;
 };
 ```
@@ -47,7 +49,7 @@ Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists` for single-record f
 
 ## Files & routes
 
-- Route files follow React Router's flat convention (`collections.$handle.tsx`, `blogs.$blogHandle.$articleHandle.tsx`) — don't rename them by hand.
+- Route files follow React Router's flat convention (`collections.$handle.tsx`, `journal.$handle.tsx`) — don't rename them by hand.
 - Non-route files: `camelCase.ts` for utilities/logic (`colors.ts`), `PascalCase.tsx` for components.
 - Typed content constants: `content/<topic>.ts` (e.g. `content/our-story.ts`).
 

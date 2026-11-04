@@ -43,8 +43,7 @@ export const AARON_LEE = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // Aaron's founder message in Shopify Files (portrait, 22s) — Shopify's
-    // 720p transcode; poster is the custom thumbnail set in Shopify admin.
+    // Poster: the custom thumbnail set in Shopify admin.
     src: shopifyVideo('8d5feed0d0594eecbb7aede436dde043', 'HD-720p-3.0Mbps-93935029'),
     poster: shopifyVideoPoster('Screenshot_2026-09-09_at_2.28.15_PM.png'),
     captions: '',

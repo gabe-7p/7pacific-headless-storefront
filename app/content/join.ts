@@ -1,11 +1,10 @@
 /**
  * The join flow's copy — one signup pipe (`JoinForm` → POST /api/subscribe)
- * with two lists behind it. Each list's copy lives here so the footer, the
- * `JoinDialog`, and any surface that mounts its own `JoinForm` read the same
- * lines.
+ * with two lists behind it. Each list's copy lives here so every surface
+ * reads the same lines.
  *
  * Acquisition through community, not price (7PA-241): no discount language,
- * ever. Homepage v2 (Oct 2026): the membership is the roster.
+ * ever.
  */
 
 import { MEMBERSHIP_PITCH } from '~/content/membership';
@@ -39,7 +38,7 @@ export const WAITLIST_SUCCESS_MESSAGE = 'You’re on it. See you at first light.
 export const JOIN_COPY: Record<JoinList, JoinDialogCopy> = {
   /**
    * The roster (email only). One set of lines shared by the footer signup and
-   * the click-triggered "Join the roster" dialog (Gabe 2026-10-08), so the
+   * the click-triggered "Join the roster" dialog, so the
    * dialog continues the CTA that opened it — the body opens with the same
    * pitch paragraph the homepage Roster section and PDP banner show.
    */

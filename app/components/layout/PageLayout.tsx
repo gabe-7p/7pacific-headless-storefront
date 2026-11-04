@@ -33,9 +33,6 @@ export const PageLayout = ({
           <Header header={header} publicStoreDomain={publicStoreDomain} />
         </div>
         <main>{children}</main>
-        {/* The footer signup is always present; the membership CTAs (and the
-            Coming Soon card) open the same form in a dialog — click-triggered
-            only, never on load. */}
         <Footer footer={footer} header={header} publicStoreDomain={publicStoreDomain} />
       </JoinDialogProvider>
     </Aside.Provider>

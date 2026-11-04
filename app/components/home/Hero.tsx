@@ -5,14 +5,10 @@ import { SpecLine } from '~/components/common/SpecLine';
 import { HOME_HERO } from '~/content/home';
 
 /**
- * Full-bleed homepage hero. Structure per the drop-01 mockup (Gabe,
- * 2026-07-21): mono spec-strip eyebrow, the ALL-CAPS headline (homepage v2:
- * two forced lines, ≤8 words), an Inter subhead, and a filled + text CTA
- * pair. Deliberate deviations
- * from 7PA-232: two CTAs instead of one — the secondary renders in chalk, so
- * the page's one Ember moment is still the primary CTA alone. Sits under the
- * transparent overlay header. The photograph itself is replaced by the
- * photography program (7PA-236/237).
+ * Full-bleed homepage hero: mono spec-strip eyebrow, the ALL-CAPS headline
+ * (two forced lines, ≤8 words), an Inter subhead, and a filled + text CTA
+ * pair. The secondary CTA renders in chalk, so the page's one Ember moment is
+ * still the primary CTA alone. Sits under the transparent overlay header.
  */
 export const Hero = () => (
   // -mt pulls the hero up beneath the sticky header (transparent overlay);
@@ -35,15 +31,13 @@ export const Hero = () => (
         click meant for the CTA beneath it. */}
     <div className="pointer-events-none absolute inset-0 bg-black/10" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
-      {/* Spec-strip tier (7PA-242): JetBrains Mono caps at +0.1em. */}
+      {/* Spec-strip tier: JetBrains Mono caps at +0.1em. */}
       <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>
       {/* Hero display tier, -0.005em, lh 0.95 (leading repeats per size —
           text-* utilities reset line-height). Each line is a nowrap block so
-          the break lands at the period on every viewport. The longer line
-          ("GOING TO BE AN ATHLETE.") measures ≈10px per font-px, so each step
-          is the largest size whose line fits the content box at that width:
-          32px at 375, 48px from 560, 60px from md, 72px from lg, 96px from xl.
-          The 560 step is an arbitrary breakpoint like the base; the named
+          the break lands at the period on every viewport. Each step is the
+          largest size whose longer line fits the content box at
+          that width. The 560 step is an arbitrary breakpoint like the base; the named
           md/lg/xl steps above it stay in ascending order, so emit order is
           safe. Re-measure if the headline copy changes. */}
       <Heading

@@ -2,12 +2,6 @@
  * /drops/first-light — the Drop 02 "FIRST LIGHT" teaser page (route
  * drops.first-light.tsx → components/content/FirstLightTeaser). Copy is
  * transcribed verbatim from Gabe's approved mock (2026-08-10).
- *
- * Every media field is a `MediaSlotSource`: when a real asset is uploaded,
- * swap the `PLACEHOLDER_IMAGE` reference for an `{ kind: 'image', … }` /
- * `{ kind: 'video', … }` object — a one-line change here, no component
- * edits. Aspect ratios are locked in `MediaSlot`, so the swap can't shift
- * the layout.
  */
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';

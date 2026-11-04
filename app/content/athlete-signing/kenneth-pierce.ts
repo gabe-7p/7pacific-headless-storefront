@@ -39,9 +39,7 @@ export const KENNETH_PIERCE = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // FullSizeRender in Shopify Files (portrait, 25s) — Shopify's 720p
-    // transcode; poster is Shopify's auto-generated preview (no custom
-    // thumbnail set for this video yet).
+    // Poster: Shopify's auto-generated preview (no custom thumbnail yet).
     src: shopifyVideo('41d3555453a64e79b9a45343f800b0ed', 'HD-720p-4.5Mbps-89804130'),
     poster: shopifyVideoPoster('41d3555453a64e79b9a45343f800b0ed.thumbnail.0000000000.jpg'),
     captions: '',

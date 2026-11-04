@@ -13,7 +13,7 @@ How to confirm the Meta Pixel fires correctly on the storefront, in about 15 min
 
 The pixel loads only after Shopify's Customer Privacy API allows analytics (immediately for US visitors; after the banner elsewhere).
 
-**Every event is a GET** (`Request Method: GET`, type `img`, ~1.3 KB). Meta's **Automatic Configuration** is switched off (`fbq('set', 'autoConfig', false, …)` before `init`), because with it on fbevents.js scrapes the page and appends ~8 KB to each event, anything over 2048 URL characters is sent as a `navigator.sendBeacon` POST instead, and those beacons were exactly the events Events Manager never showed (every `AddToCart`, and `ViewContent` on every product whose meta description is longer than the hat's). Off also means **no** `SubscribedButtonClick` automatic events and no `[Meta Pixel] - Invalid parameter format for currency` warning in the console. If you ever see a `POST` to `facebook.com/tr/` (type `ping`) again, autoConfig is back on — check that the `set` call still precedes `init` in `app/lib/analytics/meta-pixel.client.ts`.
+**Every event is a GET** (`Request Method: GET`, type `img`, ~1.3 KB). If you ever see a `POST` to `facebook.com/tr/` (type `ping`), Automatic Configuration is back on and some events (every `AddToCart`, `ViewContent` on long-description products) will be missing from Events Manager — why and where to check: the comment in `app/lib/analytics/meta-pixel.client.ts`.
 
 ## 0. Before you start (one-time)
 
@@ -91,7 +91,7 @@ Expected output:
 
 ```
 Running 1 test using 1 worker
-  ✓  1 e2e/meta-pixel.spec.ts:24:1 › Meta Pixel pre-checkout funnel (stubbed fbevents.js) (20.5s)
+  ✓  1 e2e/meta-pixel.spec.ts:23:1 › Meta Pixel pre-checkout funnel (stubbed fbevents.js) (20.5s)
   1 passed (25.2s)
 ```
 
@@ -112,7 +112,7 @@ Options: `TEST_PRODUCT_HANDLE=<handle>` picks the product; `PIXEL_BASE_URL=http:
 1. Deploy a preview (ask before running this — it creates a deployment):
 
    ```bash
-   npx shopify hydrogen deploy
+   pnpm deploy
    ```
 
    Note the preview URL it prints (`https://<something>.o2.myshopify.dev`). Add that domain to Traffic Permissions if it is not there (section 0).
@@ -126,7 +126,7 @@ Options: `TEST_PRODUCT_HANDLE=<handle>` picks the product; `PIXEL_BASE_URL=http:
 In Events Manager → **Test Events** (or **Overview → Event details**), open a `Purchase` event and look at `content_ids`. Compare with a storefront `ViewContent` from the same product.
 
 - Both look like `shopify_US_1234567890_9876543210` → match, nothing to do.
-- The Purchase shows bare numbers like `9876543210` → open `app/lib/analytics/meta-pixel.ts`, find `toMetaContentId`, and change its one return line to `return numericId(variantId);` (the comment above it says exactly this). Run `pnpm test` (two unit tests pin the format — update their expected strings) and `pnpm test:pixel`.
+- The Purchase shows bare numbers like `9876543210` → open `app/lib/analytics/meta-pixel.ts`, find `toMetaContentId`, and change its one return line to `return numericId(variantId);` (the comment above it says exactly this). Run `pnpm test` (the `meta-pixel.test.ts` expectations pin the format — update their expected strings) and `pnpm test:pixel`.
 
 ## 6. What good looks like
 

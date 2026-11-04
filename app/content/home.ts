@@ -1,9 +1,7 @@
 /**
  * Homepage marketing copy + section asset URLs (typed constants, not JSX).
- * Homepage v2 (Oct 2026): every section talks to one athlete ("you") with
- * "we" in the frame. Asset URLs are the Shopify Files / CDN assets already in
- * the slots; their alt text describes the intended Shoot #2 replacement (see
- * homepage-image-swaps.md).
+ * Every section talks to one athlete ("you") with "we" in the frame. Asset
+ * alt text describes the intended Shoot #2 replacement.
  */
 
 import { BASELINE_DROP } from '~/content/baseline-drop';
@@ -23,16 +21,13 @@ export const HOME_HERO = {
   /** Mono spec-strip label above the headline (caps via CSS). */
   eyebrow: 'Designed in San Francisco',
   /**
-   * Homepage v2 hero (Oct 2026). The headline is a fact the athlete already
-   * knows, never a motivational line: ALL CAPS via CSS, two forced lines,
-   * eight words max. Option A per the brief; Option B is
-   * ['The stands are empty.', 'We train anyway.'].
+   * The headline is a fact the athlete already knows, never a motivational
+   * line: ALL CAPS via CSS, two forced lines, eight words max.
    */
   headlineLines: ['the athlete', 'never left.'],
   /** Inter, sentence case. */
   subhead: 'Performance apparel engineered for athletes who never stop competing.',
-  /** Primary CTA, mono caps (the page's single Ember moment). Target is the
-      BASELINE shop-all collection (Gabe 2026-09-10). */
+  /** Primary CTA, mono caps (the page's single Ember moment). */
   cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
   /**
    * Text-treatment secondary CTA (renders in chalk, so the one-Ember-moment
@@ -60,11 +55,10 @@ type NameSpecCell = {
 };
 
 /**
- * The Name/Spec marquee banner directly below the hero (approved prototype,
- * Jul 2026): the three live product families as name-over-spec cells plus the
+ * The Name/Spec marquee banner directly below the hero: the three live product families as name-over-spec cells plus the
  * Shop All CTA cell, auto-scrolling. Content is locked — exactly these cells.
  * Names use the product cards' short-title device (family + noun, no "//"
- * descriptor) per Gabe (2026-07-24), so the banner and grid read as one system.
+ * descriptor), so the banner and grid read as one system.
  */
 export const HOME_NAME_SPEC_BANNER = {
   cells: [
@@ -135,9 +129,8 @@ export const HOME_DROP_TWO = {
  * BASELINE V01 — the second TeaserSection instance, below the Name/Spec
  * banner: two cards pointing deeper into the first kit (the shop-all
  * collection and the founder film on YouTube). No countdown: the kit is live.
- * The right card loops the drop page's film in the card (BASELINE_DROP.film —
- * one source for the recap video). "Edition" language is gone: the brand
- * versions product like software (V01).
+ * The right card loops the drop page's film (BASELINE_DROP.film — one source
+ * for the recap video).
  */
 export const HOME_BASELINE_INTRO = {
   heading: 'Baseline V01',
@@ -175,11 +168,7 @@ export const HOME_BASELINE_INTRO = {
 
 export const HOME_FIRST_DROP = {
   heading: 'The Starting Lineup',
-  /** The count is the real number of products in the lineup (the loader's
-      grid), never a hardcoded word. */
   subtitle: 'Purpose-built essentials engineered for the way athletes move.',
-  // Grid order is merchant-controlled: the manual homepage collection in
-  // Shopify (HANDLES.homepageCollection in content/links.ts).
 } as const;
 
 export type CoreValue = {
@@ -196,7 +185,7 @@ export type CoreValue = {
 };
 
 /**
- * "How We Train" — four rules, not feelings (homepage v2, Oct 2026). Each
+ * "How We Train" — four rules, not feelings. Each
  * card is a rule the athlete already follows, in the working voice. The CTAs
  * are not in the brief; they stay outline (never Ember) and point at existing
  * surfaces.

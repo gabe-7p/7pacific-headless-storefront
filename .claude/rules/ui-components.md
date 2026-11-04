@@ -31,7 +31,7 @@ It reads [`components.json`](../../components.json) (aliased to `~/*`, base colo
 
 - **Generated, not authored.** These files don't follow the repo's component conventions (they use the `function` keyword and occasional `any`). `app/components/ui/**` is therefore **exempt** in [eslint.config.js](../../eslint.config.js) from `react/function-component-definition` and `@typescript-eslint/no-explicit-any`. Don't "fix" generated files to use const arrows.
 - **Restyle, don't re-architect.** Change Tailwind classes to match the brand; keep the Radix structure/behavior. If you need to update a primitive, re-run `shadcn add` and re-apply your styling rather than hand-patching internals.
-- **Local deviations must be re-applied after a regenerate.** `sheet.tsx` carries two: an `overlayClassName` pass-through (the mobile menu doesn't dim the page, the cart drawer does) and live's `CloseIcon` in place of lucide's `XIcon`. `dialog.tsx` carries none beyond the type-only `React` import (we run React 19, which the templates target, so the overlays are stock function components; the `forwardRef` wrappers the React 18 build needed are gone). `button.tsx` carries six: the `brandCta` shared const + the three `brand*` variants built on it, the per-size `[--cta-slide:…]` vars, the `has-[>svg,>[data-cta-label]]:px-*` selector extensions, `lg` at brand height `h-9` (stock shadcn is `h-10`), and the single corner radius — the cva base declares `rounded-[2px]` (stock shadcn is `rounded-md`) and every size-variant `rounded-md` is stripped, so radius is declared in exactly one place. The sixth: the unused stock variants (`default`, `destructive`, `secondary`, `ghost`, `link`), the `icon*` sizes and every `dark:` utility are removed (nothing sets a `.dark` class; the default variant is `outline`). A `shadcn add` would silently drop all of these.
+- **Local deviations must be re-applied after a regenerate.** `sheet.tsx` carries three: an `overlayClassName` pass-through (the mobile menu doesn't dim the page, the cart drawer does), live's `CloseIcon` in place of lucide's `XIcon`, and a `focus-visible:` ring on the close button (stock is `focus:`; `dialog.tsx` keeps the stock `focus:`). `dialog.tsx` carries none beyond the type-only `React` import (we run React 19, which the templates target, so the overlays are stock function components; the `forwardRef` wrappers the React 18 build needed are gone). `button.tsx` carries seven: the `brandCta` shared const + the three `brand*` variants built on it, the per-size `[--cta-slide:…]` vars, the `has-[>svg,>[data-cta-label]]:px-*` selector extensions, `lg` at brand height `h-9` (stock shadcn is `h-10`), and the single corner radius — the cva base declares `rounded-[2px]` (stock shadcn is `rounded-md`) and every size-variant `rounded-md` is stripped, so radius is declared in exactly one place. The sixth: `cursor-pointer` in the cva base. The seventh: the unused stock variants (`default`, `destructive`, `secondary`, `ghost`, `link`), the `icon*` sizes and every `dark:` utility are removed (nothing sets a `.dark` class; the default variant is `outline`). A `shadcn add` would silently drop all of these. Open question: dialogs close with lucide's `XIcon` while every drawer uses the traced `CloseIcon`; decide once which one both use.
 - **Tokens live in `app/styles/tailwind.css`.** The shadcn base-color CSS variables (`--background`, `--primary`, `--border`, …) and the `@theme inline` mapping sit alongside the brand `@theme` tokens. They don't collide — keep both.
 - **Primitives are still presentational.** No data fetching or GraphQL in `components/ui/` — same boundary as every other component (see [module-boundaries.md](module-boundaries.md)).
 
@@ -64,6 +64,10 @@ and `text-ink` 12.9–13.2:1. **70% was the floor** — it measured 4.89–5.09:
 4.5:1 for the support tier by a hair and nothing more. Drop below that, or lose the scrim,
 and the body copy fails. Re-measure the composite (not the token) before touching either.
 
+## Ember is once per page — with one sanctioned exception
+
+The accent appears once per page. The BASELINE drop page (`components/content/BaselineDrop.tsx`) deliberately repeats it (live dot, stat glyphs, per-piece Shop links) because the approved mock does; its one `brand` button is still the closer's SHOP THE DROP. Don't copy that onto other pages.
+
 ## File/HUD devices stay on night editorial surfaces
 
 `common/Readout` (`SectionLabel`, `CornerBrackets`) and the `--grain` photo veil in
@@ -81,6 +85,12 @@ Header/drawer glyphs live in [`app/components/common/icons.tsx`](../../app/compo
 ## Matching live: measure, don't eyeball
 
 Parity work is driven by the rendered DOM, not screenshots alone. Read the live value with `getComputedStyle` / `getBoundingClientRect` at 375 / 768 / 1440, implement to that number, then re-measure. Screenshots confirm composition; they don't tell you a heading is weight 500 rather than 700, or that a breakpoint is 769px rather than 768px. Several audit tickets described the _symptom_ correctly but guessed the value — the measurement is the source of truth, and where they disagreed the ticket was corrected in the PR.
+
+The verification loop (from the retired migration playbook):
+
+- Check **both** viewports — mobile 390×844 and desktop 1440×900, `deviceScaleFactor` 2. A one-viewport pass doesn't count; live is responsive and a desktop-only pass misses mobile drift.
+- Per viewport: screenshot live and local at the same size (full page + the unit's bounding box), then compare layout and spacing, typography, color and assets item by item. A pixel diff is optional (≤2% changed, dynamic regions excluded).
+- Fix, re-run. Compare against the live site, never against memory.
 
 ## Why this split
 

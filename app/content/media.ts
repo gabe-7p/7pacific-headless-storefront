@@ -1,6 +1,6 @@
 /**
- * External media the content links out to — ids only; the URL shapes live in
- * lib/urls.ts. Media on Shopify Files is built by lib/shopifyFiles.ts.
+ * External media the content links out to — ids only; URL shapes live in
+ * lib/urls.ts, Shopify Files media in lib/shopifyFiles.ts.
  */
 
 /**

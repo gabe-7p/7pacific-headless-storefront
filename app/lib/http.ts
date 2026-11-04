@@ -9,9 +9,8 @@ export const notFound = (message = 'Not found') => new Response(message, { statu
 export const CACHE_ONE_DAY = `max-age=${60 * 60 * 24}`;
 
 /**
- * Below-the-fold data is returned from loaders as a promise and rendered with
- * `<Suspense>`/`<Await>`; a rejection would 500 the whole page, so every
- * deferred query goes through here: log and resolve to null instead.
+ * Wraps a deferred (below-the-fold) query: log and resolve to null instead of
+ * rejecting. See common-pitfalls.md → "Defer below-the-fold data".
  */
 export const deferQuery = <T>(query: Promise<T>): Promise<T | null> =>
   query.catch((error: unknown) => {

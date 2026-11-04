@@ -10,8 +10,8 @@ export type CartLayout = 'page' | 'aside';
 
 /**
  * The cart contents, shared by the /cart route (`page`) and the drawer
- * (`aside`). Reads the client cart store: optimistic lines appear at once and
- * settle when `/api/cart` confirms them.
+ * (`aside`). Optimistic lines appear at once and settle when `/api/cart`
+ * confirms them.
  */
 export const CartMain = ({ layout }: { layout: CartLayout }) => {
   const lines = useCart((state) => state.data.lines.nodes);
@@ -47,7 +47,6 @@ const CartEmpty = ({ layout }: { layout: CartLayout }) => {
   const { close } = useAside();
   return (
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
-      {/* Locked microcopy (7PA-243) — verbatim from the guidelines. */}
       <p className="text-sm text-support">{MICROCOPY.emptyCart}</p>
       <Cta to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport" size="sm" className="mt-4">
         Shop the drop

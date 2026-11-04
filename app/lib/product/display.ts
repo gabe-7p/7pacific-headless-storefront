@@ -6,10 +6,6 @@
  * name over a JetBrains Mono strip (`MINT · $79`). Raw Shopify titles carry a "//" descriptor and a trailing color
  * ("AIRRAIL™ 6\" // CORE MOTION TRAINING SHORT - MINT"), so the device derives
  * the short name instead of rendering the raw string.
- *
- * The strip used to carry a per-family fabric spec ("92/8 shell", "84/16
- * mesh"); dropped per Gabe (2026-07-19) — those facts live on the PDP Spec
- * Card, not the card.
  */
 
 const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();

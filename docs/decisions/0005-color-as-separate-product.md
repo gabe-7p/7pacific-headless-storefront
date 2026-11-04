@@ -1,6 +1,6 @@
 # 0005. Keep "color = separate product" data model for v1
 
-- **Status**: Accepted
+- **Status**: Accepted. **Addendum 2026-07**: the hand-maintained `lib/colorMap.ts` became the `custom.color_siblings` metafield (read by [`lib/product/colors.ts`](../../app/lib/product/colors.ts)); see [the add-a-product runbook](../runbooks/add-a-product.md).
 - **Date**: 2026-06-18
 
 ## Context

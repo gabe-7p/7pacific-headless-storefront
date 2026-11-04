@@ -15,9 +15,8 @@ export const meta: Route.MetaFunction = () => {
 };
 
 /**
- * The full cart page. Cart data comes from the client store (`useCart`),
- * which the root loader seeds; mutations post to `/api/cart` through the
- * line/discount forms, so this route has no loader or action of its own.
+ * The full cart page. It has no loader or action: cart data comes from the
+ * client store (`useCart`) and mutations post to `/api/cart`.
  */
 const Cart = () => {
   const cart = useCart((state) => state.data);

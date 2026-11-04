@@ -1,9 +1,8 @@
 import { BRAND } from '~/content/brand';
 
 /**
- * SEO defaults — single source for the page-title format and fallback meta.
- * Routes build their `meta` through `buildMeta()` below; `pageTitle` is its
- * title formatter (exported for tests).
+ * SEO defaults — the single source for the page-title format and fallback
+ * meta. Routes build `meta` through `buildMeta()` below.
  */
 export const DEFAULT_DESCRIPTION =
   'Lightweight, breathable training gear built for performance. Free shipping on orders over $200.';

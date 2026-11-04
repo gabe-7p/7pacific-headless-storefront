@@ -52,9 +52,8 @@ type HeadingProps = {
  * one-offs go in className; cn resolves the conflict). Multi-line headings
  * pass `lines` instead of children.
  *
- * A preset `size` also sets responsive steps (`md:`/`xl:`), which className
- * can't override at those breakpoints — pass `size="none"` when a page needs
- * to own its whole scale.
+ * A preset `size` carries responsive steps — see common-pitfalls.md (Tailwind
+ * traps); pass `size="none"` when a page owns its whole scale.
  */
 export const Heading = ({
   as: Tag = 'h2',

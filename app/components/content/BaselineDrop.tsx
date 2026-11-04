@@ -11,10 +11,7 @@ import { BASELINE_DROP } from '~/content/baseline-drop';
 import { cn } from '~/lib/cn';
 
 /**
- * NOTE on Ember: the approved mock deliberately repeats the Ember accent down
- * this page (live dot, stat glyphs, per-piece Shop links) — a sanctioned
- * exception to the one-moment-per-page ration (7PA-230). The one `brand`
- * BUTTON is still the closer's SHOP THE DROP.
+ * Ember repeats here by sanctioned exception (ui-components.md).
  */
 
 /** Campaign heading scale steps (the face/weight/tracking come from
@@ -35,7 +32,7 @@ const DropSectionHeader = ({ heading, subtitle }: { heading: string; subtitle: s
 /** A training-section photo under the unifying grade: the images are shot in
     different light (fog, beach sun, trail green), so each gets a slight
     desaturation plus a cool Carbon multiply veil — enough to pull them onto
-    one color profile without visibly costing detail (Gabe 2026-08-25). */
+    one color profile without visibly costing detail. */
 const GradedMedia = ({
   media,
   ratio,
@@ -54,9 +51,7 @@ const GradedMedia = ({
   </div>
 );
 
-/** The full-bleed 16:9 drop film, with the full-video pointer pinned to
-    its lower-left corner over a soft scrim (the footage runs light, so the
-    white label needs the ground). */
+/** The full-bleed 16:9 drop film; the scrim keeps the white full-video label legible. */
 const Film = () => (
   <section className="relative">
     <MediaSlot media={BASELINE_DROP.film} ratio="video" />
@@ -84,7 +79,7 @@ const Film = () => (
 /** One dark stat tile — the figure and its label pinned to the bottom.
     No fixed aspect: the top padding is all the headroom the tile gets, so
     the row stays a compact stat band; the grid levels the four tiles and
-    the bottom-pinned figures keep one shared baseline (Gabe 2026-08-25). */
+    the bottom-pinned figures keep one shared baseline. */
 const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number] }) => (
   <div className="flex flex-col justify-end bg-field-night px-4 pt-8 pb-4 md:px-5 md:pt-10 md:pb-6">
     {/* Archivo Light figure with its label beside it, items-end (not
@@ -128,8 +123,7 @@ const Standard = () => (
         subtitle={BASELINE_DROP.standard.subtitle}
       />
     </Container>
-    {/* The band is the sled-push loop at 70% of its height (Gabe, Nov
-        2026) — `loop` sits near the old `wide` band's proportions. */}
+    {/* The band is the sled-push loop at 70% of its height. */}
     <GradedMedia
       media={BASELINE_DROP.standard.banner}
       ratio="loop"
@@ -138,7 +132,7 @@ const Standard = () => (
     {/* The three day photos run edge-to-edge under the band, split by 1px
         slivers — the same 1px above them. The caption frames below butt
         together with single shared hairlines (only the photos keep the gap),
-        so the row reads as one continuous strip (Gabe 2026-08-25). The
+        so the row reads as one continuous strip. The
         sliver is the grid's own column gap, not padding on the photo: a
         padded photo is 1px narrower than its neighbour and, through the
         aspect ratio, a fraction shorter — the third caption sat ~1px lower
@@ -151,7 +145,7 @@ const Standard = () => (
           {/* Hairline frame closes around the caption — the photo caps the
               top, and from md only the first frame keeps its left border so
               adjacent frames share one hairline. flex-1 levels the three
-              frames to the tallest (Gabe 2026-08-25). */}
+              frames to the tallest. */}
           <div className="flex-1 border-x border-b border-border-subtle px-4 pt-3.5 pb-5 md:-mr-px md:border-l-0 md:px-5 md:pt-4 md:pb-6 md:group-first:border-l md:group-last:mr-0">
             <p className="text-[10px] font-bold tracking-caps text-ink uppercase md:text-[11px]">
               {`${day.index}:\u2002${day.title}`}
@@ -177,8 +171,7 @@ const PieceCell = ({
   <div className={className}>
     <MediaSlot media={piece.media} ratio="product" />
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-3 pt-2.5 pb-4 md:px-4.5 md:pt-3.5 md:pb-5">
-      {/* Product names ride the campaign Archivo, not the mono spec strip
-          (Gabe 2026-08-25). */}
+      {/* Product names ride the campaign Archivo, not the mono spec strip. */}
       <span className="font-archivo text-[11px] tracking-caps text-ink uppercase md:text-xs">
         {piece.name} <span className="text-support">{piece.price}</span>
       </span>
@@ -200,7 +193,7 @@ const Pieces = () => (
       />
     </Container>
     {/* Separate tiles split by the same hairline-thin gaps as the day
-        photos; the lead piece goes full-width on mobile (Gabe 2026-08-25). */}
+        photos; the lead piece goes full-width on mobile. */}
     <div className="grid grid-cols-2 gap-1 md:grid-cols-3 md:gap-1.5">
       {BASELINE_DROP.pieces.products.map((piece) => (
         <PieceCell
@@ -219,7 +212,7 @@ const Pieces = () => (
 const Closer = () => (
   <section className="bg-field-night py-13 text-center text-ink-night md:py-20">
     <Container>
-      {/* Campaign Archivo, matching the stat labels (Gabe 2026-08-25). */}
+      {/* Campaign Archivo, matching the stat labels. */}
       <p className="font-archivo text-[9px] tracking-[0.34em] text-support-night uppercase md:text-[11px]">
         {BASELINE_DROP.closer.eyebrow}
       </p>

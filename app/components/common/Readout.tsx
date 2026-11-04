@@ -3,8 +3,7 @@ import { cn } from '~/lib/cn';
 
 /**
  * The file/HUD readout devices shared by the night-surface editorial pages
- * (athlete signings, Our Story). Promoted out of AthleteSigning verbatim once
- * Our Story became the second consumer. Both assume a `field-night` ground.
+ * (athlete signings, Our Story). Both assume a `field-night` ground.
  */
 
 /** Chapter label: display number, mono title, trailing hairline. */

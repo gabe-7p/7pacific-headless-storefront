@@ -1,8 +1,8 @@
 /**
  * `sizes` presets for `common/Image` — the slot widths the layouts actually
  * use. A slot that matches one of these takes the preset; a one-off slot
- * (the PDP's 75vw mobile hero, the product-details scroller) keeps its own
- * string at the call site. Named by the slot's share of the viewport, not by
+ * (the PDP's 75vw mobile hero, the product-details scroller, Roster's `50vw`
+ * pair, CartLineItem's `80px`) keeps its own string at the call site. Named by the slot's share of the viewport, not by
  * the component, so a new surface can pick by shape.
  */
 export const IMAGE_SIZES = {

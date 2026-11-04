@@ -1,6 +1,6 @@
 # 0010. Hydrogen 2026-10: Hydrogen as a library inside a React Router app
 
-- **Status**: Accepted — supersedes [0009](0009-stay-on-hydrogen-2026-04.md); refines [0004](0004-native-graphql-pattern.md) and [0008](0008-posthog-analytics.md)
+- **Status**: Accepted — supersedes [0009](0009-stay-on-hydrogen-2026-04.md); refines [0004](0004-native-graphql-pattern.md) and [0008](0008-posthog-analytics.md). **Addendum**: React Router 8 refinement in [0012](0012-react-router-8.md); the root middleware is `app/lib/shopifyMiddleware.ts` (registered by `app/root.tsx`) and the PostHog client is `lib/analytics/posthog.client.ts`.
 - **Date**: 2026-11-01
 
 ## Context

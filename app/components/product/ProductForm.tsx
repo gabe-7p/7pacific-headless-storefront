@@ -35,14 +35,9 @@ const isPlainActivation = (event: MouseEvent<HTMLAnchorElement>) =>
   !event.shiftKey;
 
 /**
- * Buy-box options (size selector), styled for the white PDP buy card as a
- * full-width joined segmented bar (selected cell filled black). Each value is
- * a real link to the variant URL (crawlable, works without JS); with JS the
- * product-form store resolves the click client-side and `onSelect` rewrites
- * the URL, so a size change never waits on a loader round-trip. Shopify's
- * internal single-variant "Title" option is filtered out; products with no
- * real size option (e.g. the hat) render a single "One Size" cell like live.
- * Add-to-cart lives in a separate AddToCartBar flush at the card bottom.
+ * Buy-box options (size selector). Shopify's internal single-variant "Title"
+ * option is filtered out; products with no real size option (e.g. the hat)
+ * render a single "One Size" cell.
  */
 export const ProductForm = () => {
   const { options, register } = useProductForm();

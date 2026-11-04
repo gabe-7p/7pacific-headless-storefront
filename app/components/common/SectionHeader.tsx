@@ -24,7 +24,7 @@ type SectionHeaderProps = {
 
 /**
  * Homepage-style section header — display-scale heading plus optional muted
- * subtitle. Single-sources the markup FirstDrop/CoreValues used to repeat.
+ * subtitle.
  */
 export const SectionHeader = ({ heading, subtitle, scale, className }: SectionHeaderProps) => (
   <div className={cn('mb-8', className)}>

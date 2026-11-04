@@ -11,9 +11,7 @@ type AsideContextValue = {
 
 /**
  * A slide-in drawer, anchored to `side` (right by default; the mobile menu uses
- * left to match live). Built on the shadcn/ui `Sheet` (Radix Dialog), so focus
- * trap, scroll lock, return-focus, Esc-to-close, and ARIA come for free. Open
- * state is shared via {@link useAside}.
+ * left). Built on `Sheet`; open state is shared via {@link useAside}.
  */
 export const Aside = ({
   children,

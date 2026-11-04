@@ -16,10 +16,7 @@ const fieldClass =
   'm-0 block h-9 w-full rounded-none border border-ink bg-transparent px-4 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
 
 /**
- * The Early Access signup — the shared `JoinForm` on the waitlist (one list,
- * two doors with the homepage dialog) in the mock's boxed-mono, single-row
- * treatment. max-w-none opts the row out of the base layer's
- * form { max-width: 400px } cap.
+ * The Early Access signup — the shared `JoinForm` on the waitlist, inline row.
  */
 const EarlyAccessForm = () => (
   <JoinForm

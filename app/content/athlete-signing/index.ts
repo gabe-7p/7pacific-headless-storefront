@@ -4,10 +4,6 @@
  * signing is a new `AthleteSigningContent` object in its own file (named
  * after the URL handle) plus one line in the `ATHLETE_SIGNINGS` registry
  * below — no new routes or components.
- *
- * Asset fields (`hero.image.src`, `founderVideo.src`/`poster`) are Shopify
- * CDN URLs, same as content/home.ts. Empty string = not uploaded yet; the
- * page renders styled placeholder panels until they're set.
  */
 
 import { AARON_LEE } from './aaron-lee';

@@ -36,9 +36,7 @@ export const journalUrl = (articleHandle?: string): string =>
 export const cartUrl = (): string => '/cart';
 
 /**
- * A YouTube watch URL, optionally starting `startSeconds` in — the external
- * film links (content/media.ts) are built from the video id so the id is
- * never pasted twice.
+ * A YouTube watch URL, optionally starting `startSeconds` in.
  */
 export const youtubeWatchUrl = (videoId: string, startSeconds?: number): string =>
   `https://www.youtube.com/watch?v=${videoId}${startSeconds ? `&t=${startSeconds}s` : ''}`;

@@ -33,8 +33,7 @@ export const AMIR_SMITH = {
   founderVideo: {
     number: '01',
     title: 'A Personal Message from the Founder',
-    // IMG-0004 in Shopify Files (portrait, 39s) — Shopify's 720p transcode;
-    // poster is the custom preview thumbnail set in Shopify admin.
+    // Poster: the custom thumbnail set in Shopify admin.
     src: shopifyVideo('4e4b180b71854aeb9ddb8aed88129177', 'HD-720p-4.5Mbps-89659002'),
     poster: shopifyVideoPoster('Screenshot_2026-07-22_at_11.02.10_PM.png'),
     captions: '',

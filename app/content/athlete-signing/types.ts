@@ -1,7 +1,5 @@
 /**
- * The typed shapes behind every athlete-signing page. Each athlete file in
- * this folder is one `AthleteSigningContent` object; `index.ts` holds the
- * handle → content registry the route reads.
+ * The typed shapes behind every athlete-signing page (see `index.ts`).
  */
 
 /**
@@ -81,7 +79,6 @@ export type AthleteSigningContent = {
     fields: Array<{ label: string; value: string }>;
   };
   /**
-   * The creator module — typed copy only (no CDN assets, no live API data).
    * `handle` is the bare IG username; the component builds the profile URL.
    */
   instagram: {
