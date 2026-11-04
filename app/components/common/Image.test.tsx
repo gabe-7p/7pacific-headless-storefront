@@ -91,6 +91,17 @@ describe('Image', () => {
     expect(img.style.width).toBe('75%');
   });
 
+  it('a plain src with intrinsic dimensions and sizes stays fluid, capped by the ladder', () => {
+    const img = renderImg(<Image src={KNIT.url} width={7254} height={3387} sizes="100vw" alt="" />);
+    const candidates = parseSrcSet(img.getAttribute('srcset') ?? '');
+    expect(candidates.every((c) => c.descriptor.endsWith('w'))).toBe(true);
+    expect(candidates.at(-1)?.url.searchParams.get('width')).toBe('3000');
+    expect(img.getAttribute('sizes')).toBe('100vw');
+    expect(img.getAttribute('width')).toBe('7254');
+    expect(img.style.width).toBe('100%');
+    expect(img.style.aspectRatio).toBe('7254/3387');
+  });
+
   it('fixed mode: a plain src with intrinsic dimensions ships a 1x/2x/3x density srcset at that size', () => {
     const img = renderImg(<Image src={KNIT.url} width={2130} height={2662} alt="" />);
     const candidates = parseSrcSet(img.getAttribute('srcset') ?? '');

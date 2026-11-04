@@ -10,10 +10,11 @@ import type { CSSProperties, ImgHTMLAttributes } from 'react';
  *   `aspectRatio` prop or the source dimensions). That inline aspect-ratio
  *   is what sizes a slot: it wins over an `aspect-*` utility, exactly as the
  *   classic component did, so the product cards keep their 4:5 portrait.
- * - **Fixed** (`width` is a number): a density `srcset` (1x/2x/3x of the
- *   given size, cropped to the given ratio) and an inline `aspect-ratio`.
- *   Content photos pass their intrinsic size here, which is why they ship at
- *   full resolution.
+ *   Content photos are fluid too: `src` + their intrinsic `width`/`height`
+ *   + `sizes`, the numbers standing in for `data`'s source dimensions.
+ * - **Fixed** (`width` is a number, no `sizes`): a density `srcset` (1x/2x/3x
+ *   of the given size, cropped to the given ratio) and an inline
+ *   `aspect-ratio`.
  *
  * `Image.test.tsx` pins the contract. The inline style is the documented exception to the no-inline-style rule:
  * a per-image ratio can't be a Tailwind class.
@@ -33,7 +34,7 @@ type Crop = 'center' | 'top' | 'bottom' | 'left' | 'right';
 export type ImageProps = {
   /** A Storefront API image (`url`, `altText`, `width`, `height`). */
   data?: StorefrontImage | null;
-  /** A plain CDN URL (content files); pass the intrinsic `width`/`height`. */
+  /** A plain CDN URL (content files); pass the intrinsic `width`/`height` with `sizes`. */
   src?: string;
   /** Overrides `data.altText`. Decorative images pass "". */
   alt?: string;
@@ -45,9 +46,13 @@ export type ImageProps = {
   loading?: 'eager' | 'lazy';
   fetchPriority?: 'high' | 'low' | 'auto';
   decoding?: 'async' | 'sync' | 'auto';
-  /** A percentage keeps fluid mode ("75%" narrows the box); a number switches to fixed mode. */
+  /**
+   * A percentage keeps fluid mode ("75%" narrows the box). A number is the
+   * source's intrinsic width when `sizes` is set, otherwise it switches to
+   * fixed mode.
+   */
   width?: number | string;
-  /** Fixed mode: the rendered height; with `width` it also sets the crop ratio. */
+  /** The intrinsic height beside `sizes`; fixed mode: the rendered height and crop ratio. */
   height?: number;
   className?: string;
   /** Fluid mode: an explicit srcset ladder (px) for slots that need finer steps. */
@@ -128,7 +133,13 @@ export const Image = ({
   const url = data?.url ?? src;
   if (!url) return null;
 
-  const source = { width: data?.width, height: data?.height };
+  // `sizes` names a fluid slot, so a number beside it describes the file, not
+  // the render size. Fixed mode here would serve the full-size source.
+  const hasIntrinsicSize = sizes !== undefined && typeof width === 'number';
+  const source = hasIntrinsicSize
+    ? { width, height }
+    : { width: data?.width, height: data?.height };
+  const boxWidth = hasIntrinsicSize ? '100%' : width;
   const sourceRatio =
     source.width && source.height ? `${source.width}/${source.height}` : undefined;
   const common: ImgHTMLAttributes<HTMLImageElement> = {
@@ -139,9 +150,9 @@ export const Image = ({
     className,
   };
 
-  if (isFixedWidth(width)) {
+  if (isFixedWidth(boxWidth)) {
     // Fixed mode: 1x/2x/3x of the given size (the CDN caps at the source), cropped to the ratio.
-    const intWidth = typeof width === 'number' ? width : Number.parseFloat(width);
+    const intWidth = typeof boxWidth === 'number' ? boxWidth : Number.parseFloat(boxWidth);
     const fixedRatio = aspectRatio ?? (height ? `${intWidth}/${height}` : undefined) ?? sourceRatio;
     const multiplier = parseAspectRatio(fixedRatio);
     const fixedHeight = height ?? (multiplier ? Math.round(intWidth * multiplier) : undefined);
@@ -189,7 +200,7 @@ export const Image = ({
           : best,
       undefined
     ) ?? null;
-  const style: CSSProperties = { width, aspectRatio: fluidRatio };
+  const style: CSSProperties = { width: boxWidth, aspectRatio: fluidRatio };
 
   return (
     <img
