@@ -6,6 +6,10 @@ Stack-specific traps for this Hydrogen storefront. Check these before opening a 
 
 Data is fetched in loaders/actions and passed down as typed props. A component that reads `storefrontClientContext` or defines a `gql()` document is in the wrong layer (and would ship the document to the browser) — see [module-boundaries.md](module-boundaries.md). The cart is the one client-owned dataset: read it with `useCart`, never a loader promise.
 
+## Throw `notFound()` / `unavailable()`, not a bare `Response`
+
+Missing handles and null results are `throw notFound('Product not found')` (404, rendered by the root ErrorBoundary inside the site chrome); a dependency the page can't render without is `throw unavailable('Shop unavailable')` (500). Both live in `lib/http.ts`, as does `describeRouteError` which the boundary renders from — never `throw new Response('…', { status })` inline, and never `throw new Error` for a miss (that is a 500). Read Storefront data with `queryStorefront` / `queryStorefrontOrThrow` so GraphQL `errors` are logged.
+
 ## Handle nullable Storefront fields
 
 The Storefront API makes most fields nullable, and `noUncheckedIndexedAccess` is on. Don't assume presence.

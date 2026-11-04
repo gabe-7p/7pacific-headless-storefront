@@ -1,7 +1,8 @@
 import { Cache, gql } from '@shopify/hydrogen';
 
 import { HANDLES } from '~/content/links';
-import type { StorefrontClient } from '~/lib/storefront';
+import { CACHE_ONE_DAY, unavailable } from '~/lib/http';
+import { queryStorefront, type StorefrontClient } from '~/lib/storefront';
 import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
 
 /**
@@ -86,7 +87,7 @@ export const isSitemapType = (value: string): value is SitemapType =>
 
 const xml = (body: string) =>
   new Response(`<?xml version="1.0" encoding="UTF-8"?>\n${body}`, {
-    headers: { 'Content-Type': 'application/xml' },
+    headers: { 'Content-Type': 'application/xml', 'Cache-Control': CACHE_ONE_DAY },
   });
 
 const escape = (value: string) =>
@@ -99,11 +100,10 @@ const resourceItems = async (
   type: Exclude<SitemapType, 'journal'>,
   page: number
 ): Promise<Array<SitemapItem>> => {
-  const { data, errors } = await client.graphql(SITEMAP_PAGE_QUERY, {
+  const data = await queryStorefront(client, SITEMAP_PAGE_QUERY, {
     variables: { type: SITEMAP_API_TYPE[type], page },
     cache: Cache.long(),
   });
-  if (errors) console.error(errors);
   return (data?.sitemap?.resources?.items ?? []).map(({ handle, updatedAt }) => ({
     handle,
     lastmod: updatedAt,
@@ -116,11 +116,10 @@ const resourceItems = async (
  * One page only: the index query caps the count at 250 articles.
  */
 const journalItems = async (client: StorefrontClient): Promise<Array<SitemapItem>> => {
-  const { data, errors } = await client.graphql(JOURNAL_SITEMAP_QUERY, {
+  const data = await queryStorefront(client, JOURNAL_SITEMAP_QUERY, {
     variables: { blogHandle: HANDLES.journalBlog, first: SITEMAP_PAGE_SIZE },
     cache: Cache.long(),
   });
-  if (errors) console.error(errors);
   return (data?.blog?.articles.nodes ?? []).map(({ handle, publishedAt }) => ({
     handle,
     lastmod: publishedAt,
@@ -129,12 +128,11 @@ const journalItems = async (client: StorefrontClient): Promise<Array<SitemapItem
 
 /** `/sitemap.xml`: one `<sitemap>` per resource type per 250-item page. */
 export const getSitemapIndex = async (client: StorefrontClient, baseUrl: string) => {
-  const { data, errors } = await client.graphql(SITEMAP_INDEX_QUERY, {
+  const data = await queryStorefront(client, SITEMAP_INDEX_QUERY, {
     variables: { blogHandle: HANDLES.journalBlog },
     cache: Cache.long(),
   });
-  if (errors) console.error(errors);
-  if (!data) throw new Response('Sitemap unavailable', { status: 500 });
+  if (!data) throw unavailable('Sitemap unavailable');
   // Re-bound after the guard: the narrowing doesn't survive into the callback.
   const counts: NonNullable<typeof data> = data;
 

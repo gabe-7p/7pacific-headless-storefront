@@ -1,3 +1,5 @@
+import { notFound } from '~/lib/http';
+
 import type { Route } from './+types/$';
 
 /**
@@ -6,7 +8,7 @@ import type { Route } from './+types/$';
  * before the NotFound page renders.
  */
 export async function loader(_args: Route.LoaderArgs) {
-  throw new Response('Not Found', { status: 404 });
+  throw notFound();
 }
 
 const CatchAllPage = () => null;

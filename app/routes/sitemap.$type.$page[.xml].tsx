@@ -1,4 +1,4 @@
-import { CACHE_ONE_DAY, notFound } from '~/lib/http';
+import { notFound } from '~/lib/http';
 import { getSitemap, isSitemapType } from '~/lib/sitemap';
 import { storefrontClientContext } from '~/lib/storefront';
 
@@ -14,11 +14,9 @@ export async function loader({ url, params, context }: Route.LoaderArgs) {
   // Journal articles are capped at one page by `articles(first: 250)`.
   if (params.type === 'journal' && page !== 1) throw notFound('Sitemap not found');
 
-  const response = await getSitemap(context.get(storefrontClientContext), {
+  return getSitemap(context.get(storefrontClientContext), {
     type: params.type,
     page,
     baseUrl: url.origin,
   });
-  response.headers.set('Cache-Control', CACHE_ONE_DAY);
-  return response;
 }

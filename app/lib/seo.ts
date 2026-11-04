@@ -19,14 +19,22 @@ type BuildMetaArgs = {
   description?: string | null;
   /** og:image URL, when the page has a natural share image. */
   image?: string | null;
+  /** The page's own path (e.g. `productUrl(handle)`); emitted as an absolute canonical link. */
+  canonical?: string;
 };
 
 /**
  * The one way routes build their `meta` array: brand-formatted title,
  * description (brand default when the page has none), and og: tags.
- * Route-specific extras (e.g. canonical links) are appended by the caller.
+ * `canonical` is resolved against `BRAND.siteUrl`, never the request origin.
  */
-export const buildMeta = ({ title, absoluteTitle, description, image }: BuildMetaArgs) => {
+export const buildMeta = ({
+  title,
+  absoluteTitle,
+  description,
+  image,
+  canonical,
+}: BuildMetaArgs) => {
   const resolvedTitle = absoluteTitle ?? pageTitle(title);
   const resolvedDescription = description || DEFAULT_DESCRIPTION;
   return [
@@ -35,5 +43,8 @@ export const buildMeta = ({ title, absoluteTitle, description, image }: BuildMet
     { property: 'og:title', content: resolvedTitle },
     { property: 'og:description', content: resolvedDescription },
     ...(image ? [{ property: 'og:image', content: image }] : []),
+    ...(canonical
+      ? [{ tagName: 'link', rel: 'canonical', href: `${BRAND.siteUrl}${canonical}` }]
+      : []),
   ];
 };

@@ -9,11 +9,12 @@ import { FirstDrop } from '~/components/home/FirstDrop';
 import { Hero } from '~/components/home/Hero';
 import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { Roster } from '~/components/home/Roster';
+import { BRAND } from '~/content/brand';
 import { FEATURE_FLAGS } from '~/content/flags';
 import { HANDLES } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
-import { storefrontClientContext } from '~/lib/storefront';
+import { queryStorefront, storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/_index';
 
@@ -22,15 +23,15 @@ export const meta: Route.MetaFunction = () => {
     absoluteTitle: '7Pacific · Lightweight and Breathable Training Gear',
     // Share previews (iMessage, Slack, …) show a dedicated 1200×630 card:
     // the hero shot with the black wordmark overlaid (public/og-home.jpg).
-    // Must be an absolute URL — scrapers don't resolve relative paths.
-    image: 'https://7pacificapparel.com/og-home.jpg',
+    // Absolute: scrapers don't resolve relative paths.
+    image: `${BRAND.siteUrl}/og-home.jpg`,
   });
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
   const storefront = context.get(storefrontClientContext);
 
-  const { data } = await storefront.graphql(HOME_PRODUCTS_QUERY, {
+  const data = await queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
     variables: { handle: HANDLES.homepageCollection },
     cache: Cache.long(),
   });
@@ -41,8 +42,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 
   // Fall back to all products only if the collection is missing/empty, so a
   // misconfigured collection never blanks the homepage.
-  const fallback = await storefront.graphql(HOME_PRODUCTS_FALLBACK_QUERY, { cache: Cache.long() });
-  return { products: fallback.data?.products.nodes ?? [] };
+  const fallback = await queryStorefront(storefront, HOME_PRODUCTS_FALLBACK_QUERY, {
+    cache: Cache.long(),
+  });
+  return { products: fallback?.products.nodes ?? [] };
 }
 
 const Homepage = () => {

@@ -6,8 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { JoinForm } from '~/components/common/JoinForm';
 import { JOIN_COPY } from '~/content/join';
-import { INVALID_EMAIL_MESSAGE, REQUIRED_NAME_MESSAGE } from '~/lib/forms';
-import type { SubscribeResponse } from '~/routes/api.subscribe';
+import { INVALID_EMAIL_MESSAGE, REQUIRED_NAME_MESSAGE, type SubscribeResponse } from '~/lib/forms';
 
 type FetcherStub = { state: 'idle' | 'submitting'; data: SubscribeResponse | undefined };
 

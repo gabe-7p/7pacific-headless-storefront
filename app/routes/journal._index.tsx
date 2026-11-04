@@ -5,10 +5,9 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { JOURNAL } from '~/content/journal';
 import { HANDLES } from '~/content/links';
-import { notFound } from '~/lib/http';
 import { formatJournalDate } from '~/lib/journalFormat';
 import { buildMeta } from '~/lib/seo';
-import { storefrontClientContext } from '~/lib/storefront';
+import { queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
 import { journalUrl } from '~/lib/urls';
 
 import type { Route } from './+types/journal._index';
@@ -17,13 +16,18 @@ export const meta: Route.MetaFunction = () =>
   buildMeta({ title: JOURNAL.title, description: JOURNAL.tagline });
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.get(storefrontClientContext).graphql(JOURNAL_QUERY, {
-    variables: { blogHandle: HANDLES.journalBlog },
-    // Curated, rarely-changing content.
-    cache: Cache.long(),
-  });
-  if (!data?.blog) throw notFound('Journal not found');
-  return { articles: data.blog.articles.nodes };
+  const blog = await queryStorefrontOrThrow(
+    context.get(storefrontClientContext),
+    JOURNAL_QUERY,
+    {
+      variables: { blogHandle: HANDLES.journalBlog },
+      // Curated, rarely-changing content.
+      cache: Cache.long(),
+    },
+    (data) => data.blog,
+    'Journal not found'
+  );
+  return { articles: blog.articles.nodes };
 }
 
 const Journal = () => {
