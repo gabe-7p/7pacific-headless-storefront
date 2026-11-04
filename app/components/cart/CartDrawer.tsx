@@ -5,7 +5,7 @@ import { CartMain } from '~/components/cart/CartMain';
 import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Aside } from '~/components/layout/Aside';
 import { CART_COPY } from '~/content/cart';
-import { whenShopifyReady } from '~/lib/shopifyRuntime';
+import { getOpenCartAction, whenShopifyReady } from '~/lib/shopifyRuntime';
 
 /**
  * The drawer's open function lives in React state; this module-level slot
@@ -21,9 +21,8 @@ const registerOpener = (open: () => void) => {
   opener = open;
   if (configuring) return;
   configuring = true;
-  whenShopifyReady(
-    () => window.Shopify?.actions?.openCart,
-    (openCart) => openCart.configure({ handler: async () => opener?.() })
+  whenShopifyReady(getOpenCartAction, (openCart) =>
+    openCart.configure({ handler: async () => opener?.() })
   );
 };
 

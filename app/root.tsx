@@ -30,7 +30,7 @@ import { NotFound } from '~/components/content/NotFound';
 import { HANDLES } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
 import {
-  getPostHogConfig,
+  getPostHogConfigForRequest,
   getRouteErrorException,
   POSTHOG_HOST_META,
   POSTHOG_KEY_META,
@@ -112,10 +112,7 @@ export async function loader({ context, request, url }: Route.LoaderArgs) {
     header,
     footer,
     cartData: cartResult.data,
-    posthog: getPostHogConfig(env, {
-      isDev: import.meta.env.DEV,
-      hostname: url.hostname,
-    }),
+    posthog: getPostHogConfigForRequest(env, url),
     // Meta Pixel (lib/analytics/meta-pixel.client.ts): the ID reaches the
     // browser through this loader, never through a client-side env read.
     metaPixelId: env.PUBLIC_META_PIXEL_ID || null,

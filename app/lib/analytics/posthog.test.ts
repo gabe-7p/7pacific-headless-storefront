@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   getPostHogConfig,
+  getPostHogConfigForRequest,
   getPostHogOrigins,
   getRouteErrorException,
   isOxygenPreviewHost,
@@ -14,6 +15,19 @@ const preview = {
   isDev: false,
   hostname: '01m6b3gqktxasa942n6tkvchmt-44d79d5021aa19ed15aa.myshopify.dev',
 };
+
+describe('getPostHogConfigForRequest', () => {
+  // Vitest runs with import.meta.env.DEV true, so these are the local-dev rules.
+  const url = new URL('https://7pacificapparel.com/products/tee');
+
+  it('takes the hostname from the URL and the dev flag from the build', () => {
+    expect(getPostHogConfigForRequest(env, url)).toBeNull();
+    expect(getPostHogConfigForRequest({ ...env, PUBLIC_POSTHOG_DEV: 'true' }, url)).toEqual({
+      key: env.PUBLIC_POSTHOG_KEY,
+      host: env.PUBLIC_POSTHOG_HOST,
+    });
+  });
+});
 
 describe('getPostHogConfig', () => {
   it('returns the key and host on the production domain', () => {

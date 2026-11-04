@@ -120,10 +120,7 @@ const ProductPage = () => {
 
   return (
     <>
-      <ProductViewedTracker
-        product={{ id: product.id, title: product.title, vendor: product.vendor }}
-        variant={selectedVariant ?? null}
-      />
+      <ProductViewedTracker product={product} variant={selectedVariant} />
       {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
           of overflowing it under the header and past the fold. */}
       <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">
