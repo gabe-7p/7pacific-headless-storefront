@@ -1,8 +1,7 @@
 /**
  * `sizes` presets for `common/Image` — the slot widths the layouts actually
  * use. A slot that matches one of these takes the preset; a one-off slot
- * (the PDP's 75vw mobile hero, the product-details scroller, CartLineItem's
- * `80px`) keeps its own string at the call site. Named by the slot's share of the viewport, not by
+ * (the PDP's 75vw mobile hero, CartLineItem's `80px`) keeps its own string at the call site. Named by the slot's share of the viewport, not by
  * the component, so a new surface can pick by shape.
  */
 export const IMAGE_SIZES = {
@@ -16,6 +15,10 @@ export const IMAGE_SIZES = {
   twoThirds: '(min-width: 1024px) 66vw, 100vw',
   /** Full-bleed bands and heroes. */
   full: '100vw',
+  /** A `common/Scroller` item: mirrors its basis (78%, 45% from `sm`, three up from
+      `lg`, capped by --page-max). Change the two together. */
+  scroller3:
+    '(min-width: 1024px) min(calc((100vw - 6rem) / 3), 435px), (min-width: 640px) 45vw, 78vw',
   /** The 384px dialog side panel, hidden below `sm`. */
   dialogPanel: '(min-width: 640px) 384px, 0px',
 } as const;
