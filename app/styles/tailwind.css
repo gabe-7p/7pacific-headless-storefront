@@ -102,6 +102,10 @@
    * breakpoints sort by width, so these interleave correctly with md/lg/xl. */
   --breakpoint-impulse: 769px;
   --breakpoint-impulse-lg: 1025px;
+  /* Where the error pages drop their side gutter (1440px). In rem on purpose:
+   * Tailwind sorts breakpoints by unit before width, so a px value would emit
+   * ahead of `md:` and lose to it at every width. */
+  --breakpoint-gutterless: 90rem;
 
   /* The "Meridian on Carbon" palette (Brand Guidelines → 03 Color Palette,
    * rev. Jul 2026), with target usage weights: Court 50% · Carbon 27% ·

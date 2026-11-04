@@ -3,6 +3,7 @@ import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
 import { SpecLine } from '~/components/common/SpecLine';
+import { ErrorShell } from '~/components/content/ErrorShell';
 import { MICROCOPY } from '~/content/microcopy';
 import { NOT_FOUND_PAGE } from '~/content/not-found';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
@@ -19,11 +20,7 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
  */
 export const NotFound = () => (
   <MotionProvider>
-    {/* Measured on live: a fixed distance below the header (120px / 155px from
-        768), text 20px from the viewport edge past --page-max. Arbitrary
-        min-widths throughout — see common-pitfalls.md (named vs arbitrary
-        breakpoints). */}
-    <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
+    <ErrorShell>
       <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
         <div>
           <SpecLine className="text-support">
@@ -71,6 +68,6 @@ export const NotFound = () => (
           </SettleIn>
         </div>
       </div>
-    </div>
+    </ErrorShell>
   </MotionProvider>
 );
