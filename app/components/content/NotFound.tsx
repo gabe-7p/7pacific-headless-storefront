@@ -2,7 +2,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
-import { SpecLine } from '~/components/common/SpecLine';
+import { TypeOnReadout } from '~/components/common/Readout';
 import { ErrorShell } from '~/components/content/ErrorShell';
 import { MICROCOPY } from '~/content/microcopy';
 import { NOT_FOUND_PAGE } from '~/content/not-found';
@@ -23,20 +23,9 @@ export const NotFound = () => (
     <ErrorShell>
       <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
         <div>
-          <SpecLine className="text-support">
-            {/* steps(30) in --animate-type-on ≈ this string's length — keep
-                them roughly in sync if the readout changes. */}
-            <span className="animate-type-on inline-block motion-reduce:animate-none">
-              {NOT_FOUND_PAGE.coordinates} · {NOT_FOUND_PAGE.location}
-            </span>
-            {/* Insertion caret lands after the type-on (delay = its duration),
-                flicks twice, rests hidden. `!` so delay/count survive the
-                animate-caret-blink shorthand (see ColorSwatches). */}
-            <span
-              aria-hidden
-              className="bg-brand animate-caret-blink ml-1 inline-block h-[0.85em] w-0.5 align-middle opacity-0 [animation-delay:0.6s]! [animation-iteration-count:2]! motion-reduce:hidden"
-            />
-          </SpecLine>
+          <TypeOnReadout className="text-support">
+            {NOT_FOUND_PAGE.coordinates} · {NOT_FOUND_PAGE.location}
+          </TypeOnReadout>
           <FadeIn delay={0.15}>
             {/* 404 copy is locked microcopy (7PA-243) — verbatim. */}
             <Heading

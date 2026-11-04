@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { Caret } from '~/components/common/Readout';
 import { SpecLine } from '~/components/common/SpecLine';
 import { cn } from '~/lib/cn';
 import { getTimeLeft, pad2, TIME_LEFT_UNITS, type TimeLeft } from '~/lib/countdown';
@@ -91,10 +92,9 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
                   hidden. Absolutely positioned so it never shifts the digits.
                   Ember on the countdown is deliberate, per Gabe (2026-08-03). */}
               {index === caretIndex && timeLeft && (
-                <span
+                <Caret
                   key={`${caretIndex}-${values[caretIndex]}`}
-                  aria-hidden
-                  className="bg-brand animate-caret-blink absolute top-1/2 -left-1.5 h-[0.85em] w-0.5 -translate-y-1/2 opacity-0 motion-reduce:animate-none"
+                  className="absolute top-1/2 -left-1.5 -translate-y-1/2 motion-reduce:animate-none"
                 />
               )}
               {values[index]}

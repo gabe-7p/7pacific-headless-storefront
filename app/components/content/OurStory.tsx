@@ -6,7 +6,7 @@ import { Image } from '~/components/common/Image';
 import { LiveDot } from '~/components/common/LiveDot';
 import type { MediaSlotRatio, MediaSlotSource } from '~/components/common/MediaSlot';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
-import { CornerBrackets, SectionLabel } from '~/components/common/Readout';
+import { CornerBrackets, SectionLabel, TypeOnReadout } from '~/components/common/Readout';
 import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
 import { OUR_STORY } from '~/content/our-story';
 import { cn } from '~/lib/cn';
@@ -56,15 +56,7 @@ const FileHero = () => {
       />
       <GrainVeil />
       <Container className="relative z-10 flex flex-1 flex-col justify-between pt-[calc(var(--header-h)+1.5rem)] pb-8 md:pb-12">
-        <SpecLine className="text-support-night">
-          <span className="animate-type-on inline-block motion-reduce:animate-none">
-            {hero.readout}
-          </span>
-          <span
-            aria-hidden
-            className="bg-brand animate-caret-blink ml-1 inline-block h-[0.85em] w-0.5 align-middle opacity-0 [animation-delay:0.6s]! [animation-iteration-count:2]! motion-reduce:hidden"
-          />
-        </SpecLine>
+        <TypeOnReadout className="text-support-night">{hero.readout}</TypeOnReadout>
         <FadeIn
           delay={0.3}
           className="mt-24 flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between"
