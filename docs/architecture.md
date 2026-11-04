@@ -70,12 +70,12 @@ app/
     shopifyMiddleware.ts  the root middleware (Hydrogen's request lifecycle)
     storefront.ts   the request-scoped Storefront client, router context key, route templates · `queryStorefront` / `queryStorefrontOrThrow` (every read goes through them)
     oxygen.ts       the `oxygenContext` key: env + sub-request cache + waitUntil, set by server.ts
-    cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`, `isOptimisticLine`) · cart.fixtures.ts test-only builders + `createCartStoreMock`
+    cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`, `isOptimisticLine`, `nextDiscountCodes`) · cart.fixtures.ts test-only builders + `createCartStoreMock`
     fragments.ts    shared gql fragments + chrome queries · http.ts `notFound`, `unavailable`, `describeRouteError`, `deferQuery`
     i18n.ts         MARKET, MONEY_LOCALE, DATE_LOCALE · money.ts price formats (`brand` / `compact` / `cart`)
     urls.ts         every URL shape · shopifyFiles.ts Shopify Files CDN helpers + the `FilesImage`/`ContentMedia` content types · imageSizes.ts `sizes` presets for common/Image
     seo.ts          page-title format, `buildMeta()` · sitemap.ts the sitemaps · robots.ts `/robots.txt` · gid.ts `gidNumericId` · csp.ts + nonce.tsx the CSP header and nonce
-    shopifyRuntime.ts  the one wait-for-`window.Shopify` poll + its selectors (`getAnalyticsBus`, `getOpenCartAction`, `getCustomerPrivacy`)
+    shopifyRuntime.ts  the one wait-for-`window.Shopify` poll + its selectors (`getAnalyticsBus`, `getOpenCartAction`, `getUpdateCartAction`, `getCustomerPrivacy`, `getActiveCurrency`)
     metafields.ts   metafield JSON/image parsing · countdown.ts drop-timer math · journalFormat.ts journal dates
     forms.ts        shared form primitives (email rule, `{ ok, errors }`, `handleFormAction`, `SubscribeResponse`) · cn.ts class merging · events.ts `isPlainActivation` (is this link click ours?)
     product/        queries.ts (PDP gql documents + types), page.ts (the PDP loader's pure logic: recommendations, metafield parsing, hero images), store.ts (product-form store, `resolveSelectedVariant`, `selectionTarget`), content.ts (metafield JSON shapes), display.ts (short titles/size labels/edition label), colors.ts (swatches)

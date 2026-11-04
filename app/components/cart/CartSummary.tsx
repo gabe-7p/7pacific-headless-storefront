@@ -1,4 +1,5 @@
 import { usePostHog } from '@posthog/react';
+import type { FormEvent } from 'react';
 
 import { CartError } from '~/components/cart/CartError';
 import type { CartLayout } from '~/components/cart/CartMain';
@@ -7,8 +8,9 @@ import { Price } from '~/components/common/Price';
 import { Button } from '~/components/ui/button';
 import { CART_COPY } from '~/content/cart';
 import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics/posthog.events';
-import { useCart, useCartForm } from '~/lib/cart';
+import { nextDiscountCodes, useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
+import { getUpdateCartAction } from '~/lib/shopifyRuntime';
 
 export const CartSummary = ({ layout }: { layout: CartLayout }) => {
   const subtotal = useCart((state) => state.data.cost.subtotalAmount);
@@ -91,12 +93,30 @@ const CartDiscounts = () => {
   const { formProps, register } = useCartForm();
   const discountCodes = useCart((state) => state.data.discountCodes);
   const errors = useCart((state) => state.errors.discountCodes);
+  const loading = useCart((state) => state.loading);
   const codes = discountCodes.filter((discount) => discount.applicable).map(({ code }) => code);
   // An unknown code comes back as a warning (DISCOUNT_NOT_FOUND), not a user error.
   const errorMessage = [...errors.values()].flatMap((group) => [
     ...group.userErrors,
     ...group.warnings,
   ])[0]?.message;
+
+  // The form's own submit resends every code on the cart, rejected ones
+  // included, so send the list through `updateCart` instead. The store observes
+  // that call like a form submit. Until it can, the form's submit still works.
+  const sendCodes = (event: FormEvent<HTMLFormElement>, next: Array<string>) => {
+    const updateCart = loading ? null : getUpdateCartAction();
+    if (!updateCart) return;
+    event.preventDefault();
+    updateCart({ discountCodes: next }).catch(() => {});
+  };
+
+  const applyCode = (event: FormEvent<HTMLFormElement>) => {
+    const code = new FormData(event.currentTarget).get('discountCode');
+    const apply = typeof code === 'string' ? code.trim() : '';
+    if (apply) sendCodes(event, nextDiscountCodes(discountCodes, { apply }));
+    else event.preventDefault();
+  };
 
   return (
     <div>
@@ -105,7 +125,14 @@ const CartDiscounts = () => {
           <dt className="text-support">{CART_COPY.discountLabel}</dt>
           <dd className="flex items-center gap-3">
             {codes.map((code) => (
-              <form key={code} {...formProps()} className="flex items-center gap-2">
+              <form
+                key={code}
+                {...formProps({
+                  beforeSubmit: (event) =>
+                    sendCodes(event, nextDiscountCodes(discountCodes, { remove: code })),
+                })}
+                className="flex items-center gap-2"
+              >
                 <input type="hidden" {...register('discountCode', { value: code })} />
                 <code>{code}</code>
                 <button
@@ -122,7 +149,7 @@ const CartDiscounts = () => {
         </dl>
       )}
 
-      <form {...formProps()} className="mt-2 flex gap-2">
+      <form {...formProps({ beforeSubmit: applyCode })} className="mt-2 flex gap-2">
         <label htmlFor="discount-code-input" className="sr-only">
           {CART_COPY.discountPlaceholder}
         </label>

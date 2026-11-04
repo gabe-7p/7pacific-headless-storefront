@@ -1,4 +1,5 @@
 import { type CartState, createEmptyCartErrors, EMPTY_CART_STATE } from '@shopify/hydrogen';
+import type { FormEvent } from 'react';
 import { vi } from 'vitest';
 
 import type * as CartModule from '~/lib/cart';
@@ -90,6 +91,7 @@ export const buildCartState = (
   overrides: Partial<CartState<CartData>> = {}
 ): CartState<CartData> => ({
   ...EMPTY_CART_STATE,
+  loading: false,
   data: buildCartData(data),
   pending: buildPending(),
   errors: createEmptyCartErrors(),
@@ -98,6 +100,8 @@ export const buildCartState = (
 });
 
 type RegisterOptions = { value?: string | number; defaultValue?: string };
+
+type FormOptions = { beforeSubmit?: (event: FormEvent<HTMLFormElement>) => void };
 
 /**
  * `vi.mock('~/lib/cart', …)`'s factory: the store mocked at the hook boundary.
@@ -108,7 +112,12 @@ export const createCartStoreMock = async (getState: () => CartState<CartData>) =
   ...(await vi.importActual<typeof CartModule>('~/lib/cart')),
   useCart: (selector: (state: CartState<CartData>) => unknown) => selector(getState()),
   useCartForm: () => ({
-    formProps: () => ({}),
+    formProps: ({ beforeSubmit }: FormOptions = {}) => ({
+      onSubmit: (event: FormEvent<HTMLFormElement>) => {
+        beforeSubmit?.(event);
+        event.preventDefault();
+      },
+    }),
     register: (field: string, { value, defaultValue }: RegisterOptions = {}) => ({
       name: field,
       ...(value !== undefined ? { value, readOnly: true } : {}),

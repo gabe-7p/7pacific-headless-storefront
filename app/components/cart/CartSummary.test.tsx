@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import { type CartState, createEmptyCartErrors, createEmptyErrorGroup } from '@shopify/hydrogen';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CartSummary } from '~/components/cart/CartSummary';
 import type { CartData } from '~/lib/cart';
@@ -76,6 +76,67 @@ describe('CartSummary', () => {
     state = cartState({}, { errors });
     renderSummary('page');
     expect(screen.getByRole('alert').textContent).toBe('Enter a valid discount code');
+  });
+
+  describe('after a rejected code', () => {
+    const discountCodes = [
+      { code: 'NOPE', applicable: false },
+      { code: 'TEAM10', applicable: true },
+    ];
+    const updateCart = Object.assign(
+      vi.fn(() => Promise.resolve({})),
+      {
+        isDefault: vi.fn(() => false),
+      }
+    );
+
+    const applyCode = (code: string) => {
+      fireEvent.change(screen.getByRole('textbox', { name: 'Discount code' }), {
+        target: { value: code },
+      });
+      fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+    };
+
+    beforeEach(() => {
+      updateCart.mockClear();
+      updateCart.isDefault.mockReturnValue(false);
+      window.Shopify = { actions: { updateCart } } as never;
+      state = cartState({ discountCodes });
+      renderSummary('page');
+    });
+
+    afterEach(() => {
+      delete (window as { Shopify?: unknown }).Shopify;
+    });
+
+    it('leaves it out of a later apply', () => {
+      applyCode(' SUMMER ');
+      expect(updateCart).toHaveBeenCalledWith({ discountCodes: ['TEAM10', 'SUMMER'] });
+    });
+
+    it('leaves it out of a later remove', () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Remove discount TEAM10' }));
+      expect(updateCart).toHaveBeenCalledWith({ discountCodes: [] });
+    });
+
+    it('sends nothing for an empty submit', () => {
+      applyCode('   ');
+      expect(updateCart).not.toHaveBeenCalled();
+    });
+
+    it('leaves the submit to the form until the store owns updateCart', () => {
+      updateCart.isDefault.mockReturnValue(true);
+      applyCode('SUMMER');
+      expect(updateCart).not.toHaveBeenCalled();
+    });
+
+    it('leaves the submit to the form while the cart is still loading', () => {
+      cleanup();
+      state = { ...state, loading: true };
+      renderSummary('page');
+      applyCode('SUMMER');
+      expect(updateCart).not.toHaveBeenCalled();
+    });
   });
 
   it('renders no Checkout CTA without a checkout URL', () => {
