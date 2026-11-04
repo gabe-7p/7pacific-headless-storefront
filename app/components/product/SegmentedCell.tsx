@@ -4,7 +4,7 @@
  * adds its own sizing and cursor. `SEGMENT_LABEL` is the type tier alone, for a
  * label that sits beside a cell rather than in one (the cart drawer's subtotal).
  */
-export const SEGMENT_LABEL = 'text-[9.6px] tracking-[0.3em] uppercase';
+export const SEGMENT_LABEL = 'text-[9.6px] tracking-segment uppercase';
 export const SEGMENT_CELL = `border font-semibold ${SEGMENT_LABEL}`;
 export const SEGMENT_SELECTED = 'z-10 border-ink bg-field-night text-ink-night';
 export const SEGMENT_IDLE = 'border-border-subtle text-ink hover:border-ink';

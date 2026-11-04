@@ -97,6 +97,7 @@
   --tracking-product: 0.04em; /* product names */
   --tracking-caps: 0.08em; /* caps UI: nav, CTAs, edition numbers */
   --tracking-spec: 0.1em; /* JetBrains Mono spec strips */
+  --tracking-segment: 0.3em; /* live's segmented cells and their labels */
 
   /* Live's Impulse theme breaks at 769/1025 (its media queries use max-width,
    * so 768/1024 belong to the SMALLER tier — iPad portrait stacks), one past

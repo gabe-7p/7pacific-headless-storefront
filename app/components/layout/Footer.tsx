@@ -115,7 +115,9 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
         aria-expanded={open}
         className="flex w-full items-center justify-between py-4 impulse:pointer-events-none impulse:py-0"
       >
-        {/* 14px / 0.3em — weight comes from the Heading brand variant. */}
+        {/* 14px, weight from the Heading brand variant. The 0.3em is dead: it emits
+            before the variant's tracking-header, so this renders at 0.01em.
+            tracking-segment would emit after it and visibly widen the title. */}
         <Heading as="h3" size="none" className="text-sm tracking-[0.3em]">
           {title}
         </Heading>
