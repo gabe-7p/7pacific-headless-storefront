@@ -2,10 +2,11 @@ import { type ClassValue, clsx } from 'clsx';
 import { extendTailwindMerge } from 'tailwind-merge';
 
 /**
- * tailwind-merge's stock config lets a font-size class evict any earlier
- * `leading-*`, modelling Tailwind v3. In v4 `text-*` emits
- * `line-height: var(--tw-leading, …)`, so the two compose in CSS and the
- * eviction only ever deleted a leading the author asked for.
+ * tailwind-merge's stock config lists `leading` as a conflict of `font-size`,
+ * so a `text-*` removes any earlier `leading-*`. Our Tailwind emits `text-*` as
+ * `line-height: var(--tw-leading, …)`, which already honors the leading, so the
+ * conflict is cleared here. `text-lg/7` still evicts: its postfix sets the
+ * line-height, and that lives in `conflictingClassGroupModifiers`.
  */
 const twMerge = extendTailwindMerge({
   override: { conflictingClassGroups: { 'font-size': [] } },

@@ -85,9 +85,9 @@ Live products are **separate Shopify products per color**, not variants. The col
 
 ## Tailwind traps that silently lose a style
 
-Three bit us during the live-parity work; all three type-check and lint clean.
+These came out of the live-parity work; every one type-checks and lints clean.
 
-**`text-*` and `leading-*` compose, and `cn()` is configured to let them.** In Tailwind v4 a named size emits `line-height: var(--tw-leading, <size default>)`, so one `leading-*` holds through every size step, responsive ones included. Stock `tailwind-merge` still models v3 and deletes a `leading-*` when a `text-*` follows it, which is why `lib/cn.ts` overrides that conflict. Write the leading once, and add a responsive `leading-*` only where the value changes. Merge classes through `cn`, never a bare `twMerge`, or the eviction comes back.
+**`text-*` and `leading-*` compose, and `cn()` is configured to let them.** In Tailwind v4 a named size emits `line-height: var(--tw-leading, <size default>)`, so one `leading-*` holds through every size step, responsive ones included. Stock `tailwind-merge` lists `leading` as a conflict of `font-size`, so a `text-*` deletes any `leading-*` before it; `lib/cn.ts` clears that conflict. The eviction removed brand leadings and defaults alike, so a default that was evicted before can apply now, as `DialogTitle`'s did. Write the leading once, and add a responsive `leading-*` only where the value changes. Merge classes through `cn`, never a bare `twMerge`, or the eviction comes back.
 
 ```tsx
 // ❌ the repeats add nothing
