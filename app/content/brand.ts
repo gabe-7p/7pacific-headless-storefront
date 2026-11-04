@@ -15,6 +15,9 @@ export const BRAND = {
   /** Legal/display name (also the Storefront shop.name). */
   name: '7Pacific',
 
+  /** The canonical production origin (canonical links, absolute og:image URLs). */
+  siteUrl: 'https://7pacificapparel.com',
+
   /**
    * Announcement spec strip: mono caps. The one shipping fact, nothing else.
    */

@@ -42,4 +42,13 @@ describe('buildMeta', () => {
       content: 'https://cdn/x.jpg',
     });
   });
+
+  it('emits an absolute <link rel=canonical> on the brand origin only when given a path', () => {
+    expect(buildMeta({ title: 'X' }).some((tag) => 'rel' in tag)).toBe(false);
+    expect(buildMeta({ title: 'X', canonical: '/products/slate' })).toContainEqual({
+      tagName: 'link',
+      rel: 'canonical',
+      href: 'https://7pacificapparel.com/products/slate',
+    });
+  });
 });
