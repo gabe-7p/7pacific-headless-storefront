@@ -5,6 +5,7 @@ import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
+import { TextLink } from '~/components/common/TextLink';
 import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/content/brand';
 import { useCart } from '~/lib/cart';
@@ -140,16 +141,15 @@ export const HeaderMenu = ({
         BRAND.social
           .filter((social) => social.platform === 'Instagram')
           .map((social) => (
-            <a
+            <TextLink
               key={social.platform}
               href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={social.platform}
+              variant="bare"
               className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
             >
               <InstagramIcon className="size-5" />
-            </a>
+            </TextLink>
           ))}
     </nav>
   );

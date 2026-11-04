@@ -7,6 +7,7 @@ import { Heading } from '~/components/common/Heading';
 import { InstagramIcon } from '~/components/common/icons';
 import { JoinForm } from '~/components/common/JoinForm';
 import { Logo } from '~/components/common/Logo';
+import { TextLink } from '~/components/common/TextLink';
 import { BRAND } from '~/content/brand';
 import { JOIN_COPY } from '~/content/join';
 import { cn } from '~/lib/cn';
@@ -64,14 +65,13 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
 
             {/* Live has no divider above this row. */}
             <Container className="py-6 text-center">
-              <a
+              <TextLink
                 href="https://www.shopify.com"
-                target="_blank"
-                rel="noopener noreferrer"
+                variant="bare"
                 className="text-xs tracking-wide text-support-night transition-opacity hover:opacity-80"
               >
                 {BRAND.footer.poweredBy}
-              </a>
+              </TextLink>
             </Container>
           </footer>
         )}
@@ -143,16 +143,15 @@ const SocialIcons = () => (
   <ul className="flex gap-4">
     {BRAND.social.map((social) => (
       <li key={social.platform}>
-        <a
+        <TextLink
           href={social.href}
-          target="_blank"
-          rel="noopener noreferrer"
           title={social.platform}
+          variant="bare"
           className="inline-flex transition-opacity hover:opacity-70"
         >
           {social.platform === 'Instagram' && <InstagramIcon className="size-[22px]" />}
           <span className="sr-only">{social.platform}</span>
-        </a>
+        </TextLink>
       </li>
     ))}
   </ul>
@@ -176,26 +175,13 @@ const FooterSupport = ({
       {items.map((item) => {
         if (!item.url) return null;
         const url = toInternalPath(item.url, { publicStoreDomain, primaryDomainUrl });
-        const isExternal = !url.startsWith('/');
-        return isExternal ? (
-          <a
-            key={item.id}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-support-night transition-colors hover:text-ink-night"
-          >
+        const target = url.startsWith('/')
+          ? ({ to: url, prefetch: 'intent' } as const)
+          : { href: url };
+        return (
+          <TextLink key={item.id} variant="night" {...target}>
             {item.title}
-          </a>
-        ) : (
-          <NavLink
-            key={item.id}
-            to={url}
-            prefetch="intent"
-            className="text-support-night transition-colors hover:text-ink-night"
-          >
-            {item.title}
-          </NavLink>
+          </TextLink>
         );
       })}
     </nav>

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
+import { TEXT_LINK_CLASS } from '~/components/common/TextLink';
 import {
   SEGMENT_CELL,
   SEGMENT_IDLE,
@@ -29,8 +30,7 @@ type Unit = (typeof UNITS)[number];
  * — the same type tier as the SIZE label the trigger sits beside. Tailwind v4's
  * preflight no longer gives a `<button>` a pointer cursor, so it's declared here.
  */
-const LINK_CLASS =
-  'cursor-pointer text-support underline underline-offset-4 transition-colors hover:text-ink';
+const LINK_CLASS = cn(TEXT_LINK_CLASS, 'cursor-pointer');
 
 /** Idle cells stay unfilled so the translucent drawer reads through them, and
     with two cells the neighbour is always the selected one, so nothing lifts. */
