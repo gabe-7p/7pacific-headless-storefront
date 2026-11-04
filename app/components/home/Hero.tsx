@@ -1,6 +1,7 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { Scrim } from '~/components/common/Scrim';
 import { SpecLine } from '~/components/common/SpecLine';
 import { HOME_HERO } from '~/content/home';
 
@@ -27,9 +28,8 @@ export const Hero = () => (
       className="absolute inset-0 size-full object-cover"
     />
     {/* Live's .custom-hero-overlay verbatim: a flat rgba(0,0,0,0.10) wash over
-        the whole frame, nothing graded. pointer-events-none so it never eats a
-        click meant for the CTA beneath it. */}
-    <div className="pointer-events-none absolute inset-0 bg-black/10" />
+        the whole frame, nothing graded. */}
+    <Scrim strength="10" />
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Spec-strip tier: JetBrains Mono caps at +0.1em. */}
       <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>

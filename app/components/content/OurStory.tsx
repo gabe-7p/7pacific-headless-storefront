@@ -7,6 +7,7 @@ import { LiveDot } from '~/components/common/LiveDot';
 import type { MediaSlotRatio, MediaSlotSource } from '~/components/common/MediaSlot';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
 import { CornerBrackets, SectionLabel, TypeOnReadout } from '~/components/common/Readout';
+import { Scrim } from '~/components/common/Scrim';
 import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
 import { OUR_STORY } from '~/content/our-story';
 import { cn } from '~/lib/cn';
@@ -49,7 +50,7 @@ const FileHero = () => {
           className="size-full object-cover object-[50%_30%] saturate-[0.85]"
         />
       </SettleIn>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/25" />
+      <Scrim strength="25" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-field-night/80 to-transparent"

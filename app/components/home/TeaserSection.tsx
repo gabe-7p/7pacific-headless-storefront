@@ -4,6 +4,7 @@ import { Container } from '~/components/common/Container';
 import { ContentMedia } from '~/components/common/ContentMedia';
 import { Countdown } from '~/components/common/Countdown';
 import { Heading } from '~/components/common/Heading';
+import { Scrim } from '~/components/common/Scrim';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { SpecLine } from '~/components/common/SpecLine';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
@@ -48,9 +49,7 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
       sizes={IMAGE_SIZES.half}
       className="absolute inset-0 h-full w-full object-cover"
     />
-    {/* Legibility wash over the media — same device as the Hero's, a touch
-        stronger (15% vs 10%) for the busier archive shots. */}
-    <div className="pointer-events-none absolute inset-0 bg-black/15" />
+    <Scrim strength="15" />
     {/* text-ink-night on the wrapper so the outline CTA inherits it, the same
         way the tenet cards color their Cta through the card surface. */}
     <div className="text-ink-night absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
