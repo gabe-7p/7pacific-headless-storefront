@@ -15,8 +15,7 @@ import { cn } from '~/lib/cn';
  */
 
 /** Campaign heading scale steps (the face/weight/tracking come from
-    Heading's `campaign` variant; leading repeats next to each size step —
-    see common-pitfalls.md). */
+    Heading's `campaign` variant). */
 const CAMPAIGN_HEADING_SIZES = 'text-3xl leading-[1.15] md:text-[3.5rem] md:leading-[1.1]';
 
 /** Left-aligned section header: display heading → muted subtitle. */
@@ -86,7 +85,7 @@ const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number
         baseline): a label that wraps grows upward from the shared bottom
         edge, so every card's figure sits at the same height; the label's pb
         optically re-seats its baseline on the figure's. */}
-    <p className="font-archivo flex items-end gap-x-2 text-4xl leading-none font-light text-ink-night md:gap-x-2.5 md:text-6xl md:leading-none">
+    <p className="font-archivo flex items-end gap-x-2 text-4xl leading-none font-light text-ink-night md:gap-x-2.5 md:text-6xl">
       <span className="shrink-0">
         {stat.value}
         {'accent' in stat ? <span className="text-brand">{stat.accent}</span> : null}

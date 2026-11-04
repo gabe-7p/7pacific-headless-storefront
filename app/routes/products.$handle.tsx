@@ -167,7 +167,7 @@ const ProductPage = () => {
               <Heading
                 as="h1"
                 size="none"
-                className="text-2xl leading-[1.15] tracking-product md:text-[2rem] md:leading-[1.15]"
+                className="text-2xl leading-[1.15] tracking-product md:text-[2rem]"
               >
                 {title}
               </Heading>

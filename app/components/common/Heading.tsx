@@ -28,7 +28,7 @@ const SIZES = {
   lg: 'text-2xl md:text-3xl',
   xl: 'text-3xl md:text-4xl',
   /** Section-header tier (36px, 48px from md) — Brand Guidelines type table. */
-  display: 'text-4xl leading-[1.1] md:text-5xl md:leading-[1.1]',
+  display: 'text-4xl leading-[1.1] md:text-5xl',
 } as const;
 
 type HeadingProps = {
