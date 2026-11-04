@@ -11,12 +11,17 @@ import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
  * The one product-URL builder: `/products/<handle>`, plus the selected
  * options as search params so a sibling-color link or a cart line keeps the
  * shopper's size (color = separate product, so a color change is a navigation).
+ * `base` is the current search: unrelated params (`?utm_source=…`) survive,
+ * the selected options replace their own, and a stale Liquid-style `variant`
+ * param goes.
  */
 export const productUrl = (
   handle: string,
-  selectedOptions?: ReadonlyArray<Pick<SelectedOption, 'name' | 'value'>>
+  selectedOptions?: ReadonlyArray<Pick<SelectedOption, 'name' | 'value'>>,
+  base?: URLSearchParams
 ): string => {
-  const params = new URLSearchParams();
+  const params = new URLSearchParams(base);
+  params.delete('variant');
   selectedOptions?.forEach((option) => params.set(option.name, option.value));
   const query = params.toString();
   return `/products/${handle}${query ? `?${query}` : ''}`;

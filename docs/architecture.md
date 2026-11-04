@@ -37,10 +37,10 @@ Browser ── request ──▶ Oxygen worker (server.ts: env + sub-request cac
 ```
 
 - **The cart lives in the browser.** The root loader seeds `CartProvider` with `cartHandlers.get()`; every cart surface reads `useCart(selector)` and mutates through `useCartForm` / the product form, which post to `/api/cart` (optimistic lines settle when the handler confirms). No `/cart` action route, no loader promise for the cart. The drawer is `components/cart/CartDrawer`: the header bag, the PDP add-to-cart and Shopify's `openCart` standard action all open it through `useCartDrawer()`.
-- **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product/store.ts](../app/lib/product/store.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL without a loader round-trip.
+- **The PDP's variant selection is client-side.** `ProductProvider` + `useProductForm` ([lib/product/store.ts](../app/lib/product/store.ts)) resolve option clicks against `adjacentVariants` / the encoded variant fields; `onSelect` rewrites the URL (`selectionTarget`) without a loader round-trip. The loader's pure logic lives in [lib/product/page.ts](../app/lib/product/page.ts): it parses the JSON metafields once and takes the raw values off `product`, so they aren't serialized twice.
 - **Every Storefront read passes an explicit `cache`** (`Cache.long()` for menus/pages/journal/recommendations, `Cache.short()` for the PDP product and collection grids). There is no implicit default; a read without one hits the API every request.
 - **Critical (above-the-fold) data** is `await`ed in the loader; **below-the-fold data** is returned as a promise (through `deferQuery` in [lib/http.ts](../app/lib/http.ts)) and rendered with `<Suspense>`/`<Await>`.
-- **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (the bus helpers in [lib/analytics/shopify.ts](../app/lib/analytics/shopify.ts), tracker components in [components/analytics/Trackers.tsx](../app/components/analytics/Trackers.tsx)); destinations — Shopify's own analytics, the Meta Pixel ([lib/analytics/meta-pixel.client.ts](../app/lib/analytics/meta-pixel.client.ts), event mapping in `meta-pixel.ts`, [ADR 0011](decisions/0011-meta-pixel-as-bus-destination.md)) and PostHog ([lib/analytics/posthog.client.ts](../app/lib/analytics/posthog.client.ts), event names and property builders in [lib/analytics/posthog.events.ts](../app/lib/analytics/posthog.events.ts)) — receive events only once Customer Privacy allows. Anything that must wait for a piece of `window.Shopify` (the bus, Standard Actions, Customer Privacy) polls through the one helper in [lib/shopifyRuntime.ts](../app/lib/shopifyRuntime.ts).
+- **Analytics** go through the bus `<ShopifyScripts>` creates at `window.Shopify.analytics` (the bus helpers in [lib/analytics/shopify.ts](../app/lib/analytics/shopify.ts), including `connectDestination`, which registers both destinations; tracker components in [components/analytics/Trackers.tsx](../app/components/analytics/Trackers.tsx)); destinations — Shopify's own analytics, the Meta Pixel ([lib/analytics/meta-pixel.client.ts](../app/lib/analytics/meta-pixel.client.ts), event mapping in `meta-pixel.ts`, [ADR 0011](decisions/0011-meta-pixel-as-bus-destination.md)) and PostHog ([lib/analytics/posthog.client.ts](../app/lib/analytics/posthog.client.ts), event names and property builders in [lib/analytics/posthog.events.ts](../app/lib/analytics/posthog.events.ts)) — receive events only once Customer Privacy allows. Anything that must wait for a piece of `window.Shopify` (the bus, Standard Actions, Customer Privacy) polls through the one helper in [lib/shopifyRuntime.ts](../app/lib/shopifyRuntime.ts), which also holds the selectors for those pieces.
 - **CSP and the nonce are app code** ([lib/csp.ts](../app/lib/csp.ts), [lib/nonce.tsx](../app/lib/nonce.tsx)), set in `entry.server.tsx`.
 
 See [.claude/rules/module-boundaries.md](../.claude/rules/module-boundaries.md) for the loader-fetches / component-renders rule, and [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md) for caching, deferral, and nullability.
@@ -58,8 +58,8 @@ app/
   routes/        one file per route (React Router flat convention)
   components/
     layout/      Header, Footer, PageLayout, Aside, Announcement
-    analytics/   Trackers (route-driven publishers to the Shopify analytics bus + the PostHog and Meta Pixel bridges)
-    cart/        CartDrawer (the Aside drawer + useCartDrawer, the openCart target), CartMain / CartLineItem / CartSummary
+    analytics/   Trackers (route-driven publishers to the Shopify analytics bus, `useCartViewed`, and the PostHog and Meta Pixel destination registrations)
+    cart/        CartDrawer (the Aside drawer, the openCart target), useCartDrawer.ts (the drawer's open/close hook), CartMain / CartLineItem / CartSummary / CartError
     product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
     collection/  ProductCard, LoadMore
     home/        homepage sections
@@ -70,16 +70,16 @@ app/
     shopifyMiddleware.ts  the root middleware (Hydrogen's request lifecycle)
     storefront.ts   the request-scoped Storefront client, router context key, route templates · `queryStorefront` / `queryStorefrontOrThrow` (every read goes through them)
     oxygen.ts       the `oxygenContext` key: env + sub-request cache + waitUntil, set by server.ts
-    cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`)
+    cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`, `isOptimisticLine`, `nextDiscountCodes`) · cart.fixtures.ts test-only builders + `createCartStoreMock`
     fragments.ts    shared gql fragments + chrome queries · http.ts `notFound`, `unavailable`, `describeRouteError`, `deferQuery`
     i18n.ts         MARKET, MONEY_LOCALE, DATE_LOCALE · money.ts price formats (`brand` / `compact` / `cart`)
     urls.ts         every URL shape · shopifyFiles.ts Shopify Files CDN helpers + the `FilesImage`/`ContentMedia` content types · imageSizes.ts `sizes` presets for common/Image
     seo.ts          page-title format, `buildMeta()` · sitemap.ts the sitemaps · robots.ts `/robots.txt` · gid.ts `gidNumericId` · csp.ts + nonce.tsx the CSP header and nonce
-    shopifyRuntime.ts  the one wait-for-`window.Shopify` poll
+    shopifyRuntime.ts  the one wait-for-`window.Shopify` poll + its selectors (`getAnalyticsBus`, `getOpenCartAction`, `getUpdateCartAction`, `getCustomerPrivacy`, `getActiveCurrency`)
     metafields.ts   metafield JSON/image parsing · countdown.ts drop-timer math · journalFormat.ts journal dates
-    forms.ts        shared form primitives (email rule, `{ ok, errors }`, `handleFormAction`, `SubscribeResponse`) · cn.ts class merging
-    product/        queries.ts (PDP gql documents + types), store.ts (product-form store), content.ts (metafield JSON shapes), display.ts (short titles/size labels), colors.ts (swatches)
-    analytics/      shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders), meta-pixel.ts (event mapping), meta-pixel.client.ts (the pixel as a bus destination) — no barrel: import by path
+    forms.ts        shared form primitives (email rule, `{ ok, errors }`, `handleFormAction`, `SubscribeResponse`) · cn.ts class merging · events.ts `isPlainActivation` (is this link click ours?)
+    product/        queries.ts (PDP gql documents + types), page.ts (the PDP loader's pure logic: recommendations, metafield parsing, hero images), store.ts (product-form store, `resolveSelectedVariant`, `selectionTarget`), content.ts (metafield JSON shapes), display.ts (short titles/size labels/edition label), colors.ts (swatches)
+    analytics/      shopify.ts (the bus, `connectDestination`), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders), meta-pixel.ts (event mapping), meta-pixel.client.ts (the pixel as a bus destination) — no barrel: import by path
   styles/        tailwind.css — the single stylesheet (no separate globals)
 ```
 

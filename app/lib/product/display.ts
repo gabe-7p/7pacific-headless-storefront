@@ -8,6 +8,8 @@
  * the short name instead of rendering the raw string.
  */
 
+import { isEditionStatus } from '~/lib/product/content';
+
 const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
 
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -53,3 +55,17 @@ const SIZE_LABELS: Record<string, string> = {
 /** "Medium" → "M", "Extra Large" → "XL"; unknown values pass through untouched. */
 export const shortSizeLabel = (value: string): string =>
   SIZE_LABELS[value.trim().toLowerCase()] ?? value;
+
+/**
+ * The edition device's label: `ED. 01 · live` (the tag uppercases it). Null
+ * without a parseable number; an unknown status just drops the suffix.
+ */
+export const formatEditionLabel = (
+  number?: string | null,
+  status?: string | null
+): string | null => {
+  const parsed = Number.parseInt(number ?? '', 10);
+  if (Number.isNaN(parsed)) return null;
+  const suffix = status && isEditionStatus(status) ? ` · ${status}` : '';
+  return `ED. ${String(parsed).padStart(2, '0')}${suffix}`;
+};

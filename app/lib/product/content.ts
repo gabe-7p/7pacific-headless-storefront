@@ -4,6 +4,12 @@
  * values with `parseJsonMetafield` from `~/lib/metafields`.
  */
 
+/** `custom.edition_status` — the edition device's vocabulary (`ED. 01 · LIVE`). */
+export type EditionStatus = 'live' | 'soon' | 'archived';
+
+export const isEditionStatus = (value: string): value is EditionStatus =>
+  value === 'live' || value === 'soon' || value === 'archived';
+
 export type ProductDetailCard = { imageUrl: string; caption: string; subcaption: string };
 
 /**

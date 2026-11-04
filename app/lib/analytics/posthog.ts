@@ -54,6 +54,10 @@ export const getPostHogConfig = (
   return { key, host };
 };
 
+/** `getPostHogConfig` for the request being served: the root loader and the server client. */
+export const getPostHogConfigForRequest = (env: PostHogEnv, url: URL): PostHogConfig | null =>
+  getPostHogConfig(env, { isDev: import.meta.env.DEV, hostname: url.hostname });
+
 /**
  * CSP origins for a PostHog ingestion host: the host itself plus its assets
  * twin (`us.i.posthog.com` → `us-assets.i.posthog.com`), which serves the

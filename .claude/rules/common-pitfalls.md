@@ -64,8 +64,14 @@ const recommended = deferQuery(
 
 Two bus mechanics bite when touching the trackers (`components/analytics/Trackers.tsx`) or the PostHog bridge (`lib/analytics/posthog.client.ts`):
 
-- **The bus buffers and replays.** Events published before a destination is ready are replayed when its `setup` resolves, so PostHog's `setup` must resolve only after the SDK is opted in, or the replay is silently dropped (details: `lib/analytics/posthog.client.ts`).
-- **`ProductProvider` re-hydrates one render late.** Read the PDP's variant through `resolveSelectedVariant`, never `formVariant ?? product.selectedOrFirstAvailableVariant`, or `product_viewed` fires twice per swatch click (details: `lib/product/store.ts`).
+- **The bus buffers and replays.** Events published before a destination is ready are replayed when its `setup` resolves, so PostHog's `setup` must resolve only after the SDK is opted in, or the replay is silently dropped. `connectDestination` holds setup on its `ready` option; `posthog.client.test.tsx` pins the order (details: `lib/analytics/posthog.client.ts`).
+- **`ProductProvider` re-hydrates one render late.** Read the PDP's variant through `resolveSelectedVariant`, never `formVariant ?? product.selectedOrFirstAvailableVariant`, or `product_viewed` fires twice per swatch click (details: `lib/product/store.ts`). A size click's URL goes through `selectionTarget` in the same file, so unrelated params survive it.
+
+Read `window.Shopify` through the selectors in `lib/shopifyRuntime.ts` (`getAnalyticsBus`, `getOpenCartAction`, `getUpdateCartAction`, `getCustomerPrivacy`, `getActiveCurrency`), never at the call site: its pieces arrive at different times, and those selectors are what `whenShopifyReady` polls.
+
+## A rejected discount code stays on the cart
+
+Shopify keeps an unknown code on the cart as `applicable: false` and answers with a `DISCOUNT_NOT_FOUND` **warning**, not a user error, on every later response. The store's discount forms resend every code on the cart, so a typo would raise the alert again on the next apply or remove. `CartDiscounts` therefore sends `nextDiscountCodes(...)` through `updateCart` from `beforeSubmit`, which drops the rejected code at the next discount change. Until then it sits on the cart unseen.
 
 ## Images through `common/Image`, prices through `common/Price`
 

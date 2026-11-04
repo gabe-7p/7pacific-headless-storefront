@@ -6,6 +6,7 @@ import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
 import { HANDLES } from '~/content/links';
+import { IMAGE_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { formatJournalDate, readingTimeMinutes } from '~/lib/journalFormat';
@@ -73,31 +74,30 @@ const Article = () => {
   );
 };
 
-const ARTICLE_QUERY = gql(`
-  query JournalArticle(
-    $blogHandle: String!
-    $handle: String!
-    $country: CountryCode
-    $language: LanguageCode
-  ) @inContext(country: $country, language: $language) {
-    blog(handle: $blogHandle) {
-      articleByHandle(handle: $handle) {
-        id
-        handle
-        title
-        excerpt
-        contentHtml
-        publishedAt
-        image {
+const ARTICLE_QUERY = gql(
+  `
+    query JournalArticle(
+      $blogHandle: String!
+      $handle: String!
+      $country: CountryCode
+      $language: LanguageCode
+    ) @inContext(country: $country, language: $language) {
+      blog(handle: $blogHandle) {
+        articleByHandle(handle: $handle) {
           id
-          url
-          altText
-          width
-          height
+          handle
+          title
+          excerpt
+          contentHtml
+          publishedAt
+          image {
+            ...Image
+          }
         }
       }
     }
-  }
-`);
+  `,
+  [IMAGE_FRAGMENT]
+);
 
 export default Article;

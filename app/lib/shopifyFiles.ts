@@ -14,6 +14,19 @@
 const FILES_CDN = 'https://cdn.shopify.com/s/files/1/0686/3988/3581/files';
 const VIDEO_CDN = 'https://cdn.shopify.com/videos/c';
 
+/** Shopify's image CDN: the host `common/Image` may resize through URL params. */
+const CDN_HOST = new URL(FILES_CDN).hostname;
+
+/** Whether a URL is served by Shopify's image CDN (false for anything unparseable). */
+export const isShopifyCdnUrl = (url: string): boolean => {
+  try {
+    const { hostname } = new URL(url);
+    return hostname === CDN_HOST || hostname.endsWith(`.${CDN_HOST}`);
+  } catch {
+    return false;
+  }
+};
+
 type ImageParams = {
   /** The `v=` cache-buster Files appends to the asset's URL. */
   v?: number;

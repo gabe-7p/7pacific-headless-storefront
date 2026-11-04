@@ -1,5 +1,7 @@
 import type { CSSProperties, ImgHTMLAttributes } from 'react';
 
+import { isShopifyCdnUrl } from '~/lib/shopifyFiles';
+
 /**
  * The storefront's image element — the ONE place Shopify CDN images are
  * rendered. Two modes:
@@ -54,11 +56,6 @@ export type ImageProps = {
   srcSetWidths?: Array<number>;
 };
 
-const SHOPIFY_CDN_HOSTS = ['cdn.shopify.com', 'mock.shop'];
-
-const isShopifyImageHost = (hostname: string) =>
-  SHOPIFY_CDN_HOSTS.some((host) => hostname === host || hostname.endsWith(`.${host}`));
-
 /** 200px steps up to 3000px — the ladder every fluid slot picks from by default. */
 const DEFAULT_WIDTHS = Array.from({ length: 15 }, (_, index) => (index + 1) * 200);
 
@@ -80,13 +77,8 @@ const shopifyImageUrl = (
   url: string,
   { width, height, crop }: { width?: number; height?: number; crop?: Crop }
 ): string => {
-  let parsed: URL;
-  try {
-    parsed = new URL(url);
-  } catch {
-    return url;
-  }
-  if (!isShopifyImageHost(parsed.hostname)) return url;
+  if (!isShopifyCdnUrl(url)) return url;
+  const parsed = new URL(url);
   if (width) parsed.searchParams.set('width', String(width));
   if (height) parsed.searchParams.set('height', String(height));
   if (crop) parsed.searchParams.set('crop', crop);

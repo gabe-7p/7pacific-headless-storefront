@@ -1,5 +1,3 @@
-import type { StorefrontAnalytics } from '@shopify/hydrogen';
-
 import {
   addToCartParams,
   META_PIXEL_DESTINATION,
@@ -9,8 +7,8 @@ import {
   searchParams,
   viewContentParams,
 } from '~/lib/analytics/meta-pixel';
-import { getAnalytics } from '~/lib/analytics/shopify';
-import { whenShopifyReady } from '~/lib/shopifyRuntime';
+import { AnalyticsEvent, connectDestination } from '~/lib/analytics/shopify';
+import { getActiveCurrency } from '~/lib/shopifyRuntime';
 
 /**
  * The Meta Pixel as a destination on the Shopify analytics bus (browser only).
@@ -21,12 +19,6 @@ import { whenShopifyReady } from '~/lib/shopifyRuntime';
  * subscriber callback — never from `setup()`, which runs before consent. Until
  * the script arrives, calls sit in the official stub's queue and fbevents.js
  * flushes them in order on load, `init` first.
- *
- * Registered once per page lifetime: the bus replays its buffer to every new
- * destination, so a remove + re-add (a Strict Mode remount, an HMR reload)
- * would double-deliver. The flag is set inside the ready callback, exactly
- * like the PostHog bridge; the bus itself also ignores a second active
- * destination with the same name.
  */
 type Fbq = {
   (...args: Array<unknown>): void;
@@ -47,7 +39,6 @@ declare global {
 
 type MetaPixelOptions = { pixelId: string; nonce?: string };
 
-let registered = false;
 let fbq: Fbq | null = null;
 
 /** The official snippet's stub: queues calls until fbevents.js replaces `callMethod`. */
@@ -95,10 +86,11 @@ const ensureFbq = ({ pixelId, nonce }: MetaPixelOptions): Fbq => {
   return fbq;
 };
 
-const register = (analytics: StorefrontAnalytics, options: MetaPixelOptions) => {
-  if (registered) return;
-  registered = true;
-
+/**
+ * Registers the Meta Pixel destination once the bus exists (client only).
+ * Returns a cancel for the readiness poll; it never removes the destination.
+ */
+export const connectMetaPixelToShopify = (options: MetaPixelOptions): (() => void) => {
   const track = (event: MetaStandardEvent, params?: MetaEventParams | null) => {
     if (params === null) return;
     const pixel = ensureFbq(options);
@@ -106,25 +98,11 @@ const register = (analytics: StorefrontAnalytics, options: MetaPixelOptions) => 
     else pixel('track', event);
   };
 
-  analytics.addDestination({
-    name: META_PIXEL_DESTINATION,
-    setup({ subscribe }) {
-      const unsubscribe = [
-        subscribe('page_viewed', () => track('PageView')),
-        subscribe('product_viewed', (payload) => track('ViewContent', viewContentParams(payload))),
-        subscribe('product_added_to_cart', (payload) =>
-          track('AddToCart', addToCartParams(payload, window.Shopify?.currency?.active))
-        ),
-        subscribe('search_viewed', (payload) => track('Search', searchParams(payload))),
-      ];
-      return () => unsubscribe.forEach((off) => off());
-    },
+  return connectDestination(META_PIXEL_DESTINATION, {
+    [AnalyticsEvent.PAGE_VIEWED]: () => track('PageView'),
+    [AnalyticsEvent.PRODUCT_VIEWED]: (payload) => track('ViewContent', viewContentParams(payload)),
+    [AnalyticsEvent.PRODUCT_ADD_TO_CART]: (payload) =>
+      track('AddToCart', addToCartParams(payload, getActiveCurrency())),
+    [AnalyticsEvent.SEARCH_VIEWED]: (payload) => track('Search', searchParams(payload)),
   });
 };
-
-/**
- * Registers the Meta Pixel destination once the bus exists (client only).
- * Returns a cancel for the readiness poll; it never removes the destination.
- */
-export const connectMetaPixelToShopify = (options: MetaPixelOptions): (() => void) =>
-  whenShopifyReady(getAnalytics, (analytics) => register(analytics, options), { attempts: 20 });

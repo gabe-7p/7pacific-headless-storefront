@@ -33,6 +33,21 @@ describe('productUrl', () => {
       '/products/tee-mint?Size=Extra+Large'
     );
   });
+
+  it('keeps unrelated params from the base and replaces the selected option', () => {
+    const base = new URLSearchParams('utm_source=x&Size=Small');
+    expect(productUrl('tee-mint', [{ name: 'Size', value: 'Medium' }], base)).toBe(
+      '/products/tee-mint?utm_source=x&Size=Medium'
+    );
+  });
+
+  it('drops a stale variant param and leaves the base untouched', () => {
+    const base = new URLSearchParams('variant=123&ref=campaign');
+    expect(productUrl('tee-mint', [{ name: 'Size', value: 'Medium' }], base)).toBe(
+      '/products/tee-mint?ref=campaign&Size=Medium'
+    );
+    expect(base.get('variant')).toBe('123');
+  });
 });
 
 describe('resource URL builders', () => {

@@ -24,7 +24,7 @@ export default defineConfig({
   webServer: process.env.PIXEL_BASE_URL
     ? undefined
     : {
-        command: 'pnpm exec react-router build && pnpm exec vite preview --port 4173 --strictPort',
+        command: 'pnpm preview --port 4173 --strictPort',
         url: baseURL,
         reuseExistingServer: true,
         timeout: 300_000,

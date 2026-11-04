@@ -494,7 +494,7 @@ Verification: `pnpm type-check`; PDP hero (desktop + mobile), collection card ho
 
 **5.5 `isPlainActivation` is implemented three different ways.**
 Evidence: `app/components/product/ProductForm.tsx:29-35` — `!defaultPrevented && button === 0 && !meta/alt/ctrl/shift` (omits the `target` check the skill lists); `app/components/collection/LoadMore.tsx:72` — modifier keys only (ignores middle-click and `defaultPrevented`); `app/components/common/Prose.tsx:44-50` — intercepts every internal CMS link with no guard at all (cmd-click a link in a PDP description → same tab).
-Fix: `isPlainActivation(event)` in `app/lib/events.ts` (skill-complete: `defaultPrevented`, `button`, four modifiers, `target` empty or `_self`) with a unit test; all three call it.
+Fix: `isPlainActivation(event)` in `app/lib/events.ts` (skill-complete: `defaultPrevented`, `button`, four modifiers, `target` empty or `_self`) with a unit test; all three, and a fourth found in review (the header bag link, `Header.tsx`), call it.
 Verification: cmd-click a size cell, "Load more", and a link inside a PDP description — each opens a new tab; plain clicks behave as today.
 
 **5.6 Shared image type and CDN host check.**

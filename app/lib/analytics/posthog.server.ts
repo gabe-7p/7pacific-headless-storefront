@@ -3,7 +3,7 @@
 import { PostHog } from 'posthog-node/edge';
 import { createContext } from 'react-router';
 
-import { getPostHogConfig } from '~/lib/analytics/posthog';
+import { getPostHogConfigForRequest } from '~/lib/analytics/posthog';
 
 /**
  * Per-request server-side PostHog client, or `undefined` when PostHog is off
@@ -18,10 +18,7 @@ import { getPostHogConfig } from '~/lib/analytics/posthog';
  * client lives for exactly one request.
  */
 export const createPostHogClient = (env: Env, request: Request) => {
-  const config = getPostHogConfig(env, {
-    isDev: import.meta.env.DEV,
-    hostname: new URL(request.url).hostname,
-  });
+  const config = getPostHogConfigForRequest(env, new URL(request.url));
   if (!config) return undefined;
 
   const distinctId = request.headers.get('X-POSTHOG-DISTINCT-ID');

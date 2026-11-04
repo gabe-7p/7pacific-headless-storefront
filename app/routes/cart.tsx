@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-
+import { useCartViewed } from '~/components/analytics/Trackers';
 import { CartMain } from '~/components/cart/CartMain';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
 import { CART_COPY } from '~/content/cart';
 import { STORE_LINKS } from '~/content/links';
-import { publishCartViewed } from '~/lib/analytics/shopify';
 import { useCart } from '~/lib/cart';
 import { buildMeta } from '~/lib/seo';
 
@@ -20,14 +18,8 @@ export const meta: Route.MetaFunction = () => {
  * client store (`useCart`) and mutations post to `/api/cart`.
  */
 const Cart = () => {
-  const cart = useCart((state) => state.data);
-  const hasItems = cart.totalQuantity > 0;
-
-  useEffect(() => {
-    publishCartViewed(cart);
-    // Once per visit to the page, not per cart change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const hasItems = useCart((state) => state.data.totalQuantity > 0);
+  useCartViewed(true);
 
   return (
     <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">

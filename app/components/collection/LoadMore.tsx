@@ -4,6 +4,7 @@ import { Link, useFetcher } from 'react-router';
 import { CtaLabel } from '~/components/common/Cta';
 import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
+import { isPlainActivation } from '~/lib/events';
 
 type PageInfo = { hasNextPage: boolean; endCursor?: string | null };
 
@@ -69,7 +70,7 @@ export const LoadMore = ({
       className={LOAD_MORE_CTA}
       aria-busy={isLoading}
       onClick={(event) => {
-        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (!isPlainActivation(event)) return;
         event.preventDefault();
         onLoad(href);
       }}

@@ -1,7 +1,7 @@
 import { CartLineItem } from '~/components/cart/CartLineItem';
 import { CartSummary } from '~/components/cart/CartSummary';
+import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Cta } from '~/components/common/Cta';
-import { useAside } from '~/components/layout/Aside';
 import { CART_COPY } from '~/content/cart';
 import { STORE_LINKS } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
@@ -45,7 +45,7 @@ export const CartMain = ({ layout }: { layout: CartLayout }) => {
 };
 
 const CartEmpty = ({ layout }: { layout: CartLayout }) => {
-  const { close } = useAside();
+  const { close } = useCartDrawer();
   return (
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       <p className="text-sm text-support">{MICROCOPY.emptyCart}</p>

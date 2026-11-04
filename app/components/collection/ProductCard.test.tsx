@@ -15,6 +15,7 @@ const image = (name: string) => ({
 });
 
 const sibling = (handle: string, name: string, hex: string) => ({
+  __typename: 'Product' as const,
   handle,
   colorName: { value: name },
   colorHex: { value: hex },
@@ -28,6 +29,8 @@ const TEE: ProductCardData = {
   featuredImage: image('front'),
   images: { nodes: [image('front'), image('back')] },
   priceRange: { minVariantPrice: { amount: '74.0', currencyCode: 'USD' } },
+  editionNumber: null,
+  editionStatus: null,
   colorSiblings: {
     references: {
       nodes: [
@@ -37,7 +40,7 @@ const TEE: ProductCardData = {
       ],
     },
   },
-} as ProductCardData;
+};
 
 const HAT: ProductCardData = {
   ...TEE,
@@ -45,7 +48,7 @@ const HAT: ProductCardData = {
   title: 'MOTIONFRAME HAT - WHITE',
   images: { nodes: [image('hat-front')] }, // single image — no crossfade
   colorSiblings: { references: { nodes: [sibling('hat-white', 'White', '#ffffff')] } },
-} as ProductCardData;
+};
 
 const renderCard = (product: ProductCardData) =>
   render(

@@ -1,39 +1,48 @@
 import { gql, type StorefrontApi } from '@shopify/hydrogen';
 
-import { COLOR_SIBLINGS_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
+import {
+  COLOR_SIBLINGS_FRAGMENT,
+  EDITION_FRAGMENT,
+  MEDIA_IMAGE_REF_FRAGMENT,
+  PRODUCT_CARD_FRAGMENT,
+} from '~/lib/fragments';
 
-/** Every variant field the PDP, the product-form store and the cart need. */
-const PRODUCT_VARIANT_FRAGMENT = gql(`
-  fragment ProductVariant on ProductVariant {
-    availableForSale
-    compareAtPrice {
-      amount
-      currencyCode
-    }
-    id
-    image {
+/**
+ * Every variant field the PDP, the product-form store and the cart need.
+ * `Image` arrives through `MEDIA_IMAGE_REF_FRAGMENT`, the one carrier it can
+ * have in `PRODUCT_QUERY`: `gql()` appends each fragment's string, so a second
+ * carrier would define `Image` twice and fail at runtime.
+ */
+const PRODUCT_VARIANT_FRAGMENT = gql(
+  `
+    fragment ProductVariant on ProductVariant {
+      availableForSale
+      compareAtPrice {
+        amount
+        currencyCode
+      }
       id
-      url
-      altText
-      width
-      height
-    }
-    price {
-      amount
-      currencyCode
-    }
-    product {
+      image {
+        ...Image
+      }
+      price {
+        amount
+        currencyCode
+      }
+      product {
+        title
+        handle
+      }
+      selectedOptions {
+        name
+        value
+      }
+      sku
       title
-      handle
     }
-    selectedOptions {
-      name
-      value
-    }
-    sku
-    title
-  }
-`);
+  `,
+  [MEDIA_IMAGE_REF_FRAGMENT]
+);
 
 /**
  * The PDP query. `selectedOrFirstAvailableVariant` + `adjacentVariants` +
@@ -96,44 +105,19 @@ export const PRODUCT_QUERY = gql(
           value
         }
         # Edition device (7PA-246) — rendered above the product name.
-        editionNumber: metafield(namespace: "custom", key: "edition_number") {
-          value
-        }
-        editionStatus: metafield(namespace: "custom", key: "edition_status") {
-          value
-        }
+        ...Edition
         # Dedicated PDP hero images (the theme's "Background Image" / "…Mobile"),
         # per product. Falls back to the variant image when unset.
         heroImage: metafield(namespace: "custom", key: "hero_image") {
-          reference {
-            ... on MediaImage {
-              image {
-                id
-                url
-                altText
-                width
-                height
-              }
-            }
-          }
+          ...MediaImageRef
         }
         heroImageMobile: metafield(namespace: "custom", key: "hero_image_mobile") {
-          reference {
-            ... on MediaImage {
-              image {
-                id
-                url
-                altText
-                width
-                height
-              }
-            }
-          }
+          ...MediaImageRef
         }
       }
     }
   `,
-  [PRODUCT_VARIANT_FRAGMENT, COLOR_SIBLINGS_FRAGMENT]
+  [PRODUCT_VARIANT_FRAGMENT, COLOR_SIBLINGS_FRAGMENT, EDITION_FRAGMENT]
 );
 
 /**
@@ -164,3 +148,8 @@ export const RECOMMENDATIONS_QUERY = gql(
 type ProductQueryResult = StorefrontApi.ResultOf<typeof PRODUCT_QUERY>;
 export type ProductData = NonNullable<ProductQueryResult['product']>;
 export type ProductVariantData = NonNullable<ProductData['selectedOrFirstAvailableVariant']>;
+
+/** The product the PDP renders: raw JSON metafields parsed and removed (`parseProductContent`). */
+export type ProductPageData = Omit<ProductData, 'productDetails' | 'techStack' | 'specCard'>;
+
+export type RecommendationsData = StorefrontApi.ResultOf<typeof RECOMMENDATIONS_QUERY>;

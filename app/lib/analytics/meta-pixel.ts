@@ -19,6 +19,9 @@ import { MARKET } from '~/lib/i18n';
  */
 
 export const META_PIXEL_SCRIPT_URL = 'https://connect.facebook.net/en_US/fbevents.js';
+export const META_PIXEL_SCRIPT_ORIGIN = new URL(META_PIXEL_SCRIPT_URL).origin;
+/** Where the pixel's hits land: the `/tr` beacons and tracking image. */
+export const META_PIXEL_BEACON_ORIGIN = 'https://www.facebook.com';
 export const META_PIXEL_DESTINATION = 'meta-pixel';
 
 export type MetaStandardEvent = 'PageView' | 'ViewContent' | 'AddToCart' | 'Search';

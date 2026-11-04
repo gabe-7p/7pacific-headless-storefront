@@ -21,11 +21,15 @@ import { StickyAddToCart } from '~/components/product/StickyAddToCart';
 import { TechStack } from '~/components/product/TechStack';
 import { deferQuery, notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
-import { getMetafieldImage, parseJsonMetafield } from '~/lib/metafields';
 import { getColorSwatches } from '~/lib/product/colors';
-import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/product/content';
+import { getHeroImages, parseProductContent, selectRecommendedProducts } from '~/lib/product/page';
 import { PRODUCT_QUERY, RECOMMENDATIONS_QUERY } from '~/lib/product/queries';
-import { ProductProvider, resolveSelectedVariant, useProductForm } from '~/lib/product/store';
+import {
+  ProductProvider,
+  resolveSelectedVariant,
+  selectionTarget,
+  useProductForm,
+} from '~/lib/product/store';
 import { buildMeta } from '~/lib/seo';
 import { queryStorefront, queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
 import { productUrl } from '~/lib/urls';
@@ -53,17 +57,7 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
     queryStorefront(storefront, RECOMMENDATIONS_QUERY, {
       variables: { handle },
       cache: Cache.long(),
-    }).then((data) => {
-      const nodes = data?.product?.recommended?.references?.nodes ?? [];
-      return (
-        nodes
-          // The metafield can reference other types; only products render.
-          .flatMap((node) => ('handle' in node ? [node] : []))
-          // Exclude the product being viewed; cap at 3 like live.
-          .filter((node) => node.handle !== handle)
-          .slice(0, 3)
-      );
-    })
+    }).then((data) => selectRecommendedProducts(data, handle))
   );
 
   // Above the fold — a failure here errors the whole page.
@@ -85,13 +79,7 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
     'Product not found'
   );
 
-  return {
-    product,
-    recommendations,
-    productDetails: parseJsonMetafield<Array<ProductDetailCard>>(product.productDetails),
-    techStack: parseJsonMetafield<TechStackData>(product.techStack),
-    specCard: parseJsonMetafield<SpecCardData>(product.specCard),
-  };
+  return { ...parseProductContent(product), recommendations };
 }
 
 const Product = () => {
@@ -106,16 +94,12 @@ const Product = () => {
     <ProductProvider
       product={product}
       onSelect={(result) => {
-        const target = productUrl(
-          result.selectedVariant?.product?.handle ?? product.handle,
-          result.selectedOptions
-        );
-        const current = `${location.pathname}${location.search}`;
-        if (target === current) return;
-        void navigate(target, {
+        const { to, skipRevalidate } = selectionTarget(result, product.handle, location.search);
+        if (to === `${location.pathname}${location.search}`) return;
+        void navigate(to, {
           replace: true,
           preventScrollReset: true,
-          ...(result.status === 'resolved' ? { defaultShouldRevalidate: false } : {}),
+          ...(skipRevalidate ? { defaultShouldRevalidate: false } : {}),
         });
       }}
     >
@@ -132,17 +116,11 @@ const ProductPage = () => {
 
   const { title, descriptionHtml } = product;
 
-  // Dedicated per-product hero images (the theme's Background Image / …Mobile),
-  // falling back to the variant image when a product has none.
-  const heroDesktop = getMetafieldImage(product.heroImage) ?? selectedVariant?.image;
-  const heroMobile = getMetafieldImage(product.heroImageMobile) ?? selectedVariant?.image;
+  const { desktop: heroDesktop, mobile: heroMobile } = getHeroImages(product, selectedVariant);
 
   return (
     <>
-      <ProductViewedTracker
-        product={{ id: product.id, title: product.title, vendor: product.vendor }}
-        variant={selectedVariant ?? null}
-      />
+      <ProductViewedTracker product={product} variant={selectedVariant} />
       {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
           of overflowing it under the header and past the fold. */}
       <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">

@@ -1,4 +1,4 @@
-import type { StorefrontAnalytics } from '@shopify/hydrogen';
+import type { ShopifyGlobal } from '@shopify/hydrogen';
 import { posthog } from 'posthog-js';
 
 import type { PostHogConfig } from '~/lib/analytics/posthog';
@@ -10,8 +10,8 @@ import {
   collectionViewedProperties,
   productViewedProperties,
 } from '~/lib/analytics/posthog.events';
-import { getAnalytics } from '~/lib/analytics/shopify';
-import { whenShopifyReady } from '~/lib/shopifyRuntime';
+import { AnalyticsEvent, connectDestination } from '~/lib/analytics/shopify';
+import { getCustomerPrivacy, whenShopifyReady } from '~/lib/shopifyRuntime';
 
 /**
  * PostHog in the browser:
@@ -43,10 +43,8 @@ export const initPostHog = ({ key, host }: PostHogConfig) => {
   });
 };
 
-let bridged = false;
-
 /** Mirrors Shopify's consent decision onto the PostHog SDK. */
-const applyConsent = (customerPrivacy: NonNullable<Window['Shopify']>['customerPrivacy']) => {
+const applyConsent = (customerPrivacy: ShopifyGlobal['customerPrivacy']) => {
   if (customerPrivacy.analyticsProcessingAllowed()) {
     if (posthog.has_opted_out_capturing()) posthog.opt_in_capturing({ captureEventName: null });
     posthog.startSessionRecording();
@@ -55,81 +53,57 @@ const applyConsent = (customerPrivacy: NonNullable<Window['Shopify']>['customerP
   }
 };
 
-/** The Customer Privacy API, once its (asynchronously loaded) script has arrived. */
-const getCustomerPrivacy = () => {
-  const customerPrivacy = window.Shopify?.customerPrivacy;
-  return customerPrivacy?.analyticsProcessingAllowed ? customerPrivacy : null;
-};
-
 /**
- * Registers PostHog as a destination on the bus and follows consent. Runs once.
- *
- * `setup` resolves only after PostHog mirrors Shopify's consent decision. The
- * bus buffers everything published before a destination is ready — the PDP's
- * `product_viewed` fires on hydration, before this bridge runs — and replays
- * the buffer the moment setup resolves; replayed into a still-opted-out SDK
- * those events are silently dropped (the hydration product view went missing
- * on most page loads). If the Customer Privacy API never arrives, setup
- * resolves anyway: PostHog stays opted out, which is the right outcome, and
- * the bus stops holding events for it.
+ * Resolves only after PostHog mirrors Shopify's consent decision, and follows
+ * every later change. The bus buffers everything published before a
+ * destination is ready — the PDP's `product_viewed` fires on hydration, before
+ * the bridge runs — and replays the buffer the moment setup resolves; replayed
+ * into a still-opted-out SDK those events are silently dropped (the hydration
+ * product view went missing on most page loads). If the Customer Privacy API
+ * never arrives, this resolves anyway: PostHog stays opted out, which is the
+ * right outcome, and the bus stops holding events for it.
  */
-const bridgePostHogToShopify = (analytics: StorefrontAnalytics) => {
-  if (bridged) return;
-  bridged = true;
-
-  analytics.addDestination({
-    name: 'posthog',
-    setup({ subscribe }) {
-      const unsubscribe = [
-        subscribe('product_viewed', (payload) =>
-          posthog.capture(ANALYTICS_EVENT.productViewed, productViewedProperties(payload))
-        ),
-        subscribe('collection_viewed', (payload) =>
-          posthog.capture(ANALYTICS_EVENT.collectionViewed, collectionViewedProperties(payload))
-        ),
-        subscribe('cart_viewed', (payload) =>
-          posthog.capture(ANALYTICS_EVENT.cartViewed, cartViewedProperties(payload))
-        ),
-        subscribe('product_added_to_cart', (payload) =>
-          posthog.capture(ANALYTICS_EVENT.productAddedToCart, cartLineChangeProperties(payload))
-        ),
-        subscribe('product_removed_from_cart', (payload) =>
-          posthog.capture(ANALYTICS_EVENT.productRemovedFromCart, cartLineChangeProperties(payload))
-        ),
-        subscribe('cart_updated', (payload) =>
-          posthog.capture(ANALYTICS_EVENT.cartUpdated, cartUpdatedProperties(payload))
-        ),
-      ];
-      const teardown = () => unsubscribe.forEach((off) => off());
-
-      return new Promise<() => void>((resolve) => {
-        whenShopifyReady(
-          getCustomerPrivacy,
-          (customerPrivacy) => {
-            applyConsent(customerPrivacy);
-            resolve(teardown);
-          },
-          { onGiveUp: () => resolve(teardown) }
-        );
-      });
-    },
+const followConsent = () =>
+  new Promise<void>((resolve) => {
+    // Every later consent change (the banner, the preferences dialog) arrives
+    // through this DOM event.
+    document.addEventListener('visitorConsentCollected', () => {
+      const customerPrivacy = getCustomerPrivacy();
+      if (customerPrivacy) applyConsent(customerPrivacy);
+    });
+    whenShopifyReady(
+      getCustomerPrivacy,
+      (customerPrivacy) => {
+        applyConsent(customerPrivacy);
+        resolve();
+      },
+      { onGiveUp: resolve }
+    );
   });
-
-  // Every later consent change (the banner, the preferences dialog) arrives
-  // through this DOM event.
-  document.addEventListener('visitorConsentCollected', () => {
-    const customerPrivacy = getCustomerPrivacy();
-    if (customerPrivacy) applyConsent(customerPrivacy);
-  });
-};
 
 /**
- * Connects PostHog to the Shopify runtime (client only). The bus is created by
- * `<ShopifyScripts>`' inline bootstrap before hydration, so the first check
- * normally succeeds; it polls briefly in case hydration somehow beat it. A
- * no-op when PostHog is off (never initialised). Returns a cancel function.
+ * Registers PostHog as a destination on the bus and follows consent (client
+ * only). A no-op when PostHog is off (never initialised). Returns a cancel
+ * function for the bus poll.
  */
 export const connectPostHogToShopify = (): (() => void) => {
   if (!posthog.__loaded) return () => {};
-  return whenShopifyReady(getAnalytics, bridgePostHogToShopify, { attempts: 20 });
+  return connectDestination(
+    'posthog',
+    {
+      [AnalyticsEvent.PRODUCT_VIEWED]: (payload) =>
+        posthog.capture(ANALYTICS_EVENT.productViewed, productViewedProperties(payload)),
+      [AnalyticsEvent.COLLECTION_VIEWED]: (payload) =>
+        posthog.capture(ANALYTICS_EVENT.collectionViewed, collectionViewedProperties(payload)),
+      [AnalyticsEvent.CART_VIEWED]: (payload) =>
+        posthog.capture(ANALYTICS_EVENT.cartViewed, cartViewedProperties(payload)),
+      [AnalyticsEvent.PRODUCT_ADD_TO_CART]: (payload) =>
+        posthog.capture(ANALYTICS_EVENT.productAddedToCart, cartLineChangeProperties(payload)),
+      [AnalyticsEvent.PRODUCT_REMOVED_FROM_CART]: (payload) =>
+        posthog.capture(ANALYTICS_EVENT.productRemovedFromCart, cartLineChangeProperties(payload)),
+      [AnalyticsEvent.CART_UPDATED]: (payload) =>
+        posthog.capture(ANALYTICS_EVENT.cartUpdated, cartUpdatedProperties(payload)),
+    },
+    { ready: followConsent }
+  );
 };

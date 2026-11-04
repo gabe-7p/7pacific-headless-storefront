@@ -86,6 +86,49 @@ export const FOOTER_QUERY = gql(
 export type HeaderData = StorefrontApi.ResultOf<typeof HEADER_QUERY>;
 export type FooterData = StorefrontApi.ResultOf<typeof FOOTER_QUERY>;
 
+/** The `<Image data>` shape: what `common/Image` needs from any Storefront image. */
+export const IMAGE_FRAGMENT = gql(`
+  fragment Image on Image {
+    id
+    url
+    altText
+    width
+    height
+  }
+`);
+
+/**
+ * A `file_reference` metafield's image, spread on the metafield and read with
+ * `getMetafieldImage`. It carries `Image`, so a document that spreads both
+ * gets `Image` from here alone (graphql-fragments.md → "Rules").
+ */
+export const MEDIA_IMAGE_REF_FRAGMENT = gql(
+  `
+    fragment MediaImageRef on Metafield {
+      reference {
+        ... on MediaImage {
+          image {
+            ...Image
+          }
+        }
+      }
+    }
+  `,
+  [IMAGE_FRAGMENT]
+);
+
+/** The edition device's two metafields: `ED. 01 · LIVE` on the card and the PDP. */
+export const EDITION_FRAGMENT = gql(`
+  fragment Edition on Product {
+    editionNumber: metafield(namespace: "custom", key: "edition_number") {
+      value
+    }
+    editionStatus: metafield(namespace: "custom", key: "edition_status") {
+      value
+    }
+  }
+`);
+
 /**
  * Color = separate product: the ordered color family lives in the
  * custom.color_siblings metafield (each sibling carries its own name/hex).
@@ -119,21 +162,13 @@ export const PRODUCT_CARD_FRAGMENT = gql(
       handle
       title
       featuredImage {
-        id
-        url
-        altText
-        width
-        height
+        ...Image
       }
       # First two images: [0] is the resting card image, [1] crossfades in on
       # hover (matches the live card's product-image-hover behavior).
       images(first: 2) {
         nodes {
-          id
-          url
-          altText
-          width
-          height
+          ...Image
         }
       }
       priceRange {
@@ -143,16 +178,11 @@ export const PRODUCT_CARD_FRAGMENT = gql(
         }
       }
       # Edition device: ED. XX · STATUS, rendered in the card's mono spec strip.
-      editionNumber: metafield(namespace: "custom", key: "edition_number") {
-        value
-      }
-      editionStatus: metafield(namespace: "custom", key: "edition_status") {
-        value
-      }
+      ...Edition
       ...ColorSiblings
     }
   `,
-  [COLOR_SIBLINGS_FRAGMENT]
+  [IMAGE_FRAGMENT, EDITION_FRAGMENT, COLOR_SIBLINGS_FRAGMENT]
 );
 
 // Type-only shape query (never executed): see graphql-fragments.md → "Rules".

@@ -2,7 +2,7 @@ import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import { Link } from 'react-router';
 
 import { cn } from '~/lib/cn';
-import type { ColorSwatch } from '~/lib/product/colors';
+import { type ColorSwatch, isLightSwatch } from '~/lib/product/colors';
 import { productUrl } from '~/lib/urls';
 
 /**
@@ -100,10 +100,10 @@ export const ColorSwatches = ({
                 'block rounded-full',
                 cascade
                   ? // Live card swatch: 24px, white border, black outline on
-                    // hover/active (border-zinc keeps White visible).
+                    // hover/active (border-zinc keeps a light swatch visible).
                     cn(
                       'size-6 border transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(0,0,0,1)]',
-                      swatch.name === 'White' ? 'border-zinc' : 'border-white',
+                      isLightSwatch(swatch.hex) ? 'border-zinc' : 'border-white',
                       isActive && 'shadow-[0_0_0_1px_rgba(0,0,0,1)]'
                     )
                   : cn(

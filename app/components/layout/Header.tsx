@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
 
-import { useCartDrawer } from '~/components/cart/CartDrawer';
+import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
@@ -9,6 +9,7 @@ import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/content/brand';
 import { useCart } from '~/lib/cart';
 import { cn } from '~/lib/cn';
+import { isPlainActivation } from '~/lib/events';
 import type { HeaderData } from '~/lib/fragments';
 import { accountUrl, cartUrl, toInternalPath } from '~/lib/urls';
 
@@ -202,7 +203,7 @@ const CartBadge = () => {
       aria-label={`Cart${count ? `, ${count} items` : ''}`}
       aria-haspopup="dialog"
       onClick={(e) => {
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        if (!isPlainActivation(e)) return;
         e.preventDefault();
         openCart();
       }}

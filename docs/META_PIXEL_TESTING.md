@@ -67,7 +67,7 @@ Install the [Meta Pixel Helper](https://chromewebstore.google.com/detail/meta-pi
 
 **Bugs the Helper would flag:**
 
-- "Pixel activated multiple times" / the same pixel ID listed twice → the destination registered twice (should be impossible: `app/lib/analytics/meta-pixel.client.ts` guards it).
+- "Pixel activated multiple times" / the same pixel ID listed twice → the destination registered twice (should be impossible: `connectDestination` in `app/lib/analytics/shopify.ts` guards it).
 - "Missing value/currency" on `AddToCart` or `ViewContent` → a price mapping problem in `app/lib/analytics/meta-pixel.ts`.
 - Two identical rows for one click → duplicate events; confirm in section 3 that it is not just dev mode.
 

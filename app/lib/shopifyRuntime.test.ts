@@ -1,6 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { whenShopifyReady } from '~/lib/shopifyRuntime';
+import {
+  getActiveCurrency,
+  getAnalyticsBus,
+  getCustomerPrivacy,
+  getOpenCartAction,
+  getUpdateCartAction,
+  whenShopifyReady,
+} from '~/lib/shopifyRuntime';
 
 // Tests run in node; the helper only needs `window`'s timers, which this stub
 // routes through the (fake-timer-patched) globals at call time.
@@ -85,5 +92,44 @@ describe('whenShopifyReady', () => {
     expect(whenShopifyReady(select, callback)).toBeTypeOf('function');
     expect(select).not.toHaveBeenCalled();
     expect(callback).not.toHaveBeenCalled();
+  });
+});
+
+describe('selectors', () => {
+  it('read nothing until the runtime piece exists', () => {
+    vi.stubGlobal('window', {});
+    expect(getAnalyticsBus()).toBeNull();
+    expect(getOpenCartAction()).toBeUndefined();
+    expect(getCustomerPrivacy()).toBeNull();
+    expect(getUpdateCartAction()).toBeNull();
+    expect(getActiveCurrency()).toBeUndefined();
+  });
+
+  it('reads the active currency', () => {
+    vi.stubGlobal('window', { Shopify: { currency: { active: 'USD' } } });
+    expect(getActiveCurrency()).toBe('USD');
+  });
+
+  it('holds updateCart back until a cart store has configured it', () => {
+    const updateCart = Object.assign(vi.fn(), { isDefault: (): boolean => true });
+    vi.stubGlobal('window', { Shopify: { actions: { updateCart } } });
+    expect(getUpdateCartAction()).toBeNull();
+    updateCart.isDefault = () => false;
+    expect(getUpdateCartAction()).toBe(updateCart);
+  });
+
+  it('read the pieces off window.Shopify', () => {
+    const analytics = { publish: vi.fn() };
+    const openCart = { configure: vi.fn() };
+    const customerPrivacy = { analyticsProcessingAllowed: () => true };
+    vi.stubGlobal('window', { Shopify: { analytics, actions: { openCart }, customerPrivacy } });
+    expect(getAnalyticsBus()).toBe(analytics);
+    expect(getOpenCartAction()).toBe(openCart);
+    expect(getCustomerPrivacy()).toBe(customerPrivacy);
+  });
+
+  it('treats a Customer Privacy stub without its API as not arrived', () => {
+    vi.stubGlobal('window', { Shopify: { customerPrivacy: {} } });
+    expect(getCustomerPrivacy()).toBeNull();
   });
 });
