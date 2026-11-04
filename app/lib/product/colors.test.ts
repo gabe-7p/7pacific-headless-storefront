@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getColorSwatches } from '~/lib/product/colors';
+import { getColorSwatches, isLightSwatch } from '~/lib/product/colors';
 
 // Fixtures are typed against the fragment-derived shape: a sibling is a
 // `Product` node whose color metafields are `{ value }` or `null` when unset.
@@ -43,5 +43,24 @@ describe('getColorSwatches', () => {
       },
     };
     expect(getColorSwatches(metafield)).toEqual([{ handle: 'ok', name: 'White', hex: '#ffffff' }]);
+  });
+});
+
+describe('isLightSwatch', () => {
+  it('counts white and off-whites as light', () => {
+    expect(isLightSwatch('#ffffff')).toBe(true);
+    expect(isLightSwatch('#FFF')).toBe(true);
+    expect(isLightSwatch('#F5F5F0')).toBe(true);
+  });
+
+  it('leaves real colors dark enough to show on a white card', () => {
+    expect(isLightSwatch('#6A7E8D')).toBe(false);
+    expect(isLightSwatch('#FF8A00')).toBe(false);
+    expect(isLightSwatch('#000000')).toBe(false);
+  });
+
+  it('reads a malformed hex as not light', () => {
+    expect(isLightSwatch('white')).toBe(false);
+    expect(isLightSwatch('')).toBe(false);
   });
 });
