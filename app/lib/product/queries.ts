@@ -148,3 +148,8 @@ export const RECOMMENDATIONS_QUERY = gql(
 type ProductQueryResult = StorefrontApi.ResultOf<typeof PRODUCT_QUERY>;
 export type ProductData = NonNullable<ProductQueryResult['product']>;
 export type ProductVariantData = NonNullable<ProductData['selectedOrFirstAvailableVariant']>;
+
+/** The product the PDP renders: raw JSON metafields parsed and removed (`parseProductContent`). */
+export type ProductPageData = Omit<ProductData, 'productDetails' | 'techStack' | 'specCard'>;
+
+export type RecommendationsData = StorefrontApi.ResultOf<typeof RECOMMENDATIONS_QUERY>;

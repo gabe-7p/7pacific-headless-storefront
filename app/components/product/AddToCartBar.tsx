@@ -4,7 +4,7 @@ import { useCartDrawer } from '~/components/cart/CartDrawer';
 import { CtaLabel } from '~/components/common/Cta';
 import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';
-import type { ProductData } from '~/lib/product/queries';
+import type { ProductPageData } from '~/lib/product/queries';
 import { useProductForm } from '~/lib/product/store';
 
 /**
@@ -12,7 +12,7 @@ import { useProductForm } from '~/lib/product/store';
  * `product_added_to_cart` analytics event comes from the cart's own tracking,
  * not from this click.
  */
-export const AddToCartBar = ({ product }: { product: ProductData }) => {
+export const AddToCartBar = ({ product }: { product: ProductPageData }) => {
   const { options, selectedVariant, register, formProps, pending } = useProductForm();
   const { open: openCart } = useCartDrawer();
   const addable = canAddToCart(product, options);

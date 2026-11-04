@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { cn } from '~/lib/cn';
-import type { ProductData } from '~/lib/product/queries';
+import type { ProductPageData } from '~/lib/product/queries';
 
 /**
  * Mobile/tablet sticky add-to-cart bar (7PA-166). The in-card bar can't pin via
@@ -11,7 +11,7 @@ import type { ProductData } from '~/lib/product/queries';
  * again when it returns. From 769px up (live's breakpoint, where the floating
  * card appears) the static in-card bar takes over.
  */
-export const StickyAddToCart = ({ product }: { product: ProductData }) => {
+export const StickyAddToCart = ({ product }: { product: ProductPageData }) => {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [pinned, setPinned] = useState(false);
 

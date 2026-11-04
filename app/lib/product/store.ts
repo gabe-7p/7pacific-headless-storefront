@@ -1,6 +1,7 @@
 import { createProductComponents } from '@shopify/hydrogen/react';
 
-import type { ProductData, ProductVariantData } from '~/lib/product/queries';
+import type { ProductPageData, ProductVariantData } from '~/lib/product/queries';
+import { productUrl } from '~/lib/urls';
 
 /**
  * The product-form store for the PDP: `ProductProvider` holds the loader's
@@ -8,7 +9,7 @@ import type { ProductData, ProductVariantData } from '~/lib/product/queries';
  * the add-to-cart form bindings. Option clicks resolve client-side against
  * `adjacentVariants` / the encoded variant fields — no loader round-trip.
  */
-export const { ProductProvider, useProductForm } = createProductComponents<ProductData>();
+export const { ProductProvider, useProductForm } = createProductComponents<ProductPageData>();
 
 /**
  * The variant the page renders (and reports as viewed). `ProductProvider`
@@ -19,8 +20,34 @@ export const { ProductProvider, useProductForm } = createProductComponents<Produ
  */
 export const resolveSelectedVariant = (
   formVariant: ProductVariantData | null | undefined,
-  product: Pick<ProductData, 'handle' | 'selectedOrFirstAvailableVariant'>
+  product: Pick<ProductPageData, 'handle' | 'selectedOrFirstAvailableVariant'>
 ): ProductVariantData | null =>
   formVariant && formVariant.product.handle === product.handle
     ? formVariant
     : product.selectedOrFirstAvailableVariant;
+
+/** What `selectionTarget` reads from the store's `onSelect` result. */
+type SelectionResult = {
+  status: 'resolved' | 'unresolved';
+  selectedOptions: ReadonlyArray<{ name: string; value: string }>;
+  selectedVariant?: { product?: { handle: string } | null } | null;
+};
+
+/**
+ * Where a size click goes: the URL for the selection, keeping unrelated params
+ * (`?utm_source=…`) from `currentSearch`. `skipRevalidate` is true for a
+ * selection the store resolved, because the page already holds that variant;
+ * an unresolved one needs the loader.
+ */
+export const selectionTarget = (
+  result: SelectionResult,
+  fallbackHandle: string,
+  currentSearch: string
+) => ({
+  to: productUrl(
+    result.selectedVariant?.product?.handle ?? fallbackHandle,
+    result.selectedOptions,
+    new URLSearchParams(currentSearch)
+  ),
+  skipRevalidate: result.status === 'resolved',
+});

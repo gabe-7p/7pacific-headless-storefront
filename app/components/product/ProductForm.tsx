@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { SizeGuide } from '~/components/product/SizeGuide';
@@ -32,6 +32,7 @@ const OptionLabel = ({ children, action }: { children: string; action?: ReactNod
  */
 export const ProductForm = () => {
   const { options, register } = useProductForm();
+  const { search } = useLocation();
 
   // "Title" is Shopify's placeholder option for single-variant products.
   const sizeOptions = options.filter((option) => option.name !== 'Title');
@@ -103,7 +104,11 @@ export const ProductForm = () => {
                 return (
                   <Link
                     key={name}
-                    to={productUrl(value.handle, value.selectedOptions)}
+                    to={productUrl(
+                      value.handle,
+                      value.selectedOptions,
+                      new URLSearchParams(search)
+                    )}
                     replace
                     preventScrollReset
                     aria-current={selected ? 'true' : undefined}
