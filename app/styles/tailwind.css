@@ -257,6 +257,8 @@
  */
 :root {
   --page-max: 1400px;
+  --page-narrow: 60rem; /* contact and generic content pages */
+  --page-cart: 1100px;
   --header-h: 3.375rem; /* 54px */
   --announcement-h: 1.75rem; /* 28px */
   --hero-min-h: 34rem; /* common/HeroShell */

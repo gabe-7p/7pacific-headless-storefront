@@ -61,7 +61,7 @@ const Contact = () => {
   return (
     <Container className="py-16 md:py-24">
       {/* Live centres a ~960px column and lets the copy sit on the page — no card. */}
-      <div className="mx-auto max-w-[960px]">
+      <div className="mx-auto max-w-(--page-narrow)">
         <Heading as="h1" variant="quiet" size="none" className="text-[2.4rem] font-semibold">
           Contact Us
         </Heading>

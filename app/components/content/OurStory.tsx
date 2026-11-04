@@ -16,6 +16,8 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Body copy: 14px Inter at 1.6 (the guideline floor). */
 const BODY = 'text-sm leading-[1.6] text-ink-night';
+/** Body copy held to a readable line, where it isn't already in a narrow column. */
+const BODY_MEASURE = `${BODY} max-w-[60ch]`;
 /** Chapter statements — one step under the hero. */
 const STATEMENT = 'text-4xl leading-[0.98] md:text-6xl xl:text-7xl';
 const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl';
@@ -85,14 +87,14 @@ const Status = () => {
   return (
     <Container className="py-12 md:py-18">
       <SectionLabel number={status.number} title={status.title} />
-      <p className={cn(BODY, 'mt-8 max-w-[60ch]')}>{status.open}</p>
+      <p className={cn(BODY_MEASURE, 'mt-8')}>{status.open}</p>
       <div className="mt-12 grid gap-10 lg:grid-cols-[4fr_8fr] lg:gap-16">
         <FramedMedia media={status.media} ratio="portrait" />
         <div className="lg:pt-3">
           <Heading as="h2" size="none" className={SUBSTATEMENT}>
             {status.statement}
           </Heading>
-          <div className={cn(BODY, 'mt-8 max-w-[60ch] space-y-5')}>
+          <div className={cn(BODY_MEASURE, 'mt-8 space-y-5')}>
             {status.after.map((p) => (
               <p key={p}>{p}</p>
             ))}
@@ -102,7 +104,7 @@ const Status = () => {
       <Heading as="h2" size="none" className={cn(STATEMENT, 'mt-12 max-w-[18ch] md:mt-18')}>
         {status.callout}
       </Heading>
-      <div className={cn(BODY, 'mt-8 max-w-[60ch] space-y-5')}>
+      <div className={cn(BODY_MEASURE, 'mt-8 space-y-5')}>
         {status.close.map((p) => (
           <p key={p}>{p}</p>
         ))}
@@ -128,7 +130,7 @@ const Mission = () => {
             </p>
           ))}
         </div>
-        <p className={cn(BODY, 'mt-8 max-w-[60ch]')}>{mission.close}</p>
+        <p className={cn(BODY_MEASURE, 'mt-8')}>{mission.close}</p>
       </Container>
     </section>
   );
@@ -150,7 +152,7 @@ const Kit = () => {
             lines={kit.headingLines}
             className={cn(SUBSTATEMENT, 'xl:text-6xl xl:leading-[1.02]')}
           />
-          <div className={cn(BODY, 'max-w-[60ch] space-y-5 lg:pt-2')}>
+          <div className={cn(BODY_MEASURE, 'space-y-5 lg:pt-2')}>
             {kit.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
