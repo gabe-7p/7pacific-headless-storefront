@@ -32,6 +32,9 @@ export default [
       // Written at the project root by @shopify/hydrogen/ts-plugin (gitignored).
       '**/*-graphql-env.d.ts',
       '**/.react-router/',
+      // Playwright run artifacts (gitignored) — the trace viewer ships minified .js.
+      '**/test-results/',
+      '**/playwright-report/',
       // Local agent worktrees (gitignored) — each carries a full copy of the repo.
       '**/.claude/worktrees/',
     ],

@@ -5,13 +5,31 @@
 // Enhance TypeScript's built-in typings.
 import '@total-typescript/ts-reset';
 
-import type { AppEnv } from './app/lib/env';
-
 // The worker bindings (env, cache, waitUntil) travel on the router context
 // under the typed `oxygenContext` key — see app/lib/oxygen.ts.
 
 declare global {
-  /** The Oxygen worker bindings (`.env` locally). Shape lives in app/lib/env.ts. */
+  /**
+   * The Oxygen worker environment (`.env` locally; a linked storefront injects
+   * these on Oxygen). `server.ts` threads it onto the router context under
+   * `oxygenContext` (lib/oxygen.ts), so the root middleware, loaders and
+   * entry.server read one shape via `context.get(oxygenContext).env`.
+   */
   // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- global augmentation must be an interface
-  interface Env extends AppEnv {}
+  interface Env {
+    PUBLIC_STORE_DOMAIN: string;
+    PUBLIC_STOREFRONT_ID?: string;
+    PRIVATE_STOREFRONT_API_TOKEN?: string;
+    PUBLIC_CHECKOUT_DOMAIN?: string;
+    /** [public] PostHog project API key (`phc_…`) — unset = PostHog off. See lib/analytics/posthog.ts. */
+    PUBLIC_POSTHOG_KEY?: string;
+    /** [public] PostHog ingestion host, e.g. https://us.i.posthog.com */
+    PUBLIC_POSTHOG_HOST?: string;
+    /** [public] `true` to send events from `pnpm dev` (off by default). */
+    PUBLIC_POSTHOG_DEV?: string;
+    /** [public] Meta Pixel ID (shared with the Facebook & Instagram app) — unset = pixel off. See lib/analytics/meta-pixel.client.ts. */
+    PUBLIC_META_PIXEL_ID?: string;
+    /** [public] Meta domain-verification token — renders the `facebook-domain-verification` meta tag when set. */
+    PUBLIC_META_DOMAIN_VERIFICATION?: string;
+  }
 }

@@ -64,12 +64,6 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
-      {/* Spec lines (coordinates, location/time) — parked, not rendered.
-      <div className={cn(SPEC_LINE_CLASS, 'text-support-night mt-2 flex flex-col gap-1')}>
-        <span>{HOME_HERO.coordinates}</span>
-        <span>{HOME_HERO.tagline}</span>
-      </div>
-      */}
     </Container>
   </section>
 );

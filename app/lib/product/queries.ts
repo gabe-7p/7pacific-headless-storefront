@@ -12,7 +12,6 @@ const PRODUCT_VARIANT_FRAGMENT = gql(`
     }
     id
     image {
-      __typename
       id
       url
       altText
@@ -33,10 +32,6 @@ const PRODUCT_VARIANT_FRAGMENT = gql(`
     }
     sku
     title
-    unitPrice {
-      amount
-      currencyCode
-    }
   }
 `);
 
@@ -69,14 +64,6 @@ export const PRODUCT_QUERY = gql(
             firstSelectableVariant {
               ...ProductVariant
             }
-            swatch {
-              color
-              image {
-                previewImage {
-                  url
-                }
-              }
-            }
           }
         }
         selectedOrFirstAvailableVariant(
@@ -92,10 +79,6 @@ export const PRODUCT_QUERY = gql(
           caseInsensitiveMatch: true
         ) {
           ...ProductVariant
-        }
-        seo {
-          description
-          title
         }
         fitNote: metafield(namespace: "custom", key: "fit_note") {
           value
@@ -178,6 +161,6 @@ export const RECOMMENDATIONS_QUERY = gql(
   [PRODUCT_CARD_FRAGMENT]
 );
 
-export type ProductQueryResult = StorefrontApi.ResultOf<typeof PRODUCT_QUERY>;
+type ProductQueryResult = StorefrontApi.ResultOf<typeof PRODUCT_QUERY>;
 export type ProductData = NonNullable<ProductQueryResult['product']>;
 export type ProductVariantData = NonNullable<ProductData['selectedOrFirstAvailableVariant']>;

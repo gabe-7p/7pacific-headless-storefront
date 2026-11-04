@@ -1,8 +1,7 @@
 import { CornerBrackets, SectionLabel } from '~/components/common/Readout';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent, ScaleMarkerPercent } from '~/content/athlete-signing';
 import { cn } from '~/lib/cn';
-
-import { MONO_LABEL } from './monoLabel';
 
 /**
  * Static map for the readout-scale marker — `markerPercent` is a 5%-step
@@ -39,9 +38,9 @@ export const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent
       <CornerBrackets />
 
       <div className="flex items-baseline justify-between">
-        <span className={cn(MONO_LABEL, 'text-support-night')}>{readout.stat.label}</span>
+        <span className={cn(SPEC_LINE_CLASS, 'text-support-night')}>{readout.stat.label}</span>
         {readout.stat.verified && (
-          <span className={cn(MONO_LABEL, 'text-ink-night')}>Verified</span>
+          <span className={cn(SPEC_LINE_CLASS, 'text-ink-night')}>Verified</span>
         )}
       </div>
       <p className="text-brand mt-4 font-mono text-6xl tracking-tight md:text-7xl">
@@ -62,7 +61,7 @@ export const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent
         />
         <span
           className={cn(
-            MONO_LABEL,
+            SPEC_LINE_CLASS,
             'text-support-night absolute top-5 -translate-x-1/2 text-[0.6rem] whitespace-nowrap',
             MARKER_LEFT[readout.scale.markerPercent]
           )}
@@ -74,7 +73,9 @@ export const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent
       <dl className="mt-8 grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-2">
         {readout.fields.map((field) => (
           <div key={field.label}>
-            <dt className={cn(MONO_LABEL, 'text-support-night text-[0.65rem]')}>{field.label}</dt>
+            <dt className={cn(SPEC_LINE_CLASS, 'text-support-night text-[0.65rem]')}>
+              {field.label}
+            </dt>
             <dd className="mt-1.5 font-mono text-sm tracking-caps text-ink-night uppercase">
               {field.value}
             </dd>

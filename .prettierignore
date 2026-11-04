@@ -3,6 +3,8 @@ node_modules
 /build
 /.cache
 /.react-router
+/test-results
+/playwright-report
 /.shopify
 pnpm-lock.yaml
 
@@ -10,3 +12,4 @@ pnpm-lock.yaml
 .claude/skills/hydrogen-*/
 .claude/skills/migrate-to-hydrogen-2026-10/
 .agents/skills/
+.superpowers/

@@ -20,9 +20,8 @@ export const meta: Route.MetaFunction = () => {
  * line/discount forms, so this route has no loader or action of its own.
  */
 const Cart = () => {
-  const totalQuantity = useCart((state) => state.data.totalQuantity);
   const cart = useCart((state) => state.data);
-  const hasItems = totalQuantity > 0;
+  const hasItems = cart.totalQuantity > 0;
 
   useEffect(() => {
     publishCartViewed(cart);

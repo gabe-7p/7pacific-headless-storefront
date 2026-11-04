@@ -33,7 +33,6 @@ export const STORE_LINKS = {
   shopShirts: productUrl('tracefiber-performance-tech-tee-mountain-mist'),
   shopShorts: productUrl('airrail-6-performance-shorts-mountain-mist'),
   /** Homepage Name/Spec banner cells — one per live product family: */
-  shopShortsMint: productUrl('airrail-6-performance-shorts-mint'),
   shopShortsMidnight: productUrl('airrail-6-performance-shorts-midnight'),
   shopShirtsMidnight: productUrl('tracefiber-performance-tech-tee-midnight'),
   shopHat: productUrl('motionframe-running-hat-white'),

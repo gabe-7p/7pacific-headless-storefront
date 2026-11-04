@@ -11,6 +11,9 @@ export async function loader({ url, params, context }: Route.LoaderArgs) {
     throw notFound('Sitemap not found');
   }
 
+  // Journal articles are capped at one page by `articles(first: 250)`.
+  if (params.type === 'journal' && page !== 1) throw notFound('Sitemap not found');
+
   const response = await getSitemap(context.get(storefrontClientContext), {
     type: params.type,
     page,

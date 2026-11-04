@@ -55,16 +55,8 @@ export const HEADER_QUERY = gql(
       shop {
         id
         name
-        description
         primaryDomain {
           url
-        }
-        brand {
-          logo {
-            image {
-              url
-            }
-          }
         }
       }
       localization {
@@ -96,7 +88,6 @@ export const FOOTER_QUERY = gql(
 
 export type HeaderData = StorefrontApi.ResultOf<typeof HEADER_QUERY>;
 export type FooterData = StorefrontApi.ResultOf<typeof FOOTER_QUERY>;
-export type MenuData = NonNullable<HeaderData['menu']>;
 
 // ---------------------------------------------------------------------------
 // Base building-block fragments — only the fields every consumer needs.

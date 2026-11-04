@@ -10,7 +10,7 @@ import { createContext } from 'react-router';
  * `interface RouterContextProvider { env … }` augmentation no longer merges.)
  */
 export type OxygenBindings = {
-  /** The worker env (`.env` locally). Shape: lib/env.ts. */
+  /** The worker env (`.env` locally). Shape: the global `Env` in env.d.ts. */
   env: Env;
   /** Oxygen's sub-request cache (`caches.open('hydrogen-v1')`). */
   cache: CacheInstance;

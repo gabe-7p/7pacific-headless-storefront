@@ -1,7 +1,7 @@
 import { cn } from '~/lib/cn';
 import { formatPrice, type MoneyLike, type PriceFormat } from '~/lib/money';
 
-export type PriceVariant = PriceFormat;
+type PriceVariant = PriceFormat;
 
 /**
  * The one price element — every money value on the site renders through it,

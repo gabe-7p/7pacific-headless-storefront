@@ -20,8 +20,6 @@
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
 
-@custom-variant dark (&:is(.dark *));
-
 /* shadcn/ui base variables, aligned to the Meridian on Carbon brand palette
  * (values reference the brand tokens defined in the @theme block below) so the
  * generated primitives in app/components/ui/ sit on the same field as the rest
@@ -31,10 +29,6 @@
   --radius: 0.625rem;
   --background: var(--color-court);
   --foreground: var(--color-carbon);
-  --card: var(--color-court);
-  --card-foreground: var(--color-carbon);
-  --popover: var(--color-court);
-  --popover-foreground: var(--color-carbon);
   --primary: var(--color-carbon);
   --primary-foreground: var(--color-court);
   --secondary: var(--color-panel);
@@ -49,28 +43,6 @@
   --ring: var(--color-graphite);
 }
 
-/* Night Session: Carbon becomes the field, Court becomes type. */
-.dark {
-  --background: var(--color-carbon);
-  --foreground: var(--color-court);
-  --card: var(--color-carbon);
-  --card-foreground: var(--color-court);
-  --popover: var(--color-carbon);
-  --popover-foreground: var(--color-court);
-  --primary: var(--color-court);
-  --primary-foreground: var(--color-carbon);
-  --secondary: var(--color-graphite-night);
-  --secondary-foreground: var(--color-court);
-  --muted: var(--color-graphite-night);
-  --muted-foreground: var(--color-zinc);
-  --accent: var(--color-graphite-night);
-  --accent-foreground: var(--color-court);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: var(--color-graphite-night);
-  --input: var(--color-graphite-night);
-  --ring: var(--color-zinc);
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -78,10 +50,6 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);

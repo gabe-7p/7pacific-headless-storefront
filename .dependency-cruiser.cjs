@@ -35,7 +35,6 @@ module.exports = {
           '\\.config\\.(c?js|ts)$',
           '^app/root\\.tsx$',
           '^app/entry\\.(client|server)\\.tsx$',
-          '^app/lib/env\\.ts$', // the Env shape; imported only by the root env.d.ts (outside the cruised tree)
           '^app/routes\\.ts$',
           '^app/routes/', // file-based routes are framework entry points
           '^app/styles/',

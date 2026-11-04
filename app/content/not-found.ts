@@ -1,8 +1,7 @@
 /**
  * 404 page content. The sentence itself is MICROCOPY.notFound (locked verbatim,
  * 7PA-243) — this holds the supporting pieces: the coordinates spec-line device
- * (echoing the homepage hero's Lands End readout in content/home.ts — same
- * place, same device) and the photograph.
+ * (a Lands End readout — the place the sentence names) and the photograph.
  */
 
 import { shopifyImage } from '~/lib/shopifyFiles';

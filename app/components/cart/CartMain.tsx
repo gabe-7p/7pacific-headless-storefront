@@ -1,11 +1,10 @@
 import { CartLineItem } from '~/components/cart/CartLineItem';
+import { CartSummary } from '~/components/cart/CartSummary';
 import { Cta } from '~/components/common/Cta';
 import { useAside } from '~/components/layout/Aside';
 import { STORE_LINKS } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
 import { useCart } from '~/lib/cart';
-
-import { CartSummary } from './CartSummary';
 
 export type CartLayout = 'page' | 'aside';
 

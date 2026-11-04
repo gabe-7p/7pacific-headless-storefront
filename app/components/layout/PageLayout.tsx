@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 import { CartDrawer } from '~/components/cart/CartDrawer';
 import { JoinDialogProvider } from '~/components/common/JoinDialog';
 import { Announcement } from '~/components/layout/Announcement';
@@ -10,7 +12,7 @@ type PageLayoutProps = {
   footer: Promise<FooterData | null>;
   header: HeaderData;
   publicStoreDomain: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
 export const PageLayout = ({

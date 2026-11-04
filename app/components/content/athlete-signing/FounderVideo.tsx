@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { SectionLabel } from '~/components/common/Readout';
+import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
 import { cn } from '~/lib/cn';
-
-import { MONO_LABEL } from './monoLabel';
 
 /** mm:ss for the video time readout. */
 const formatTime = (seconds: number) => {
@@ -130,8 +129,8 @@ export const FounderVideo = ({ video }: { video: AthleteSigningContent['founderV
             />
           )}
           <div className="flex items-center justify-between">
-            <span className={cn(MONO_LABEL, 'text-support-night')}>{video.attribution}</span>
-            <span className={cn(MONO_LABEL, 'text-ink-night')}>
+            <span className={cn(SPEC_LINE_CLASS, 'text-support-night')}>{video.attribution}</span>
+            <span className={cn(SPEC_LINE_CLASS, 'text-ink-night')}>
               {hasVideo && duration > 0
                 ? `${formatTime(currentTime)} / ${formatTime(duration)}`
                 : video.duration}
