@@ -1,9 +1,5 @@
 import { cn } from '~/lib/cn';
-
-type EditionStatus = 'live' | 'soon' | 'archived';
-
-const isEditionStatus = (value: string): value is EditionStatus =>
-  value === 'live' || value === 'soon' || value === 'archived';
+import { formatEditionLabel } from '~/lib/product/display';
 
 /**
  * The edition-number device: `ED. 01 · LIVE`. Renders nothing without a number.
@@ -17,10 +13,8 @@ export const EditionTag = ({
   status?: string | null;
   className?: string;
 }) => {
-  const parsed = Number.parseInt(number ?? '', 10);
-  if (Number.isNaN(parsed)) return null;
-  const normalized = status && isEditionStatus(status) ? status : null;
-  const label = `ED. ${String(parsed).padStart(2, '0')}${normalized ? ` · ${normalized}` : ''}`;
+  const label = formatEditionLabel(number, status);
+  if (!label) return null;
   return (
     <span
       className={cn(

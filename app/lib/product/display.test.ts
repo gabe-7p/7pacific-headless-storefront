@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getShortTitle, shortSizeLabel } from '~/lib/product/display';
+import { formatEditionLabel, getShortTitle, shortSizeLabel } from '~/lib/product/display';
 
 describe('getShortTitle', () => {
   it('derives the short name from a real shorts title (spaced color dash)', () => {
@@ -49,5 +49,23 @@ describe('shortSizeLabel', () => {
   it('passes unknown values through untouched', () => {
     expect(shortSizeLabel('32')).toBe('32');
     expect(shortSizeLabel('Tall')).toBe('Tall');
+  });
+});
+
+describe('formatEditionLabel', () => {
+  it('pads the number and appends a known status', () => {
+    expect(formatEditionLabel('1', 'live')).toBe('ED. 01 · live');
+    expect(formatEditionLabel('12', 'archived')).toBe('ED. 12 · archived');
+  });
+
+  it('drops an unknown or missing status', () => {
+    expect(formatEditionLabel('3', 'sold-out')).toBe('ED. 03');
+    expect(formatEditionLabel('3', null)).toBe('ED. 03');
+  });
+
+  it('is null without a parseable number', () => {
+    expect(formatEditionLabel('n/a', 'live')).toBeNull();
+    expect(formatEditionLabel('', 'live')).toBeNull();
+    expect(formatEditionLabel(null, 'live')).toBeNull();
   });
 });
