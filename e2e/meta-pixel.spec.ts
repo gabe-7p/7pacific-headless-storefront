@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { STORE_LINKS } from '~/content/links';
+
 import { installPixelCapture, isStubMode, readEnvVar, SETTLE_MS, TRAFFIC_BLOCKED } from './pixel';
 
 /**
@@ -72,7 +74,7 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
   await test.step('2. client-side navigation to a product fires one PageView and one ViewContent', async () => {
     // The homepage's product links scroll in a marquee (never "stable" for a
     // click), so the collection grid is the navigation source.
-    await page.goto('/collections/baseline');
+    await page.goto(STORE_LINKS.shopAll);
     await expectExactly('PageView', 2);
     const link = page
       .locator(`a[href^="/products/${productHandle ?? ''}"]`)

@@ -2,8 +2,13 @@ import { describe, expect, it } from 'vitest';
 
 import { routeTemplates } from '~/lib/storefront';
 import {
+  accountUrl,
+  athleteUrl,
   cartUrl,
   collectionUrl,
+  dropUrl,
+  instagramPostUrl,
+  instagramProfileUrl,
   journalUrl,
   pageUrl,
   productUrl,
@@ -40,6 +45,24 @@ describe('resource URL builders', () => {
   it('builds the journal index without a handle and an article with one', () => {
     expect(journalUrl()).toBe('/journal');
     expect(journalUrl('founder-letter-ed-01')).toBe('/journal/founder-letter-ed-01');
+  });
+});
+
+describe('drop, athlete, account and Instagram builders', () => {
+  it('builds app-route paths', () => {
+    expect(dropUrl('first-light')).toBe('/drops/first-light');
+    expect(athleteUrl('amir-smith')).toBe('/athletes/amir-smith');
+  });
+
+  it("points the account link at Shopify's hosted portal on the given domain", () => {
+    expect(accountUrl('7pacific-7311.myshopify.com')).toBe(
+      'https://7pacific-7311.myshopify.com/account'
+    );
+  });
+
+  it('builds Instagram profile and post URLs', () => {
+    expect(instagramProfileUrl('7_pacific')).toBe('https://www.instagram.com/7_pacific/');
+    expect(instagramPostUrl('DdpdpIIhBYg')).toBe('https://www.instagram.com/p/DdpdpIIhBYg/');
   });
 });
 

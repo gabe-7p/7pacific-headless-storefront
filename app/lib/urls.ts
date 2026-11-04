@@ -35,6 +35,27 @@ export const journalUrl = (articleHandle?: string): string =>
 /** `/cart` — the full-page cart (the drawer is the primary surface). */
 export const cartUrl = (): string => '/cart';
 
+/** `/drops/<handle>` — a campaign drop page (an app route, not a Shopify resource). */
+export const dropUrl = (handle: string): string => `/drops/${handle}`;
+
+/** `/athletes/<handle>` — an athlete-signing page. */
+export const athleteUrl = (handle: string): string => `/athletes/${handle}`;
+
+/**
+ * Shopify's hosted account portal. It lives on the myshopify domain (which
+ * survives the custom-domain cutover), not ours: guest checkout means there
+ * is no local /account route.
+ */
+export const accountUrl = (publicStoreDomain: string): string =>
+  `https://${publicStoreDomain}/account`;
+
+/** An Instagram profile, from the bare username (no `@`). */
+export const instagramProfileUrl = (handle: string): string =>
+  `https://www.instagram.com/${handle}/`;
+
+/** An Instagram post, from the shortcode in its `/p/<id>/` URL. */
+export const instagramPostUrl = (id: string): string => `https://www.instagram.com/p/${id}/`;
+
 /**
  * A YouTube watch URL, optionally starting `startSeconds` in.
  */
