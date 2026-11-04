@@ -7,9 +7,13 @@ import { extendTailwindMerge } from 'tailwind-merge';
  * `line-height: var(--tw-leading, …)`, which already honors the leading, so the
  * conflict is cleared here. `text-lg/7` still evicts: its postfix sets the
  * line-height, and that lives in `conflictingClassGroupModifiers`.
+ *
+ * `theme` names the custom tokens merge can't place by itself: without `brand`,
+ * `rounded-brand` wouldn't replace the primitives' `rounded-lg`.
  */
 const twMerge = extendTailwindMerge({
   override: { conflictingClassGroups: { 'font-size': [] } },
+  extend: { theme: { radius: ['brand'] } },
 });
 
 /**

@@ -21,7 +21,7 @@ export const BrandDialogContent = ({
 }) => (
   <DialogContent
     className={cn(
-      'bg-field-night text-ink-night rounded-[2px] border-border-subtle-night',
+      'bg-field-night text-ink-night rounded-brand border-border-subtle-night',
       className
     )}
   >

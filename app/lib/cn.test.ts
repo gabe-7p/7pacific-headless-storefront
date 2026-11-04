@@ -17,6 +17,12 @@ describe('cn', () => {
     });
   });
 
+  describe('knows the custom tokens', () => {
+    it('lets rounded-brand replace a stock radius', () => {
+      expect(cn('rounded-lg rounded-brand')).toBe('rounded-brand');
+    });
+  });
+
   describe('still resolves real conflicts', () => {
     it('between two leadings', () => {
       expect(cn('leading-[1.1] leading-none')).toBe('leading-none');
