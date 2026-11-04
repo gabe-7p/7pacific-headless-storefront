@@ -5,7 +5,7 @@ import { useFetcher } from 'react-router';
 import { Cta, type CtaVariant } from '~/components/common/Cta';
 import type { JoinFormCopy, JoinList } from '~/content/join';
 import { cn } from '~/lib/cn';
-import type { SubscribeResponse } from '~/routes/api.subscribe';
+import type { SubscribeResponse } from '~/lib/forms';
 
 /**
  * The night-tier underline field — the footer signup's input recipe, also

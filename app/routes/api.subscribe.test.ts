@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ANALYTICS_EVENT } from '~/lib/analytics/posthog.events';
 import { posthogContext, type PostHogServerClient } from '~/lib/analytics/posthog.server';
-import { INVALID_EMAIL_MESSAGE, REQUIRED_NAME_MESSAGE } from '~/lib/forms';
-import { action, UNKNOWN_LIST_MESSAGE } from '~/routes/api.subscribe';
+import { INVALID_EMAIL_MESSAGE, REQUIRED_NAME_MESSAGE, UNKNOWN_LIST_MESSAGE } from '~/lib/forms';
+import { action } from '~/routes/api.subscribe';
 
 const capture = vi.fn();
 
