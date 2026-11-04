@@ -9,6 +9,8 @@ export const CART_COPY = {
   shopCta: 'Shop the drop',
   continueShopping: 'Continue shopping',
   disclaimer: 'Shipping, taxes, and discount codes calculated at checkout.',
+  /** The summary region's accessible name. */
+  summaryLabel: 'Summary',
   /** The applied-codes row label. */
   discountLabel: 'Discount(s)',
   /** The code input's label and placeholder. */

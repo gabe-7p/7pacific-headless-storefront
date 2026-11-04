@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import type { CartState } from '@shopify/hydrogen';
+import { type CartState, createEmptyCartErrors, createEmptyErrorGroup } from '@shopify/hydrogen';
 import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -48,6 +48,23 @@ describe('CartSummary', () => {
     expect(screen.getByText('Subtotal')).toBeTruthy();
     expect(screen.getByText('$158.00')).toBeTruthy();
     expect(screen.getByRole('link', { name: /checkout/i }).getAttribute('href')).toBe(CHECKOUT_URL);
+  });
+
+  it('names the summary region', () => {
+    state = cartState();
+    renderSummary('aside');
+    expect(screen.getByRole('region', { name: 'Summary' })).toBeTruthy();
+  });
+
+  it('renders the discount error as an alert line', () => {
+    const errors = createEmptyCartErrors();
+    errors.discountCodes.set('NOPE', {
+      ...createEmptyErrorGroup(),
+      userErrors: [{ code: null, message: 'Code is not valid.' }],
+    });
+    state = cartState({}, { errors });
+    renderSummary('page');
+    expect(screen.getByRole('alert').textContent).toBe('Code is not valid.');
   });
 
   it('renders no Checkout CTA without a checkout URL', () => {

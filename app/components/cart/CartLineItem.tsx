@@ -1,12 +1,13 @@
 import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 
+import { CartError } from '~/components/cart/CartError';
 import type { CartLayout } from '~/components/cart/CartMain';
+import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Image } from '~/components/common/Image';
 import { Price } from '~/components/common/Price';
-import { useAside } from '~/components/layout/Aside';
 import { CART_COPY } from '~/content/cart';
-import { type CartLine, useCart, useCartForm } from '~/lib/cart';
+import { type CartLine, isOptimisticLine, useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 import { cartUrl, productUrl } from '~/lib/urls';
 
@@ -22,14 +23,14 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
   const { formProps, register } = useCartForm();
   const lineError = useCart((state) => state.errors.lines.get(id));
   const pending = useCart((state) => state.pending.lines.has(id));
-  const { close } = useAside();
+  const { close } = useCartDrawer();
   const closeIfAside = () => layout === 'aside' && close();
 
   const product = merchandise?.product;
   const title = product?.title ?? merchandise?.title ?? CART_COPY.productFallback;
   const selectedOptions = merchandise?.selectedOptions ?? [];
   const lineItemUrl = product?.handle ? productUrl(product.handle, selectedOptions) : cartUrl();
-  const isOptimistic = id.startsWith('optimistic:');
+  const isOptimistic = isOptimisticLine(line);
   const errorMessage = lineError?.userErrors[0]?.message;
 
   return (
@@ -39,12 +40,11 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
           <Link prefetch="intent" to={lineItemUrl} onClick={closeIfAside} className="flex-none">
             <Image
               alt={title}
-              aspectRatio="1/1"
               data={merchandise.image}
-              srcSetWidths={[80, 160, 240]}
-              sizes="80px"
+              width={80}
+              height={96}
               loading="lazy"
-              className="h-24 w-20 bg-field object-cover"
+              className="bg-field"
             />
           </Link>
         )}
@@ -98,7 +98,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
                 <Plus className="size-3.5" />
               </button>
             </div>
-            <div className="font-mono text-sm font-medium">
+            <div className="text-sm font-medium">
               <Price data={line.cost.totalAmount} variant="cart" />
             </div>
           </form>
@@ -113,11 +113,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
               Remove
             </button>
           </form>
-          {errorMessage && (
-            <p className="mt-2 text-xs text-ember" role="alert">
-              {errorMessage}
-            </p>
-          )}
+          {errorMessage && <CartError message={errorMessage} />}
         </div>
       </div>
     </li>

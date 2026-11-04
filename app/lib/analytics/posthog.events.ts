@@ -1,6 +1,6 @@
 import type { AnalyticsEventMap } from '@shopify/hydrogen';
 
-import type { MoneyLike } from '~/lib/money';
+import type { CartData } from '~/lib/cart';
 
 /**
  * PostHog event names and payload builders in one place, so every capture
@@ -71,11 +71,11 @@ export const cartLineChangeProperties = (payload: AnalyticsEventMap['product_add
 };
 
 export const checkoutStartedProperties = (
-  cart: { totalQuantity?: number | null; cost?: { subtotalAmount?: MoneyLike | null } | null },
+  cart: Pick<CartData, 'totalQuantity' | 'cost'>,
   layout: string
 ) => ({
   cart_layout: layout,
   total_quantity: cart.totalQuantity,
-  subtotal: cart.cost?.subtotalAmount?.amount,
-  currency: cart.cost?.subtotalAmount?.currencyCode,
+  subtotal: cart.cost.subtotalAmount.amount,
+  currency: cart.cost.subtotalAmount.currencyCode,
 });

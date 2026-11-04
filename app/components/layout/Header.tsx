@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
 
-import { useCartDrawer } from '~/components/cart/CartDrawer';
+import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';

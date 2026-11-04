@@ -1,6 +1,6 @@
 import { canAddToCart } from '@shopify/hydrogen';
 
-import { useCartDrawer } from '~/components/cart/CartDrawer';
+import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { CtaLabel } from '~/components/common/Cta';
 import { buttonVariants } from '~/components/ui/button';
 import { cn } from '~/lib/cn';

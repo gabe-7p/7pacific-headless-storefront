@@ -1,11 +1,12 @@
 import { useCartAnalytics } from '@shopify/hydrogen/react';
 import type { MoneyV2 } from '@shopify/hydrogen/storefront-api-types';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
 
 import { connectMetaPixelToShopify } from '~/lib/analytics/meta-pixel.client';
 import { connectPostHogToShopify } from '~/lib/analytics/posthog.client';
-import { AnalyticsEvent, getAnalytics } from '~/lib/analytics/shopify';
+import { AnalyticsEvent, getAnalytics, publishCartViewed } from '~/lib/analytics/shopify';
+import { useCart } from '~/lib/cart';
 import { useNonce } from '~/lib/nonce';
 
 /**
@@ -25,6 +26,23 @@ export const PageViewedTracker = () => {
 export const CartAnalyticsTracker = () => {
   useCartAnalytics();
   return null;
+};
+
+/**
+ * Publishes `cart_viewed` once each time `active` turns true: an open of the
+ * drawer, a visit to /cart. A cart change while active doesn't republish, and
+ * the ref (it survives Strict Mode's effect replay) keeps a visit to one event.
+ */
+export const useCartViewed = (active: boolean) => {
+  const cart = useCart((state) => state.data);
+  const cartRef = useRef(cart);
+  cartRef.current = cart;
+  const wasActive = useRef(false);
+
+  useEffect(() => {
+    if (active && !wasActive.current) publishCartViewed(cartRef.current);
+    wasActive.current = active;
+  }, [active]);
 };
 
 export const ProductViewedTracker = ({

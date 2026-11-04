@@ -10,6 +10,7 @@ import {
   collectionViewedProperties,
   productViewedProperties,
 } from '~/lib/analytics/posthog.events';
+import { buildCartCost } from '~/lib/cart.fixtures';
 
 const shop = { shopId: 'gid://shopify/Shop/1', channel: 'hydrogen', storefrontId: 'sf' } as const;
 
@@ -186,19 +187,7 @@ describe('cartLineChangeProperties', () => {
 describe('checkoutStartedProperties', () => {
   it('reads the subtotal and quantity off the store cart', () => {
     expect(
-      checkoutStartedProperties(
-        { totalQuantity: 3, cost: { subtotalAmount: { amount: '222.0', currencyCode: 'USD' } } },
-        'aside'
-      )
+      checkoutStartedProperties({ totalQuantity: 3, cost: buildCartCost('222.0') }, 'aside')
     ).toEqual({ cart_layout: 'aside', total_quantity: 3, subtotal: '222.0', currency: 'USD' });
-  });
-
-  it('tolerates an optimistic cart with no cost yet', () => {
-    expect(checkoutStartedProperties({ totalQuantity: 1 }, 'page')).toEqual({
-      cart_layout: 'page',
-      total_quantity: 1,
-      subtotal: undefined,
-      currency: undefined,
-    });
   });
 });

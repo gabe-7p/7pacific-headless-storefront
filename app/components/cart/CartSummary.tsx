@@ -1,5 +1,6 @@
 import { usePostHog } from '@posthog/react';
 
+import { CartError } from '~/components/cart/CartError';
 import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
 import { Price } from '~/components/common/Price';
@@ -20,6 +21,7 @@ export const CartSummary = ({ layout }: { layout: CartLayout }) => {
 
   return (
     <div
+      role="region"
       aria-labelledby="cart-summary"
       className={cn(
         'px-5 py-5',
@@ -32,6 +34,9 @@ export const CartSummary = ({ layout }: { layout: CartLayout }) => {
             'border-border-subtle border-t lg:w-80 lg:flex-none lg:border-t-0 lg:bg-panel lg:p-6'
       )}
     >
+      <p id="cart-summary" className="sr-only">
+        {CART_COPY.summaryLabel}
+      </p>
       <div className="flex items-baseline justify-between" aria-busy={totalsPending}>
         {/* Live's drawer letterspaces the label; the /cart page keeps it plain. */}
         <span
@@ -40,10 +45,7 @@ export const CartSummary = ({ layout }: { layout: CartLayout }) => {
           Subtotal
         </span>
         <span
-          className={cn(
-            'font-mono text-sm font-medium transition-opacity',
-            totalsPending && 'opacity-50'
-          )}
+          className={cn('text-sm font-medium transition-opacity', totalsPending && 'opacity-50')}
         >
           <Price data={subtotal} variant="cart" /> {subtotal?.amount ? null : '-'}
         </span>
@@ -131,11 +133,7 @@ const CartDiscounts = () => {
           Apply
         </Button>
       </form>
-      {errorMessage && (
-        <p className="mt-2 text-xs text-ember" role="alert">
-          {errorMessage}
-        </p>
-      )}
+      {errorMessage && <CartError message={errorMessage} />}
     </div>
   );
 };

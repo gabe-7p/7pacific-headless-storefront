@@ -1,25 +1,11 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
+import { useCartViewed } from '~/components/analytics/Trackers';
 import { CartMain } from '~/components/cart/CartMain';
-import { Aside, useAside } from '~/components/layout/Aside';
+import { useCartDrawer } from '~/components/cart/useCartDrawer';
+import { Aside } from '~/components/layout/Aside';
 import { CART_COPY } from '~/content/cart';
-import { publishCartViewed } from '~/lib/analytics/shopify';
-import { useCart } from '~/lib/cart';
 import { whenShopifyReady } from '~/lib/shopifyRuntime';
-
-/**
- * The one way to open the cart drawer from React: the header bag, the PDP
- * add-to-cart (`afterSubmit`) and the drawer's own `openCart` handler all go
- * through this hook, so the drawer's `Aside` type is spelled in one file.
- */
-export const useCartDrawer = () => {
-  const { type, open, close } = useAside();
-  return {
-    isOpen: type === 'cart',
-    open: useCallback(() => open('cart'), [open]),
-    close,
-  };
-};
 
 /**
  * The drawer's open function lives in React state; this module-level slot
@@ -47,17 +33,11 @@ const registerOpener = (open: () => void) => {
  */
 export const CartDrawer = () => {
   const { isOpen, open } = useCartDrawer();
-  const cart = useCart((state) => state.data);
-  const cartRef = useRef(cart);
-  cartRef.current = cart;
+  useCartViewed(isOpen);
 
   useEffect(() => {
     registerOpener(open);
   }, [open]);
-
-  useEffect(() => {
-    if (isOpen) publishCartViewed(cartRef.current);
-  }, [isOpen]);
 
   return (
     <Aside type="cart" heading={CART_COPY.title}>

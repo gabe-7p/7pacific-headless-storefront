@@ -55,6 +55,14 @@ describe('CartLineItem', () => {
     expect(screen.getByLabelText<HTMLInputElement>('Quantity').value).toBe('2');
   });
 
+  it('renders the thumbnail in fixed mode at the 80×96 slot', () => {
+    state = buildCartState();
+    const { container } = renderLine(line());
+    const image = container.querySelector('img');
+    expect(image?.getAttribute('src')).toContain('width=80&height=96&crop=center');
+    expect(image?.getAttribute('srcset')).toContain('width=160&height=192&crop=center 2x');
+  });
+
   it('enables the stepper and remove control for a confirmed line', () => {
     state = buildCartState();
     renderLine(line());
