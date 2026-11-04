@@ -29,10 +29,14 @@ export const BrandDialogContent = ({
   </DialogContent>
 );
 
-/** Dialog title rendered through `Heading`, keeping Radix's aria wiring. */
+/**
+ * Dialog title rendered through `Heading`, keeping Radix's aria wiring. `asChild`
+ * hands `DialogTitle`'s `leading-none` to `Heading` as a className, where it would
+ * outrank the variant's leading, so the brand value is restated here.
+ */
 export const BrandDialogTitle = ({ children }: { children: ReactNode }) => (
   <DialogTitle asChild>
-    <Heading as="h2" size="none" className="tracking-header text-2xl">
+    <Heading as="h2" size="none" className="tracking-header text-2xl leading-[1.1]">
       {children}
     </Heading>
   </DialogTitle>

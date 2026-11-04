@@ -87,14 +87,16 @@ Live products are **separate Shopify products per color**, not variants. The col
 
 Three bit us during the live-parity work; all three type-check and lint clean.
 
-**`text-*` also sets `line-height`.** So a `leading-` on a shared component is overridden by any size utility a caller passes. Repeat the leading next to each size:
+**`text-*` and `leading-*` compose, and `cn()` is configured to let them.** In Tailwind v4 a named size emits `line-height: var(--tw-leading, <size default>)`, so one `leading-*` holds through every size step, responsive ones included. Stock `tailwind-merge` still models v3 and deletes a `leading-*` when a `text-*` follows it, which is why `lib/cn.ts` overrides that conflict. Write the leading once, and add a responsive `leading-*` only where the value changes. Merge classes through `cn`, never a bare `twMerge`, or the eviction comes back.
 
 ```tsx
-// ❌ variant's leading-[1.1] is dead — text-4xl re-sets line-height
-<Heading className="text-4xl" />
+// ❌ the repeats add nothing
+<Heading className="text-4xl leading-[1.05] md:text-6xl md:leading-[1.05]" />
 // ✅
-<Heading className="text-4xl leading-[1.1]" />
+<Heading className="text-4xl leading-[1.05] md:text-6xl" />
 ```
+
+Between two `leading-*` the later one wins, and `asChild` makes that easy to miss: a Radix title's classes reach the child as its `className`, after `Heading`'s variant. `DialogTitle`'s `leading-none` would beat the brand `leading-[1.1]`, so `BrandDialogTitle` restates it.
 
 **Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does. Named breakpoints sort by width, so they interleave correctly with `md`/`lg`/`xl`. Holdouts that still use arbitrary variants: `routes/products.$handle.tsx` (`min-[769px]:` on purpose — its chains rely on named-beats-arbitrary emit order, see the next trap, and need visual re-verification to move), plus `root.tsx` and `NotFound.tsx` (`min-[768px]`/`min-[1440px]`), `Hero.tsx` (`min-[560px]`) and `NameSpecBanner.tsx` (`min-[860px]`) until they are cleared.
 
