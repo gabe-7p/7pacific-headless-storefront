@@ -1,13 +1,10 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
+import { GradedMedia, GrainVeil } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { LiveDot } from '~/components/common/LiveDot';
-import {
-  MediaSlot,
-  type MediaSlotRatio,
-  type MediaSlotSource,
-} from '~/components/common/MediaSlot';
+import type { MediaSlotRatio, MediaSlotSource } from '~/components/common/MediaSlot';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
 import { CornerBrackets, SectionLabel } from '~/components/common/Readout';
 import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
@@ -22,40 +19,11 @@ const STATEMENT = 'text-4xl leading-[0.98] md:text-6xl xl:text-7xl';
 const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl';
 const HAIRLINE = 'border-t border-border-subtle-night';
 
-/** Film grain over photography — see `--grain` in tailwind.css. */
-const GrainVeil = () => (
-  <div
-    aria-hidden
-    className="pointer-events-none absolute inset-0 bg-[image:var(--grain)] opacity-[0.07] mix-blend-overlay"
-  />
-);
-
-/** BaselineDrop's graded treatment (saturate .85 + multiply veil) plus grain,
-    so the fog stand-ins and the eventual night shoot share one profile. */
-const GradedMedia = ({
-  media,
-  ratio,
-  className,
-}: {
-  media: MediaSlotSource;
-  ratio: MediaSlotRatio;
-  className?: string;
-}) => (
-  <div className={cn('relative overflow-hidden', className)}>
-    <MediaSlot media={media} ratio={ratio} className="saturate-[0.85]" />
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
-    />
-    <GrainVeil />
-  </div>
-);
-
 /** A photo inside corner brackets — the file's photo mount. */
 const FramedMedia = ({ media, ratio }: { media: MediaSlotSource; ratio: MediaSlotRatio }) => (
   <div className="relative p-3">
     <CornerBrackets />
-    <GradedMedia media={media} ratio={ratio} />
+    <GradedMedia media={media} ratio={ratio} grain />
   </div>
 );
 
@@ -195,11 +163,11 @@ const Kit = () => {
           </div>
         </div>
       </Container>
-      <GradedMedia media={kit.banner} ratio="wide" />
+      <GradedMedia media={kit.banner} ratio="wide" grain />
       <div className="mt-px grid gap-px bg-border-subtle-night md:grid-cols-3">
         {kit.strip.map((cell) => (
           <figure key={cell.caption} className="bg-field-night">
-            <GradedMedia media={cell.media} ratio="landscape" />
+            <GradedMedia media={cell.media} ratio="landscape" grain />
             <figcaption className={cn(SPEC_LINE_CLASS, 'px-4 py-3 text-support-night md:px-5')}>
               {cell.caption}
             </figcaption>
@@ -272,7 +240,7 @@ const Roster = () => {
  */
 export const OurStory = () => (
   <MotionProvider>
-    <div className="bg-field-night text-ink-night bg-[image:repeating-linear-gradient(to_right,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px),repeating-linear-gradient(to_bottom,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px)]">
+    <div className="bg-field-night text-ink-night bg-[image:var(--file-grid)]">
       <FileHero />
       <Status />
       <Mission />

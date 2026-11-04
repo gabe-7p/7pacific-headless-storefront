@@ -1,15 +1,11 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Eyebrow } from '~/components/common/Eyebrow';
+import { GradedMedia } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
-import {
-  MediaSlot,
-  type MediaSlotRatio,
-  type MediaSlotSource,
-} from '~/components/common/MediaSlot';
+import { MediaSlot } from '~/components/common/MediaSlot';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
-import { cn } from '~/lib/cn';
 
 /**
  * Ember repeats here by sanctioned exception (ui-components.md).
@@ -26,28 +22,6 @@ const DropSectionHeader = ({ heading, subtitle }: { heading: string; subtitle: s
       {heading}
     </Heading>
     <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-support md:mt-3">{subtitle}</p>
-  </div>
-);
-
-/** A training-section photo under the unifying grade: the images are shot in
-    different light (fog, beach sun, trail green), so each gets a slight
-    desaturation plus a cool Carbon multiply veil — enough to pull them onto
-    one color profile without visibly costing detail. */
-const GradedMedia = ({
-  media,
-  ratio,
-  className,
-}: {
-  media: MediaSlotSource;
-  ratio: MediaSlotRatio;
-  className?: string;
-}) => (
-  <div className={cn('relative', className)}>
-    <MediaSlot media={media} ratio={ratio} className="saturate-[0.85]" />
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
-    />
   </div>
 );
 
