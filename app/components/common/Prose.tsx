@@ -2,6 +2,7 @@ import type { MouseEvent } from 'react';
 import { useNavigate } from 'react-router';
 
 import { cn } from '~/lib/cn';
+import { isPlainActivation } from '~/lib/events';
 
 /**
  * Styled wrapper for Shopify-authored HTML (page bodies, product
@@ -42,8 +43,9 @@ export const Prose = ({ html, variant = 'page', className }: ProseProps) => {
   // Shopify-authored HTML carries plain <a href="/..."> links; route the
   // internal ones through the client router instead of a full page reload.
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
-    const href = (event.target as HTMLElement).closest('a')?.getAttribute('href');
-    if (href?.startsWith('/')) {
+    const link = (event.target as HTMLElement).closest('a');
+    const href = link?.getAttribute('href');
+    if (href?.startsWith('/') && isPlainActivation(event, link)) {
       event.preventDefault();
       void navigate(href);
     }

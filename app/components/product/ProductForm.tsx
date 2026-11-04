@@ -1,9 +1,10 @@
-import type { MouseEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { SizeGuide } from '~/components/product/SizeGuide';
 import { cn } from '~/lib/cn';
+import { isPlainActivation } from '~/lib/events';
 import { shortSizeLabel } from '~/lib/product/display';
 import { useProductForm } from '~/lib/product/store';
 import { productUrl } from '~/lib/urls';
@@ -23,16 +24,6 @@ const OptionLabel = ({ children, action }: { children: string; action?: ReactNod
     {action}
   </div>
 );
-
-// A modified or non-primary click belongs to the browser (new tab, new
-// window), so the href stays in charge of it.
-const isPlainActivation = (event: MouseEvent<HTMLAnchorElement>) =>
-  !event.defaultPrevented &&
-  event.button === 0 &&
-  !event.metaKey &&
-  !event.altKey &&
-  !event.ctrlKey &&
-  !event.shiftKey;
 
 /**
  * Buy-box options (size selector). Shopify's internal single-variant "Title"
