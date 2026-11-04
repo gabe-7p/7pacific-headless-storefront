@@ -92,7 +92,11 @@ const CartDiscounts = () => {
   const discountCodes = useCart((state) => state.data.discountCodes);
   const errors = useCart((state) => state.errors.discountCodes);
   const codes = discountCodes.filter((discount) => discount.applicable).map(({ code }) => code);
-  const errorMessage = [...errors.values()].flatMap((group) => group.userErrors)[0]?.message;
+  // An unknown code comes back as a warning (DISCOUNT_NOT_FOUND), not a user error.
+  const errorMessage = [...errors.values()].flatMap((group) => [
+    ...group.userErrors,
+    ...group.warnings,
+  ])[0]?.message;
 
   return (
     <div>

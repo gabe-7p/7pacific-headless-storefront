@@ -67,6 +67,17 @@ describe('CartSummary', () => {
     expect(screen.getByRole('alert').textContent).toBe('Code is not valid.');
   });
 
+  it('renders an unknown code, which arrives as a warning, as an alert line', () => {
+    const errors = createEmptyCartErrors();
+    errors.discountCodes.set('NOPE', {
+      ...createEmptyErrorGroup(),
+      warnings: [{ code: 'DISCOUNT_NOT_FOUND', message: 'Enter a valid discount code' }],
+    });
+    state = cartState({}, { errors });
+    renderSummary('page');
+    expect(screen.getByRole('alert').textContent).toBe('Enter a valid discount code');
+  });
+
   it('renders no Checkout CTA without a checkout URL', () => {
     state = cartState({ checkoutUrl: '' });
     renderSummary('aside');

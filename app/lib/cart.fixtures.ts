@@ -2,7 +2,9 @@ import { type CartState, createEmptyCartErrors, EMPTY_CART_STATE } from '@shopif
 import { vi } from 'vitest';
 
 import type * as CartModule from '~/lib/cart';
-import type { CartData, CartLine } from '~/lib/cart';
+
+type CartData = CartModule.CartData;
+type CartLine = CartModule.CartLine;
 
 /**
  * Test-only builders for the cart store: one complete, type-checked cart so a
