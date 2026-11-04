@@ -10,9 +10,10 @@ import { getOpenCartAction, whenShopifyReady } from '~/lib/shopifyRuntime';
 /**
  * The drawer's open function lives in React state; this module-level slot
  * lets the one non-React caller reach it: Shopify's `openCart` standard
- * action (cart/buy permalinks, agents, apps), wired once the Standard Actions
- * script loads. The handler reads the slot at call time, so a later
- * re-registration (a remount) still wins.
+ * action (agents and apps), wired once the Standard Actions script loads.
+ * Cart and buy permalinks never get here: `handleShopifyRoutes` answers them
+ * with a redirect to checkout. The handler reads the slot at call time, so a
+ * later re-registration (a remount) still wins.
  */
 let opener: (() => void) | null = null;
 let configuring = false;
