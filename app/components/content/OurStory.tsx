@@ -73,10 +73,10 @@ const FileHero = () => {
     <section className="relative -mt-(--header-h) flex min-h-[34rem] flex-col overflow-hidden md:min-h-[44rem]">
       <SettleIn className="absolute inset-0">
         <Image
-          src={hero.image.url}
+          src={hero.image.src}
           width={hero.image.width}
           height={hero.image.height}
-          alt=""
+          alt={hero.image.alt}
           sizes={IMAGE_SIZES.full}
           loading="eager"
           fetchPriority="high"

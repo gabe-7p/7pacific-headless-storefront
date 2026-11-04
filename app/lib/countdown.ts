@@ -5,6 +5,14 @@ export type TimeLeft = {
   seconds: number;
 };
 
+/** The unit keys in display order (days first). */
+export const TIME_LEFT_UNITS = [
+  'days',
+  'hours',
+  'minutes',
+  'seconds',
+] as const satisfies ReadonlyArray<keyof TimeLeft>;
+
 const SECOND_MS = 1000;
 const MINUTE_MS = 60 * SECOND_MS;
 const HOUR_MS = 60 * MINUTE_MS;

@@ -8,6 +8,7 @@
  */
 
 import { MEMBERSHIP_PITCH } from '~/content/membership';
+import { type FilesImage, filesImage } from '~/lib/shopifyFiles';
 
 /** The lists a visitor can join. The API rejects anything else with a 400. */
 export const JOIN_LISTS = ['newsletter', 'waitlist'] as const;
@@ -27,7 +28,12 @@ export type JoinFormCopy = {
 };
 
 /** A list's dialog copy: the form lines plus the panel's heading and body. */
-export type JoinDialogCopy = JoinFormCopy & { heading: string; body: string };
+export type JoinDialogCopy = JoinFormCopy & {
+  heading: string;
+  body: string;
+  /** The dialog's side image (Shopify Files); omit for a text-only panel. */
+  image?: FilesImage;
+};
 
 /**
  * The waitlist confirmation, shared by the homepage dialog and the FIRST
@@ -48,6 +54,13 @@ export const JOIN_COPY: Record<JoinList, JoinDialogCopy> = {
     emailPlaceholder: 'your@email.com',
     submitLabel: 'Add my name',
     successMessage: 'You’re in the book. See you at the next session.',
+    // Decorative — hidden below `sm`, and the heading carries the meaning.
+    image: filesImage('jahli_full_body_behind_in_gym.jpg', {
+      v: 1793245833,
+      width: 3580,
+      height: 4000,
+      alt: '',
+    }),
   },
   /** The Drop 02 waitlist (name + email), opened by the Coming Soon card. */
   waitlist: {

@@ -24,7 +24,7 @@ export const Roster = () => (
     />
     {/* Band 2: pre-cropped, so its own width/height set the box. */}
     <Image
-      src={HOME_ROSTER.image.url}
+      src={HOME_ROSTER.image.src}
       width={HOME_ROSTER.image.width}
       height={HOME_ROSTER.image.height}
       alt={HOME_ROSTER.image.alt}
@@ -38,23 +38,23 @@ export const Roster = () => (
           would otherwise size the row (same fix as TeaserSection). */}
       <div className="relative overflow-hidden">
         <Image
-          src={HOME_ROSTER.bakeryRun.squad.url}
+          src={HOME_ROSTER.bakeryRun.squad.src}
           width={HOME_ROSTER.bakeryRun.squad.width}
           height={HOME_ROSTER.bakeryRun.squad.height}
           alt={HOME_ROSTER.bakeryRun.squad.alt}
           loading="lazy"
-          sizes="50vw"
+          sizes={IMAGE_SIZES.halfAlways}
           className="absolute inset-0 size-full object-cover"
         />
       </div>
       <div className="relative overflow-hidden">
         <Image
-          src={HOME_ROSTER.bakeryRun.announcement.url}
+          src={HOME_ROSTER.bakeryRun.announcement.src}
           width={HOME_ROSTER.bakeryRun.announcement.width}
           height={HOME_ROSTER.bakeryRun.announcement.height}
           alt={HOME_ROSTER.bakeryRun.announcement.alt}
           loading="lazy"
-          sizes="50vw"
+          sizes={IMAGE_SIZES.halfAlways}
           className="absolute inset-0 size-full object-cover"
         />
       </div>

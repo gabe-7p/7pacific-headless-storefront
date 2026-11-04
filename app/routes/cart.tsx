@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { CartMain } from '~/components/cart/CartMain';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
+import { CART_COPY } from '~/content/cart';
 import { STORE_LINKS } from '~/content/links';
 import { publishCartViewed } from '~/lib/analytics/shopify';
 import { useCart } from '~/lib/cart';
@@ -11,7 +12,7 @@ import { buildMeta } from '~/lib/seo';
 import type { Route } from './+types/cart';
 
 export const meta: Route.MetaFunction = () => {
-  return buildMeta({ title: 'Cart' });
+  return buildMeta({ title: CART_COPY.title });
 };
 
 /**
@@ -32,11 +33,11 @@ const Cart = () => {
     <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">
       <div className="mb-8 text-center">
         <Heading as="h1" variant="quiet" className="font-semibold">
-          Cart
+          {CART_COPY.title}
         </Heading>
         {hasItems && (
           <TextLink to={STORE_LINKS.shopAll} prefetch="intent" className="mt-2 inline-block">
-            Continue shopping
+            {CART_COPY.continueShopping}
           </TextLink>
         )}
       </div>

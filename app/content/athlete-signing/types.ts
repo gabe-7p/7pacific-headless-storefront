@@ -2,6 +2,8 @@
  * The typed shapes behind every athlete-signing page (see `index.ts`).
  */
 
+import type { FilesImage } from '~/lib/shopifyFiles';
+
 /**
  * Marker position along the performance-readout scale, in 5% steps. A union
  * (not a free number) so the component can map it to static Tailwind classes —
@@ -59,7 +61,7 @@ export type AthleteSigningContent = {
      * `fit: 'contain'` letterboxes the full image inside the panel instead of
      * cover-cropping it — for shots whose edges can't be lost (default cover).
      */
-    image: { src: string; alt: string; width: number; height: number; fit?: 'cover' | 'contain' };
+    image: FilesImage & { fit?: 'cover' | 'contain' };
   };
   founderVideo: {
     number: string;
@@ -90,4 +92,23 @@ export type AthleteSigningContent = {
     series: Array<string>;
     linkLabel: string;
   };
+};
+
+/**
+ * What an athlete's own file holds: everything of `AthleteSigningContent`
+ * except the chrome and the section titles/lead/labels every signing shares
+ * (`SIGNING_DEFAULTS` in `index.ts`), which `defineSigning` fills in.
+ */
+export type AthleteSigningOverrides = Omit<
+  AthleteSigningContent,
+  'chrome' | 'signedLine' | 'headline' | 'hero' | 'founderVideo' | 'readout' | 'instagram'
+> & {
+  headline: Pick<AthleteSigningContent['headline'], 'name'>;
+  hero: Omit<AthleteSigningContent['hero'], 'modeLabel' | 'camLine' | 'shotLine'>;
+  founderVideo: Omit<
+    AthleteSigningContent['founderVideo'],
+    'number' | 'title' | 'captions' | 'attribution'
+  >;
+  readout: Omit<AthleteSigningContent['readout'], 'number' | 'title'>;
+  instagram: Omit<AthleteSigningContent['instagram'], 'number' | 'title' | 'linkLabel'>;
 };

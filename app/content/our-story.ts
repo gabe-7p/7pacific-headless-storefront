@@ -10,22 +10,26 @@
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { STORE_LINKS } from '~/content/links';
-import { shopifyImage } from '~/lib/shopifyFiles';
+import { filesImage, shopifyImage } from '~/lib/shopifyFiles';
 
 const image = (src: string, alt: string, focus?: 'top' | 'upper' | 'right'): MediaSlotSource =>
   focus ? { kind: 'image', src, alt, focus } : { kind: 'image', src, alt };
 
 export const OUR_STORY = {
+  /** The `<title>` — `buildMeta` adds the brand prefix. */
+  seoTitle: 'Our Story',
   hero: {
     title: ['We train here too.'],
     /** Mono readout that types on under the header — steps(30) in
         --animate-type-on is tuned to roughly this length. */
     readout: 'File 01 · Our Story · San Francisco',
-    image: {
-      url: shopifyImage('face-on-shot-zach.jpg', { v: 1785783370 }),
+    // Decorative — the headline carries the meaning.
+    image: filesImage('face-on-shot-zach.jpg', {
+      v: 1785783370,
       width: 2048,
       height: 1638,
-    },
+      alt: '',
+    }),
     // The page's only CTA — the story page carries no Ember moment (7PA-230).
     cta: { label: 'Shop', href: STORE_LINKS.shopShorts },
   },

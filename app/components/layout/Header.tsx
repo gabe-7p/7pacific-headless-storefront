@@ -10,7 +10,7 @@ import { BRAND } from '~/content/brand';
 import { useCart } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 import type { HeaderData } from '~/lib/fragments';
-import { toInternalPath } from '~/lib/urls';
+import { accountUrl, cartUrl, toInternalPath } from '~/lib/urls';
 
 type HeaderProps = {
   header: HeaderData;
@@ -157,10 +157,9 @@ export const HeaderMenu = ({
 const HeaderCtas = ({ publicStoreDomain }: Pick<HeaderProps, 'publicStoreDomain'>) => {
   return (
     <nav className="flex items-center justify-end gap-4" role="navigation">
-      {/* Shopify's hosted account portal (on the myshopify domain, which survives
-          the custom-domain cutover); desktop-only. */}
+      {/* Desktop-only; the portal itself is documented on accountUrl. */}
       <a
-        href={`https://${publicStoreDomain}/account`}
+        href={accountUrl(publicStoreDomain)}
         className="hidden items-center transition-opacity hover:opacity-70 impulse:inline-flex"
         title="Log in"
       >
@@ -198,7 +197,7 @@ const CartBadge = () => {
 
   return (
     <a
-      href="/cart"
+      href={cartUrl()}
       className="relative inline-flex transition-opacity hover:opacity-70"
       aria-label={`Cart${count ? `, ${count} items` : ''}`}
       aria-haspopup="dialog"

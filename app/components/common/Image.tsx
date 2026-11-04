@@ -19,7 +19,9 @@ import type { CSSProperties, ImgHTMLAttributes } from 'react';
  * a per-image ratio can't be a Tailwind class.
  */
 
-type ImageData = {
+/** A Storefront API image (also the shape `lib/metafields` hands back). */
+export type StorefrontImage = {
+  id?: string | null;
   url: string;
   altText?: string | null;
   width?: number | null;
@@ -30,7 +32,7 @@ type Crop = 'center' | 'top' | 'bottom' | 'left' | 'right';
 
 export type ImageProps = {
   /** A Storefront API image (`url`, `altText`, `width`, `height`). */
-  data?: ImageData | null;
+  data?: StorefrontImage | null;
   /** A plain CDN URL (content files); pass the intrinsic `width`/`height`. */
   src?: string;
   /** Overrides `data.altText`. Decorative images pass "". */

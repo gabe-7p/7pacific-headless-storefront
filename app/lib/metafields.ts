@@ -5,6 +5,8 @@
  * metafield degrades gracefully (section omitted) instead of 500-ing the page.
  */
 
+import type { StorefrontImage } from '~/components/common/Image';
+
 const parseJson = <T>(value?: string | null): T | null => {
   if (!value) return null;
   try {
@@ -18,17 +20,9 @@ const parseJson = <T>(value?: string | null): T | null => {
 export const parseJsonMetafield = <T>(metafield?: { value?: string | null } | null): T | null =>
   parseJson<T>(metafield?.value);
 
-type MetafieldImage = {
-  id?: string | null;
-  url: string;
-  altText?: string | null;
-  width?: number | null;
-  height?: number | null;
-};
-
 type ImageReferenceMetafield = {
   // A file_reference resolves to a union of media types; only MediaImage has `image`.
-  reference?: { __typename?: string; image?: MetafieldImage | null } | null;
+  reference?: { __typename?: string; image?: StorefrontImage | null } | null;
 } | null;
 
 /**
@@ -37,5 +31,5 @@ type ImageReferenceMetafield = {
  * Returns null when the metafield or its reference is absent, so callers can
  * fall back to another image.
  */
-export const getMetafieldImage = (metafield?: ImageReferenceMetafield): MetafieldImage | null =>
+export const getMetafieldImage = (metafield?: ImageReferenceMetafield): StorefrontImage | null =>
   metafield?.reference?.image ?? null;

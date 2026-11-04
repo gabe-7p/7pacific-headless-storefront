@@ -6,7 +6,7 @@
  * in a per-product metafield. The numbers are body, not garment, measurements.
  */
 
-import { shopifyImage } from '~/lib/shopifyFiles';
+import { filesImage } from '~/lib/shopifyFiles';
 
 type SizeRow = {
   /** Short size label, matching the PDP selector's cells (S/M/L/XL). */
@@ -60,12 +60,12 @@ export const SIZE_GUIDE = {
      * and the CDN would otherwise serve all 9MB of it. `width`/`height` match
      * the served size so the box reserves the right space before it loads.
      */
-    image: {
-      url: shopifyImage('side-guide-photo.png', { width: 1200 }),
+    image: filesImage('side-guide-photo.png', {
+      resize: 1200,
       width: 1200,
       height: 1500,
       alt: 'The white tee, front on, with the chest, waist and hip measuring points marked',
-    },
+    }),
     points: [
       {
         label: 'Chest',

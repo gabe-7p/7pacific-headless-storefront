@@ -5,6 +5,7 @@ import { SectionLabel } from '~/components/common/Readout';
 import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
 import { cn } from '~/lib/cn';
+import { instagramProfileUrl } from '~/lib/urls';
 
 /**
  * "The Creator" module — typed copy only: handle, tagline, and the athlete's
@@ -42,7 +43,7 @@ export const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['
       </dl>
 
       <a
-        href={`https://www.instagram.com/${instagram.handle}/`}
+        href={instagramProfileUrl(instagram.handle)}
         target="_blank"
         rel="noreferrer"
         className={cn(

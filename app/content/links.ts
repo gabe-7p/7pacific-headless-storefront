@@ -1,4 +1,4 @@
-import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
+import { collectionUrl, dropUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
 
 /**
  * THE single place a Shopify handle may appear in app code — when a handle
@@ -35,9 +35,9 @@ export const STORE_LINKS = {
   shopHat: productUrl('motionframe-running-hat-white'),
   /** Drop 02 teaser card target — the FW26 FIRST LIGHT teaser page. Point it
       at the /collections/first-light collection once the drop is live. */
-  firstLight: '/drops/first-light',
+  firstLight: dropUrl('first-light'),
   /** Homepage BASELINE intro card target — the Baseline editorial drop page. */
-  baselineDrop: '/drops/baseline',
+  baselineDrop: dropUrl('baseline'),
   /** The journal index (fallback nav). */
   journal: journalUrl(),
   /** Our Story — the homepage "Read the story" CTAs and the fallback nav's About. */
@@ -45,6 +45,20 @@ export const STORE_LINKS = {
   /** The contact page (fallback footer nav). */
   contact: pageUrl(HANDLES.contactPage),
 } as const;
+
+/**
+ * Display prices for the products the marketing surfaces name, keyed by the
+ * `STORE_LINKS` entry that targets them (every color of a family shares one
+ * price). Hand-typed copy that mirrors the live Shopify products (2026-08-25)
+ * — update here if pricing changes; the PDP and cart read Shopify directly.
+ */
+export const PRODUCT_PRICES = {
+  shopShirts: '$72',
+  shopShirtsMidnight: '$72',
+  shopShorts: '$79',
+  shopShortsMidnight: '$79',
+  shopHat: '$42',
+} as const satisfies Partial<Record<keyof typeof STORE_LINKS, string>>;
 
 /**
  * Content files mark membership CTAs with this href instead of a real path;

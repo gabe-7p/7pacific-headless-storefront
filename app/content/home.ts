@@ -5,21 +5,29 @@
  */
 
 import { BASELINE_DROP } from '~/content/baseline-drop';
+import { BRAND } from '~/content/brand';
 import { DROP_TWO_LAUNCH } from '~/content/drop-two';
-import { STORE_LINKS } from '~/content/links';
-import { BEHIND_THE_BUILD_VIDEO_ID } from '~/content/media';
+import { PRODUCT_PRICES, STORE_LINKS } from '~/content/links';
+import { BAKERY_RUN_RECAP_POST_ID, BEHIND_THE_BUILD_VIDEO_ID } from '~/content/media';
 import { MEMBERSHIP_PITCH } from '~/content/membership';
 import {
-  shopifyImage,
+  type ContentMedia,
+  filesImage,
   shopifyVideo,
-  shopifyVideoOriginal,
   shopifyVideoThumbnail,
 } from '~/lib/shopifyFiles';
-import { youtubeWatchUrl } from '~/lib/urls';
+import { instagramPostUrl, youtubeWatchUrl } from '~/lib/urls';
+
+/** The homepage's `<title>` (used verbatim) and its 1200×630 share card. */
+export const HOME_META = {
+  title: '7Pacific · Lightweight and Breathable Training Gear',
+  // The hero shot with the black wordmark overlaid (public/og-home.jpg).
+  ogImage: `${BRAND.siteUrl}/og-home.jpg`,
+} as const;
 
 export const HOME_HERO = {
   /** Mono spec-strip label above the headline (caps via CSS). */
-  eyebrow: 'Designed in San Francisco',
+  eyebrow: BRAND.provenance,
   /**
    * The headline is a fact the athlete already knows, never a motivational
    * line: ALL CAPS via CSS, two forced lines, eight words max.
@@ -65,19 +73,19 @@ export const HOME_NAME_SPEC_BANNER = {
     {
       name: 'AIRRAIL™ 6" Short',
       spec: ['Laser-cut vents', 'Thigh, waistband, core'],
-      price: '$79',
+      price: PRODUCT_PRICES.shopShortsMidnight,
       href: STORE_LINKS.shopShortsMidnight,
     },
     {
       name: 'TRACEFIBER™ Tee',
       spec: ['Integrated mesh', 'Shoulder darts'],
-      price: '$72',
+      price: PRODUCT_PRICES.shopShirtsMidnight,
       href: STORE_LINKS.shopShirtsMidnight,
     },
     {
       name: 'MOTIONFRAME™ Hat',
       spec: ['Structured, weightless', 'Rear adjuster'],
-      price: '$42',
+      price: PRODUCT_PRICES.shopHat,
       href: STORE_LINKS.shopHat,
     },
   ] satisfies ReadonlyArray<NameSpecCell>,
@@ -103,9 +111,12 @@ export const HOME_DROP_TWO = {
       cta: { label: 'Discover', href: STORE_LINKS.firstLight },
       media: {
         kind: 'image',
-        url: shopifyImage('face-on-shot-zach.jpg', { v: 1785783370 }),
-        width: 2048,
-        height: 1638,
+        ...filesImage('face-on-shot-zach.jpg', {
+          v: 1785783370,
+          width: 2048,
+          height: 1638,
+          alt: '',
+        }),
       },
     },
     comingSoon: {
@@ -115,9 +126,12 @@ export const HOME_DROP_TWO = {
       cta: { label: 'Get on the List' },
       media: {
         kind: 'image',
-        url: shopifyImage('chirstian-on-stairs.jpg', { v: 1785783387 }),
-        width: 1638,
-        height: 2048,
+        ...filesImage('chirstian-on-stairs.jpg', {
+          v: 1785783387,
+          width: 1638,
+          height: 2048,
+          alt: '',
+        }),
       },
     },
   },
@@ -143,10 +157,12 @@ export const HOME_BASELINE_INTRO = {
       cta: { label: 'Shop Baseline V01', href: STORE_LINKS.shopAll },
       media: {
         kind: 'image',
-        url: shopifyImage('zach_taking_off_shirt_kezar.jpg', { v: 1793245651 }),
-        width: 4260,
-        height: 5325,
-        alt: 'Athlete pulling off a grey training tee at the rail of a stadium track at dusk',
+        ...filesImage('zach_taking_off_shirt_kezar.jpg', {
+          v: 1793245651,
+          width: 4260,
+          height: 5325,
+          alt: 'Athlete pulling off a grey training tee at the rail of a stadium track at dusk',
+        }),
       },
     },
     film: {
@@ -179,9 +195,7 @@ export type CoreValue = {
   /** Card background tone — rows alternate dark charcoal and light gray. */
   tone: 'dark' | 'light';
   /** The media panel paired with the card in its row. */
-  media:
-    | { kind: 'video'; src: string; poster?: string; label?: string }
-    | { kind: 'image'; url: string; width: number; height: number; alt: string };
+  media: ContentMedia;
 };
 
 /**
@@ -201,7 +215,8 @@ export const HOME_CORE_VALUES = {
       cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
       media: {
         kind: 'video',
-        src: shopifyVideoOriginal('a156e4e88aec47fa96892073a276450f'),
+        // 720p rendition — the slot never renders wider than ~800px.
+        src: shopifyVideo('a156e4e88aec47fa96892073a276450f', 'HD-720p-3.0Mbps-58365129'),
         label: 'Hand writing a split time into a training notebook',
       },
     },
@@ -213,10 +228,12 @@ export const HOME_CORE_VALUES = {
       // Pre-cropped to 2:1 so the wide slot trims little at any breakpoint.
       media: {
         kind: 'image',
-        url: shopifyImage('squatting_from_behind_cropped.jpg', { v: 1793245647 }),
-        width: 3572,
-        height: 1786,
-        alt: 'Athlete from behind under a loaded barbell in a dark squat rack',
+        ...filesImage('squatting_from_behind_cropped.jpg', {
+          v: 1793245647,
+          width: 3572,
+          height: 1786,
+          alt: 'Athlete from behind under a loaded barbell in a dark squat rack',
+        }),
       },
     },
     {
@@ -239,10 +256,12 @@ export const HOME_CORE_VALUES = {
       // Pre-cropped to 2:1, like the squat photo above.
       media: {
         kind: 'image',
-        url: shopifyImage('leaning_against_fence_cropped.jpg', { v: 1793245650 }),
-        width: 4200,
-        height: 2100,
-        alt: 'Two athletes in sunglasses leaning against a chain-link fence in full sun',
+        ...filesImage('leaning_against_fence_cropped.jpg', {
+          v: 1793245650,
+          width: 4200,
+          height: 2100,
+          alt: 'Two athletes in sunglasses leaning against a chain-link fence in full sun',
+        }),
       },
     },
   ] satisfies ReadonlyArray<CoreValue>,
@@ -265,30 +284,30 @@ export const HOME_ROSTER = {
     label: 'Athletes training across a wide gym floor',
   },
   /** Pre-cropped to 70% of its 3:2 height; its own ratio sets the band. */
-  image: {
-    url: shopifyImage('roster_at_kezar_cropped.jpg', { v: 1793245653 }),
+  image: filesImage('roster_at_kezar_cropped.jpg', {
+    v: 1793245653,
     width: 7254,
     height: 3387,
     alt: 'Six athletes stretching along the track and bench at Kezar Stadium',
-  },
+  }),
   /** Third band: two 1.36:1 crops side by side (the band is 2.72:1). */
   bakeryRun: {
-    squad: {
-      url: shopifyImage('sf_bakery_run_full_squad.jpg', { v: 1793245652 }),
+    squad: filesImage('sf_bakery_run_full_squad.jpg', {
+      v: 1793245652,
       width: 5015,
       height: 3688,
       alt: 'The full bakery-run squad gathered on the road behind a 7Pacific banner',
-    },
-    announcement: {
-      url: shopifyImage('sf_bakery_run_announcement.jpg', { v: 1793245652 }),
+    }),
+    announcement: filesImage('sf_bakery_run_announcement.jpg', {
+      v: 1793245652,
       width: 5066,
       height: 3725,
       alt: 'Runners gathered under the trees listening to the pre-run announcement',
-    },
+    }),
     /** External — opens in a new tab. */
     cta: {
       label: 'Watch bakery run recap',
-      href: 'https://www.instagram.com/p/DdpdpIIhBYg/',
+      href: instagramPostUrl(BAKERY_RUN_RECAP_POST_ID),
     },
   },
 } as const;

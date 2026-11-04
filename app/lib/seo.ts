@@ -4,8 +4,7 @@ import { BRAND } from '~/content/brand';
  * SEO defaults — the single source for the page-title format and fallback
  * meta. Routes build `meta` through `buildMeta()` below.
  */
-export const DEFAULT_DESCRIPTION =
-  'Lightweight, breathable training gear built for performance. Free shipping on orders over $200.';
+export const DEFAULT_DESCRIPTION = BRAND.seo.defaultDescription;
 
 /** `pageTitle('Cart')` → "7Pacific | Cart"; `pageTitle()` → "7Pacific". */
 export const pageTitle = (title?: string | null) =>
