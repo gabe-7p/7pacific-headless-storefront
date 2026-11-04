@@ -20,11 +20,25 @@ describe('cn', () => {
   describe('knows the custom tokens', () => {
     it('reads font-campaign as a weight, not a family', () => {
       expect(cn('font-display-narrow font-campaign')).toBe('font-display-narrow font-campaign');
-      expect(cn('font-medium font-campaign')).toBe('font-campaign');
+      expect(cn('font-campaign font-display-narrow')).toBe('font-campaign font-display-narrow');
     });
 
-    it('lets rounded-brand replace a stock radius', () => {
+    it('keeps every font family beside font-campaign', () => {
+      expect(cn('font-mono font-campaign')).toBe('font-mono font-campaign');
+      expect(cn('font-archivo font-campaign')).toBe('font-archivo font-campaign');
+    });
+
+    it('resolves font-campaign against another weight in either order', () => {
+      expect(cn('font-medium font-campaign')).toBe('font-campaign');
+      expect(cn('font-campaign font-medium')).toBe('font-medium');
+      expect(cn('font-[450] font-campaign')).toBe('font-campaign');
+    });
+
+    it('resolves rounded-brand against another radius in either order', () => {
       expect(cn('rounded-lg rounded-brand')).toBe('rounded-brand');
+      expect(cn('rounded-brand rounded-lg')).toBe('rounded-lg');
+      expect(cn('rounded-brand rounded-none')).toBe('rounded-none');
+      expect(cn('rounded-[2px] rounded-brand')).toBe('rounded-brand');
     });
   });
 

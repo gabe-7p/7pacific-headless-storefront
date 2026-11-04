@@ -27,4 +27,14 @@ describe('Price', () => {
       container.textContent?.indexOf('60') ?? -1
     );
   });
+
+  it('puts className on both prices when a compare-at price is set', () => {
+    const { container } = render(
+      <Price data={money('48.0')} compareAt={money('60.0')} className="font-medium" />
+    );
+    const spans = [...container.querySelectorAll('span.font-mono')];
+    expect(spans).toHaveLength(2);
+    expect(spans.every((span) => span.classList.contains('font-medium'))).toBe(true);
+    expect(container.querySelector('s span')?.classList).toContain('font-medium');
+  });
 });
