@@ -33,8 +33,7 @@ export const Hero = () => (
     <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
       {/* Spec-strip tier: JetBrains Mono caps at +0.1em. */}
       <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>
-      {/* Hero display tier, -0.005em, lh 0.95 (leading repeats per size —
-          text-* utilities reset line-height). Each line is a nowrap block so
+      {/* Hero display tier, -0.005em, lh 0.95. Each line is a nowrap block so
           the break lands at the period on every viewport. Each step is the
           largest size whose longer line fits the content box at
           that width. The 560 step is an arbitrary breakpoint like the base; the named
@@ -44,12 +43,10 @@ export const Hero = () => (
         as="h1"
         size="none"
         lines={HOME_HERO.headlineLines}
-        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl min-[560px]:leading-[0.95] md:text-6xl md:leading-[0.95] lg:text-7xl lg:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
+        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
       />
       {/* Body tier: Inter, sentence case. */}
-      <p className="max-w-[42ch] text-sm leading-[1.55] md:text-base md:leading-[1.55]">
-        {HOME_HERO.subhead}
-      </p>
+      <p className="max-w-[42ch] text-sm leading-[1.55] md:text-base">{HOME_HERO.subhead}</p>
       <div className="mt-1 flex flex-wrap items-center gap-x-6 gap-y-3">
         <Cta to={HOME_HERO.cta.href} variant="brand" size="lg">
           {HOME_HERO.cta.label}

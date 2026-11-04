@@ -36,7 +36,7 @@ const CellSet = ({
               one deliberate deviation from the site's 500-only display weight.
               Not a Heading: these are marquee cells (duplicated, aria-hidden
               copy included), not document headings. */}
-          <span className="font-display text-ink tracking-product text-lg leading-[1.15] font-bold whitespace-nowrap uppercase min-[860px]:text-xl min-[860px]:leading-[1.15]">
+          <span className="font-display text-ink tracking-product text-lg leading-[1.15] font-bold whitespace-nowrap uppercase min-[860px]:text-xl">
             {cell.name}
           </span>
           <SpecLine as="span" className="text-support text-[10px] whitespace-nowrap">

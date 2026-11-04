@@ -20,17 +20,11 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
   >
     {/* Tenet heading: 18px, 20px tablet, 24px desktop; tracking from the
         Heading brand variant. */}
-    <Heading
-      as="h3"
-      size="none"
-      className="text-lg leading-[1.1] md:text-xl md:leading-[1.1] xl:text-2xl xl:leading-[1.1]"
-    >
+    <Heading as="h3" size="none" className="text-lg leading-[1.1] md:text-xl xl:text-2xl">
       {value.title}
     </Heading>
     {/* Body: 13px, 14px from md. */}
-    <p className="mt-4 max-w-[38ch] text-[0.8125rem] leading-[1.25] md:text-sm md:leading-[1.25]">
-      {value.body}
-    </p>
+    <p className="mt-4 max-w-[38ch] text-[0.8125rem] leading-[1.25] md:text-sm">{value.body}</p>
     {value.cta && (
       <Cta to={value.cta.href} prefetch="intent" size="xs" className="mt-6">
         {value.cta.label}

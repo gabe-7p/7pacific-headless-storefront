@@ -46,7 +46,7 @@ export const NotFound = () => (
               as="h1"
               size="none"
               variant="quiet"
-              className="mt-4 max-w-md text-[22px] leading-snug text-balance md:text-[26px] md:leading-snug"
+              className="mt-4 max-w-md text-[22px] leading-snug text-balance md:text-[26px]"
             >
               {MICROCOPY.notFound}
             </Heading>

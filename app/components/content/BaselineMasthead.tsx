@@ -20,7 +20,7 @@ export const BaselineMasthead = ({ withDropLink = false }: { withDropLink?: bool
     <Heading
       as="h1"
       size="none"
-      className="mt-3 text-[2.5rem] leading-none tracking-hero md:mt-4 md:text-6xl md:leading-none"
+      className="mt-3 text-[2.5rem] leading-none tracking-hero md:mt-4 md:text-6xl"
     >
       {BASELINE_DROP.headline}
       <span className="hidden md:inline">{`\u2002·\u2002${BASELINE_DROP.status}`}</span>

@@ -70,17 +70,16 @@ export const Roster = () => (
           it doesn't read as a panel); sticky's stacking context keeps the
           -z-10 pseudo above the media. */}
       <div className="pointer-events-auto sticky top-[40vh] mx-auto flex w-fit flex-col items-center text-center before:pointer-events-none before:absolute before:-inset-x-24 before:-inset-y-16 before:-z-10 before:bg-[radial-gradient(ellipse_at_center,rgb(0_0_0/0.6),transparent_70%)] md:before:-inset-x-40 md:before:-inset-y-24">
-        {/* A step under the section-header scale; leading repeats per size
-            because text-* resets line-height. */}
+        {/* A step under the section-header scale. */}
         <Heading
           as="h2"
           size="none"
           lines={HOME_ROSTER.headingLines}
-          className="text-2xl leading-[1.05] md:text-4xl md:leading-[1.05] xl:text-5xl xl:leading-[1.05]"
+          className="text-2xl leading-[1.05] md:text-4xl xl:text-5xl"
         />
         {/* Phone sizes stay a step smaller so the block fits inside the
             ~350px the bands total there. */}
-        <p className="mt-3 max-w-lg text-sm leading-[1.5] md:mt-4 md:text-base md:leading-[1.5]">
+        <p className="mt-3 max-w-lg text-sm leading-[1.5] md:mt-4 md:text-base">
           {HOME_ROSTER.body}
         </p>
         {/* Both secondary — the page's one Ember moment is the hero CTA (7PA-230). */}

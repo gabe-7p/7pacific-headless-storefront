@@ -4,9 +4,7 @@ import { cn } from '~/lib/cn';
 import { getTimeLeft, pad2, TIME_LEFT_UNITS, type TimeLeft } from '~/lib/countdown';
 
 /**
- * Size tiers — full class strings per tier because `text-*` also re-sets
- * line-height, so `leading-none` must repeat next to every size step (see
- * common-pitfalls.md).
+ * Size tiers — full class strings per tier.
  */
 const SIZES = {
   /** Homepage teaser tier. */
@@ -14,7 +12,7 @@ const SIZES = {
     root: 'gap-4 md:gap-6',
     group: 'gap-4 md:gap-6',
     separator: 'text-2xl md:text-3xl',
-    digits: 'text-2xl leading-none md:text-3xl md:leading-none',
+    digits: 'text-2xl leading-none md:text-3xl',
     label: 'text-[10px]',
   },
   /** Drop-page hero tier. */
@@ -22,7 +20,7 @@ const SIZES = {
     root: 'gap-5 md:gap-8',
     group: 'gap-5 md:gap-8',
     separator: 'text-3xl md:text-5xl',
-    digits: 'text-4xl leading-none md:text-6xl md:leading-none',
+    digits: 'text-4xl leading-none md:text-6xl',
     label: 'text-[10px] md:text-xs',
   },
 } as const;

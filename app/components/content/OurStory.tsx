@@ -17,11 +17,9 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Body copy: 14px Inter at 1.6 (the guideline floor). */
 const BODY = 'text-sm leading-[1.6] text-ink-night';
-/** Chapter statements — one step under the hero. `leading-` repeats per size
-    because `text-*` utilities reset line-height. */
-const STATEMENT =
-  'text-4xl leading-[0.98] md:text-6xl md:leading-[0.98] xl:text-7xl xl:leading-[0.98]';
-const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl md:leading-[1.05]';
+/** Chapter statements — one step under the hero. */
+const STATEMENT = 'text-4xl leading-[0.98] md:text-6xl xl:text-7xl';
+const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl';
 const HAIRLINE = 'border-t border-border-subtle-night';
 
 /** Film grain over photography — see `--grain` in tailwind.css. */
@@ -107,7 +105,7 @@ const FileHero = () => {
             as="h1"
             size="none"
             lines={hero.title}
-            className="text-5xl leading-[0.95] tracking-hero md:text-7xl md:leading-[0.95] xl:text-8xl xl:leading-[0.95]"
+            className="text-5xl leading-[0.95] tracking-hero md:text-7xl xl:text-8xl"
           />
           <Cta to={hero.cta.href} variant="brand-outline" size="sm">
             {hero.cta.label}
@@ -241,7 +239,7 @@ const Roster = () => {
           </div>
           <div className="max-w-[65ch]">
             {/* Sub-headline tier: Inter, 20–24px, tight tracking, sentence case. */}
-            <p className="text-2xl leading-snug font-medium tracking-tight text-ink-night md:text-3xl md:leading-snug">
+            <p className="text-2xl leading-snug font-medium tracking-tight text-ink-night md:text-3xl">
               {roster.lede}
             </p>
             <div className={cn(BODY, 'mt-8 space-y-6')}>

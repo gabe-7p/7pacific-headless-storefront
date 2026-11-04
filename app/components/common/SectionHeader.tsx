@@ -4,12 +4,11 @@ import { cn } from '~/lib/cn';
 /**
  * Section-header scales from the brand type table (the +0.01em tracking comes
  * from Heading's brand variant). Pick the one matching the surface instead of
- * overriding sizes at the call site. `leading-` repeats with each size because
- * Tailwind's `text-*` utilities also set line-height.
+ * overriding sizes at the call site.
  */
 const SCALES = {
   /** Homepage sections — 48px, 60px on desktop. */
-  section: 'text-5xl leading-[1.05] xl:text-6xl xl:leading-[1.05]',
+  section: 'text-5xl leading-[1.05] xl:text-6xl',
   /** Every PDP section heading — Product Details, Tech Stack, and
       Recommendations all share this flat 30px so the page reads as one scale. */
   panel: 'text-3xl leading-[1.2]',
