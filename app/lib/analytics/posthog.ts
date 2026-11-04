@@ -71,7 +71,7 @@ export const getPostHogOrigins = (host: string | undefined): Array<string> => {
 };
 
 /**
- * A thrown route response (`throw new Response(…, { status: 500 })`) reaches
+ * A thrown route response (`throw unavailable()`) reaches
  * the root ErrorBoundary as an ErrorResponse, not an Error. Captured as-is,
  * posthog-js reports it with no message or stack, so every status falls into
  * one issue. Wrap it in an Error whose message carries the status, so each

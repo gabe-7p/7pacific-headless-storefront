@@ -5,7 +5,6 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { JOURNAL } from '~/content/journal';
 import { HANDLES } from '~/content/links';
-import { notFound } from '~/lib/http';
 import { formatJournalDate } from '~/lib/journalFormat';
 import { buildMeta } from '~/lib/seo';
 import { queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
@@ -17,7 +16,7 @@ export const meta: Route.MetaFunction = () =>
   buildMeta({ title: JOURNAL.title, description: JOURNAL.tagline });
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const data = await queryStorefrontOrThrow(
+  const blog = await queryStorefrontOrThrow(
     context.get(storefrontClientContext),
     JOURNAL_QUERY,
     {
@@ -25,10 +24,10 @@ export async function loader({ context }: Route.LoaderArgs) {
       // Curated, rarely-changing content.
       cache: Cache.long(),
     },
+    (data) => data.blog,
     'Journal not found'
   );
-  if (!data.blog) throw notFound('Journal not found');
-  return { articles: data.blog.articles.nodes };
+  return { articles: blog.articles.nodes };
 }
 
 const Journal = () => {

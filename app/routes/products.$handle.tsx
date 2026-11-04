@@ -67,7 +67,7 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
   );
 
   // Above the fold — a failure here errors the whole page.
-  const data = await queryStorefrontOrThrow(
+  const product = await queryStorefrontOrThrow(
     storefront,
     PRODUCT_QUERY,
     {
@@ -81,10 +81,9 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
       // Price/availability-sensitive: keep the cache window short.
       cache: Cache.short(),
     },
+    (data) => data.product,
     'Product not found'
   );
-  const product = data.product;
-  if (!product) throw notFound('Product not found');
 
   return {
     product,

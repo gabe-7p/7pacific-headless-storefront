@@ -26,18 +26,15 @@ export async function loader({ context, params }: Route.LoaderArgs) {
     throw notFound('Page not found');
   }
 
-  const data = await queryStorefrontOrThrow(
+  const page = await queryStorefrontOrThrow(
     context.get(storefrontClientContext),
     PAGE_QUERY,
     { variables: { handle: params.handle }, cache: Cache.long() },
+    (data) => data.page,
     'Page not found'
   );
 
-  if (!data.page) {
-    throw notFound('Page not found');
-  }
-
-  return { page: data.page };
+  return { page };
 }
 
 const Page = () => {

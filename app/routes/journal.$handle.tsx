@@ -25,14 +25,13 @@ export async function loader({ context, params }: Route.LoaderArgs) {
   const { handle } = params;
   if (!handle) throw notFound('Article not found');
 
-  const data = await queryStorefrontOrThrow(
+  const article = await queryStorefrontOrThrow(
     context.get(storefrontClientContext),
     ARTICLE_QUERY,
     { variables: { blogHandle: HANDLES.journalBlog, handle }, cache: Cache.long() },
+    (data) => data.blog?.articleByHandle,
     'Article not found'
   );
-  const article = data?.blog?.articleByHandle;
-  if (!article) throw notFound('Article not found');
 
   return { article };
 }

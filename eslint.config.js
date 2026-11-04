@@ -26,6 +26,7 @@ export default [
   {
     ignores: [
       '**/node_modules/',
+      '**/.superpowers/',
       '**/build/',
       '**/dist/',
       '**/*.generated.d.ts',

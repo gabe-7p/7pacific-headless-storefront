@@ -54,9 +54,11 @@ export type RootLoader = typeof loader;
 export const middleware: Array<Route.MiddlewareFunction> = [shopifyMiddleware];
 
 /**
- * Root data (menus, shop identity) only revalidates on mutations and explicit
- * useRevalidator calls — not on sub-navigations. The cart lives in the client
- * store, so it never needs the root loader to re-run.
+ * Root data (menus, shop identity) never revalidates after a form submission:
+ * cart mutations go through /api/cart, not a React Router action, and no app
+ * action touches shop data. It revalidates only when the URL is unchanged,
+ * i.e. an explicit revalidate — not on sub-navigations. The cart lives in the
+ * client store, so it never needs the root loader to re-run.
  */
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, currentUrl, nextUrl }) => {
   // No app action reads or writes root data: signup and contact submit to their

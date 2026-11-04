@@ -41,24 +41,40 @@ describe('queryStorefront', () => {
 });
 
 describe('queryStorefrontOrThrow', () => {
-  it('returns data when present', async () => {
+  const select = (data: { shop: { id: string } }) => data.shop.id || null;
+
+  it('returns the selected value when present', async () => {
     const { client } = clientReturning({ data: { shop: { id: 'x' } } });
     await expect(
-      queryStorefrontOrThrow(client, ROBOTS_QUERY, { cache: Cache.long() }, 'Missing')
-    ).resolves.toEqual({ shop: { id: 'x' } });
+      queryStorefrontOrThrow(client, ROBOTS_QUERY, { cache: Cache.long() }, select, 'Missing')
+    ).resolves.toBe('x');
   });
 
-  it('throws a 404 Response with the message when data is null', async () => {
+  it('throws a 404 Response with the message when the selection is null', async () => {
+    const { client } = clientReturning({ data: { shop: { id: '' } } });
+    const thrown = await queryStorefrontOrThrow(
+      client,
+      ROBOTS_QUERY,
+      { cache: Cache.long() },
+      select,
+      'Missing'
+    ).catch((error: unknown) => error);
+    expect(thrown).toBeInstanceOf(Response);
+    expect((thrown as Response).status).toBe(404);
+    await expect((thrown as Response).text()).resolves.toBe('Missing');
+  });
+
+  it('throws a 500 Response when the API returned no data', async () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     const { client } = clientReturning({ data: null });
     const thrown = await queryStorefrontOrThrow(
       client,
       ROBOTS_QUERY,
       { cache: Cache.long() },
+      select,
       'Missing'
     ).catch((error: unknown) => error);
     expect(thrown).toBeInstanceOf(Response);
-    expect((thrown as Response).status).toBe(404);
-    await expect((thrown as Response).text()).resolves.toBe('Missing');
+    expect((thrown as Response).status).toBe(500);
   });
 });

@@ -28,7 +28,7 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
   const { handle } = params;
   if (!handle) throw notFound('Collection not found');
 
-  const data = await queryStorefrontOrThrow(
+  const collection = await queryStorefrontOrThrow(
     context.get(storefrontClientContext),
     COLLECTION_QUERY,
     {
@@ -38,10 +38,9 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
       // Product listings change with availability/merchandising: short cache.
       cache: Cache.short(),
     },
+    (data) => data.collection,
     'Collection not found'
   );
-  const collection = data.collection;
-  if (!collection) throw notFound('Collection not found');
 
   const { products, ...rest } = collection;
   return {

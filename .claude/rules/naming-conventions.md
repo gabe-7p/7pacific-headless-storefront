@@ -11,26 +11,26 @@
 Storefront reads reveal their not-found behavior in the name, and both helpers live in [`lib/storefront.ts`](../../app/lib/storefront.ts):
 
 - **Returns `null` when the API gave no data → plain `queryStorefront`.** It logs GraphQL `errors` (which `graphql()` returns instead of throwing) and returns `data ?? null`.
-- **Throws a 404 `Response` when there is no data → `queryStorefrontOrThrow`** (takes the message as its last argument).
+- **Throws when the selected part is missing → `queryStorefrontOrThrow`.** It takes a selector and the not-found message, returns the selected value (non-null), throws `notFound(message)` (404) when it is null, and `unavailable()` (500) when the API returned no data at all.
 
 `cache` is a required key of the options, so a read without one doesn't type-check.
 
 ```ts
 // ✅ returns null when the API gave no data — caller must check
-const data = await queryStorefront(storefront, CONTACT_PAGE_QUERY, {
+const contact = await queryStorefront(storefront, CONTACT_PAGE_QUERY, {
   variables: { handle: HANDLES.contactPage },
   cache: Cache.long(),
 });
-const page = data?.page ?? null;
+const contactPage = contact?.page ?? null;
 
-// ✅ throws notFound('Page not found') when there is no data — `data` is guaranteed
-const data = await queryStorefrontOrThrow(
+// ✅ throws notFound('Page not found') when `page` is null — `page` is guaranteed
+const page = await queryStorefrontOrThrow(
   storefront,
   PAGE_QUERY,
   { variables: { handle }, cache: Cache.long() },
+  (data) => data.page,
   'Page not found'
 );
-if (!data.page) throw notFound('Page not found'); // a null *field* is still the caller's check
 ```
 
 Throw with `notFound()` / `unavailable()` from [`lib/http.ts`](../../app/lib/http.ts), never `new Response(…, { status })` inline. For any other single-record helper keep the same split: `getX` returns `null`/`undefined` when missing, `getXOrThrow` throws. Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists`. Collection fetches keep natural plural names (`getProducts`, `listCollections`).

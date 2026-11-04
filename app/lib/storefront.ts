@@ -9,7 +9,7 @@ import {
 } from '@shopify/hydrogen';
 import { createContext } from 'react-router';
 
-import { notFound } from '~/lib/http';
+import { notFound, unavailable } from '~/lib/http';
 import { MARKET } from '~/lib/i18n';
 
 // The bare client type defaults its per-call extras to `{}`, which erases the
@@ -77,16 +77,24 @@ export const queryStorefront = async <const Doc extends QueryDoc>(
   return data ?? null;
 };
 
-/** Like `queryStorefront`, but a missing result is a 404 (`notFound(message)`). */
-export const queryStorefrontOrThrow = async <const Doc extends QueryDoc>(
+/**
+ * Like `queryStorefront`, but returns the `select`ed part of the result and
+ * throws when it is missing: no data at all (the API is down) is
+ * `unavailable()` (500); a null selected field (unknown handle) is
+ * `notFound(message)` (404).
+ */
+export const queryStorefrontOrThrow = async <const Doc extends QueryDoc, T>(
   client: StorefrontClient,
   doc: Doc,
   options: QueryStorefrontOptions<Doc>,
+  select: (data: StorefrontApi.ResultOf<Doc>) => T | null | undefined,
   message: string
-): Promise<StorefrontApi.ResultOf<Doc>> => {
+): Promise<NonNullable<T>> => {
   const data = await queryStorefront(client, doc, options);
-  if (!data) throw notFound(message);
-  return data;
+  if (!data) throw unavailable();
+  const selected = select(data);
+  if (selected === null || selected === undefined) throw notFound(message);
+  return selected;
 };
 
 const BUYER_IP_HEADERS = ['oxygen-buyer-ip', 'cf-connecting-ip', 'x-forwarded-for'] as const;
