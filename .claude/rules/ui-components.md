@@ -31,7 +31,7 @@ It reads [`components.json`](../../components.json) (aliased to `~/*`, base colo
 
 - **Generated, not authored.** These files don't follow the repo's component conventions (they use the `function` keyword and occasional `any`). `app/components/ui/**` is therefore **exempt** in [eslint.config.js](../../eslint.config.js) from `react/function-component-definition` and `@typescript-eslint/no-explicit-any`. Don't "fix" generated files to use const arrows.
 - **Restyle, don't re-architect.** Change Tailwind classes to match the brand; keep the Radix structure/behavior. If you need to update a primitive, re-run `shadcn add` and re-apply your styling rather than hand-patching internals.
-- **Local deviations must be re-applied after a regenerate.** `sheet.tsx` carries three: an `overlayClassName` pass-through (the mobile menu doesn't dim the page, the cart drawer does), live's `CloseIcon` in place of lucide's `XIcon`, and a `focus-visible:` ring on the close button (stock is `focus:`; `dialog.tsx` keeps the stock `focus:`). `dialog.tsx` carries none beyond the type-only `React` import (we run React 19, which the templates target, so the overlays are stock function components; the `forwardRef` wrappers the React 18 build needed are gone). `button.tsx` carries seven: the `brandCta` shared const + the three `brand*` variants built on it, the per-size `[--cta-slide:…]` vars, the `has-[>svg,>[data-cta-label]]:px-*` selector extensions, `lg` at brand height `h-9` (stock shadcn is `h-10`), and the single corner radius — the cva base declares `rounded-[2px]` (stock shadcn is `rounded-md`) and every size-variant `rounded-md` is stripped, so radius is declared in exactly one place. The sixth: `cursor-pointer` in the cva base. The seventh: the unused stock variants (`default`, `destructive`, `secondary`, `ghost`, `link`), the `icon*` sizes and every `dark:` utility are removed (nothing sets a `.dark` class; the default variant is `outline`). A `shadcn add` would silently drop all of these. Open question: dialogs close with lucide's `XIcon` while every drawer uses the traced `CloseIcon`; decide once which one both use.
+- **Local deviations must be re-applied after a regenerate.** `sheet.tsx` carries four: an `overlayClassName` pass-through (the mobile menu doesn't dim the page, the cart drawer does), live's `CloseIcon` in place of lucide's `XIcon`, a `focus-visible:` ring on the close button (stock is `focus:`; `dialog.tsx` keeps the stock `focus:`), and a default `aria-describedby={undefined}` on `SheetContent`, ahead of the props spread, so no caller has to silence Radix's missing-description warning (a sheet that adds a `SheetDescription` passes its id through props). `dialog.tsx` carries none beyond the type-only `React` import (we run React 19, which the templates target, so the overlays are stock function components; the `forwardRef` wrappers the React 18 build needed are gone). `button.tsx` carries seven: the `brandCta` shared const + the three `brand*` variants built on it, the per-size `[--cta-slide:…]` vars, the `has-[>svg,>[data-cta-label]]:px-*` selector extensions, `lg` at brand height `h-9` (stock shadcn is `h-10`), and the single corner radius — the cva base declares `rounded-brand` (stock shadcn is `rounded-md`) and every size-variant `rounded-md` is stripped, so radius is declared in exactly one place. The sixth: `cursor-pointer` in the cva base. The seventh: the unused stock variants (`default`, `destructive`, `secondary`, `ghost`, `link`), the `icon*` sizes and every `dark:` utility are removed (nothing sets a `.dark` class; the default variant is `outline`). A `shadcn add` would silently drop all of these. Open question: dialogs close with lucide's `XIcon` while every drawer uses the traced `CloseIcon`; decide once which one both use.
 - **Tokens live in `app/styles/tailwind.css`.** The shadcn base-color CSS variables (`--background`, `--primary`, `--border`, …) and the `@theme inline` mapping sit alongside the brand `@theme` tokens. They don't collide — keep both.
 - **Primitives are still presentational.** No data fetching or GraphQL in `components/ui/` — same boundary as every other component (see [module-boundaries.md](module-boundaries.md)).
 
@@ -47,7 +47,8 @@ does** rather than widening `Aside` with props for a single caller —
 (560px, centred title, text CLOSE via `SheetClose`, `showCloseButton={false}`).
 
 Two gotchas either way: `sm:max-w-none` is required to beat the primitive's `sm:max-w-sm`,
-and `gap-0 p-0` kills its flex gap and padding so each section can re-apply `px-5`.
+and `gap-0 p-0` kills its flex gap and padding so each section can re-apply `px-5`. Neither needs
+`aria-describedby={undefined}`: `SheetContent` defaults it.
 
 **The size-guide drawer is the one translucent surface.** `bg-field/80` + `backdrop-blur-xs`
 — everywhere else stays opaque (`--color-field` / `--color-field-night`), and faded Carbon
@@ -66,17 +67,19 @@ and the body copy fails. Re-measure the composite (not the token) before touchin
 
 ## Ember is once per page — with one sanctioned exception
 
-The accent appears once per page. The BASELINE drop page (`components/content/BaselineDrop.tsx`) deliberately repeats it (live dot, stat glyphs, per-piece Shop links) because the approved mock does; its one `brand` button is still the closer's SHOP THE DROP. Don't copy that onto other pages.
+The accent appears once per page, and form errors don't claim it: they render through `common/FieldError` in `--color-error`, which sits on the support tier. The BASELINE drop page (`components/content/BaselineDrop.tsx`) deliberately repeats it (live dot, stat glyphs, per-piece Shop links) because the approved mock does; its one `brand` button is still the closer's SHOP THE DROP. Don't copy that onto other pages.
 
 ## File/HUD devices stay on night editorial surfaces
 
-`common/Readout` (`SectionLabel`, `CornerBrackets`) and the `--grain` photo veil in
+`common/Readout` (`SectionLabel`, `CornerBrackets`), the `--grain` photo veil
+(`GrainVeil`, `GradedMedia grain`) and the `--file-grid` 72px ground in
 `tailwind.css` are the "issued file" vocabulary from the brand world doc — numbered
 chapters, mono readouts, a photo mount, grain over photography. They belong to the
 night-surface editorial pages (athlete signings, Our Story) and assume a `field-night`
 ground. Don't scatter them onto product or commerce surfaces, and keep grain on photos
 only, never under body copy. Chapter numbers encode order in a file; don't number things
-that aren't a sequence.
+that aren't a sequence. `Readout`'s `TypeOnReadout` and `Caret` are the exception: they work
+on either ground (the 404 is light, and the countdown uses the caret).
 
 ## Icons: match live, don't approximate
 

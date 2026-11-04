@@ -59,12 +59,12 @@ app/
   components/
     layout/      Header, Footer, PageLayout, Aside, Announcement
     analytics/   Trackers (route-driven publishers to the Shopify analytics bus, `useCartViewed`, and the PostHog and Meta Pixel destination registrations)
-    cart/        CartDrawer (the Aside drawer, the openCart target), useCartDrawer.ts (the drawer's open/close hook), CartMain / CartLineItem / CartSummary / CartError
-    product/     PDP components (ProductForm, ColorSwatches, TechStack, …)
+    cart/        CartDrawer (the Aside drawer, the openCart target), useCartDrawer.ts (the drawer's open/close hook), CartMain / CartLineItem / CartSummary
+    product/     PDP components (ProductForm, SegmentedCell, ColorSwatches, TechStack, …)
     collection/  ProductCard, LoadMore
     home/        homepage sections
-    content/     static-page compositions (OurStory, FirstLightTeaser, BaselineDrop, BaselineMasthead, NotFound, athlete-signing/ — the signing page as a root + one file per section)
-    common/      shared primitives (Container, Heading, Cta, Prose, ContentMedia, JoinForm + JoinDialog/useJoinDialog, …)
+    content/     static-page compositions (OurStory, FirstLightTeaser, BaselineDrop, BaselineMasthead, NotFound, ErrorShell, athlete-signing/ — the signing page as a root + one file per section)
+    common/      shared primitives (Container, Heading, Cta, Prose, ContentMedia, FieldError, Scrim, GradedMedia, HeroShell, JoinForm + JoinDialog/useJoinDialog, …)
   content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, siteUrl, provenance, shipping, seo, announcement, footer labels, social, fallback nav), media.ts (external media ids), cart.ts (CART_COPY); athlete-signing/ = types + one file per athlete (only what differs) + `SIGNING_DEFAULTS`/`defineSigning` and the handle registry
   lib/           (+ colocated *.test.ts)
     shopifyMiddleware.ts  the root middleware (Hydrogen's request lifecycle)
