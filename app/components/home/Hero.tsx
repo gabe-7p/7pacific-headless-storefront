@@ -34,14 +34,12 @@ export const Hero = () => (
       {/* Hero display tier, -0.005em, lh 0.95. Each line is a nowrap block so
           the break lands at the period on every viewport. Each step is the
           largest size whose longer line fits the content box at
-          that width. The 560 step is an arbitrary breakpoint like the base; the named
-          md/lg/xl steps above it stay in ascending order, so emit order is
-          safe. Re-measure if the headline copy changes. */}
+          that width. Re-measure if the headline copy changes. */}
       <Heading
         as="h1"
         size="none"
         lines={HOME_HERO.headlineLines}
-        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
+        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap hero-sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
       />
       {/* Body tier: Inter, sentence case. */}
       <p className="max-w-[42ch] text-sm leading-[1.55] md:text-base">{HOME_HERO.subhead}</p>

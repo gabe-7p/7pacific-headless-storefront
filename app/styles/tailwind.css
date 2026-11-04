@@ -110,14 +110,17 @@
   /* Live's Impulse theme breaks at 769/1025 (its media queries use max-width,
    * so 768/1024 belong to the SMALLER tier — iPad portrait stacks), one past
    * Tailwind's md/lg. `impulse:`/`impulse-lg:` are those tiers; don't reach
-   * for md:/lg: on surfaces that must flip exactly where live does. Named
-   * breakpoints sort by width, so these interleave correctly with md/lg/xl. */
+   * for md:/lg: on surfaces that must flip exactly where live does. They are px,
+   * and Tailwind sorts breakpoints by unit before width, so they emit ahead of
+   * every rem breakpoint: don't chain them with md/lg/xl on one property. */
   --breakpoint-impulse: 769px;
   --breakpoint-impulse-lg: 1025px;
   /* Where the error pages drop their side gutter (1440px). In rem on purpose:
    * Tailwind sorts breakpoints by unit before width, so a px value would emit
    * ahead of `md:` and lose to it at every width. */
   --breakpoint-gutterless: 90rem;
+  --breakpoint-hero-sm: 35rem; /* 560px: where the homepage headline steps up */
+  --breakpoint-banner: 53.75rem; /* 860px: where the Name/Spec cells step up */
 
   /* The "Meridian on Carbon" palette (Brand Guidelines → 03 Color Palette,
    * rev. Jul 2026), with target usage weights: Court 50% · Carbon 27% ·
