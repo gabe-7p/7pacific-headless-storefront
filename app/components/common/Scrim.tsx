@@ -2,11 +2,11 @@ import { cn } from '~/lib/cn';
 
 const STRENGTHS = {
   /** Live's hero overlay, verbatim. */
-  '10': 'bg-black/10',
+  '10': 'bg-scrim/10',
   /** The busier shots: teaser cards, the Roster bands, the PDP banner. */
-  '15': 'bg-black/15',
+  '15': 'bg-scrim/15',
   /** Our Story's hero, under the transparent header. */
-  '25': 'bg-black/25',
+  '25': 'bg-scrim/25',
 } as const;
 
 /**

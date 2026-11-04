@@ -145,7 +145,7 @@ const ProductPage = () => {
             className="hidden object-cover object-center min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full"
           />
         )}
-        <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-black/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
+        <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-scrim/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
         {/* The card carries its own left inset rather than the Container taking
             horizontal padding: Tailwind emits `md:` after `min-[769px]:`, so a
             `md:px-0` reset would win over `min-[769px]:px-8` at 769+. */}

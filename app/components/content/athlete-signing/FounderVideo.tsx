@@ -77,7 +77,7 @@ export const FounderVideo = ({ video }: { video: AthleteSigningContent['founderV
   return (
     <section>
       <SectionLabel number={video.number} title={video.title} />
-      <div className="relative mt-6 aspect-9/16 overflow-hidden bg-white/4">
+      <div className="relative mt-6 aspect-9/16 overflow-hidden bg-ink-night/4">
         {hasVideo && (
           <video
             ref={videoRef}
@@ -113,7 +113,7 @@ export const FounderVideo = ({ video }: { video: AthleteSigningContent['founderV
           </span>
         )}
         {/* Legibility scrim behind the controls — video runs under them. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-linear-to-t from-black/60 to-transparent p-4 pt-10">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col gap-3 bg-linear-to-t from-scrim/60 to-transparent p-4 pt-10">
           {hasVideo && (
             <input
               type="range"
@@ -125,7 +125,7 @@ export const FounderVideo = ({ video }: { video: AthleteSigningContent['founderV
               aria-label="Video progress"
               // Thumb is the same thin vertical marker as the readout scale.
               // m-0/border-0/p-0/rounded-none undo the base-layer `input` styles.
-              className="pointer-events-auto m-0 h-3 w-full cursor-pointer appearance-none rounded-none border-0 bg-transparent p-0 bg-[image:linear-gradient(rgb(255_255_255/0.25),rgb(255_255_255/0.25))] bg-[position:0_center] bg-[size:100%_1px] bg-no-repeat [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-white [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-white"
+              className="pointer-events-auto m-0 h-3 w-full cursor-pointer appearance-none rounded-none border-0 bg-transparent p-0 bg-[image:linear-gradient(color-mix(in_srgb,var(--color-ink-night)_25%,transparent),color-mix(in_srgb,var(--color-ink-night)_25%,transparent))] bg-[position:0_center] bg-[size:100%_1px] bg-no-repeat [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-ink-night [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-ink-night"
             />
           )}
           <div className="flex items-center justify-between">

@@ -51,7 +51,7 @@ export const Header = ({ header, publicStoreDomain }: HeaderProps) => {
       className={cn(
         'transition-colors duration-300 ease-(--ease-brand)',
         overlay
-          ? 'bg-linear-to-b from-black/30 to-transparent text-ink-night'
+          ? 'bg-linear-to-b from-scrim/30 to-transparent text-ink-night'
           : 'bg-nav text-nav-text shadow-sm'
       )}
     >

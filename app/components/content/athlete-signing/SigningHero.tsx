@@ -7,7 +7,7 @@ import { cn } from '~/lib/cn';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 const HeroPanel = ({ hero }: { hero: AthleteSigningContent['hero'] }) => (
-  <div className="relative aspect-[4/5] w-full overflow-hidden bg-white/4 md:aspect-auto md:h-full md:min-h-[560px]">
+  <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink-night/4 md:aspect-auto md:h-full md:min-h-[560px]">
     {hero.image.src && (
       <Image
         src={hero.image.src}

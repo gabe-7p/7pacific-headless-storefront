@@ -47,9 +47,9 @@ export const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent
       </p>
 
       <div className="relative mt-10 pb-7">
-        <div className="flex h-2.5 items-end justify-between border-b border-white/25">
+        <div className="flex h-2.5 items-end justify-between border-b border-ink-night/25">
           {Array.from({ length: 11 }, (_, index) => (
-            <span key={index} className="h-1.5 w-px bg-white/25" />
+            <span key={index} className="h-1.5 w-px bg-ink-night/25" />
           ))}
         </div>
         <span

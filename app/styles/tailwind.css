@@ -143,6 +143,9 @@
   --color-ink-night: var(--color-court); /* primary type on dark */
   --color-support: var(--color-graphite); /* secondary type on light */
   --color-support-night: var(--color-zinc); /* secondary/muted type on dark */
+  /* Washes over photography (common/Scrim, the gradient scrims). Pure black, off
+   * the palette on purpose: a scrim darkens media, it is never a surface or type. */
+  --color-scrim: #000;
   /* Form error text (common/FieldError). On the support tier, not Ember: Ember
    * is rationed to one moment per page, and an error line can't claim it. */
   --color-error: var(--color-support);

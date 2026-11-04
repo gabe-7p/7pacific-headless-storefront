@@ -21,10 +21,10 @@ export const SectionLabel = ({ number, title }: { number: string; title: string 
 /** Four hairline corner marks; the parent must be `relative`. */
 export const CornerBrackets = () => (
   <span aria-hidden>
-    <span className="border-border-subtle/50 absolute top-0 left-0 size-3 border-t border-l" />
-    <span className="border-border-subtle/50 absolute top-0 right-0 size-3 border-t border-r" />
-    <span className="border-border-subtle/50 absolute bottom-0 left-0 size-3 border-b border-l" />
-    <span className="border-border-subtle/50 absolute right-0 bottom-0 size-3 border-r border-b" />
+    <span className="border-border-subtle-night absolute top-0 left-0 size-3 border-t border-l" />
+    <span className="border-border-subtle-night absolute top-0 right-0 size-3 border-t border-r" />
+    <span className="border-border-subtle-night absolute bottom-0 left-0 size-3 border-b border-l" />
+    <span className="border-border-subtle-night absolute right-0 bottom-0 size-3 border-r border-b" />
   </span>
 );
 
