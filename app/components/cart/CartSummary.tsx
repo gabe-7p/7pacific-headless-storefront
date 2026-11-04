@@ -5,6 +5,7 @@ import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
 import { FieldError } from '~/components/common/FieldError';
 import { Price } from '~/components/common/Price';
+import { SEGMENT_LABEL } from '~/components/product/SegmentedCell';
 import { Button } from '~/components/ui/button';
 import { CART_COPY } from '~/content/cart';
 import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics/posthog.events';
@@ -41,11 +42,7 @@ export const CartSummary = ({ layout }: { layout: CartLayout }) => {
       </p>
       <div className="flex items-baseline justify-between" aria-busy={totalsPending}>
         {/* Live's drawer letterspaces the label; the /cart page keeps it plain. */}
-        <span
-          className={cn('text-sm', layout === 'aside' && 'text-[9.6px] tracking-[0.3em] uppercase')}
-        >
-          Subtotal
-        </span>
+        <span className={cn('text-sm', layout === 'aside' && SEGMENT_LABEL)}>Subtotal</span>
         <span
           className={cn('text-sm font-medium transition-opacity', totalsPending && 'opacity-50')}
         >

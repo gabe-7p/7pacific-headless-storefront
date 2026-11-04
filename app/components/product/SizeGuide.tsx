@@ -4,6 +4,12 @@ import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import {
+  SEGMENT_CELL,
+  SEGMENT_IDLE,
+  SEGMENT_JOIN,
+  SEGMENT_SELECTED,
+} from '~/components/product/SegmentedCell';
+import {
   Sheet,
   SheetClose,
   SheetContent,
@@ -26,9 +32,9 @@ type Unit = (typeof UNITS)[number];
 const LINK_CLASS =
   'cursor-pointer text-support underline underline-offset-4 transition-colors hover:text-ink';
 
-/** Live's segmented cell, borrowed from the size selector one scroll above. */
-const UNIT_CELL =
-  'cursor-pointer border px-6 py-2 text-[9.6px] font-semibold tracking-[0.3em] uppercase transition-colors';
+/** Idle cells stay unfilled so the translucent drawer reads through them, and
+    with two cells the neighbour is always the selected one, so nothing lifts. */
+const UNIT_CELL = cn(SEGMENT_CELL, 'cursor-pointer px-6 py-2');
 
 /**
  * Mono measurement cell — numbers read as spec data, not prose. It steps down
@@ -86,10 +92,8 @@ export const SizeGuide = () => {
                 onClick={() => setUnit(key)}
                 className={cn(
                   UNIT_CELL,
-                  '-ml-px first:ml-0',
-                  unit === key
-                    ? 'z-10 border-ink bg-field-night text-ink-night'
-                    : 'border-border-subtle text-ink hover:border-ink'
+                  SEGMENT_JOIN,
+                  unit === key ? SEGMENT_SELECTED : SEGMENT_IDLE
                 )}
               >
                 {units[key].label}
