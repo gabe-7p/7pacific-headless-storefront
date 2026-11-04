@@ -90,6 +90,9 @@
   /* The ONE corner radius: buttons, dialogs, the swatch tooltip. */
   --radius-brand: 2px;
 
+  /* The campaign title weight (Heading's campaign variant). */
+  --font-weight-campaign: 450;
+
   /* Brand tracking scale — caps always track wider than default, body stays
    * at 0. `tracking-caps` and `tracking-spec` are the two load-bearing values. */
   --tracking-hero: -0.005em; /* hero display headlines */

@@ -18,6 +18,11 @@ describe('cn', () => {
   });
 
   describe('knows the custom tokens', () => {
+    it('reads font-campaign as a weight, not a family', () => {
+      expect(cn('font-display-narrow font-campaign')).toBe('font-display-narrow font-campaign');
+      expect(cn('font-medium font-campaign')).toBe('font-campaign');
+    });
+
     it('lets rounded-brand replace a stock radius', () => {
       expect(cn('rounded-lg rounded-brand')).toBe('rounded-brand');
     });
