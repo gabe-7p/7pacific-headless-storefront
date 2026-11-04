@@ -6,13 +6,13 @@ import { ProductViewedTracker } from '~/components/analytics/Trackers';
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
+import { Price } from '~/components/common/Price';
 import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
 import { EditionTag } from '~/components/product/EditionTag';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
-import { ProductPrice } from '~/components/product/ProductPrice';
 import { Recommendations } from '~/components/product/Recommendations';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
@@ -169,11 +169,18 @@ const ProductPage = () => {
               >
                 {title}
               </Heading>
+              {/* font-medium, not bold: mono runs Regular/Medium only. The
+                  non-breaking space holds the row when no variant resolves. */}
               <div className="mt-3 text-lg">
-                <ProductPrice
-                  price={selectedVariant?.price}
-                  compareAtPrice={selectedVariant?.compareAtPrice}
-                />
+                {selectedVariant?.price ? (
+                  <Price
+                    data={selectedVariant.price}
+                    compareAt={selectedVariant.compareAtPrice}
+                    className="font-medium"
+                  />
+                ) : (
+                  <span>&nbsp;</span>
+                )}
               </div>
               {descriptionHtml && (
                 <Prose html={descriptionHtml} variant="description" className="mt-4" />
