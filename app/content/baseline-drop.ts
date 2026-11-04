@@ -6,7 +6,8 @@
  */
 
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
-import { STORE_LINKS } from '~/content/links';
+import { CART_COPY } from '~/content/cart';
+import { PRODUCT_PRICES, STORE_LINKS } from '~/content/links';
 import { BEHIND_THE_BUILD_VIDEO_ID } from '~/content/media';
 import { shopifyImage, shopifyVideo, shopifyVideoThumbnail } from '~/lib/shopifyFiles';
 import { youtubeWatchUrl } from '~/lib/urls';
@@ -128,12 +129,12 @@ would be easy on Saturday. We got you.',
     subtitle:
       'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. These are the \
 only three pieces you need to get to work.',
-    /** Names and prices mirror the live Shopify products (2026-08-25) —
-        update here if pricing changes. */
+    /** Names mirror the live Shopify products (2026-08-25); prices come from
+        `PRODUCT_PRICES` (content/links.ts) — update there if pricing changes. */
     products: [
       {
         name: 'AirRail™ short',
-        price: '$79',
+        price: PRODUCT_PRICES.shopShorts,
         href: STORE_LINKS.shopShorts,
         media: {
           kind: 'image',
@@ -146,7 +147,7 @@ only three pieces you need to get to work.',
       },
       {
         name: 'TraceFiber™ tee',
-        price: '$72',
+        price: PRODUCT_PRICES.shopShirts,
         href: STORE_LINKS.shopShirts,
         media: {
           kind: 'image',
@@ -156,7 +157,7 @@ only three pieces you need to get to work.',
       },
       {
         name: 'MotionFrame™ hat',
-        price: '$42',
+        price: PRODUCT_PRICES.shopHat,
         href: STORE_LINKS.shopHat,
         // Same worn shot the MOTIONFRAME hat PDP leads with.
         media: {
@@ -172,6 +173,6 @@ only three pieces you need to get to work.',
     eyebrow: 'ED. 01 · Live now',
     headingLines: ['Set your baseline.', 'Then beat it.'],
     body: 'Height, pace, load, rounds. Whatever number you’re chasing, chase it in gear that was tested chasing the same thing.',
-    cta: { label: 'Shop the drop', href: STORE_LINKS.shopAll },
+    cta: { label: CART_COPY.shopCta, href: STORE_LINKS.shopAll },
   },
 } as const;

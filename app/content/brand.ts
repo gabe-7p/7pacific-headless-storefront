@@ -5,10 +5,19 @@
  */
 
 import { STORE_LINKS } from '~/content/links';
-import { pageUrl } from '~/lib/urls';
+import { instagramProfileUrl, pageUrl } from '~/lib/urls';
+
+/** Free shipping starts here (USD) — the announcement and the default meta description both quote it. */
+const FREE_SHIPPING_THRESHOLD = 200;
 
 type SocialPlatform = 'Instagram';
-type SocialLink = { platform: SocialPlatform; href: string };
+type SocialLink = { platform: SocialPlatform; handle: string; href: string };
+
+const instagram = (handle: string): SocialLink => ({
+  platform: 'Instagram',
+  handle,
+  href: instagramProfileUrl(handle),
+});
 type NavLink = { title: string; url: string };
 
 export const BRAND = {
@@ -18,16 +27,30 @@ export const BRAND = {
   /** The canonical production origin (canonical links, absolute og:image URLs). */
   siteUrl: 'https://7pacificapparel.com',
 
+  /** Where the product is designed — the homepage eyebrow and every signing page footer. */
+  provenance: 'Designed in San Francisco',
+
+  shipping: { threshold: FREE_SHIPPING_THRESHOLD },
+
   /**
    * Announcement spec strip: mono caps. The one shipping fact, nothing else.
    */
   announcement: {
-    message: 'FREE SHIPPING ON ORDERS $200+',
+    message: `FREE SHIPPING ON ORDERS $${FREE_SHIPPING_THRESHOLD}+`,
   },
 
-  social: [
-    { platform: 'Instagram', href: 'https://www.instagram.com/7_pacific/' },
-  ] satisfies Array<SocialLink>,
+  /** Fallback meta description for any page without its own (see lib/seo.ts). */
+  seo: {
+    defaultDescription: `Lightweight, breathable training gear built for performance. Free shipping on orders over $${FREE_SHIPPING_THRESHOLD}.`,
+  },
+
+  footer: {
+    /** The footer's link column (the Storefront `footer` menu) title. */
+    supportTitle: 'Support',
+    poweredBy: 'Powered by Shopify',
+  },
+
+  social: [instagram('7_pacific')] satisfies Array<SocialLink>,
 
   /** Fallback footer links, used only if the Storefront `footer` menu is empty. */
   footerLinks: [

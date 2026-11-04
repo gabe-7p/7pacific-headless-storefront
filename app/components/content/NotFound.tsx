@@ -53,7 +53,7 @@ export const NotFound = () => (
           </FadeIn>
           <FadeIn delay={0.3}>
             <Cta to="/" size="sm" className="mt-6">
-              Homepage
+              {MICROCOPY.notFoundCta}
             </Cta>
           </FadeIn>
         </div>
@@ -61,10 +61,10 @@ export const NotFound = () => (
         <div className="overflow-hidden">
           <SettleIn delay={0.1}>
             <Image
-              src={NOT_FOUND_PAGE.image.url}
+              src={NOT_FOUND_PAGE.image.src}
               width={NOT_FOUND_PAGE.image.width}
               height={NOT_FOUND_PAGE.image.height}
-              alt={NOT_FOUND_PAGE.image.altText}
+              alt={NOT_FOUND_PAGE.image.alt}
               sizes={IMAGE_SIZES.half}
               className="w-full"
             />

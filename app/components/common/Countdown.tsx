@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { cn } from '~/lib/cn';
-import { getTimeLeft, pad2, type TimeLeft } from '~/lib/countdown';
-
-const UNIT_KEYS = ['days', 'hours', 'minutes', 'seconds'] as const;
+import { getTimeLeft, pad2, TIME_LEFT_UNITS, type TimeLeft } from '~/lib/countdown';
 
 /**
  * Size tiers — full class strings per tier because `text-*` also re-sets
@@ -58,7 +56,7 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
         const timeLeft = getTimeLeft(targetMs, Date.now());
         const prevTimeLeft = prev.timeLeft;
         const changed = prevTimeLeft
-          ? UNIT_KEYS.findIndex((unit) => timeLeft[unit] !== prevTimeLeft[unit])
+          ? TIME_LEFT_UNITS.findIndex((unit) => timeLeft[unit] !== prevTimeLeft[unit])
           : 0;
         // Nothing changed (the countdown is holding at zero): keep the old
         // index — the caret's key stays the same, so it doesn't replay.
@@ -70,7 +68,9 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
   }, [dropIso]);
 
   const { timeLeft, caretIndex } = state;
-  const values = timeLeft ? UNIT_KEYS.map((unit) => pad2(timeLeft[unit])) : labels.map(() => '--');
+  const values = timeLeft
+    ? TIME_LEFT_UNITS.map((unit) => pad2(timeLeft[unit]))
+    : labels.map(() => '--');
   const tier = SIZES[size];
 
   return (

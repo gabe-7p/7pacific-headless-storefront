@@ -36,9 +36,6 @@ export const shopifyImage = (filename: string, params?: ImageParams) =>
 export const shopifyVideo = (id: string, rendition: string) =>
   `${VIDEO_CDN}/vp/${id}/${id}.${rendition}.mp4`;
 
-/** The untranscoded upload — legacy, prefer a rendition. */
-export const shopifyVideoOriginal = (id: string) => `${VIDEO_CDN}/o/v/${id}.mp4`;
-
 /** The first-frame thumbnail Files renders for a video. */
 export const shopifyVideoThumbnail = (id: string, params?: ImageParams) =>
   `${FILES_CDN}/preview_images/${id}.thumbnail.0000000000.jpg${query(params)}`;
@@ -46,3 +43,32 @@ export const shopifyVideoThumbnail = (id: string, params?: ImageParams) =>
 /** A custom poster uploaded for a video. */
 export const shopifyVideoPoster = (filename: string, params?: ImageParams) =>
   `${FILES_CDN}/preview_images/${filename}${query(params)}`;
+
+/**
+ * The shapes content files hold for Files media, so every surface that
+ * renders one (`common/Image`, `common/ContentMedia`) takes the same thing.
+ * `width`/`height` are the asset's intrinsic size (what `Image` crops and
+ * reserves space from).
+ */
+export type FilesImage = { src: string; width: number; height: number; alt: string };
+
+export type FilesVideo = { src: string; poster?: string; label?: string };
+
+/** A slot that holds either: discriminated by `kind`. */
+export type ContentMedia = ({ kind: 'image' } & FilesImage) | ({ kind: 'video' } & FilesVideo);
+
+/**
+ * A `FilesImage` from the filename Files shows. `width`/`height` are the
+ * intrinsic size; `resize` asks the CDN for a smaller copy of an oversized
+ * source (the `?width=` param) when the intrinsic size is the served size.
+ */
+export const filesImage = (
+  filename: string,
+  {
+    v,
+    resize,
+    width,
+    height,
+    alt,
+  }: { v?: number; resize?: number; width: number; height: number; alt: string }
+): FilesImage => ({ src: shopifyImage(filename, { v, width: resize }), width, height, alt });

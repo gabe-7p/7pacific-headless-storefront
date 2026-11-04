@@ -5,6 +5,7 @@ import type { CartLayout } from '~/components/cart/CartMain';
 import { Image } from '~/components/common/Image';
 import { Price } from '~/components/common/Price';
 import { useAside } from '~/components/layout/Aside';
+import { CART_COPY } from '~/content/cart';
 import { type CartLine, useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 import { cartUrl, productUrl } from '~/lib/urls';
@@ -25,7 +26,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
   const closeIfAside = () => layout === 'aside' && close();
 
   const product = merchandise?.product;
-  const title = product?.title ?? merchandise?.title ?? 'Product';
+  const title = product?.title ?? merchandise?.title ?? CART_COPY.productFallback;
   const selectedOptions = merchandise?.selectedOptions ?? [];
   const lineItemUrl = product?.handle ? productUrl(product.handle, selectedOptions) : cartUrl();
   const isOptimistic = id.startsWith('optimistic:');

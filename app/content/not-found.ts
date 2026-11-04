@@ -3,15 +3,14 @@
  * supporting pieces: the coordinates spec-line and the photograph.
  */
 
-import { shopifyImage } from '~/lib/shopifyFiles';
+import { filesImage } from '~/lib/shopifyFiles';
 
 export const NOT_FOUND_PAGE = {
   coordinates: '37.78°N · 122.51°W',
   location: 'Lands End',
-  image: {
-    url: shopifyImage('potential_hero_image.jpg'),
+  image: filesImage('potential_hero_image.jpg', {
     width: 2048,
     height: 1365,
-    altText: 'Two athletes walking away down a foggy coastal trail at Lands End',
-  },
+    alt: 'Two athletes walking away down a foggy coastal trail at Lands End',
+  }),
 } as const;

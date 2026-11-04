@@ -12,8 +12,8 @@ import type { ReactNode } from 'react';
  * Wrap the app (or a subtree that animates) once in `<MotionProvider>`.
  */
 
-/** Easing pulled to one place; same curve as the CSS `--ease-brand` token. */
-const EASE_BRAND = [0.165, 0.84, 0.44, 1] as const;
+/** Easing pulled to one place; same curve as the CSS `--ease-brand` token (Motion.test.ts pins the two together). */
+export const EASE_BRAND = [0.165, 0.84, 0.44, 1] as const;
 
 /**
  * reducedMotion="user" is what actually makes the primitives' "respects

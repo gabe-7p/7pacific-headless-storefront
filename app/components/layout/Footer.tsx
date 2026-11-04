@@ -53,7 +53,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                   <SocialIcons />
                 </div>
               </FooterCollapsible>
-              <FooterCollapsible title="Support">
+              <FooterCollapsible title={BRAND.footer.supportTitle}>
                 <FooterSupport
                   menu={footer?.menu}
                   primaryDomainUrl={header.shop.primaryDomain.url}
@@ -70,7 +70,7 @@ export const Footer = ({ footer: footerPromise, header, publicStoreDomain }: Foo
                 rel="noopener noreferrer"
                 className="text-xs tracking-wide text-support-night transition-opacity hover:opacity-80"
               >
-                Powered by Shopify
+                {BRAND.footer.poweredBy}
               </a>
             </Container>
           </footer>
@@ -91,8 +91,13 @@ const FooterCollapsible = ({ title, children }: { title: string; children: React
   const [collapsible, setCollapsible] = useState(false);
 
   useEffect(() => {
-    // Must mirror the `impulse:` CSS breakpoint above.
-    const mq = window.matchMedia('(max-width: 768px)');
+    // The `impulse:` breakpoint, read from the theme token so the CSS and
+    // this query can't drift (`@theme` variables are emitted on :root).
+    const impulse = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-impulse'),
+      10
+    );
+    const mq = window.matchMedia(`(max-width: ${(Number.isNaN(impulse) ? 769 : impulse) - 1}px)`);
     const apply = () => {
       setCollapsible(mq.matches);
       setOpen(!mq.matches);

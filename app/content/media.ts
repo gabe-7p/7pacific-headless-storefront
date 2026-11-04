@@ -9,3 +9,6 @@
  * homepage skips the first four seconds of slate).
  */
 export const BEHIND_THE_BUILD_VIDEO_ID = 'jf_E0NEgeCE';
+
+/** The bakery-run recap post on Instagram (the shortcode in its `/p/<id>/` URL). */
+export const BAKERY_RUN_RECAP_POST_ID = 'DdpdpIIhBYg';

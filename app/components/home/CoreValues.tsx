@@ -1,8 +1,7 @@
 import { Container } from '~/components/common/Container';
+import { ContentMedia } from '~/components/common/ContentMedia';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { Image } from '~/components/common/Image';
-import { LazyVideo } from '~/components/common/LazyVideo';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { type CoreValue, HOME_CORE_VALUES } from '~/content/home';
 import { cn } from '~/lib/cn';
@@ -40,26 +39,6 @@ const ValueCard = ({ value, className }: { value: CoreValue; className?: string 
   </div>
 );
 
-const Media = ({ media }: { media: CoreValue['media'] }) =>
-  media.kind === 'video' ? (
-    <LazyVideo
-      src={media.src}
-      poster={media.poster}
-      label={media.label}
-      className="size-full object-cover"
-    />
-  ) : (
-    <Image
-      src={media.url}
-      width={media.width}
-      height={media.height}
-      alt={media.alt}
-      loading="lazy"
-      sizes={IMAGE_SIZES.twoThirds}
-      className="size-full object-cover"
-    />
-  );
-
 /**
  * "How We Train" — four alternating rows pairing each rule card with its
  * media (wide media ~2/3, narrow card ~1/3, sides alternating per row; single
@@ -77,7 +56,11 @@ export const CoreValues = () => {
         {values.map((value, index) => (
           <div key={value.title} className="grid grid-cols-1 gap-3 md:grid-cols-3">
             <div className="h-64 overflow-hidden bg-field md:col-span-2 md:h-80 lg:h-[420px]">
-              <Media media={value.media} />
+              <ContentMedia
+                media={value.media}
+                sizes={IMAGE_SIZES.twoThirds}
+                className="size-full object-cover"
+              />
             </div>
             <ValueCard value={value} className={index % 2 === 0 ? undefined : 'md:order-first'} />
           </div>

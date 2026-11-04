@@ -2,6 +2,7 @@ import { CartLineItem } from '~/components/cart/CartLineItem';
 import { CartSummary } from '~/components/cart/CartSummary';
 import { Cta } from '~/components/common/Cta';
 import { useAside } from '~/components/layout/Aside';
+import { CART_COPY } from '~/content/cart';
 import { STORE_LINKS } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
 import { useCart } from '~/lib/cart';
@@ -49,7 +50,7 @@ const CartEmpty = ({ layout }: { layout: CartLayout }) => {
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       <p className="text-sm text-support">{MICROCOPY.emptyCart}</p>
       <Cta to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport" size="sm" className="mt-4">
-        Shop the drop
+        {CART_COPY.shopCta}
       </Cta>
     </div>
   );

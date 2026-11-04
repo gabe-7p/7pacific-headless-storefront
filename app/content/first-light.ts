@@ -15,6 +15,8 @@ export const FIRST_LIGHT = {
   eyebrow: 'ED. 02 · FW 26',
   /** ALL CAPS via CSS (Heading brand variant), per the display-face rule. */
   headline: 'First Light · 09.13.26',
+  /** The `<title>` — `buildMeta` adds the brand prefix. */
+  seoTitle: 'First Light · 09.13.26',
   intro:
     'Our first fall and winter clothing selection in our history and we’re excited to share it. \
 We kept our vision clear of always putting the athletes first and creating products that you will \

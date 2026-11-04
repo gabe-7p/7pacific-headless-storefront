@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { Cta } from '~/components/common/Cta';
 import { TeaserSection } from '~/components/home/TeaserSection';
@@ -13,9 +13,10 @@ const CARDS = [
       title: 'Left Title',
       media: {
         kind: 'image',
-        url: 'https://cdn.shopify.com/files/left.jpg',
+        src: 'https://cdn.shopify.com/files/left.jpg',
         width: 2048,
         height: 1638,
+        alt: '',
       },
     },
     cta: (
@@ -52,6 +53,18 @@ const renderSection = (props?: {
     </MemoryRouter>
   );
 
+beforeAll(() => {
+  // jsdom has no IntersectionObserver; LazyVideo (the video card) needs one.
+  vi.stubGlobal(
+    'IntersectionObserver',
+    class {
+      observe = () => undefined;
+      disconnect = () => undefined;
+      unobserve = () => undefined;
+    }
+  );
+});
+
 afterEach(cleanup);
 
 describe('TeaserSection', () => {
@@ -81,16 +94,17 @@ describe('TeaserSection', () => {
     expect(external?.getAttribute('rel')).toBe('noopener noreferrer');
   });
 
-  it('renders image media as an <img> and video media as a muted looping cover video', () => {
+  it('renders image media as an <img> and video media as a lazy muted looping cover video', () => {
     const { container } = renderSection();
     const img = container.querySelector('img');
     expect(img?.src).toContain('left.jpg');
     const video = container.querySelector('video');
-    expect(video?.src).toContain('right.mp4');
+    // LazyVideo attaches `src` only once the card nears the viewport, so the
+    // clip is not fetched on load; the poster stands in until then.
+    expect(video?.getAttribute('src')).toBeNull();
+    expect(video?.getAttribute('preload')).toBe('none');
     expect(video?.poster).toContain('right-poster.jpg');
-    // Autoplay in the card requires muted + playsInline; loop keeps it ambient.
     expect(video?.muted).toBe(true);
-    expect(video).toHaveProperty('autoplay', true);
     expect(video).toHaveProperty('loop', true);
     expect(video?.getAttribute('playsinline')).not.toBeNull();
     // Both fill the fixed-aspect wrapper the same way.

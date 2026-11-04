@@ -141,7 +141,7 @@ export const SizeGuide = () => {
             <p className="mt-3 text-xs leading-relaxed text-support">{howToMeasure.body}</p>
           </div>
           <img
-            src={image.url}
+            src={image.src}
             alt={image.alt}
             width={image.width}
             height={image.height}

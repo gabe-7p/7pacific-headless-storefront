@@ -28,6 +28,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { NotFound } from '~/components/content/NotFound';
 import { HANDLES } from '~/content/links';
+import { MICROCOPY } from '~/content/microcopy';
 import {
   getPostHogConfig,
   getRouteErrorException,
@@ -239,13 +240,11 @@ export const ErrorBoundary = () => {
     <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
       <p className="text-support text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
       <Heading as="h1" size="xl" className="mt-3">
-        Something went wrong
+        {MICROCOPY.serverError.heading}
       </Heading>
-      <p className="mt-4 max-w-md text-sm text-ink">
-        An unexpected error occurred. Please try again.
-      </p>
+      <p className="mt-4 max-w-md text-sm text-ink">{MICROCOPY.serverError.body}</p>
       <Cta href="/" variant="brand" size="lg" className="mt-8">
-        Back to shopping
+        {MICROCOPY.serverError.cta}
       </Cta>
       {errorMessage && (
         <pre className="mt-8 max-w-full overflow-x-auto text-left text-xs text-support">

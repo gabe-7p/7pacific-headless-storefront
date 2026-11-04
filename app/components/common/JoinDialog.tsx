@@ -7,14 +7,6 @@ import { JoinDialogContext } from '~/components/common/useJoinDialog';
 import { Dialog, DialogDescription } from '~/components/ui/dialog';
 import { JOIN_COPY, type JoinList } from '~/content/join';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
-import { shopifyImage } from '~/lib/shopifyFiles';
-
-/** The roster dialog's image (Shopify Files). */
-const IMAGE = {
-  src: shopifyImage('jahli_full_body_behind_in_gym.jpg', { v: 1793245833 }),
-  width: 3580,
-  height: 4000,
-};
 
 /**
  * The signup modal, one per list, opened through `useJoinDialog().open(list)`.
@@ -56,14 +48,16 @@ const NewsletterPanel = () => {
   const copy = JOIN_COPY.newsletter;
   return (
     <BrandDialogContent className="grid gap-0 overflow-hidden p-0 sm:max-w-3xl sm:grid-cols-2">
-      <Image
-        src={IMAGE.src}
-        alt=""
-        width={IMAGE.width}
-        height={IMAGE.height}
-        sizes={IMAGE_SIZES.dialogPanel}
-        className="hidden size-full object-cover sm:block"
-      />
+      {copy.image && (
+        <Image
+          src={copy.image.src}
+          alt={copy.image.alt}
+          width={copy.image.width}
+          height={copy.image.height}
+          sizes={IMAGE_SIZES.dialogPanel}
+          className="hidden size-full object-cover sm:block"
+        />
+      )}
       <div className="p-8">
         <BrandDialogTitle>{copy.heading}</BrandDialogTitle>
         <DialogDescription className="mt-3 text-sm text-support-night">

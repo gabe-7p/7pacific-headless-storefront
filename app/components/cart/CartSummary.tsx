@@ -4,6 +4,7 @@ import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
 import { Price } from '~/components/common/Price';
 import { Button } from '~/components/ui/button';
+import { CART_COPY } from '~/content/cart';
 import { ANALYTICS_EVENT, checkoutStartedProperties } from '~/lib/analytics/posthog.events';
 import { useCart, useCartForm } from '~/lib/cart';
 import { cn } from '~/lib/cn';
@@ -56,9 +57,7 @@ export const CartSummary = ({ layout }: { layout: CartLayout }) => {
       )}
 
       {/* Live puts the disclaimer above the checkout button. */}
-      <p className="mt-3 text-center text-xs text-support">
-        Shipping, taxes, and discount codes calculated at checkout.
-      </p>
+      <p className="mt-3 text-center text-xs text-support">{CART_COPY.disclaimer}</p>
       <CartCheckoutActions layout={layout} />
     </div>
   );
@@ -97,7 +96,7 @@ const CartDiscounts = () => {
     <div>
       {codes.length > 0 && (
         <dl className="flex items-center justify-between">
-          <dt className="text-support">Discount(s)</dt>
+          <dt className="text-support">{CART_COPY.discountLabel}</dt>
           <dd className="flex items-center gap-3">
             {codes.map((code) => (
               <form key={code} {...formProps()} className="flex items-center gap-2">
@@ -119,13 +118,13 @@ const CartDiscounts = () => {
 
       <form {...formProps()} className="mt-2 flex gap-2">
         <label htmlFor="discount-code-input" className="sr-only">
-          Discount code
+          {CART_COPY.discountPlaceholder}
         </label>
         <input
           id="discount-code-input"
           type="text"
           {...register('discountCode', { defaultValue: '' })}
-          placeholder="Discount code"
+          placeholder={CART_COPY.discountPlaceholder}
           className="border-border-subtle m-0 flex-1 rounded-none border px-2 py-1.5"
         />
         <Button type="submit" {...register('discount-apply')} variant="outline" size="sm">

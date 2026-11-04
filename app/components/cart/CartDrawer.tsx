@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { CartMain } from '~/components/cart/CartMain';
 import { Aside, useAside } from '~/components/layout/Aside';
+import { CART_COPY } from '~/content/cart';
 import { publishCartViewed } from '~/lib/analytics/shopify';
 import { useCart } from '~/lib/cart';
 import { whenShopifyReady } from '~/lib/shopifyRuntime';
@@ -59,7 +60,7 @@ export const CartDrawer = () => {
   }, [isOpen]);
 
   return (
-    <Aside type="cart" heading="Cart">
+    <Aside type="cart" heading={CART_COPY.title}>
       <CartMain layout="aside" />
     </Aside>
   );

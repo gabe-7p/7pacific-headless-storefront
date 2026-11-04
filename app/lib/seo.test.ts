@@ -14,6 +14,14 @@ describe('pageTitle', () => {
   });
 });
 
+describe('DEFAULT_DESCRIPTION', () => {
+  it('quotes the free-shipping threshold from the brand', () => {
+    expect(DEFAULT_DESCRIPTION).toBe(
+      'Lightweight, breathable training gear built for performance. Free shipping on orders over $200.'
+    );
+  });
+});
+
 describe('buildMeta', () => {
   it('builds title/description/og tags from a page title', () => {
     const meta = buildMeta({ title: 'Cart', description: 'Your cart.' });

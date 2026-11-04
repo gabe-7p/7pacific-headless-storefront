@@ -64,8 +64,8 @@ app/
     collection/  ProductCard, LoadMore
     home/        homepage sections
     content/     static-page compositions (OurStory, FirstLightTeaser, BaselineDrop, BaselineMasthead, NotFound, athlete-signing/ — the signing page as a root + one file per section)
-    common/      shared primitives (Container, Heading, Cta, Prose, JoinForm + JoinDialog/useJoinDialog, …)
-  content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, announcement, social, fallback nav), media.ts (external media ids); athlete-signing/ = types + one file per athlete + the handle registry
+    common/      shared primitives (Container, Heading, Cta, Prose, ContentMedia, JoinForm + JoinDialog/useJoinDialog, …)
+  content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, siteUrl, provenance, shipping, seo, announcement, footer labels, social, fallback nav), media.ts (external media ids), cart.ts (CART_COPY); athlete-signing/ = types + one file per athlete (only what differs) + `SIGNING_DEFAULTS`/`defineSigning` and the handle registry
   lib/           (+ colocated *.test.ts)
     shopifyMiddleware.ts  the root middleware (Hydrogen's request lifecycle)
     storefront.ts   the request-scoped Storefront client, router context key, route templates · `queryStorefront` / `queryStorefrontOrThrow` (every read goes through them)
@@ -73,7 +73,7 @@ app/
     cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`)
     fragments.ts    shared gql fragments + chrome queries · http.ts `notFound`, `unavailable`, `describeRouteError`, `deferQuery`
     i18n.ts         MARKET, MONEY_LOCALE, DATE_LOCALE · money.ts price formats (`brand` / `compact` / `cart`)
-    urls.ts         every URL shape · shopifyFiles.ts Shopify Files CDN helpers · imageSizes.ts `sizes` presets for common/Image
+    urls.ts         every URL shape · shopifyFiles.ts Shopify Files CDN helpers + the `FilesImage`/`ContentMedia` content types · imageSizes.ts `sizes` presets for common/Image
     seo.ts          page-title format, `buildMeta()` · sitemap.ts the sitemaps · robots.ts `/robots.txt` · gid.ts `gidNumericId` · csp.ts + nonce.tsx the CSP header and nonce
     shopifyRuntime.ts  the one wait-for-`window.Shopify` poll
     metafields.ts   metafield JSON/image parsing · countdown.ts drop-timer math · journalFormat.ts journal dates
