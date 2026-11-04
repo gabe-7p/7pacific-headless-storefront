@@ -16,6 +16,18 @@ export const getAnalyticsBus = (): StorefrontAnalytics | null =>
 /** The `openCart` standard action, once the Standard Actions script has loaded. */
 export const getOpenCartAction = () => window.Shopify?.actions?.openCart;
 
+/**
+ * `updateCart`, once a connected cart store has taken it over. Before that,
+ * Shopify's default handler would run instead of the app's cart route.
+ */
+export const getUpdateCartAction = () => {
+  const updateCart = window.Shopify?.actions?.updateCart;
+  return updateCart && !updateCart.isDefault() ? updateCart : null;
+};
+
+/** The shop's active currency code, set by `<ShopifyScripts>`. */
+export const getActiveCurrency = () => window.Shopify?.currency?.active;
+
 /** The Customer Privacy API, once its (asynchronously loaded) script has arrived. */
 export const getCustomerPrivacy = (): ShopifyGlobal['customerPrivacy'] | null => {
   const customerPrivacy = window.Shopify?.customerPrivacy;

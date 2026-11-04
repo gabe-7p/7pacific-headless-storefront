@@ -8,6 +8,7 @@ import {
   viewContentParams,
 } from '~/lib/analytics/meta-pixel';
 import { AnalyticsEvent, connectDestination } from '~/lib/analytics/shopify';
+import { getActiveCurrency } from '~/lib/shopifyRuntime';
 
 /**
  * The Meta Pixel as a destination on the Shopify analytics bus (browser only).
@@ -101,7 +102,7 @@ export const connectMetaPixelToShopify = (options: MetaPixelOptions): (() => voi
     [AnalyticsEvent.PAGE_VIEWED]: () => track('PageView'),
     [AnalyticsEvent.PRODUCT_VIEWED]: (payload) => track('ViewContent', viewContentParams(payload)),
     [AnalyticsEvent.PRODUCT_ADD_TO_CART]: (payload) =>
-      track('AddToCart', addToCartParams(payload, window.Shopify?.currency?.active)),
+      track('AddToCart', addToCartParams(payload, getActiveCurrency())),
     [AnalyticsEvent.SEARCH_VIEWED]: (payload) => track('Search', searchParams(payload)),
   });
 };

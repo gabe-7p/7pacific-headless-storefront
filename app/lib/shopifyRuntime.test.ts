@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  getActiveCurrency,
   getAnalyticsBus,
   getCustomerPrivacy,
   getOpenCartAction,
+  getUpdateCartAction,
   whenShopifyReady,
 } from '~/lib/shopifyRuntime';
 
@@ -99,6 +101,21 @@ describe('selectors', () => {
     expect(getAnalyticsBus()).toBeNull();
     expect(getOpenCartAction()).toBeUndefined();
     expect(getCustomerPrivacy()).toBeNull();
+    expect(getUpdateCartAction()).toBeNull();
+    expect(getActiveCurrency()).toBeUndefined();
+  });
+
+  it('reads the active currency', () => {
+    vi.stubGlobal('window', { Shopify: { currency: { active: 'USD' } } });
+    expect(getActiveCurrency()).toBe('USD');
+  });
+
+  it('holds updateCart back until a cart store has configured it', () => {
+    const updateCart = Object.assign(vi.fn(), { isDefault: (): boolean => true });
+    vi.stubGlobal('window', { Shopify: { actions: { updateCart } } });
+    expect(getUpdateCartAction()).toBeNull();
+    updateCart.isDefault = () => false;
+    expect(getUpdateCartAction()).toBe(updateCart);
   });
 
   it('read the pieces off window.Shopify', () => {
