@@ -135,13 +135,7 @@ const Newsletter = () => (
   <div className="impulse:max-w-md">
     {/* Live footer copy and links are 10.2px. */}
     <p className="text-[10.2px] text-support-night">{JOIN_COPY.newsletter.body}</p>
-    <JoinForm
-      list="newsletter"
-      copy={JOIN_COPY.newsletter}
-      submit="mail"
-      className="mt-5"
-      errorClassName="mt-2 text-sm text-support-night"
-    />
+    <JoinForm list="newsletter" copy={JOIN_COPY.newsletter} submit="mail" className="mt-5" />
   </div>
 );
 

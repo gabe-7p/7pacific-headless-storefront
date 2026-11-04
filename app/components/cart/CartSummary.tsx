@@ -1,9 +1,9 @@
 import { usePostHog } from '@posthog/react';
 import type { FormEvent } from 'react';
 
-import { CartError } from '~/components/cart/CartError';
 import type { CartLayout } from '~/components/cart/CartMain';
 import { Cta } from '~/components/common/Cta';
+import { FieldError } from '~/components/common/FieldError';
 import { Price } from '~/components/common/Price';
 import { Button } from '~/components/ui/button';
 import { CART_COPY } from '~/content/cart';
@@ -164,7 +164,7 @@ const CartDiscounts = () => {
           Apply
         </Button>
       </form>
-      {errorMessage && <CartError message={errorMessage} />}
+      {errorMessage && <FieldError className="mt-2">{errorMessage}</FieldError>}
     </div>
   );
 };

@@ -127,6 +127,10 @@
   --color-ink-night: var(--color-court); /* primary type on dark */
   --color-support: var(--color-graphite); /* secondary type on light */
   --color-support-night: var(--color-zinc); /* secondary/muted type on dark */
+  /* Form error text (common/FieldError). On the support tier, not Ember: Ember
+   * is rationed to one moment per page, and an error line can't claim it. */
+  --color-error: var(--color-support);
+  --color-error-night: var(--color-support-night);
 
   /* Semantic surface tokens — chained onto the palette above so every hex
    * lives exactly once. */

@@ -123,3 +123,25 @@ describe('JoinForm — waitlist', () => {
     expect(document.querySelector('form')).toBeNull();
   });
 });
+
+describe('JoinForm — errors', () => {
+  const invalid: SubscribeResponse = { ok: false, errors: { email: INVALID_EMAIL_MESSAGE } };
+
+  it('renders a field error in the tone of the ground', () => {
+    fetcher = { state: 'idle', data: invalid };
+    renderForm({ tone: 'day' });
+    expect(screen.getByRole('alert').classList).toContain('text-error');
+  });
+
+  it('defaults to the night tone', () => {
+    fetcher = { state: 'idle', data: invalid };
+    renderForm();
+    expect(screen.getByRole('alert').classList).toContain('text-error-night');
+  });
+
+  it('sets the error a step larger on the mail row', () => {
+    fetcher = { state: 'idle', data: invalid };
+    renderForm({ submit: 'mail' });
+    expect(screen.getByRole('alert').classList).toContain('text-sm');
+  });
+});

@@ -25,8 +25,8 @@ const EarlyAccessForm = () => (
     withName
     noValidate
     className="mt-6 grid max-w-none grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+    tone="day"
     fieldClassName={fieldClass}
-    successClassName="mt-6 text-sm font-medium text-ink"
     ctaVariant="brand"
   />
 );

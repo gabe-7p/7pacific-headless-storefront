@@ -1,9 +1,9 @@
 import { Minus, Plus } from 'lucide-react';
 import { Link } from 'react-router';
 
-import { CartError } from '~/components/cart/CartError';
 import type { CartLayout } from '~/components/cart/CartMain';
 import { useCartDrawer } from '~/components/cart/useCartDrawer';
+import { FieldError } from '~/components/common/FieldError';
 import { Image } from '~/components/common/Image';
 import { Price } from '~/components/common/Price';
 import { CART_COPY } from '~/content/cart';
@@ -113,7 +113,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
               Remove
             </button>
           </form>
-          {errorMessage && <CartError message={errorMessage} />}
+          {errorMessage && <FieldError className="mt-2">{errorMessage}</FieldError>}
         </div>
       </div>
     </li>

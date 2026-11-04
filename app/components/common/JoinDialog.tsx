@@ -63,13 +63,7 @@ const NewsletterPanel = () => {
         <DialogDescription className="mt-3 text-sm text-support-night">
           {copy.body}
         </DialogDescription>
-        <JoinForm
-          list="newsletter"
-          copy={copy}
-          submit="mail"
-          className="mt-5"
-          errorClassName="mt-2 text-sm text-support-night"
-        />
+        <JoinForm list="newsletter" copy={copy} submit="mail" className="mt-5" />
       </div>
     </BrandDialogContent>
   );
@@ -88,7 +82,6 @@ const WaitlistPanel = () => {
         withName
         noValidate
         className="mt-5 space-y-4"
-        errorClassName="mt-1 text-xs text-support-night"
         ctaClassName="mt-2"
       />
     </BrandDialogContent>
