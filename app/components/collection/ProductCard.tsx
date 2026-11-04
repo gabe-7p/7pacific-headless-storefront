@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { Price } from '~/components/common/Price';
+import { SpecLine } from '~/components/common/SpecLine';
 import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import type { ProductCardData } from '~/lib/fragments';
@@ -88,16 +89,16 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
         {/* Line 2 — the mono spec strip: middle dots (never slash/pipe as a
             separator), Graphite (`text-support`), price lives here in mono.
             The edition device leads it. */}
-        <span className="text-support tracking-spec font-mono text-[11px] uppercase">
+        <SpecLine as="span" size="strip" className="text-support">
           <EditionTag
             number={product.editionNumber?.value}
             status={product.editionStatus?.value}
-            className="tracking-spec text-[11px]"
+            variant="strip"
           />
           {product.editionNumber?.value ? ' · ' : ''}
           {colorName ? `${colorName} · ` : ''}
           <Price data={priceRange.minVariantPrice} variant="compact" />
-        </span>
+        </SpecLine>
       </div>
     </div>
   );

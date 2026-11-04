@@ -1,7 +1,9 @@
+import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
+import { ColorSwatches } from '~/components/product/ColorSwatches';
 import {
   SEGMENT_CELL,
   SEGMENT_IDLE,
@@ -11,6 +13,7 @@ import {
 import { SizeGuide } from '~/components/product/SizeGuide';
 import { cn } from '~/lib/cn';
 import { isPlainActivation } from '~/lib/events';
+import type { ColorSwatch } from '~/lib/product/colors';
 import { shortSizeLabel } from '~/lib/product/display';
 import { useProductForm } from '~/lib/product/store';
 import { productUrl } from '~/lib/urls';
@@ -30,11 +33,11 @@ const OptionLabel = ({ children, action }: { children: string; action?: ReactNod
 );
 
 /**
- * Buy-box options (size selector). Shopify's internal single-variant "Title"
- * option is filtered out; products with no real size option (e.g. the hat)
- * render a single "One Size" cell.
+ * Size selector. Shopify's internal single-variant "Title" option is filtered
+ * out; products with no real size option (e.g. the hat) render a single "One
+ * Size" cell.
  */
-export const ProductForm = () => {
+const SizeOptions = () => {
   const { options, register } = useProductForm();
   const { search } = useLocation();
 
@@ -137,3 +140,33 @@ export const ProductForm = () => {
     </div>
   );
 };
+
+/**
+ * The buy-box selection cluster: the Color row, then the size options. Color
+ * sits here though it isn't a variant option (color = separate product).
+ */
+export const ProductForm = ({
+  swatches,
+  currentHandle,
+  selectedOptions,
+}: {
+  swatches: Array<ColorSwatch>;
+  currentHandle: string;
+  selectedOptions?: Array<SelectedOption>;
+}) => (
+  <>
+    <div className="mt-4">
+      <OptionLabel>Color</OptionLabel>
+      <ColorSwatches
+        swatches={swatches}
+        currentHandle={currentHandle}
+        size="lg"
+        alwaysRender
+        selectedOptions={selectedOptions}
+      />
+    </div>
+    <div className="mt-4">
+      <SizeOptions />
+    </div>
+  </>
+);

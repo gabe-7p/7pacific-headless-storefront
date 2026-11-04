@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { SpecLine } from '~/components/common/SpecLine';
 import { cn } from '~/lib/cn';
 import { getTimeLeft, pad2, TIME_LEFT_UNITS, type TimeLeft } from '~/lib/countdown';
 
@@ -98,9 +99,9 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
               )}
               {values[index]}
             </span>
-            <span className={cn('font-mono tracking-spec text-ink uppercase', tier.label)}>
+            <SpecLine as="span" className={cn('text-ink', tier.label)}>
               {label}
-            </span>
+            </SpecLine>
           </div>
         </div>
       ))}

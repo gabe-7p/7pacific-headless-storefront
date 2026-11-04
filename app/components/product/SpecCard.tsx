@@ -1,3 +1,4 @@
+import { SpecLine } from '~/components/common/SpecLine';
 import type { SpecCardData } from '~/lib/product/content';
 
 /** The locked field order from the guidelines — never re-sort. */
@@ -24,7 +25,9 @@ export const SpecCard = ({ data }: { data: SpecCardData }) => {
     <dl className="border-border-subtle divide-border-subtle divide-y border-y font-mono text-[11px]">
       {rows.map(([label, key]) => (
         <div key={key} className="grid grid-cols-[4.5rem_1fr] items-baseline gap-x-3 py-1">
-          <dt className="tracking-spec text-support uppercase">{label}</dt>
+          <SpecLine as="dt" size="strip" className="text-support">
+            {label}
+          </SpecLine>
           <dd className="leading-snug text-ink">{data[key]}</dd>
         </div>
       ))}

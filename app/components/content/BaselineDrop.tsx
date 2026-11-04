@@ -1,5 +1,6 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
+import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import {
   MediaSlot,
@@ -90,9 +91,12 @@ const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number
         {stat.value}
         {'accent' in stat ? <span className="text-brand">{stat.accent}</span> : null}
       </span>
-      <span className="min-w-0 pb-1 text-xs leading-tight tracking-caps text-support-night uppercase md:pb-2 md:text-sm">
+      <Eyebrow
+        as="span"
+        className="min-w-0 pb-1 leading-tight font-light text-support-night md:pb-2 md:text-sm"
+      >
         {stat.label}
-      </span>
+      </Eyebrow>
     </p>
   </div>
 );

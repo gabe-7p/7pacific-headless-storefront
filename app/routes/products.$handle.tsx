@@ -4,13 +4,11 @@ import { Await, useLoaderData, useLocation, useNavigate } from 'react-router';
 
 import { ProductViewedTracker } from '~/components/analytics/Trackers';
 import { Container } from '~/components/common/Container';
-import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
-import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
@@ -188,19 +186,11 @@ const ProductPage = () => {
                   <SpecCard data={specCard} />
                 </div>
               )}
-              <div className="mt-4">
-                <Eyebrow className="mb-2 text-support">Color</Eyebrow>
-                <ColorSwatches
-                  swatches={getColorSwatches(product.colorSiblings)}
-                  currentHandle={product.handle}
-                  size="lg"
-                  alwaysRender
-                  selectedOptions={selectedVariant?.selectedOptions}
-                />
-              </div>
-              <div className="mt-4">
-                <ProductForm />
-              </div>
+              <ProductForm
+                swatches={getColorSwatches(product.colorSiblings)}
+                currentHandle={product.handle}
+                selectedOptions={selectedVariant?.selectedOptions}
+              />
               {/* The fit line moves into the Spec Card's FIT row when a spec
                   card exists — don't render it twice. */}
               {!specCard?.fit && product.fitNote?.value && (

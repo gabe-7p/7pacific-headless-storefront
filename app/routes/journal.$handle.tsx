@@ -5,6 +5,7 @@ import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { Prose } from '~/components/common/Prose';
+import { SpecLine } from '~/components/common/SpecLine';
 import { HANDLES } from '~/content/links';
 import { IMAGE_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
@@ -53,7 +54,7 @@ const Article = () => {
   return (
     <article className="pb-24">
       <Container className="py-16 md:py-24">
-        <p className="tracking-spec font-mono text-xs text-support uppercase">{meta}</p>
+        <SpecLine className="text-support">{meta}</SpecLine>
         <Heading as="h1" size="none" className="mt-3 max-w-[20ch] text-4xl md:text-6xl">
           {article.title}
         </Heading>
