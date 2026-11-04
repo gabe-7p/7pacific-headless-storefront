@@ -68,7 +68,6 @@ export const SizeGuide = () => {
         side="right"
         showCloseButton={false}
         className="w-full gap-0 border-l-border-subtle bg-field/80 p-0 text-ink backdrop-blur-xs sm:w-[560px] sm:max-w-none"
-        aria-describedby={undefined}
       >
         <SheetHeader className="relative shrink-0 items-center border-b border-border-subtle p-0 px-5 py-4">
           <SheetTitle asChild>
