@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { Heading } from '~/components/common/Heading';
-import { DialogContent, DialogTitle } from '~/components/ui/dialog';
+import { DialogContent, DialogDescription, DialogTitle } from '~/components/ui/dialog';
 import { cn } from '~/lib/cn';
 
 /**
@@ -36,8 +36,13 @@ export const BrandDialogContent = ({
  */
 export const BrandDialogTitle = ({ children }: { children: ReactNode }) => (
   <DialogTitle asChild>
-    <Heading as="h2" size="none" className="tracking-header text-2xl leading-[1.1]">
+    <Heading as="h2" size="none" className="text-2xl leading-[1.1]">
       {children}
     </Heading>
   </DialogTitle>
+);
+
+/** The line under a night dialog's title, keeping Radix's aria wiring. */
+export const BrandDialogDescription = ({ children }: { children: ReactNode }) => (
+  <DialogDescription className="mt-3 text-sm text-support-night">{children}</DialogDescription>
 );

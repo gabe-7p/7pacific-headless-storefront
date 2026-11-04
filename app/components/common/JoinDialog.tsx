@@ -1,10 +1,14 @@
 import { type ReactNode, useCallback, useMemo, useState } from 'react';
 
-import { BrandDialogContent, BrandDialogTitle } from '~/components/common/BrandDialog';
+import {
+  BrandDialogContent,
+  BrandDialogDescription,
+  BrandDialogTitle,
+} from '~/components/common/BrandDialog';
 import { Image } from '~/components/common/Image';
 import { JoinForm } from '~/components/common/JoinForm';
 import { JoinDialogContext } from '~/components/common/useJoinDialog';
-import { Dialog, DialogDescription } from '~/components/ui/dialog';
+import { Dialog } from '~/components/ui/dialog';
 import { JOIN_COPY, type JoinList } from '~/content/join';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
@@ -60,9 +64,7 @@ const NewsletterPanel = () => {
       )}
       <div className="p-8">
         <BrandDialogTitle>{copy.heading}</BrandDialogTitle>
-        <DialogDescription className="mt-3 text-sm text-support-night">
-          {copy.body}
-        </DialogDescription>
+        <BrandDialogDescription>{copy.body}</BrandDialogDescription>
         <JoinForm list="newsletter" copy={copy} submit="mail" className="mt-5" />
       </div>
     </BrandDialogContent>
@@ -75,7 +77,7 @@ const WaitlistPanel = () => {
   return (
     <BrandDialogContent className="p-8 sm:max-w-md">
       <BrandDialogTitle>{copy.heading}</BrandDialogTitle>
-      <DialogDescription className="mt-3 text-sm text-support-night">{copy.body}</DialogDescription>
+      <BrandDialogDescription>{copy.body}</BrandDialogDescription>
       <JoinForm
         list="waitlist"
         copy={copy}
