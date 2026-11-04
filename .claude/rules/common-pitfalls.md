@@ -64,8 +64,10 @@ const recommended = deferQuery(
 
 Two bus mechanics bite when touching the trackers (`components/analytics/Trackers.tsx`) or the PostHog bridge (`lib/analytics/posthog.client.ts`):
 
-- **The bus buffers and replays.** Events published before a destination is ready are replayed when its `setup` resolves, so PostHog's `setup` must resolve only after the SDK is opted in, or the replay is silently dropped (details: `lib/analytics/posthog.client.ts`).
-- **`ProductProvider` re-hydrates one render late.** Read the PDP's variant through `resolveSelectedVariant`, never `formVariant ?? product.selectedOrFirstAvailableVariant`, or `product_viewed` fires twice per swatch click (details: `lib/product/store.ts`).
+- **The bus buffers and replays.** Events published before a destination is ready are replayed when its `setup` resolves, so PostHog's `setup` must resolve only after the SDK is opted in, or the replay is silently dropped. `connectDestination` holds setup on its `ready` option; `posthog.client.test.tsx` pins the order (details: `lib/analytics/posthog.client.ts`).
+- **`ProductProvider` re-hydrates one render late.** Read the PDP's variant through `resolveSelectedVariant`, never `formVariant ?? product.selectedOrFirstAvailableVariant`, or `product_viewed` fires twice per swatch click (details: `lib/product/store.ts`). A size click's URL goes through `selectionTarget` in the same file, so unrelated params survive it.
+
+Read `window.Shopify` through the selectors in `lib/shopifyRuntime.ts` (`getAnalyticsBus`, `getOpenCartAction`, `getCustomerPrivacy`), never at the call site: its pieces arrive at different times, and those selectors are what `whenShopifyReady` polls.
 
 ## Images through `common/Image`, prices through `common/Price`
 

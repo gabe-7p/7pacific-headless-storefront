@@ -36,9 +36,9 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 app/
   routes.ts      route config (flat-routes convention; Shopify-owned URLs are answered by the root middleware, not routes)
   routes/        one file per route (React Router flat convention); loader/action live here (+ colocated *.test.ts, ignored by routes.ts)
-  components/    presentational only — layout/ analytics/ cart/ (CartDrawer + useCartDrawer, CartMain, CartLineItem, CartSummary) product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
+  components/    presentational only — layout/ analytics/ cart/ (CartDrawer, useCartDrawer.ts, CartMain, CartLineItem, CartSummary, CartError) product/ collection/ home/ content/ common/ ui/ (generated shadcn primitives)
   content/       typed marketing copy + brand content — links.ts (`HANDLES` = the ONE place a Shopify handle lives + `STORE_LINKS`), brand.ts (name, `siteUrl`, `provenance`, `shipping`, `seo`, announcement, footer labels, social, fallback nav), media.ts (external media ids), cart.ts (`CART_COPY`), join.ts, membership.ts, …
-  lib/           request wiring (`shopifyMiddleware.ts`, `storefront.ts`, `oxygen.ts`, `csp.ts`), data (`fragments.ts`, `product/`, `cart*.ts`), `analytics/`, and cross-cutting helpers (`urls.ts`, `i18n.ts`, `money.ts`, …) + colocated *.test.ts — file-by-file in [docs/architecture.md](docs/architecture.md#code-organization)
+  lib/           request wiring (`shopifyMiddleware.ts`, `storefront.ts`, `oxygen.ts`, `csp.ts`), data (`fragments.ts`, `product/` incl. `product/page.ts`, `cart*.ts`; `cart.fixtures.ts` is test-only), `analytics/`, and cross-cutting helpers (`urls.ts`, `i18n.ts`, `money.ts`, `events.ts`, …) + colocated *.test.ts — file-by-file in [docs/architecture.md](docs/architecture.md#code-organization)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
 public/          static files served at the web root as-is (favicon.ico, og-home.jpg, topography.jpg, llms.txt — the GEO brand summary, copy mirrors Notion)
