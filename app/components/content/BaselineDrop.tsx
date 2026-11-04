@@ -4,26 +4,13 @@ import { Eyebrow } from '~/components/common/Eyebrow';
 import { GradedMedia } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
 import { MediaSlot } from '~/components/common/MediaSlot';
+import { SectionHeader } from '~/components/common/SectionHeader';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
 
 /**
  * Ember repeats here by sanctioned exception (ui-components.md).
  */
-
-/** Campaign heading scale steps (the face/weight/tracking come from
-    Heading's `campaign` variant). */
-const CAMPAIGN_HEADING_SIZES = 'text-3xl leading-[1.15] md:text-[3.5rem] md:leading-[1.1]';
-
-/** Left-aligned section header: display heading → muted subtitle. */
-const DropSectionHeader = ({ heading, subtitle }: { heading: string; subtitle: string }) => (
-  <div>
-    <Heading as="h2" variant="campaign" size="none" className={CAMPAIGN_HEADING_SIZES}>
-      {heading}
-    </Heading>
-    <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-support md:mt-3">{subtitle}</p>
-  </div>
-);
 
 /** The full-bleed 16:9 drop film; the scrim keeps the white full-video label legible. */
 const Film = () => (
@@ -78,9 +65,10 @@ const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number
 /** "THE RECEIPTS" — the four earned-number cards. */
 const Receipts = () => (
   <Container className="pt-12 pb-11 md:pt-18 md:pb-16">
-    <DropSectionHeader
+    <SectionHeader
       heading={BASELINE_DROP.receipts.heading}
       subtitle={BASELINE_DROP.receipts.subtitle}
+      scale="campaign"
     />
     <div className="mt-7 grid grid-cols-2 gap-1 md:mt-12 md:grid-cols-4 md:gap-1.5">
       {BASELINE_DROP.receipts.stats.map((stat) => (
@@ -95,9 +83,10 @@ const Receipts = () => (
 const Standard = () => (
   <section>
     <Container className="pt-12 pb-6 md:pt-18 md:pb-11">
-      <DropSectionHeader
+      <SectionHeader
         heading={BASELINE_DROP.standard.heading}
         subtitle={BASELINE_DROP.standard.subtitle}
+        scale="campaign"
       />
     </Container>
     {/* The band is the sled-push loop at 70% of its height. */}
@@ -164,9 +153,10 @@ const PieceCell = ({
 const Pieces = () => (
   <section>
     <Container className="pt-12 pb-6 md:pt-16 md:pb-10">
-      <DropSectionHeader
+      <SectionHeader
         heading={BASELINE_DROP.pieces.heading}
         subtitle={BASELINE_DROP.pieces.subtitle}
+        scale="campaign"
       />
     </Container>
     {/* Separate tiles split by the same hairline-thin gaps as the day

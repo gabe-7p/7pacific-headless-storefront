@@ -38,7 +38,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
  */
 export const ProductDetails = ({ cards }: { cards: ReadonlyArray<ProductDetailCard> }) => (
   <PdpSection>
-    <SectionHeader heading="Product Details" scale="panel" />
+    <SectionHeader heading="Product Details" scale="panel" className="mb-8" />
     {/* Live styles this gallery's scrollbar so it's always visible (8px,
         white/10 track, white/30 thumb) — not the macOS overlay bar that only
         appears mid-scroll. Styling the -webkit pseudos opts out of overlay

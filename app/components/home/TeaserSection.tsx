@@ -68,7 +68,7 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
  */
 export const TeaserSection = ({ heading, subtitle, countdown, cards }: TeaserSectionProps) => (
   <Container className="py-9 md:py-12">
-    <SectionHeader heading={heading} subtitle={subtitle} scale="section" className="mb-0" />
+    <SectionHeader heading={heading} subtitle={subtitle} scale="section" />
     {countdown ? (
       <Countdown dropIso={countdown.dropIso} labels={countdown.labels} className="mt-3" />
     ) : null}
