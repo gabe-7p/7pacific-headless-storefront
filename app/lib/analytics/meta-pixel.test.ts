@@ -56,10 +56,6 @@ describe('toMetaContentId', () => {
       'shopify_US_1_11'
     );
   });
-
-  it('tolerates decorated and bare ids', () => {
-    expect(toMetaContentId('1', 'gid://shopify/ProductVariant/11?x=1')).toBe('shopify_US_1_11');
-  });
 });
 
 describe('viewContentParams', () => {

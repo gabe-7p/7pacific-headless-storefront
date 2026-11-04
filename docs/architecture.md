@@ -68,16 +68,16 @@ app/
   content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, announcement, social, fallback nav), media.ts (external media ids); athlete-signing/ = types + one file per athlete + the handle registry
   lib/           (+ colocated *.test.ts)
     shopifyMiddleware.ts  the root middleware (Hydrogen's request lifecycle)
-    storefront.ts   the request-scoped Storefront client, router context key, route templates
+    storefront.ts   the request-scoped Storefront client, router context key, route templates · `queryStorefront` / `queryStorefrontOrThrow` (every read goes through them)
     oxygen.ts       the `oxygenContext` key: env + sub-request cache + waitUntil, set by server.ts
     cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`)
-    fragments.ts    shared gql fragments + chrome queries · http.ts `notFound`, `deferQuery`
+    fragments.ts    shared gql fragments + chrome queries · http.ts `notFound`, `unavailable`, `describeRouteError`, `deferQuery`
     i18n.ts         MARKET, MONEY_LOCALE, DATE_LOCALE · money.ts price formats (`brand` / `compact` / `cart`)
     urls.ts         every URL shape · shopifyFiles.ts Shopify Files CDN helpers · imageSizes.ts `sizes` presets for common/Image
-    seo.ts          page-title format, `buildMeta()` · sitemap.ts the sitemaps · csp.ts + nonce.tsx the CSP header and nonce
+    seo.ts          page-title format, `buildMeta()` · sitemap.ts the sitemaps · robots.ts `/robots.txt` · gid.ts `gidNumericId` · csp.ts + nonce.tsx the CSP header and nonce
     shopifyRuntime.ts  the one wait-for-`window.Shopify` poll
     metafields.ts   metafield JSON/image parsing · countdown.ts drop-timer math · journalFormat.ts journal dates
-    forms.ts        shared form primitives (email rule, `{ ok, errors }`) · cn.ts class merging
+    forms.ts        shared form primitives (email rule, `{ ok, errors }`, `handleFormAction`, `SubscribeResponse`) · cn.ts class merging
     product/        queries.ts (PDP gql documents + types), store.ts (product-form store), content.ts (metafield JSON shapes), display.ts (short titles/size labels), colors.ts (swatches)
     analytics/      shopify.ts (the bus), posthog.ts (runtime config), posthog.client.ts / posthog.server.ts (the two SDKs), posthog.events.ts (event names + builders), meta-pixel.ts (event mapping), meta-pixel.client.ts (the pixel as a bus destination) — no barrel: import by path
   styles/        tailwind.css — the single stylesheet (no separate globals)

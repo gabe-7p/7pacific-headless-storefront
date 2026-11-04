@@ -4,6 +4,7 @@ import type {
   SearchViewPayload,
 } from '@shopify/hydrogen';
 
+import { gidNumericId } from '~/lib/gid';
 import { MARKET } from '~/lib/i18n';
 
 /**
@@ -23,21 +24,15 @@ export const META_PIXEL_DESTINATION = 'meta-pixel';
 export type MetaStandardEvent = 'PageView' | 'ViewContent' | 'AddToCart' | 'Search';
 export type MetaEventParams = Record<string, string | number | Array<string>>;
 
-/** The numeric tail of a Shopify GID (`gid://shopify/ProductVariant/42?x=1` → `42`); a bare id passes through. */
-const numericId = (id: string): string => {
-  const [path = ''] = id.split('?');
-  return path.slice(path.lastIndexOf('/') + 1);
-};
-
 /**
  * THE one place the Meta catalog id format lives. Shopify's Facebook &
  * Instagram app syncs the catalog as `shopify_<country>_<productId>_<variantId>`,
  * and its checkout Purchase events use the same ids, so storefront events
  * match them. To switch to bare variant ids instead, make this
- * `return numericId(variantId);` — nothing else changes.
+ * `return gidNumericId(variantId);` — nothing else changes.
  */
 export const toMetaContentId = (productId: string, variantId: string): string =>
-  `shopify_${MARKET.country}_${numericId(productId)}_${numericId(variantId)}`;
+  `shopify_${MARKET.country}_${gidNumericId(productId)}_${gidNumericId(variantId)}`;
 
 const roundToCents = (value: number): number => Math.round(value * 100) / 100;
 
