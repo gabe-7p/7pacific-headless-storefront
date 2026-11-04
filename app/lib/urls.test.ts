@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { routeTemplates } from '~/lib/storefront';
 import {
   cartUrl,
   collectionUrl,
@@ -73,6 +74,14 @@ describe('toInternalPath', () => {
   it('leaves external URLs alone', () => {
     expect(toInternalPath('https://www.instagram.com/7_pacific/', domains)).toBe(
       'https://www.instagram.com/7_pacific/'
+    );
+  });
+});
+
+describe('routeTemplates', () => {
+  it('spells the product path exactly as productUrl does', () => {
+    expect(routeTemplates.productInCollection.replace(':productHandle', 'tee-white')).toBe(
+      productUrl('tee-white')
     );
   });
 });

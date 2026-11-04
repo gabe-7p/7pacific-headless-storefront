@@ -6,40 +6,34 @@
 - Props type is `type` (not `interface`), named `<Component>Props` when it needs a name, or inlined for tiny components.
 - **Exception: `app/components/ui/`** holds generated shadcn/ui primitives. They use the `function` keyword and shadcn's own naming (`DialogContent`, `SelectTrigger`, …) and are ESLint-exempt — don't rewrite them to match this convention. See [ui-components.md](ui-components.md).
 
-## Data helpers: `getX` vs `getXOrThrow`
+## Data helpers: `queryStorefront` vs `queryStorefrontOrThrow`
 
-Single-record fetch/lookup helpers reveal their not-found behavior in the name:
+Storefront reads reveal their not-found behavior in the name, and both helpers live in [`lib/storefront.ts`](../../app/lib/storefront.ts):
 
-- **Returns `null`/`undefined` when missing → plain `getX`.**
-- **Throws when missing → `getXOrThrow`.**
+- **Returns `null` when the API gave no data → plain `queryStorefront`.** It logs GraphQL `errors` (which `graphql()` returns instead of throwing) and returns `data ?? null`.
+- **Throws a 404 `Response` when there is no data → `queryStorefrontOrThrow`** (takes the message as its last argument).
+
+`cache` is a required key of the options, so a read without one doesn't type-check.
 
 ```ts
-// ✅ returns null when not found — caller must check
-// (illustrative: no shared instance exists yet — PR 3 of the tech-debt stack adds
-// `queryStorefront` / `queryStorefrontOrThrow` in lib/storefront.ts)
-export const getProductByHandle = async (
-  { handle }: { handle: string },
-  storefront: StorefrontClient
-) => {
-  const { data } = await storefront.graphql(PRODUCT_QUERY, {
-    variables: { handle },
-    cache: Cache.short(),
-  });
-  return data?.product ?? null; // may be null
-};
+// ✅ returns null when the API gave no data — caller must check
+const data = await queryStorefront(storefront, CONTACT_PAGE_QUERY, {
+  variables: { handle: HANDLES.contactPage },
+  cache: Cache.long(),
+});
+const page = data?.page ?? null;
 
-// ✅ throws when not found — caller gets a guaranteed value
-export const getProductByHandleOrThrow = async (
-  { handle }: { handle: string },
-  storefront: StorefrontClient
-) => {
-  const product = await getProductByHandle({ handle }, storefront);
-  if (!product) throw notFound('Product not found');
-  return product;
-};
+// ✅ throws notFound('Page not found') when there is no data — `data` is guaranteed
+const data = await queryStorefrontOrThrow(
+  storefront,
+  PAGE_QUERY,
+  { variables: { handle }, cache: Cache.long() },
+  'Page not found'
+);
+if (!data.page) throw notFound('Page not found'); // a null *field* is still the caller's check
 ```
 
-Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists` for single-record fetches. Collection fetches keep natural plural names (`getProducts`, `listCollections`).
+Throw with `notFound()` / `unavailable()` from [`lib/http.ts`](../../app/lib/http.ts), never `new Response(…, { status })` inline. For any other single-record helper keep the same split: `getX` returns `null`/`undefined` when missing, `getXOrThrow` throws. Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists`. Collection fetches keep natural plural names (`getProducts`, `listCollections`).
 
 ## GraphQL
 

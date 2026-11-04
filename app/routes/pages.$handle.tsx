@@ -6,7 +6,7 @@ import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
-import { storefrontClientContext } from '~/lib/storefront';
+import { queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/pages.$handle';
 
@@ -26,12 +26,14 @@ export async function loader({ context, params }: Route.LoaderArgs) {
     throw notFound('Page not found');
   }
 
-  const { data } = await context.get(storefrontClientContext).graphql(PAGE_QUERY, {
-    variables: { handle: params.handle },
-    cache: Cache.long(),
-  });
+  const data = await queryStorefrontOrThrow(
+    context.get(storefrontClientContext),
+    PAGE_QUERY,
+    { variables: { handle: params.handle }, cache: Cache.long() },
+    'Page not found'
+  );
 
-  if (!data?.page) {
+  if (!data.page) {
     throw notFound('Page not found');
   }
 

@@ -27,7 +27,7 @@ import type { ProductDetailCard, SpecCardData, TechStackData } from '~/lib/produ
 import { PRODUCT_QUERY, RECOMMENDATIONS_QUERY } from '~/lib/product/queries';
 import { ProductProvider, resolveSelectedVariant, useProductForm } from '~/lib/product/store';
 import { buildMeta } from '~/lib/seo';
-import { storefrontClientContext } from '~/lib/storefront';
+import { queryStorefront, queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
 import { productUrl } from '~/lib/urls';
 
 import type { Route } from './+types/products.$handle';
@@ -37,11 +37,8 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
     ...buildMeta({
       title: loaderData?.product.title,
       description: loaderData?.product.description,
+      canonical: loaderData ? productUrl(loaderData.product.handle) : undefined,
     }),
-    {
-      rel: 'canonical',
-      href: loaderData ? productUrl(loaderData.product.handle) : undefined,
-    },
   ];
 };
 
@@ -53,36 +50,41 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
 
   // Below the fold: "PLANNING TO SWEAT MORE?" (custom.recommended_products), deferred.
   const recommendations = deferQuery(
-    storefront
-      .graphql(RECOMMENDATIONS_QUERY, { variables: { handle }, cache: Cache.long() })
-      .then(({ data }) => {
-        const nodes = data?.product?.recommended?.references?.nodes ?? [];
-        return (
-          nodes
-            // The metafield can reference other types; only products render.
-            .flatMap((node) => ('handle' in node ? [node] : []))
-            // Exclude the product being viewed; cap at 3 like live.
-            .filter((node) => node.handle !== handle)
-            .slice(0, 3)
-        );
-      })
+    queryStorefront(storefront, RECOMMENDATIONS_QUERY, {
+      variables: { handle },
+      cache: Cache.long(),
+    }).then((data) => {
+      const nodes = data?.product?.recommended?.references?.nodes ?? [];
+      return (
+        nodes
+          // The metafield can reference other types; only products render.
+          .flatMap((node) => ('handle' in node ? [node] : []))
+          // Exclude the product being viewed; cap at 3 like live.
+          .filter((node) => node.handle !== handle)
+          .slice(0, 3)
+      );
+    })
   );
 
   // Above the fold — a failure here errors the whole page.
-  const { data, errors } = await storefront.graphql(PRODUCT_QUERY, {
-    variables: {
-      handle,
-      // The ?Size=… params pick the variant; unknown params are ignored.
-      selectedOptions: getSelectedProductOptions({
-        searchParams: url.searchParams,
-      }),
+  const data = await queryStorefrontOrThrow(
+    storefront,
+    PRODUCT_QUERY,
+    {
+      variables: {
+        handle,
+        // The ?Size=… params pick the variant; unknown params are ignored.
+        selectedOptions: getSelectedProductOptions({
+          searchParams: url.searchParams,
+        }),
+      },
+      // Price/availability-sensitive: keep the cache window short.
+      cache: Cache.short(),
     },
-    // Price/availability-sensitive: keep the cache window short.
-    cache: Cache.short(),
-  });
-  if (errors) console.error(errors);
-  const product = data?.product;
-  if (!product?.id) throw notFound('Product not found');
+    'Product not found'
+  );
+  const product = data.product;
+  if (!product) throw notFound('Product not found');
 
   return {
     product,

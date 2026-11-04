@@ -1,5 +1,5 @@
 import { Cache, gql } from '@shopify/hydrogen';
-import { data, Form, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { Form, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
@@ -8,8 +8,7 @@ import { Prose } from '~/components/common/Prose';
 import { CONTACT } from '~/content/contact';
 import { HANDLES } from '~/content/links';
 import {
-  collectErrors,
-  type FormResult,
+  handleFormAction,
   readField,
   REQUIRED_MESSAGE_MESSAGE,
   REQUIRED_NAME_MESSAGE,
@@ -17,7 +16,7 @@ import {
   validateRequired,
 } from '~/lib/forms';
 import { buildMeta } from '~/lib/seo';
-import { storefrontClientContext } from '~/lib/storefront';
+import { queryStorefront, storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/pages.contact-us';
 
@@ -28,36 +27,25 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   // The live Contact page's static copy (intro, support email, returns block)
   // lives in the Shopify page body; render it above the form.
-  const { data } = await context.get(storefrontClientContext).graphql(CONTACT_PAGE_QUERY, {
+  const data = await queryStorefront(context.get(storefrontClientContext), CONTACT_PAGE_QUERY, {
     variables: { handle: HANDLES.contactPage },
     cache: Cache.long(),
   });
   return { page: data?.page ?? null };
 }
 
-type ContactResponse = FormResult<'name' | 'email' | 'message'>;
-
 /** Same `{ ok, errors }` contract and status codes as routes/api.subscribe. */
-export async function action({ request }: Route.ActionArgs) {
-  if (request.method !== 'POST') {
-    return data<ContactResponse>(
-      { ok: false, errors: { message: 'Method not allowed' } },
-      { status: 405 }
-    );
-  }
-
-  const form = await request.formData();
-  const errors = collectErrors({
-    name: validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE),
-    email: validateEmail(readField(form, 'email')),
-    message: validateRequired(readField(form, 'message'), REQUIRED_MESSAGE_MESSAGE),
+export const action = ({ request }: Route.ActionArgs) =>
+  handleFormAction<'name' | 'email' | 'message'>(request, {
+    methodField: 'message',
+    check: (form) => ({
+      name: validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE),
+      email: validateEmail(readField(form, 'email')),
+      message: validateRequired(readField(form, 'message'), REQUIRED_MESSAGE_MESSAGE),
+    }),
+    // TODO: deliver the message (Shopify contact endpoint / email provider).
+    // Storefront API has no contact mutation; wire this to the chosen provider.
   });
-  if (errors) return data<ContactResponse>({ ok: false, errors }, { status: 400 });
-
-  // TODO: deliver the message (Shopify contact endpoint / email provider).
-  // Storefront API has no contact mutation; wire this to the chosen provider.
-  return data<ContactResponse>({ ok: true });
-}
 
 const fieldClass =
   'w-full border border-border-subtle bg-field px-4 py-3 text-sm focus:border-ink focus:outline-none';

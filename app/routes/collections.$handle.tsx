@@ -1,5 +1,5 @@
 import { Cache, gql } from '@shopify/hydrogen';
-import { redirect, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 
 import { CollectionViewedTracker } from '~/components/analytics/Trackers';
 import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
@@ -10,15 +10,10 @@ import { HANDLES } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { buildMeta } from '~/lib/seo';
-import { storefrontClientContext } from '~/lib/storefront';
+import { queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
 import { collectionUrl } from '~/lib/urls';
 
 import type { Route } from './+types/collections.$handle';
-
-/** The shop-all collection opens on the drop page's BASELINE masthead instead
-    of the generic title/description header, so both entry points to ED. 01 —
-    the nav's Shop link and /drops/baseline — read the same above the fold. */
-const SHOP_ALL_HANDLE = HANDLES.shopAllCollection;
 
 const PAGE_SIZE = 24;
 
@@ -31,17 +26,21 @@ export const meta: Route.MetaFunction = ({ loaderData }) => {
 
 export async function loader({ context, params, url }: Route.LoaderArgs) {
   const { handle } = params;
-  if (!handle) throw redirect('/');
+  if (!handle) throw notFound('Collection not found');
 
-  const { data, errors } = await context.get(storefrontClientContext).graphql(COLLECTION_QUERY, {
-    // No sort or filter variables: the collection's own merchandised order is
-    // the display order (drag to reorder in the Shopify admin).
-    variables: { handle, first: PAGE_SIZE, after: url.searchParams.get('after') || undefined },
-    // Product listings change with availability/merchandising: short cache.
-    cache: Cache.short(),
-  });
-  if (errors) console.error(errors);
-  const collection = data?.collection;
+  const data = await queryStorefrontOrThrow(
+    context.get(storefrontClientContext),
+    COLLECTION_QUERY,
+    {
+      // No sort or filter variables: the collection's own merchandised order is
+      // the display order (drag to reorder in the Shopify admin).
+      variables: { handle, first: PAGE_SIZE, after: url.searchParams.get('after') || undefined },
+      // Product listings change with availability/merchandising: short cache.
+      cache: Cache.short(),
+    },
+    'Collection not found'
+  );
+  const collection = data.collection;
   if (!collection) throw notFound('Collection not found');
 
   const { products, ...rest } = collection;
@@ -58,7 +57,7 @@ const Collection = () => {
   const loaderData = useLoaderData<typeof loader>();
   const { collection } = loaderData;
   const { nodes, pageInfo, isLoading, loadMore } = useLoadMore(loaderData);
-  const isShopAll = collection.handle === SHOP_ALL_HANDLE;
+  const isShopAll = collection.handle === HANDLES.shopAllCollection;
 
   return (
     <div>

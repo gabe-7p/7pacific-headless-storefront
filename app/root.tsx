@@ -37,12 +37,12 @@ import {
 import { CartProvider } from '~/lib/cart';
 import { cartHandlers } from '~/lib/cart.server';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
-import { deferQuery } from '~/lib/http';
+import { deferQuery, describeRouteError, unavailable } from '~/lib/http';
 import { MARKET } from '~/lib/i18n';
 import { useNonce } from '~/lib/nonce';
 import { oxygenContext } from '~/lib/oxygen';
 import { shopifyMiddleware } from '~/lib/shopifyMiddleware';
-import { routeTemplates, storefrontClientContext } from '~/lib/storefront';
+import { queryStorefront, routeTemplates, storefrontClientContext } from '~/lib/storefront';
 
 import type { Route } from './+types/root';
 import { PageLayout } from './components/layout/PageLayout';
@@ -59,9 +59,11 @@ export const middleware: Array<Route.MiddlewareFunction> = [shopifyMiddleware];
  * store, so it never needs the root loader to re-run.
  */
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, currentUrl, nextUrl }) => {
-  if (formMethod && formMethod !== 'GET') return true;
-  if (currentUrl.toString() === nextUrl.toString()) return true;
-  return false;
+  // No app action reads or writes root data: signup and contact submit to their
+  // own actions, and cart mutations go through /api/cart (not a React Router
+  // action). So a form submission never needs the root loader to re-run.
+  if (formMethod) return false;
+  return currentUrl.toString() === nextUrl.toString();
 };
 
 /**
@@ -86,32 +88,27 @@ export async function loader({ context, request, url }: Route.LoaderArgs) {
 
   // Below the fold: deferred and guarded (never throws).
   const footer = deferQuery(
-    storefront
-      .graphql(FOOTER_QUERY, {
-        variables: { footerMenuHandle: HANDLES.footerMenu },
-        cache: Cache.long(),
-      })
-      .then(({ data }) => data)
+    queryStorefront(storefront, FOOTER_QUERY, {
+      variables: { footerMenuHandle: HANDLES.footerMenu },
+      cache: Cache.long(),
+    })
   );
 
   // Above the fold, in parallel: the header chrome and the visitor's cart.
   // The cart is awaited so the first paint has it (no empty-then-filled flicker).
-  const [headerResult, cartResult] = await Promise.all([
-    storefront.graphql(HEADER_QUERY, {
+  const [header, cartResult] = await Promise.all([
+    queryStorefront(storefront, HEADER_QUERY, {
       variables: { headerMenuHandle: HANDLES.headerMenu },
       cache: Cache.long(),
     }),
     cartHandlers.get({ storefrontClient: storefront, request }),
   ]);
-  if (headerResult.errors) console.error(headerResult.errors);
-  if (!headerResult.data) throw new Response('Shop unavailable', { status: 500 });
-  const header = headerResult.data;
+  if (!header) throw unavailable('Shop unavailable');
 
   return {
     header,
     footer,
     cartData: cartResult.data,
-    publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     posthog: getPostHogConfig(env, {
       isDev: import.meta.env.DEV,
       hostname: url.hostname,
@@ -203,7 +200,11 @@ const App = () => {
       {isBareChrome ? (
         <Outlet />
       ) : (
-        <PageLayout {...data}>
+        <PageLayout
+          footer={data.footer}
+          header={data.header}
+          publicStoreDomain={data.shop.myshopifyDomain}
+        >
           <Outlet />
         </PageLayout>
       )}
@@ -216,17 +217,7 @@ export const ErrorBoundary = () => {
   const error = useRouteError();
   const posthog = usePostHog();
   const { pathname } = useLocation();
-  let errorMessage = 'Unknown error';
-  let errorStatus = 500;
-
-  if (isRouteErrorResponse(error)) {
-    errorMessage = error?.data?.message ?? error.data;
-    errorStatus = error.status;
-  } else if (error instanceof Error) {
-    errorMessage = error.message;
-  }
-
-  const isNotFound = errorStatus === 404;
+  const { status: errorStatus, message: errorMessage, isNotFound } = describeRouteError(error);
 
   useEffect(() => {
     if (isNotFound) return;
@@ -268,7 +259,13 @@ export const ErrorBoundary = () => {
 
   return (
     <CartProvider initialData={rootData.cartData}>
-      <PageLayout {...rootData}>{content}</PageLayout>
+      <PageLayout
+        footer={rootData.footer}
+        header={rootData.header}
+        publicStoreDomain={rootData.shop.myshopifyDomain}
+      >
+        {content}
+      </PageLayout>
     </CartProvider>
   );
 };
