@@ -36,10 +36,10 @@ const CellSet = ({
               one deliberate deviation from the site's 500-only display weight.
               Not a Heading: these are marquee cells (duplicated, aria-hidden
               copy included), not document headings. */}
-          <span className="font-display text-ink tracking-product text-lg leading-[1.15] font-bold whitespace-nowrap uppercase min-[860px]:text-xl">
+          <span className="font-display text-ink tracking-product text-lg leading-[1.15] font-bold whitespace-nowrap uppercase banner:text-xl">
             {cell.name}
           </span>
-          <SpecLine as="span" className="text-support text-[10px] whitespace-nowrap">
+          <SpecLine as="span" className="text-support text-3xs whitespace-nowrap">
             {cell.spec.join(' · ')}
             {' · '}
             <span className="text-ink font-medium">{cell.price}</span>
@@ -52,7 +52,7 @@ const CellSet = ({
       <Link
         to={HOME_NAME_SPEC_BANNER.cta.href}
         tabIndex={tabIndex}
-        className="border-border-subtle text-brand tracking-caps flex items-center border-r px-6 font-mono text-[11px] font-medium uppercase"
+        className="border-border-subtle text-brand tracking-caps flex items-center border-r px-6 font-mono text-2xs font-medium uppercase"
       >
         {HOME_NAME_SPEC_BANNER.cta.label}
       </Link>

@@ -3,6 +3,7 @@ import { Link, useLoaderData } from 'react-router';
 
 import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
+import { SpecLine } from '~/components/common/SpecLine';
 import { JOURNAL } from '~/content/journal';
 import { HANDLES } from '~/content/links';
 import { formatJournalDate } from '~/lib/journalFormat';
@@ -49,9 +50,9 @@ const Journal = () => {
               className="block py-6 transition-opacity hover:opacity-70"
             >
               {/* Mono metadata strip — the journal's spec-strip device. */}
-              <span className="tracking-spec font-mono text-xs text-support uppercase">
+              <SpecLine as="span" className="text-support">
                 {formatJournalDate(article.publishedAt)}
-              </span>
+              </SpecLine>
               <Heading as="h2" size="none" className="mt-2 text-2xl md:text-3xl">
                 {article.title}
               </Heading>

@@ -3,6 +3,13 @@ import { useState } from 'react';
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
+import { TEXT_LINK_CLASS } from '~/components/common/TextLink';
+import {
+  SEGMENT_CELL,
+  SEGMENT_IDLE,
+  SEGMENT_JOIN,
+  SEGMENT_SELECTED,
+} from '~/components/product/SegmentedCell';
 import {
   Sheet,
   SheetClose,
@@ -23,19 +30,18 @@ type Unit = (typeof UNITS)[number];
  * — the same type tier as the SIZE label the trigger sits beside. Tailwind v4's
  * preflight no longer gives a `<button>` a pointer cursor, so it's declared here.
  */
-const LINK_CLASS =
-  'cursor-pointer text-support underline underline-offset-4 transition-colors hover:text-ink';
+const LINK_CLASS = cn(TEXT_LINK_CLASS, 'cursor-pointer');
 
-/** Live's segmented cell, borrowed from the size selector one scroll above. */
-const UNIT_CELL =
-  'cursor-pointer border px-6 py-2 text-[9.6px] font-semibold tracking-[0.3em] uppercase transition-colors';
+/** Idle cells stay unfilled so the translucent drawer reads through them, and
+    with two cells the neighbour is always the selected one, so nothing lifts. */
+const UNIT_CELL = cn(SEGMENT_CELL, 'cursor-pointer px-6 py-2');
 
 /**
  * Mono measurement cell — numbers read as spec data, not prose. It steps down
  * on mobile: at 13px the widest range (36.5 - 38.5) fills a full-bleed column
  * edge to edge, so neighbouring cells visually run together.
  */
-const DATA_CELL = 'py-3 text-center font-mono text-[11px] text-ink sm:text-[13px]';
+const DATA_CELL = 'py-3 text-center font-mono text-2xs text-ink sm:text-[13px]';
 
 /**
  * The PDP size guide: an underlined SIZE GUIDE link on the SIZE label's row
@@ -62,7 +68,6 @@ export const SizeGuide = () => {
         side="right"
         showCloseButton={false}
         className="w-full gap-0 border-l-border-subtle bg-field/80 p-0 text-ink backdrop-blur-xs sm:w-[560px] sm:max-w-none"
-        aria-describedby={undefined}
       >
         <SheetHeader className="relative shrink-0 items-center border-b border-border-subtle p-0 px-5 py-4">
           <SheetTitle asChild>
@@ -86,10 +91,8 @@ export const SizeGuide = () => {
                 onClick={() => setUnit(key)}
                 className={cn(
                   UNIT_CELL,
-                  '-ml-px first:ml-0',
-                  unit === key
-                    ? 'z-10 border-ink bg-field-night text-ink-night'
-                    : 'border-border-subtle text-ink hover:border-ink'
+                  SEGMENT_JOIN,
+                  unit === key ? SEGMENT_SELECTED : SEGMENT_IDLE
                 )}
               >
                 {units[key].label}

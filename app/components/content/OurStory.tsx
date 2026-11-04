@@ -1,15 +1,14 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
+import { GradedMedia, GrainVeil } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
+import { HeroContent, HeroShell } from '~/components/common/HeroShell';
 import { Image } from '~/components/common/Image';
 import { LiveDot } from '~/components/common/LiveDot';
-import {
-  MediaSlot,
-  type MediaSlotRatio,
-  type MediaSlotSource,
-} from '~/components/common/MediaSlot';
+import type { MediaSlotRatio, MediaSlotSource } from '~/components/common/MediaSlot';
 import { FadeIn, MotionProvider, SettleIn } from '~/components/common/Motion';
-import { CornerBrackets, SectionLabel } from '~/components/common/Readout';
+import { CornerBrackets, SectionLabel, TypeOnReadout } from '~/components/common/Readout';
+import { Scrim } from '~/components/common/Scrim';
 import { SPEC_LINE_CLASS, SpecLine } from '~/components/common/SpecLine';
 import { OUR_STORY } from '~/content/our-story';
 import { cn } from '~/lib/cn';
@@ -17,45 +16,18 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Body copy: 14px Inter at 1.6 (the guideline floor). */
 const BODY = 'text-sm leading-[1.6] text-ink-night';
+/** Body copy held to a readable line, where it isn't already in a narrow column. */
+const BODY_MEASURE = `${BODY} max-w-[60ch]`;
 /** Chapter statements — one step under the hero. */
 const STATEMENT = 'text-4xl leading-[0.98] md:text-6xl xl:text-7xl';
 const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl';
 const HAIRLINE = 'border-t border-border-subtle-night';
 
-/** Film grain over photography — see `--grain` in tailwind.css. */
-const GrainVeil = () => (
-  <div
-    aria-hidden
-    className="pointer-events-none absolute inset-0 bg-[image:var(--grain)] opacity-[0.07] mix-blend-overlay"
-  />
-);
-
-/** BaselineDrop's graded treatment (saturate .85 + multiply veil) plus grain,
-    so the fog stand-ins and the eventual night shoot share one profile. */
-const GradedMedia = ({
-  media,
-  ratio,
-  className,
-}: {
-  media: MediaSlotSource;
-  ratio: MediaSlotRatio;
-  className?: string;
-}) => (
-  <div className={cn('relative overflow-hidden', className)}>
-    <MediaSlot media={media} ratio={ratio} className="saturate-[0.85]" />
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
-    />
-    <GrainVeil />
-  </div>
-);
-
 /** A photo inside corner brackets — the file's photo mount. */
 const FramedMedia = ({ media, ratio }: { media: MediaSlotSource; ratio: MediaSlotRatio }) => (
   <div className="relative p-3">
     <CornerBrackets />
-    <GradedMedia media={media} ratio={ratio} />
+    <GradedMedia media={media} ratio={ratio} grain />
   </div>
 );
 
@@ -68,7 +40,7 @@ const FramedMedia = ({ media, ratio }: { media: MediaSlotSource; ratio: MediaSlo
 const FileHero = () => {
   const { hero } = OUR_STORY;
   return (
-    <section className="relative -mt-(--header-h) flex min-h-[34rem] flex-col overflow-hidden md:min-h-[44rem]">
+    <HeroShell className="flex-col">
       <SettleIn className="absolute inset-0">
         <Image
           src={hero.image.src}
@@ -81,22 +53,14 @@ const FileHero = () => {
           className="size-full object-cover object-[50%_30%] saturate-[0.85]"
         />
       </SettleIn>
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-black/25" />
+      <Scrim strength="25" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-field-night/80 to-transparent"
       />
       <GrainVeil />
-      <Container className="relative z-10 flex flex-1 flex-col justify-between pt-[calc(var(--header-h)+1.5rem)] pb-8 md:pb-12">
-        <SpecLine className="text-support-night">
-          <span className="animate-type-on inline-block motion-reduce:animate-none">
-            {hero.readout}
-          </span>
-          <span
-            aria-hidden
-            className="bg-brand animate-caret-blink ml-1 inline-block h-[0.85em] w-0.5 align-middle opacity-0 [animation-delay:0.6s]! [animation-iteration-count:2]! motion-reduce:hidden"
-          />
-        </SpecLine>
+      <HeroContent clearance="sm" className="flex-1 justify-between pb-8 md:pb-12">
+        <TypeOnReadout className="text-support-night">{hero.readout}</TypeOnReadout>
         <FadeIn
           delay={0.3}
           className="mt-24 flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between"
@@ -111,8 +75,8 @@ const FileHero = () => {
             {hero.cta.label}
           </Cta>
         </FadeIn>
-      </Container>
-    </section>
+      </HeroContent>
+    </HeroShell>
   );
 };
 
@@ -123,14 +87,14 @@ const Status = () => {
   return (
     <Container className="py-12 md:py-18">
       <SectionLabel number={status.number} title={status.title} />
-      <p className={cn(BODY, 'mt-8 max-w-[60ch]')}>{status.open}</p>
+      <p className={cn(BODY_MEASURE, 'mt-8')}>{status.open}</p>
       <div className="mt-12 grid gap-10 lg:grid-cols-[4fr_8fr] lg:gap-16">
         <FramedMedia media={status.media} ratio="portrait" />
         <div className="lg:pt-3">
           <Heading as="h2" size="none" className={SUBSTATEMENT}>
             {status.statement}
           </Heading>
-          <div className={cn(BODY, 'mt-8 max-w-[60ch] space-y-5')}>
+          <div className={cn(BODY_MEASURE, 'mt-8 space-y-5')}>
             {status.after.map((p) => (
               <p key={p}>{p}</p>
             ))}
@@ -140,7 +104,7 @@ const Status = () => {
       <Heading as="h2" size="none" className={cn(STATEMENT, 'mt-12 max-w-[18ch] md:mt-18')}>
         {status.callout}
       </Heading>
-      <div className={cn(BODY, 'mt-8 max-w-[60ch] space-y-5')}>
+      <div className={cn(BODY_MEASURE, 'mt-8 space-y-5')}>
         {status.close.map((p) => (
           <p key={p}>{p}</p>
         ))}
@@ -166,7 +130,7 @@ const Mission = () => {
             </p>
           ))}
         </div>
-        <p className={cn(BODY, 'mt-8 max-w-[60ch]')}>{mission.close}</p>
+        <p className={cn(BODY_MEASURE, 'mt-8')}>{mission.close}</p>
       </Container>
     </section>
   );
@@ -188,18 +152,18 @@ const Kit = () => {
             lines={kit.headingLines}
             className={cn(SUBSTATEMENT, 'xl:text-6xl xl:leading-[1.02]')}
           />
-          <div className={cn(BODY, 'max-w-[60ch] space-y-5 lg:pt-2')}>
+          <div className={cn(BODY_MEASURE, 'space-y-5 lg:pt-2')}>
             {kit.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </div>
         </div>
       </Container>
-      <GradedMedia media={kit.banner} ratio="wide" />
+      <GradedMedia media={kit.banner} ratio="wide" grain />
       <div className="mt-px grid gap-px bg-border-subtle-night md:grid-cols-3">
         {kit.strip.map((cell) => (
           <figure key={cell.caption} className="bg-field-night">
-            <GradedMedia media={cell.media} ratio="landscape" />
+            <GradedMedia media={cell.media} ratio="landscape" grain />
             <figcaption className={cn(SPEC_LINE_CLASS, 'px-4 py-3 text-support-night md:px-5')}>
               {cell.caption}
             </figcaption>
@@ -272,7 +236,7 @@ const Roster = () => {
  */
 export const OurStory = () => (
   <MotionProvider>
-    <div className="bg-field-night text-ink-night bg-[image:repeating-linear-gradient(to_right,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px),repeating-linear-gradient(to_bottom,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px)]">
+    <div className="bg-field-night text-ink-night bg-[image:var(--file-grid)]">
       <FileHero />
       <Status />
       <Mission />

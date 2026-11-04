@@ -17,7 +17,7 @@ export const Recommendations = ({ products }: { products: ReadonlyArray<ProductC
   return (
     <Container className="py-14 md:py-20">
       {/* Live left-aligns this heading and its subtitle at 40px. */}
-      <SectionHeader heading={heading} subtitle={subtitle} scale="panel" />
+      <SectionHeader heading={heading} subtitle={subtitle} scale="panel" className="mb-8" />
       {/* Capped at 66rem and left-aligned under the heading (Gabe's decision):
           at full width the stretched video box ran past a MacBook viewport.
           At 1440 the 13/12 split and 40px gutter give ~232px cards and a

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { Caret } from '~/components/common/Readout';
+import { SpecLine } from '~/components/common/SpecLine';
 import { cn } from '~/lib/cn';
 import { getTimeLeft, pad2, TIME_LEFT_UNITS, type TimeLeft } from '~/lib/countdown';
 
@@ -13,7 +15,7 @@ const SIZES = {
     group: 'gap-4 md:gap-6',
     separator: 'text-2xl md:text-3xl',
     digits: 'text-2xl leading-none md:text-3xl',
-    label: 'text-[10px]',
+    label: 'text-3xs',
   },
   /** Drop-page hero tier. */
   xl: {
@@ -21,7 +23,7 @@ const SIZES = {
     group: 'gap-5 md:gap-8',
     separator: 'text-3xl md:text-5xl',
     digits: 'text-4xl leading-none md:text-6xl',
-    label: 'text-[10px] md:text-xs',
+    label: 'text-3xs md:text-xs',
   },
 } as const;
 
@@ -90,17 +92,16 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
                   hidden. Absolutely positioned so it never shifts the digits.
                   Ember on the countdown is deliberate, per Gabe (2026-08-03). */}
               {index === caretIndex && timeLeft && (
-                <span
+                <Caret
                   key={`${caretIndex}-${values[caretIndex]}`}
-                  aria-hidden
-                  className="bg-brand animate-caret-blink absolute top-1/2 -left-1.5 h-[0.85em] w-0.5 -translate-y-1/2 opacity-0 motion-reduce:animate-none"
+                  className="absolute top-1/2 -left-1.5 -translate-y-1/2 motion-reduce:animate-none"
                 />
               )}
               {values[index]}
             </span>
-            <span className={cn('font-mono tracking-spec text-ink uppercase', tier.label)}>
+            <SpecLine as="span" className={cn('text-ink', tier.label)}>
               {label}
-            </span>
+            </SpecLine>
           </div>
         </div>
       ))}

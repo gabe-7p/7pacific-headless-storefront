@@ -1,5 +1,6 @@
 import { useCartViewed } from '~/components/analytics/Trackers';
 import { CartMain } from '~/components/cart/CartMain';
+import { Container } from '~/components/common/Container';
 import { Heading } from '~/components/common/Heading';
 import { TextLink } from '~/components/common/TextLink';
 import { CART_COPY } from '~/content/cart';
@@ -22,7 +23,7 @@ const Cart = () => {
   useCartViewed(true);
 
   return (
-    <div className="mx-auto max-w-[1100px] px-4 py-10 md:px-8">
+    <Container className="max-w-(--page-cart) py-10">
       <div className="mb-8 text-center">
         <Heading as="h1" variant="quiet" className="font-semibold">
           {CART_COPY.title}
@@ -34,7 +35,7 @@ const Cart = () => {
         )}
       </div>
       <CartMain layout="page" />
-    </div>
+    </Container>
   );
 };
 

@@ -14,6 +14,7 @@ export const FirstDrop = ({ products }: { products: ReadonlyArray<ProductCardDat
       heading={HOME_FIRST_DROP.heading}
       subtitle={HOME_FIRST_DROP.subtitle}
       scale="section"
+      className="mb-8"
     />
     {/* Three across down to live's Impulse breakpoint (769px) rather than
         Tailwind's lg — the cards hold their proportions well below 1024. */}

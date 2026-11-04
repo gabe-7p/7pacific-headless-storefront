@@ -9,11 +9,11 @@ import { cn } from '~/lib/cn';
 // (see ~/components/common/Cta.tsx).
 const brandCta = 'group/cta font-mono font-medium uppercase tracking-caps';
 
-// The base's `rounded-[2px]` is the ONE corner radius for every button — no
+// The base's `rounded-brand` is the ONE corner radius for every button — no
 // variant or size line may declare its own (a `shadcn add` regenerate would
 // restore stock `rounded-md` here and on the size lines; strip them again).
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[2px] text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-brand text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {

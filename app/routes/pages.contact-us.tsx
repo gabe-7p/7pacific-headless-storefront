@@ -3,6 +3,7 @@ import { Form, useActionData, useLoaderData, useNavigation } from 'react-router'
 
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
+import { FieldError } from '~/components/common/FieldError';
 import { Heading } from '~/components/common/Heading';
 import { Prose } from '~/components/common/Prose';
 import { CONTACT } from '~/content/contact';
@@ -60,7 +61,7 @@ const Contact = () => {
   return (
     <Container className="py-16 md:py-24">
       {/* Live centres a ~960px column and lets the copy sit on the page — no card. */}
-      <div className="mx-auto max-w-[960px]">
+      <div className="mx-auto max-w-(--page-narrow)">
         <Heading as="h1" variant="quiet" size="none" className="text-[2.4rem] font-semibold">
           Contact Us
         </Heading>
@@ -86,7 +87,7 @@ const Contact = () => {
                 placeholder={CONTACT.fields.name.placeholder}
                 className={fieldClass}
               />
-              {errors?.name && <p className="mt-1 text-xs text-red-600">{errors.name}</p>}
+              {errors?.name && <FieldError>{errors.name}</FieldError>}
             </div>
             <div>
               <label htmlFor="email" className="sr-only">
@@ -99,7 +100,7 @@ const Contact = () => {
                 placeholder={CONTACT.fields.email.placeholder}
                 className={fieldClass}
               />
-              {errors?.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+              {errors?.email && <FieldError>{errors.email}</FieldError>}
             </div>
             <div>
               <label htmlFor="phone" className="sr-only">
@@ -124,7 +125,7 @@ const Contact = () => {
                 placeholder={CONTACT.fields.message.placeholder}
                 className={fieldClass}
               />
-              {errors?.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
+              {errors?.message && <FieldError>{errors.message}</FieldError>}
             </div>
             {/* Secondary — the contact page carries no Ember moment. */}
             <Cta type="submit" disabled={submitting} className="w-full sm:w-auto">

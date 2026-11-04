@@ -25,7 +25,9 @@ import {
   PostHogBridge,
 } from '~/components/analytics/Trackers';
 import { Cta } from '~/components/common/Cta';
+import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
+import { ErrorShell } from '~/components/content/ErrorShell';
 import { NotFound } from '~/components/content/NotFound';
 import { HANDLES } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
@@ -232,10 +234,8 @@ export const ErrorBoundary = () => {
   const content = isNotFound ? (
     <NotFound />
   ) : (
-    // Same offset/gutter treatment as the 404 (see components/content/NotFound
-    // for the live-parity rationale) so both error surfaces sit identically.
-    <div className="mx-auto min-h-[60vh] max-w-(--page-max) px-3 pt-[120px] pb-20 min-[768px]:px-5 min-[768px]:pt-[155px] min-[1440px]:px-0">
-      <p className="text-support text-sm font-medium tracking-caps uppercase">{errorStatus}</p>
+    <ErrorShell>
+      <Eyebrow className="text-support text-sm">{errorStatus}</Eyebrow>
       <Heading as="h1" size="xl" className="mt-3">
         {MICROCOPY.serverError.heading}
       </Heading>
@@ -248,7 +248,7 @@ export const ErrorBoundary = () => {
           {errorMessage}
         </pre>
       )}
-    </div>
+    </ErrorShell>
   );
 
   // Render inside the site chrome when root data is available (the common

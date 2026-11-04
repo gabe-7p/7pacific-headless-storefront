@@ -21,7 +21,7 @@
  * of the site. --secondary/--muted/--accent share --color-panel (a Zinc-into-
  * Court mix) so ghost/hover states stay visible on a Court page field. */
 :root {
-  --radius: 0.625rem;
+  --radius: var(--radius-brand);
   --background: var(--color-court);
   --foreground: var(--color-carbon);
   --primary: var(--color-carbon);
@@ -39,6 +39,8 @@
 }
 
 @theme inline {
+  /* --radius is 2px, so --radius-sm and --radius-md resolve to 0: a generated
+   * `rounded-sm` or `rounded-md` renders square. --radius-lg is 2px. */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -87,6 +89,12 @@
   --font-sans: 'Inter Variable', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
+  /* The ONE corner radius: buttons, dialogs, the swatch tooltip. */
+  --radius-brand: 2px;
+
+  /* The campaign title weight (Heading's campaign variant). */
+  --font-weight-campaign: 450;
+
   /* Brand tracking scale — caps always track wider than default, body stays
    * at 0. `tracking-caps` and `tracking-spec` are the two load-bearing values. */
   --tracking-hero: -0.005em; /* hero display headlines */
@@ -94,14 +102,28 @@
   --tracking-product: 0.04em; /* product names */
   --tracking-caps: 0.08em; /* caps UI: nav, CTAs, edition numbers */
   --tracking-spec: 0.1em; /* JetBrains Mono spec strips */
+  --tracking-segment: 0.3em; /* live's segmented cells and their labels */
+
+  /* The two steps under text-xs. No --line-height pair on purpose: they inherit
+   * their leading, as the arbitrary sizes they replace did. */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-3xs: 0.625rem; /* 10px */
 
   /* Live's Impulse theme breaks at 769/1025 (its media queries use max-width,
    * so 768/1024 belong to the SMALLER tier — iPad portrait stacks), one past
    * Tailwind's md/lg. `impulse:`/`impulse-lg:` are those tiers; don't reach
-   * for md:/lg: on surfaces that must flip exactly where live does. Named
-   * breakpoints sort by width, so these interleave correctly with md/lg/xl. */
+   * for md:/lg: on surfaces that must flip exactly where live does. They are px,
+   * and Tailwind sorts breakpoints by unit, then width, so they emit ahead of
+   * every rem breakpoint and lose to a narrower one on the same property:
+   * `impulse:` to sm, hero-sm or md, `impulse-lg:` to those plus banner and lg. */
   --breakpoint-impulse: 769px;
   --breakpoint-impulse-lg: 1025px;
+  /* Where the error pages drop their side gutter (1440px). In rem on purpose:
+   * Tailwind sorts breakpoints by unit, then width, so a px value would emit
+   * ahead of `md:` and lose to it. */
+  --breakpoint-gutterless: 90rem;
+  --breakpoint-hero-sm: 35rem; /* 560px: where the homepage headline steps up */
+  --breakpoint-banner: 53.75rem; /* 860px: where the Name/Spec cells step up */
 
   /* The "Meridian on Carbon" palette (Brand Guidelines → 03 Color Palette,
    * rev. Jul 2026), with target usage weights: Court 50% · Carbon 27% ·
@@ -127,6 +149,13 @@
   --color-ink-night: var(--color-court); /* primary type on dark */
   --color-support: var(--color-graphite); /* secondary type on light */
   --color-support-night: var(--color-zinc); /* secondary/muted type on dark */
+  /* Washes over photography (common/Scrim, the gradient scrims). Pure black, off
+   * the palette on purpose: a scrim darkens media, it is never a surface or type. */
+  --color-scrim: #000;
+  /* Form error text (common/FieldError). On the support tier, not Ember: Ember
+   * is rationed to one moment per page, and an error line can't claim it. */
+  --color-error: var(--color-support);
+  --color-error-night: var(--color-support-night);
 
   /* Semantic surface tokens — chained onto the palette above so every hex
    * lives exactly once. */
@@ -249,8 +278,12 @@
  */
 :root {
   --page-max: 1400px;
+  --page-narrow: 60rem; /* contact and generic content pages */
+  --page-cart: 1100px;
   --header-h: 3.375rem; /* 54px */
   --announcement-h: 1.75rem; /* 28px */
+  --hero-min-h: 34rem; /* common/HeroShell */
+  --hero-min-h-md: 44rem;
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
   /* Film grain for night-surface photography (Our Story "The File"): a tiled
      160px fractal-noise SVG, laid over a photo as `bg-[image:var(--grain)]`
@@ -258,6 +291,23 @@
      direction (direct flash, grain, motion blur); keep it on photos only,
      never under body copy. */
   --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  /* The file's ground (Our Story, athlete signings): a 72px hairline grid at
+     2.5% white, laid on a field-night surface as `bg-[image:var(--file-grid)]`. */
+  --file-grid:
+    repeating-linear-gradient(
+      to right,
+      rgb(255 255 255 / 0.025) 0px,
+      rgb(255 255 255 / 0.025) 1px,
+      transparent 1px,
+      transparent 72px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgb(255 255 255 / 0.025) 0px,
+      rgb(255 255 255 / 0.025) 1px,
+      transparent 1px,
+      transparent 72px
+    );
 }
 
 /* --- base element defaults ---

@@ -98,16 +98,18 @@ These came out of the live-parity work; every one type-checks and lints clean.
 
 Between two `leading-*` the later one wins, and `asChild` makes that easy to miss: a Radix title's classes reach the child as its `className`, after `Heading`'s variant. `DialogTitle`'s `leading-none` would beat the brand `leading-[1.1]`, so `BrandDialogTitle` restates it.
 
-**Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does. Named breakpoints sort by width, so they interleave correctly with `md`/`lg`/`xl`. Holdouts that still use arbitrary variants: `routes/products.$handle.tsx` (`min-[769px]:` on purpose — its chains rely on named-beats-arbitrary emit order, see the next trap, and need visual re-verification to move), plus `root.tsx` and `NotFound.tsx` (`min-[768px]`/`min-[1440px]`), `Hero.tsx` (`min-[560px]`) and `NameSpecBanner.tsx` (`min-[860px]`) until they are cleared.
+**Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does. The one holdout on arbitrary variants is `routes/products.$handle.tsx` (`min-[769px]:` on purpose — its chains rely on `md:` (rem) emitting after `min-[769px]:` (px), see the next trap, and need visual re-verification to move).
 
-**Named and arbitrary breakpoints don't interleave.** Tailwind emits named variants (`md:`) after arbitrary ones (`min-[1440px]:`), so the named one wins at the larger width regardless of intent. Use one form or the other in a chain:
+**Breakpoints sort by unit first, then by width.** This holds for named and arbitrary variants alike: Tailwind emits em, then px, then rem, and orders by width within a unit, so `min-[50rem]:` lands between `md:` and `lg:` and `min-[769px]:` shares `impulse:`'s slot. A px breakpoint therefore emits ahead of every rem one, and it loses only to a narrower rem breakpoint on the same property: `impulse:` to `sm`, `hero-sm` or `md`, and `impulse-lg:` to those plus `banner` and `lg`. `impulse:` with `lg:` is fine, because `lg` is both later and wider. Give a new breakpoint a rem value (`--breakpoint-gutterless: 90rem`, `-hero-sm: 35rem`, `-banner: 53.75rem`) so it sorts by width with `sm`…`2xl`.
 
 ```tsx
-// ❌ md:px-5 still applies at 1440
+// ❌ px emits before rem, so md:px-5 still applies at 1440
 <div className="px-3 md:px-5 min-[1440px]:px-0" />
-// ✅ sorts by width
-<div className="px-3 min-[768px]:px-5 min-[1440px]:px-0" />
+// ✅ one unit, so it sorts by width
+<div className="px-3 md:px-5 gutterless:px-0" />
 ```
+
+**A custom token in `cn()` needs registering, or merge misreads it.** tailwind-merge reads any unknown `font-*` as a font family, so `font-campaign` would evict `font-display-narrow`, and an unknown `rounded-*` wouldn't replace a stock one. `lib/cn.ts` registers both under `theme`. The brand `tracking-*` tokens aren't registered: two of them on one element both survive and CSS emit order decides, which is alphabetical after the arbitrary values. So `tracking-[0.3em]` loses to a variant's `tracking-header` (the footer titles render at 0.01em, whatever their class says), while `tracking-segment` would beat it. Measure the computed value when you swap one for the other.
 
 **A preset `size` on `Heading` (or `scale` on `SectionHeader`) carries responsive steps** (`md:`/`xl:`) that a `className` can't override at those breakpoints. Pass `size="none"` when a page owns its whole scale.
 

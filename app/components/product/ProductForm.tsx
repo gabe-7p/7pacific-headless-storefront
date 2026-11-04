@@ -1,21 +1,28 @@
+import type { SelectedOption } from '@shopify/hydrogen/storefront-api-types';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
+import { ColorSwatches } from '~/components/product/ColorSwatches';
+import {
+  SEGMENT_CELL,
+  SEGMENT_IDLE,
+  SEGMENT_JOIN,
+  SEGMENT_SELECTED,
+} from '~/components/product/SegmentedCell';
 import { SizeGuide } from '~/components/product/SizeGuide';
 import { cn } from '~/lib/cn';
 import { isPlainActivation } from '~/lib/events';
+import type { ColorSwatch } from '~/lib/product/colors';
 import { shortSizeLabel } from '~/lib/product/display';
 import { useProductForm } from '~/lib/product/store';
 import { productUrl } from '~/lib/urls';
 
-/** Live's segmented size cell: 9.6px, semibold, 0.3em tracking, uppercase. */
-const SIZE_CELL =
-  'flex-1 border py-3 text-center text-[9.6px] font-semibold tracking-[0.3em] uppercase';
+const SIZE_CELL = cn(SEGMENT_CELL, 'flex-1 py-3 text-center');
 
-const SELECTED_CELL = 'z-10 border-ink bg-field-night text-ink-night';
-const IDLE_CELL =
-  'border-border-subtle bg-field text-ink hover:z-10 hover:border-ink focus-visible:z-10';
+/** Idle cells sit on the buy card, and each can neighbour another idle cell, so
+    one lifts on hover or focus to keep its dark border on top. */
+const IDLE_CELL = cn(SEGMENT_IDLE, 'bg-field hover:z-10 focus-visible:z-10');
 
 /** The label row above a segmented bar; `action` rides its right edge. */
 const OptionLabel = ({ children, action }: { children: string; action?: ReactNode }) => (
@@ -26,11 +33,11 @@ const OptionLabel = ({ children, action }: { children: string; action?: ReactNod
 );
 
 /**
- * Buy-box options (size selector). Shopify's internal single-variant "Title"
- * option is filtered out; products with no real size option (e.g. the hat)
- * render a single "One Size" cell.
+ * Size selector. Shopify's internal single-variant "Title" option is filtered
+ * out; products with no real size option (e.g. the hat) render a single "One
+ * Size" cell.
  */
-export const ProductForm = () => {
+const SizeOptions = () => {
   const { options, register } = useProductForm();
   const { search } = useLocation();
 
@@ -42,7 +49,7 @@ export const ProductForm = () => {
       <div>
         <OptionLabel>Size</OptionLabel>
         <div className="flex w-full">
-          <span className={cn(SIZE_CELL, 'cursor-default', SELECTED_CELL)}>One Size</span>
+          <span className={cn(SIZE_CELL, 'cursor-default', SEGMENT_SELECTED)}>One Size</span>
         </div>
       </div>
     );
@@ -69,8 +76,8 @@ export const ProductForm = () => {
                 // the hovered cell like the selected one.
                 const className = cn(
                   SIZE_CELL,
-                  '-ml-px transition-colors first:ml-0',
-                  selected ? SELECTED_CELL : IDLE_CELL,
+                  SEGMENT_JOIN,
+                  selected ? SEGMENT_SELECTED : IDLE_CELL,
                   !available && 'opacity-40'
                 );
 
@@ -133,3 +140,33 @@ export const ProductForm = () => {
     </div>
   );
 };
+
+/**
+ * The buy-box selection cluster: the Color row, then the size options. Color
+ * sits here though it isn't a variant option (color = separate product).
+ */
+export const ProductForm = ({
+  swatches,
+  currentHandle,
+  selectedOptions,
+}: {
+  swatches: Array<ColorSwatch>;
+  currentHandle: string;
+  selectedOptions?: Array<SelectedOption>;
+}) => (
+  <>
+    <div className="mt-4">
+      <OptionLabel>Color</OptionLabel>
+      <ColorSwatches
+        swatches={swatches}
+        currentHandle={currentHandle}
+        size="lg"
+        alwaysRender
+        selectedOptions={selectedOptions}
+      />
+    </div>
+    <div className="mt-4">
+      <SizeOptions />
+    </div>
+  </>
+);

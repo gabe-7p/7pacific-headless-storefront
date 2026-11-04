@@ -1,6 +1,7 @@
-import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
+import { HeroContent, HeroShell } from '~/components/common/HeroShell';
+import { Scrim } from '~/components/common/Scrim';
 import { SpecLine } from '~/components/common/SpecLine';
 import { HOME_HERO } from '~/content/home';
 
@@ -11,9 +12,7 @@ import { HOME_HERO } from '~/content/home';
  * still the primary CTA alone. Sits under the transparent overlay header.
  */
 export const Hero = () => (
-  // -mt pulls the hero up beneath the sticky header (transparent overlay);
-  // the announcement bar above it stays opaque.
-  <section className="bg-field-night relative -mt-(--header-h) flex min-h-[34rem] items-center overflow-hidden text-ink-night md:min-h-[44rem]">
+  <HeroShell className="bg-field-night items-center text-ink-night">
     {/* Plain autoplay video, not LazyVideo: above the fold it must start
         before hydration. The poster is the clip's first frame. */}
     <video
@@ -27,23 +26,20 @@ export const Hero = () => (
       className="absolute inset-0 size-full object-cover"
     />
     {/* Live's .custom-hero-overlay verbatim: a flat rgba(0,0,0,0.10) wash over
-        the whole frame, nothing graded. pointer-events-none so it never eats a
-        click meant for the CTA beneath it. */}
-    <div className="pointer-events-none absolute inset-0 bg-black/10" />
-    <Container className="relative z-10 flex flex-col items-start gap-5 py-16 pt-[calc(var(--header-h)+4rem)]">
+        the whole frame, nothing graded. */}
+    <Scrim strength="10" />
+    <HeroContent clearance="lg" className="items-start gap-5 py-16">
       {/* Spec-strip tier: JetBrains Mono caps at +0.1em. */}
       <SpecLine className="text-support-night">{HOME_HERO.eyebrow}</SpecLine>
       {/* Hero display tier, -0.005em, lh 0.95. Each line is a nowrap block so
           the break lands at the period on every viewport. Each step is the
           largest size whose longer line fits the content box at
-          that width. The 560 step is an arbitrary breakpoint like the base; the named
-          md/lg/xl steps above it stay in ascending order, so emit order is
-          safe. Re-measure if the headline copy changes. */}
+          that width. Re-measure if the headline copy changes. */}
       <Heading
         as="h1"
         size="none"
         lines={HOME_HERO.headlineLines}
-        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap min-[560px]:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
+        className="text-[2rem] leading-[0.95] tracking-hero [&>span]:whitespace-nowrap hero-sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
       />
       {/* Body tier: Inter, sentence case. */}
       <p className="max-w-[42ch] text-sm leading-[1.55] md:text-base">{HOME_HERO.subhead}</p>
@@ -55,6 +51,6 @@ export const Hero = () => (
           {HOME_HERO.secondaryCta.label}
         </Cta>
       </div>
-    </Container>
-  </section>
+    </HeroContent>
+  </HeroShell>
 );

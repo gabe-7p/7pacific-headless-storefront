@@ -4,17 +4,15 @@ import { Await, useLoaderData, useLocation, useNavigate } from 'react-router';
 
 import { ProductViewedTracker } from '~/components/analytics/Trackers';
 import { Container } from '~/components/common/Container';
-import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
+import { Price } from '~/components/common/Price';
 import { Prose } from '~/components/common/Prose';
 import { AddToCartBar } from '~/components/product/AddToCartBar';
 import { BrandBanner } from '~/components/product/BrandBanner';
-import { ColorSwatches } from '~/components/product/ColorSwatches';
 import { EditionTag } from '~/components/product/EditionTag';
 import { ProductDetails } from '~/components/product/ProductDetails';
 import { ProductForm } from '~/components/product/ProductForm';
-import { ProductPrice } from '~/components/product/ProductPrice';
 import { Recommendations } from '~/components/product/Recommendations';
 import { SpecCard } from '~/components/product/SpecCard';
 import { StickyAddToCart } from '~/components/product/StickyAddToCart';
@@ -147,7 +145,7 @@ const ProductPage = () => {
             className="hidden object-cover object-center min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full"
           />
         )}
-        <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-black/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
+        <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-scrim/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
         {/* The card carries its own left inset rather than the Container taking
             horizontal padding: Tailwind emits `md:` after `min-[769px]:`, so a
             `md:px-0` reset would win over `min-[769px]:px-8` at 769+. */}
@@ -171,11 +169,18 @@ const ProductPage = () => {
               >
                 {title}
               </Heading>
+              {/* font-medium, not bold: mono runs Regular/Medium only. The
+                  non-breaking space holds the row when no variant resolves. */}
               <div className="mt-3 text-lg">
-                <ProductPrice
-                  price={selectedVariant?.price}
-                  compareAtPrice={selectedVariant?.compareAtPrice}
-                />
+                {selectedVariant?.price ? (
+                  <Price
+                    data={selectedVariant.price}
+                    compareAt={selectedVariant.compareAtPrice}
+                    className="font-medium"
+                  />
+                ) : (
+                  <span>&nbsp;</span>
+                )}
               </div>
               {descriptionHtml && (
                 <Prose html={descriptionHtml} variant="description" className="mt-4" />
@@ -188,19 +193,11 @@ const ProductPage = () => {
                   <SpecCard data={specCard} />
                 </div>
               )}
-              <div className="mt-4">
-                <Eyebrow className="mb-2 text-support">Color</Eyebrow>
-                <ColorSwatches
-                  swatches={getColorSwatches(product.colorSiblings)}
-                  currentHandle={product.handle}
-                  size="lg"
-                  alwaysRender
-                  selectedOptions={selectedVariant?.selectedOptions}
-                />
-              </div>
-              <div className="mt-4">
-                <ProductForm />
-              </div>
+              <ProductForm
+                swatches={getColorSwatches(product.colorSiblings)}
+                currentHandle={product.handle}
+                selectedOptions={selectedVariant?.selectedOptions}
+              />
               {/* The fit line moves into the Spec Card's FIT row when a spec
                   card exists — don't render it twice. */}
               {!specCard?.fit && product.fitNote?.value && (

@@ -43,7 +43,7 @@ export const CoreValues = () => {
 
   return (
     <Container className="py-9 md:py-12">
-      <SectionHeader heading={heading} subtitle={subtitle} scale="section" />
+      <SectionHeader heading={heading} subtitle={subtitle} scale="section" className="mb-8" />
 
       <div className="flex flex-col gap-3">
         {/* Sides alternate starting media-left. */}

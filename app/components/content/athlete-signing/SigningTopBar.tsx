@@ -28,7 +28,7 @@ export const SigningTopBar = ({ chrome }: { chrome: AthleteSigningContent['chrom
     </Container>
     <Container className="border-t border-border-subtle-night py-3 md:hidden">
       <span className={cn(SPEC_LINE_CLASS, 'text-support-night flex items-center gap-2.5')}>
-        <span aria-hidden className="border-border-subtle/60 size-2.5 border" />
+        <span aria-hidden className="border-support-night/60 size-2.5 border" />
         {chrome.urlLine}
       </span>
     </Container>

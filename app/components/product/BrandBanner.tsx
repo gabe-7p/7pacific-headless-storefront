@@ -2,6 +2,7 @@ import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { LazyVideo } from '~/components/common/LazyVideo';
+import { Scrim } from '~/components/common/Scrim';
 import { PRODUCT_BRAND_BANNER } from '~/content/product-page';
 
 /**
@@ -27,9 +28,8 @@ export const BrandBanner = () => {
             label={video.label}
             className="absolute inset-0 size-full object-cover"
           />
-          {/* Legibility wash — the same 15% the Roster bands use; the footage
-              is dark already, so the copy renders in the night tokens. */}
-          <div className="pointer-events-none absolute inset-0 bg-black/15" />
+          {/* The footage is dark already, so the copy renders in the night tokens. */}
+          <Scrim strength="15" />
           <div className="absolute inset-0 flex justify-center px-6 pt-10 text-center md:justify-end md:pt-14 lg:pr-[6%]">
             <div className="max-w-md">
               {/* Live: 60px / 500 / -0.02em (tight negative tracking). */}

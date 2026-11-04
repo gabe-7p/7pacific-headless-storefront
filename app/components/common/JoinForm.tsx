@@ -3,6 +3,7 @@ import { useId } from 'react';
 import { useFetcher } from 'react-router';
 
 import { Cta, type CtaVariant } from '~/components/common/Cta';
+import { FieldError } from '~/components/common/FieldError';
 import type { JoinFormCopy, JoinList } from '~/content/join';
 import { cn } from '~/lib/cn';
 import type { SubscribeResponse } from '~/lib/forms';
@@ -14,6 +15,12 @@ import type { SubscribeResponse } from '~/lib/forms';
  */
 const NIGHT_UNDERLINE_FIELD =
   'w-full rounded-none border-0 border-b border-border-subtle bg-transparent px-0 py-2 text-ink-night placeholder:text-support-night focus:border-ink-night focus:outline-none';
+
+/** The confirmation line that replaces the form, per ground. */
+const SUCCESS_LINE = {
+  day: 'mt-6 text-sm font-medium text-ink',
+  night: 'mt-5 text-sm font-medium',
+} as const;
 
 type JoinFormProps = {
   /** Which list the signup lands on — sent as the `list` field. */
@@ -30,10 +37,10 @@ type JoinFormProps = {
   noValidate?: boolean;
   /** Layout of the <Form> (stacked dialog vs. inline row). */
   className?: string;
+  /** The ground the form sits on; sets the error and confirmation lines. */
+  tone?: 'day' | 'night';
   /** Field treatment — surface-owned; defaults to the night underline. */
   fieldClassName?: string;
-  errorClassName?: string;
-  successClassName?: string;
   ctaVariant?: CtaVariant;
   ctaClassName?: string;
 };
@@ -50,9 +57,8 @@ export const JoinForm = ({
   submit = 'cta',
   noValidate = false,
   className,
+  tone = 'night',
   fieldClassName = NIGHT_UNDERLINE_FIELD,
-  errorClassName = 'mt-1 text-xs text-support',
-  successClassName = 'mt-5 text-sm font-medium',
   ctaVariant,
   ctaClassName,
 }: JoinFormProps) => {
@@ -63,9 +69,17 @@ export const JoinForm = ({
   const emailId = useId();
   const submitting = fetcher.state !== 'idle';
   const errors = fetcher.data?.ok === false ? fetcher.data.errors : undefined;
+  // The mail row (footer, newsletter dialog) sets its error a step larger.
+  const errorClassName = submit === 'mail' ? 'mt-2 text-sm' : undefined;
+  const fieldError = (message: string | undefined) =>
+    message ? (
+      <FieldError tone={tone} className={errorClassName}>
+        {message}
+      </FieldError>
+    ) : null;
 
   if (fetcher.data?.ok === true) {
-    return <p className={successClassName}>{copy.successMessage}</p>;
+    return <p className={SUCCESS_LINE[tone]}>{copy.successMessage}</p>;
   }
 
   const emailField = (
@@ -104,7 +118,7 @@ export const JoinForm = ({
             placeholder={copy.namePlaceholder}
             className={fieldClassName}
           />
-          {errors?.name && <p className={errorClassName}>{errors.name}</p>}
+          {fieldError(errors?.name)}
         </div>
       )}
       <div>
@@ -126,9 +140,9 @@ export const JoinForm = ({
         ) : (
           emailField
         )}
-        {errors?.email && <p className={errorClassName}>{errors.email}</p>}
+        {fieldError(errors?.email)}
       </div>
-      {errors?.list && <p className={errorClassName}>{errors.list}</p>}
+      {fieldError(errors?.list)}
       {submit === 'cta' && (
         <Cta type="submit" variant={ctaVariant} disabled={submitting} className={ctaClassName}>
           {copy.submitLabel}

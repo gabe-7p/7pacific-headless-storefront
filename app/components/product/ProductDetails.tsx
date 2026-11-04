@@ -3,7 +3,7 @@ import { Image } from '~/components/common/Image';
 import { Scroller } from '~/components/common/Scroller';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { PdpSection } from '~/components/product/PdpSection';
-import { imageWidths } from '~/lib/imageSizes';
+import { IMAGE_SIZES, imageWidths } from '~/lib/imageSizes';
 import type { ProductDetailCard } from '~/lib/product/content';
 
 const DetailCard = ({ card }: { card: ProductDetailCard }) => (
@@ -21,7 +21,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
       aspectRatio="5/6"
       crop="center"
       srcSetWidths={imageWidths(400, 100, 16)}
-      sizes="(min-width: 1024px) min(calc((100vw - 6rem) / 3), 435px), (min-width: 640px) 45vw, 78vw"
+      sizes={IMAGE_SIZES.scroller3}
       className="aspect-[32/45] w-full object-cover impulse:aspect-[5/6]"
     />
     <Heading as="h3" variant="caps" size="none" className="mt-3 text-sm">
@@ -38,7 +38,7 @@ const DetailCard = ({ card }: { card: ProductDetailCard }) => (
  */
 export const ProductDetails = ({ cards }: { cards: ReadonlyArray<ProductDetailCard> }) => (
   <PdpSection>
-    <SectionHeader heading="Product Details" scale="panel" />
+    <SectionHeader heading="Product Details" scale="panel" className="mb-8" />
     {/* Live styles this gallery's scrollbar so it's always visible (8px,
         white/10 track, white/30 thumb) — not the macOS overlay bar that only
         appears mid-scroll. Styling the -webkit pseudos opts out of overlay

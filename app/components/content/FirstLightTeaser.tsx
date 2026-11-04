@@ -2,9 +2,8 @@ import { Container } from '~/components/common/Container';
 import { Countdown } from '~/components/common/Countdown';
 import { Heading } from '~/components/common/Heading';
 import { JoinForm } from '~/components/common/JoinForm';
-import { LiveDot } from '~/components/common/LiveDot';
+import { LiveEyebrow } from '~/components/common/LiveDot';
 import { MediaSlot } from '~/components/common/MediaSlot';
-import { SpecLine } from '~/components/common/SpecLine';
 import { FIRST_LIGHT } from '~/content/first-light';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
@@ -25,8 +24,8 @@ const EarlyAccessForm = () => (
     withName
     noValidate
     className="mt-6 grid max-w-none grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+    tone="day"
     fieldClassName={fieldClass}
-    successClassName="mt-6 text-sm font-medium text-ink"
     ctaVariant="brand"
   />
 );
@@ -34,11 +33,8 @@ const EarlyAccessForm = () => (
 /** Ember eyebrow dot + edition line, then the page headline and intro. */
 const Intro = () => (
   <Container className="pt-10 pb-8 md:pt-14 md:pb-10">
-    <SpecLine className="flex items-center gap-3 text-sm text-ink">
-      {/* The mock pairs the Ember live signal with the SIGN UP CTA below. */}
-      <LiveDot />
-      {FIRST_LIGHT.eyebrow}
-    </SpecLine>
+    {/* The mock pairs the Ember live signal with the SIGN UP CTA below. */}
+    <LiveEyebrow>{FIRST_LIGHT.eyebrow}</LiveEyebrow>
     <Heading as="h1" size="none" className="mt-4 text-5xl md:text-6xl">
       {FIRST_LIGHT.headline}
     </Heading>

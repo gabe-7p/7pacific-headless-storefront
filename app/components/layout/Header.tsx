@@ -5,6 +5,7 @@ import { useCartDrawer } from '~/components/cart/useCartDrawer';
 import { Container } from '~/components/common/Container';
 import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/common/icons';
 import { Logo } from '~/components/common/Logo';
+import { TextLink } from '~/components/common/TextLink';
 import { useAside } from '~/components/layout/Aside';
 import { BRAND } from '~/content/brand';
 import { useCart } from '~/lib/cart';
@@ -50,7 +51,7 @@ export const Header = ({ header, publicStoreDomain }: HeaderProps) => {
       className={cn(
         'transition-colors duration-300 ease-(--ease-brand)',
         overlay
-          ? 'bg-linear-to-b from-black/30 to-transparent text-ink-night'
+          ? 'bg-linear-to-b from-scrim/30 to-transparent text-ink-night'
           : 'bg-nav text-nav-text shadow-sm'
       )}
     >
@@ -140,16 +141,15 @@ export const HeaderMenu = ({
         BRAND.social
           .filter((social) => social.platform === 'Instagram')
           .map((social) => (
-            <a
+            <TextLink
               key={social.platform}
               href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={social.platform}
+              variant="bare"
               className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
             >
               <InstagramIcon className="size-5" />
-            </a>
+            </TextLink>
           ))}
     </nav>
   );
@@ -210,7 +210,7 @@ const CartBadge = () => {
     >
       <BagIcon className="size-7" />
       {count > 0 && (
-        <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-ink-night">
+        <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-3xs font-bold text-ink-night">
           {count}
         </span>
       )}

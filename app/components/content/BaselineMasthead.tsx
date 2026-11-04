@@ -1,7 +1,7 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
-import { LiveDot } from '~/components/common/LiveDot';
+import { LiveEyebrow } from '~/components/common/LiveDot';
 import { SpecLine } from '~/components/common/SpecLine';
 import { BASELINE_DROP } from '~/content/baseline-drop';
 
@@ -13,10 +13,7 @@ import { BASELINE_DROP } from '~/content/baseline-drop';
  */
 export const BaselineMasthead = ({ withDropLink = false }: { withDropLink?: boolean }) => (
   <Container className="pt-8 pb-6 md:pt-14 md:pb-10">
-    <SpecLine className="flex items-center gap-3 text-sm text-ink">
-      <LiveDot />
-      {BASELINE_DROP.eyebrow}
-    </SpecLine>
+    <LiveEyebrow>{BASELINE_DROP.eyebrow}</LiveEyebrow>
     <Heading
       as="h1"
       size="none"

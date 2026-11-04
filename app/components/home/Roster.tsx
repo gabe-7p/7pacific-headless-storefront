@@ -2,6 +2,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { Image } from '~/components/common/Image';
 import { LazyVideo } from '~/components/common/LazyVideo';
+import { Scrim } from '~/components/common/Scrim';
 import { HOME_ROSTER } from '~/content/home';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
@@ -59,8 +60,7 @@ export const Roster = () => (
         />
       </div>
     </div>
-    {/* Legibility wash — the same 15% the Baseline V01 cards use. */}
-    <div className="pointer-events-none absolute inset-0 bg-black/15" />
+    <Scrim strength="15" />
     {/* Overlay layer spanning all bands. The copy block is sticky at 40vh;
         the layer's padding sets where the ride starts (pt) and stops (pb —
         sticky travel is bounded by the containing block's content box).

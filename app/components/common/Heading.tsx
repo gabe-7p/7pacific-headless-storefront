@@ -18,7 +18,7 @@ const VARIANTS = {
   /** Campaign display — Archivo Narrow at 450 with caps-tier tracking, the
       drop-page section-title face (see ui-components.md's campaign-type
       note). Callers own the size/leading steps via className. */
-  campaign: 'font-display-narrow font-[450] tracking-caps uppercase leading-[1.1]',
+  campaign: 'font-display-narrow font-campaign tracking-caps uppercase leading-[1.1]',
 } as const;
 
 const SIZES = {

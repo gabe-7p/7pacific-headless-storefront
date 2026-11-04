@@ -1,54 +1,16 @@
 import { Container } from '~/components/common/Container';
 import { Cta } from '~/components/common/Cta';
+import { Eyebrow } from '~/components/common/Eyebrow';
+import { GradedMedia } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
-import {
-  MediaSlot,
-  type MediaSlotRatio,
-  type MediaSlotSource,
-} from '~/components/common/MediaSlot';
+import { MediaSlot } from '~/components/common/MediaSlot';
+import { SectionHeader } from '~/components/common/SectionHeader';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
-import { cn } from '~/lib/cn';
 
 /**
  * Ember repeats here by sanctioned exception (ui-components.md).
  */
-
-/** Campaign heading scale steps (the face/weight/tracking come from
-    Heading's `campaign` variant). */
-const CAMPAIGN_HEADING_SIZES = 'text-3xl leading-[1.15] md:text-[3.5rem] md:leading-[1.1]';
-
-/** Left-aligned section header: display heading → muted subtitle. */
-const DropSectionHeader = ({ heading, subtitle }: { heading: string; subtitle: string }) => (
-  <div>
-    <Heading as="h2" variant="campaign" size="none" className={CAMPAIGN_HEADING_SIZES}>
-      {heading}
-    </Heading>
-    <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-support md:mt-3">{subtitle}</p>
-  </div>
-);
-
-/** A training-section photo under the unifying grade: the images are shot in
-    different light (fog, beach sun, trail green), so each gets a slight
-    desaturation plus a cool Carbon multiply veil — enough to pull them onto
-    one color profile without visibly costing detail. */
-const GradedMedia = ({
-  media,
-  ratio,
-  className,
-}: {
-  media: MediaSlotSource;
-  ratio: MediaSlotRatio;
-  className?: string;
-}) => (
-  <div className={cn('relative', className)}>
-    <MediaSlot media={media} ratio={ratio} className="saturate-[0.85]" />
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"
-    />
-  </div>
-);
 
 /** The full-bleed 16:9 drop film; the scrim keeps the white full-video label legible. */
 const Film = () => (
@@ -60,7 +22,7 @@ const Film = () => (
     />
     <div className="absolute bottom-4 left-4 md:bottom-8 md:left-10">
       {/* White campaign Archivo, per Gabe (2026-08-25). */}
-      <p className="font-archivo text-[11px] font-medium tracking-caps text-ink-night uppercase md:text-sm">
+      <p className="font-archivo text-2xs font-medium tracking-caps text-ink-night uppercase md:text-sm">
         {BASELINE_DROP.filmOverlay.label}
       </p>
       <Cta
@@ -90,9 +52,12 @@ const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number
         {stat.value}
         {'accent' in stat ? <span className="text-brand">{stat.accent}</span> : null}
       </span>
-      <span className="min-w-0 pb-1 text-xs leading-tight tracking-caps text-support-night uppercase md:pb-2 md:text-sm">
+      <Eyebrow
+        as="span"
+        className="min-w-0 pb-1 leading-tight font-light text-support-night md:pb-2 md:text-sm"
+      >
         {stat.label}
-      </span>
+      </Eyebrow>
     </p>
   </div>
 );
@@ -100,9 +65,10 @@ const StatCard = ({ stat }: { stat: (typeof BASELINE_DROP.receipts.stats)[number
 /** "THE RECEIPTS" — the four earned-number cards. */
 const Receipts = () => (
   <Container className="pt-12 pb-11 md:pt-18 md:pb-16">
-    <DropSectionHeader
+    <SectionHeader
       heading={BASELINE_DROP.receipts.heading}
       subtitle={BASELINE_DROP.receipts.subtitle}
+      scale="campaign"
     />
     <div className="mt-7 grid grid-cols-2 gap-1 md:mt-12 md:grid-cols-4 md:gap-1.5">
       {BASELINE_DROP.receipts.stats.map((stat) => (
@@ -117,9 +83,10 @@ const Receipts = () => (
 const Standard = () => (
   <section>
     <Container className="pt-12 pb-6 md:pt-18 md:pb-11">
-      <DropSectionHeader
+      <SectionHeader
         heading={BASELINE_DROP.standard.heading}
         subtitle={BASELINE_DROP.standard.subtitle}
+        scale="campaign"
       />
     </Container>
     {/* The band is the sled-push loop at 70% of its height. */}
@@ -146,7 +113,7 @@ const Standard = () => (
               adjacent frames share one hairline. flex-1 levels the three
               frames to the tallest. */}
           <div className="flex-1 border-x border-b border-border-subtle px-4 pt-3.5 pb-5 md:-mr-px md:border-l-0 md:px-5 md:pt-4 md:pb-6 md:group-first:border-l md:group-last:mr-0">
-            <p className="text-[10px] font-bold tracking-caps text-ink uppercase md:text-[11px]">
+            <p className="text-3xs font-bold tracking-caps text-ink uppercase md:text-2xs">
               {`${day.index}:\u2002${day.title}`}
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-support md:mt-2 md:text-[0.8rem]">
@@ -171,7 +138,7 @@ const PieceCell = ({
     <MediaSlot media={piece.media} ratio="product" />
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-3 pt-2.5 pb-4 md:px-4.5 md:pt-3.5 md:pb-5">
       {/* Product names ride the campaign Archivo, not the mono spec strip. */}
-      <span className="font-archivo text-[11px] tracking-caps text-ink uppercase md:text-xs">
+      <span className="font-archivo text-2xs tracking-caps text-ink uppercase md:text-xs">
         {piece.name} <span className="text-support">{piece.price}</span>
       </span>
       <Cta to={piece.href} variant="brand-text" size="xs" className="px-0 text-brand">
@@ -186,9 +153,10 @@ const PieceCell = ({
 const Pieces = () => (
   <section>
     <Container className="pt-12 pb-6 md:pt-16 md:pb-10">
-      <DropSectionHeader
+      <SectionHeader
         heading={BASELINE_DROP.pieces.heading}
         subtitle={BASELINE_DROP.pieces.subtitle}
+        scale="campaign"
       />
     </Container>
     {/* Separate tiles split by the same hairline-thin gaps as the day
@@ -211,8 +179,9 @@ const Pieces = () => (
 const Closer = () => (
   <section className="bg-field-night py-13 text-center text-ink-night md:py-20">
     <Container>
-      {/* Campaign Archivo, matching the stat labels. */}
-      <p className="font-archivo text-[9px] tracking-[0.34em] text-support-night uppercase md:text-[11px]">
+      {/* Campaign Archivo, matching the stat labels. The 9px phone size is a
+          one-off, below the type scale. */}
+      <p className="font-archivo text-[9px] tracking-[0.34em] text-support-night uppercase md:text-2xs">
         {BASELINE_DROP.closer.eyebrow}
       </p>
       <Heading

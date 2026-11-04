@@ -16,7 +16,7 @@ import { SigningTopBar } from './SigningTopBar';
  * renders its own top/bottom bars and `main` landmark.
  */
 export const AthleteSigning = ({ content }: { content: AthleteSigningContent }) => (
-  <div className="bg-field-night text-ink-night flex min-h-svh flex-col bg-[image:repeating-linear-gradient(to_right,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px),repeating-linear-gradient(to_bottom,rgb(255_255_255/0.025)_0px,rgb(255_255_255/0.025)_1px,transparent_1px,transparent_72px)]">
+  <div className="bg-field-night text-ink-night flex min-h-svh flex-col bg-[image:var(--file-grid)]">
     <SigningTopBar chrome={content.chrome} />
     <main className="flex-1">
       <SigningHero content={content} />
