@@ -1,28 +1,18 @@
 // @vitest-environment jsdom
-import { type CartState, createEmptyCartErrors, EMPTY_CART_STATE } from '@shopify/hydrogen';
+import type { CartState } from '@shopify/hydrogen';
 import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { CartSummary } from '~/components/cart/CartSummary';
 import type { CartData } from '~/lib/cart';
+import { buildCartCost, buildCartState, buildPending } from '~/lib/cart.fixtures';
 
 let state: CartState<CartData>;
 
-vi.mock('~/lib/cart', () => ({
-  useCart: (selector: (current: CartState<CartData>) => unknown) => selector(state),
-  useCartForm: () => ({
-    formProps: () => ({}),
-    register: (
-      field: string,
-      options: { value?: string | number; defaultValue?: string } = {}
-    ) => ({
-      name: field,
-      ...(options.value !== undefined ? { value: options.value, readOnly: true } : {}),
-      ...(options.defaultValue !== undefined ? { defaultValue: options.defaultValue } : {}),
-    }),
-  }),
-}));
+vi.mock('~/lib/cart', async () =>
+  (await import('~/lib/cart.fixtures')).createCartStoreMock(() => state)
+);
 
 vi.mock('@posthog/react', () => ({ usePostHog: () => ({ capture: vi.fn() }) }));
 
@@ -31,21 +21,16 @@ const CHECKOUT_URL = 'https://checkout.example/c/abc?key=123';
 const cartState = (
   data: Partial<CartData> = {},
   overrides: Partial<CartState<CartData>> = {}
-): CartState<CartData> => ({
-  ...EMPTY_CART_STATE,
-  data: {
-    ...EMPTY_CART_STATE.data,
-    checkoutUrl: CHECKOUT_URL,
-    totalQuantity: 2,
-    cost: { subtotalAmount: { amount: '158.0', currencyCode: 'USD' } },
-    discountCodes: [],
-    ...data,
-  } as CartData,
-  pending: { lines: new Set(), discountCodes: new Set(), note: false, attributes: false },
-  errors: createEmptyCartErrors(),
-  revalidating: false,
-  ...overrides,
-});
+): CartState<CartData> =>
+  buildCartState(
+    {
+      checkoutUrl: CHECKOUT_URL,
+      totalQuantity: 2,
+      cost: buildCartCost('158.0'),
+      ...data,
+    },
+    overrides
+  );
 
 const renderSummary = (layout: 'page' | 'aside') =>
   render(
@@ -66,7 +51,7 @@ describe('CartSummary', () => {
   });
 
   it('renders no Checkout CTA without a checkout URL', () => {
-    state = cartState({ checkoutUrl: undefined });
+    state = cartState({ checkoutUrl: '' });
     renderSummary('aside');
     expect(screen.queryByRole('link', { name: /checkout/i })).toBeNull();
   });
@@ -98,12 +83,7 @@ describe('CartSummary', () => {
     state = cartState(
       {},
       {
-        pending: {
-          lines: new Set(['gid://shopify/CartLine/1']),
-          discountCodes: new Set(),
-          note: false,
-          attributes: false,
-        },
+        pending: buildPending({ lines: new Set(['gid://shopify/CartLine/1']) }),
       }
     );
     renderSummary('aside');

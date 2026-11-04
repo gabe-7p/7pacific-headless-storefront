@@ -1,11 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ProductVariantData } from '~/lib/product/queries';
 import { resolveSelectedVariant, selectionTarget } from '~/lib/product/store';
 
-// Only the fields the resolver reads; the rest of the variant is irrelevant here.
-const variant = (id: string, handle: string) =>
-  ({ id, product: { handle, title: handle } }) as unknown as ProductVariantData;
+const variant = (id: string, handle: string) => ({ id, product: { handle, title: handle } });
 
 const midnightSmall = variant('gid://shopify/ProductVariant/1', 'shorts-midnight');
 const midnightMedium = variant('gid://shopify/ProductVariant/2', 'shorts-midnight');

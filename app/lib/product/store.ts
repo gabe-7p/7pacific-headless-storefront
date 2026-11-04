@@ -18,10 +18,10 @@ export const { ProductProvider, useProductForm } = createProductComponents<Produ
  * loader's own selection is the truth. Always read the variant through this
  * (see common-pitfalls.md).
  */
-export const resolveSelectedVariant = (
-  formVariant: ProductVariantData | null | undefined,
-  product: Pick<ProductPageData, 'handle' | 'selectedOrFirstAvailableVariant'>
-): ProductVariantData | null =>
+export const resolveSelectedVariant = <TVariant extends Pick<ProductVariantData, 'id' | 'product'>>(
+  formVariant: TVariant | null | undefined,
+  product: { handle: string; selectedOrFirstAvailableVariant: TVariant | null }
+): TVariant | null =>
   formVariant && formVariant.product.handle === product.handle
     ? formVariant
     : product.selectedOrFirstAvailableVariant;
