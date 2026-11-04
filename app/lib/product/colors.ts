@@ -24,7 +24,7 @@ export type ColorSwatch = { handle: string; name: string; hex: string };
 type ColorSiblingsMetafield = ProductCardData['colorSiblings'];
 
 /** Relative luminance above which a swatch disappears against the white card. */
-const LIGHT_SWATCH_LUMINANCE = 0.9;
+const LIGHT_SWATCH_LUMINANCE = 0.75;
 
 const toLinear = (channel: number) => {
   const value = channel / 255;
@@ -33,8 +33,9 @@ const toLinear = (channel: number) => {
 
 /**
  * Whether a swatch hex needs a visible frame on a white card: WCAG relative
- * luminance over 0.9 counts as light (white and off-whites do; the palest
- * live colors sit well under it). A malformed hex reads as not light.
+ * luminance over 0.75 counts as light. That frames white and off-whites (cream
+ * #F5F5DC is 0.90, light grey #EDEDED 0.85); the palest live color after White
+ * is Mint at 0.55. A malformed hex reads as not light.
  */
 export const isLightSwatch = (hex: string): boolean => {
   const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim());

@@ -51,9 +51,13 @@ describe('isLightSwatch', () => {
     expect(isLightSwatch('#ffffff')).toBe(true);
     expect(isLightSwatch('#FFF')).toBe(true);
     expect(isLightSwatch('#F5F5F0')).toBe(true);
+    expect(isLightSwatch('#F5F5DC')).toBe(true);
+    expect(isLightSwatch('#F5F0E6')).toBe(true);
+    expect(isLightSwatch('#EDEDED')).toBe(true);
   });
 
   it('leaves real colors dark enough to show on a white card', () => {
+    expect(isLightSwatch('#B4C8C2')).toBe(false); // Mint, the palest live color after White
     expect(isLightSwatch('#6A7E8D')).toBe(false);
     expect(isLightSwatch('#FF8A00')).toBe(false);
     expect(isLightSwatch('#000000')).toBe(false);
