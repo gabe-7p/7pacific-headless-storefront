@@ -12,7 +12,7 @@ export const SPEC_LINE_CLASS = 'font-mono text-xs tracking-spec uppercase';
 /** `strip` is the 11px tier: product-card lines and the Spec Card's labels. */
 const SIZES = {
   xs: undefined,
-  strip: 'text-[11px]',
+  strip: 'text-2xs',
 } as const;
 
 type SpecLineProps = {

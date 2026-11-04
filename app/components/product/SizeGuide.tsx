@@ -41,7 +41,7 @@ const UNIT_CELL = cn(SEGMENT_CELL, 'cursor-pointer px-6 py-2');
  * on mobile: at 13px the widest range (36.5 - 38.5) fills a full-bleed column
  * edge to edge, so neighbouring cells visually run together.
  */
-const DATA_CELL = 'py-3 text-center font-mono text-[11px] text-ink sm:text-[13px]';
+const DATA_CELL = 'py-3 text-center font-mono text-2xs text-ink sm:text-[13px]';
 
 /**
  * The PDP size guide: an underlined SIZE GUIDE link on the SIZE label's row

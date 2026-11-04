@@ -99,6 +99,11 @@
   --tracking-spec: 0.1em; /* JetBrains Mono spec strips */
   --tracking-segment: 0.3em; /* live's segmented cells and their labels */
 
+  /* The two steps under text-xs. No --line-height pair on purpose: they inherit
+   * their leading, as the arbitrary sizes they replace did. */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-3xs: 0.625rem; /* 10px */
+
   /* Live's Impulse theme breaks at 769/1025 (its media queries use max-width,
    * so 768/1024 belong to the SMALLER tier — iPad portrait stacks), one past
    * Tailwind's md/lg. `impulse:`/`impulse-lg:` are those tiers; don't reach

@@ -26,6 +26,7 @@ const ROW_GRID =
   'grid grid-cols-1 gap-5 py-5 text-center impulse:grid-cols-[1fr_2fr_1fr] impulse:gap-[30px] impulse:py-[25px] impulse:text-left impulse-lg:grid-cols-[1fr_1.3fr_1fr] impulse-lg:gap-5 impulse-lg:py-[30px]';
 
 // Row-title sizing on top of the Heading `caps` variant (weight/caps live there).
+// The 1px tracking is live's measured value, not a brand tier.
 const ROW_TITLE = 'text-sm tracking-[1px] impulse-lg:text-base';
 
 // A column centers its content when the row is stacked (≤768), left-aligns once

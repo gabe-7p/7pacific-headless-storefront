@@ -210,7 +210,7 @@ const CartBadge = () => {
     >
       <BagIcon className="size-7" />
       {count > 0 && (
-        <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-ink-night">
+        <span className="bg-cart-dot absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-3xs font-bold text-ink-night">
           {count}
         </span>
       )}

@@ -22,7 +22,7 @@ const Film = () => (
     />
     <div className="absolute bottom-4 left-4 md:bottom-8 md:left-10">
       {/* White campaign Archivo, per Gabe (2026-08-25). */}
-      <p className="font-archivo text-[11px] font-medium tracking-caps text-ink-night uppercase md:text-sm">
+      <p className="font-archivo text-2xs font-medium tracking-caps text-ink-night uppercase md:text-sm">
         {BASELINE_DROP.filmOverlay.label}
       </p>
       <Cta
@@ -113,7 +113,7 @@ const Standard = () => (
               adjacent frames share one hairline. flex-1 levels the three
               frames to the tallest. */}
           <div className="flex-1 border-x border-b border-border-subtle px-4 pt-3.5 pb-5 md:-mr-px md:border-l-0 md:px-5 md:pt-4 md:pb-6 md:group-first:border-l md:group-last:mr-0">
-            <p className="text-[10px] font-bold tracking-caps text-ink uppercase md:text-[11px]">
+            <p className="text-3xs font-bold tracking-caps text-ink uppercase md:text-2xs">
               {`${day.index}:\u2002${day.title}`}
             </p>
             <p className="mt-1.5 text-xs leading-relaxed text-support md:mt-2 md:text-[0.8rem]">
@@ -138,7 +138,7 @@ const PieceCell = ({
     <MediaSlot media={piece.media} ratio="product" />
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-3 pt-2.5 pb-4 md:px-4.5 md:pt-3.5 md:pb-5">
       {/* Product names ride the campaign Archivo, not the mono spec strip. */}
-      <span className="font-archivo text-[11px] tracking-caps text-ink uppercase md:text-xs">
+      <span className="font-archivo text-2xs tracking-caps text-ink uppercase md:text-xs">
         {piece.name} <span className="text-support">{piece.price}</span>
       </span>
       <Cta to={piece.href} variant="brand-text" size="xs" className="px-0 text-brand">
@@ -179,8 +179,9 @@ const Pieces = () => (
 const Closer = () => (
   <section className="bg-field-night py-13 text-center text-ink-night md:py-20">
     <Container>
-      {/* Campaign Archivo, matching the stat labels. */}
-      <p className="font-archivo text-[9px] tracking-[0.34em] text-support-night uppercase md:text-[11px]">
+      {/* Campaign Archivo, matching the stat labels. The 9px phone size is a
+          one-off, below the type scale. */}
+      <p className="font-archivo text-[9px] tracking-[0.34em] text-support-night uppercase md:text-2xs">
         {BASELINE_DROP.closer.eyebrow}
       </p>
       <Heading

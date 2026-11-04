@@ -47,6 +47,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
       <div className="relative overflow-hidden bg-field">
         <Link to={to} prefetch="intent" className="block" aria-label={title}>
           {label && (
+            // 8px: a one-off, below the type scale, for a badge on the card image.
             <span className="absolute top-0 right-0 z-10 bg-field-night px-1.5 py-0.5 text-[8px] font-semibold tracking-wide text-ink-night uppercase">
               {label}
             </span>

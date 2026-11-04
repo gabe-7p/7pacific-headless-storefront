@@ -4,7 +4,7 @@ import { formatEditionLabel } from '~/lib/product/display';
 /** `strip` drops into a card's mono spec strip, at that strip's size and tracking. */
 const VARIANTS = {
   default: 'text-xs tracking-caps',
-  strip: 'text-[11px] tracking-spec',
+  strip: 'text-2xs tracking-spec',
 } as const;
 
 /**
