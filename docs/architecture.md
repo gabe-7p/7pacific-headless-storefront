@@ -4,15 +4,15 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 
 ## The stack
 
-| Layer     | Choice                                                                                                                         |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Framework | **React Router 8** (middleware) + **Hydrogen 2026.10** as a library, Vite 8                                                    |
-| Runtime   | Oxygen (Shopify's edge worker hosting)                                                                                         |
-| UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives                                                  |
-| Data      | Shopify **Storefront API** (guest checkout — no customer accounts)                                                             |
-| Types     | `gql()` documents typed in place by `@shopify/hydrogen/ts-plugin` (gql.tada)                                                   |
-| Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                                                                                |
-| Tooling   | pnpm, TypeScript (strict), ESLint (flat), Prettier, dependency-cruiser, Vitest, Playwright (pixel funnel), husky + lint-staged |
+| Layer     | Choice                                                                                                                               |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Framework | **React Router 8** (middleware) + **Hydrogen 2026.10** as a library, Vite 8                                                          |
+| Runtime   | Oxygen (Shopify's edge worker hosting)                                                                                               |
+| UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives                                                        |
+| Data      | Shopify **Storefront API** (guest checkout — no customer accounts)                                                                   |
+| Types     | `gql()` documents typed in place by `@shopify/hydrogen/ts-plugin` (gql.tada)                                                         |
+| Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                                                                                      |
+| Tooling   | pnpm, TypeScript (strict), ESLint (flat), Prettier, dependency-cruiser, knip, Vitest, Playwright (pixel funnel), husky + lint-staged |
 
 ## Request & data flow
 
@@ -107,7 +107,7 @@ Rules for modules:
 - **Copy lives in `content/`**, not hardcoded in JSX (English-only typed constants for v1).
 - A module owns a **module-level `CLAUDE.md`** so an agent working inside it gets focused context.
 
-> This is the target shape we migrate into as features mature; we don't pre-create empty module folders. Boundaries will be enforced over time by [dependency-cruiser](../.dependency-cruiser.cjs) (layer rules are planned in [tech-debt-plan.md](tech-debt-plan.md); today it checks cycles and orphans).
+> This is the target shape we migrate into as features mature; we don't pre-create empty module folders. Boundaries are enforced by [dependency-cruiser](../.dependency-cruiser.cjs) (cycles, orphans, layer and module-entry rules).
 
 ## Domain model: color = separate product
 

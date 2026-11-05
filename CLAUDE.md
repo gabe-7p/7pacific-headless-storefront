@@ -26,6 +26,7 @@ This file is auto-loaded into every agent session. Read it first; follow the lin
 | Unit tests (Vitest)            | `pnpm test`                                                                                     |
 | Meta Pixel funnel (Playwright) | `pnpm test:pixel` (offline stub) / `pnpm test:pixel:live` — see docs/META_PIXEL_TESTING.md      |
 | Sync Hydrogen agent skills     | `pnpm exec hydrogen skills sync` (after a Hydrogen bump; `skills check` runs in CI)             |
+| Unused exports/deps (knip)     | `pnpm knip`                                                                                     |
 | Dependency-boundary check      | `pnpm depcruise`                                                                                |
 | Add a shadcn/ui primitive      | `pnpm dlx shadcn@latest add <name>`                                                             |
 | Full pre-PR gate               | the `/check` command (mirrors CI)                                                               |
@@ -62,7 +63,7 @@ Full detail in [.claude/rules/](.claude/rules/) — read the relevant file befor
 - [common-pitfalls.md](.claude/rules/common-pitfalls.md) — nullable Storefront fields, no waterfalls, never expose `PRIVATE_*`, no `any`.
 - [ui-components.md](.claude/rules/ui-components.md) — when to reach for a shadcn/ui primitive vs. hand-build, how to add/restyle one, the `components/ui/` lint exemption.
 
-The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; every Storefront read passes an explicit `cache`; the cart is read with `useCart`, never a loader promise; images through `common/Image`, prices through `common/Price`; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint and `/check` enforce these (dependency-cruiser layer rules will join them; see docs/tech-debt-plan.md) (`no-explicit-any` is a warning we treat as a defect; `components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
+The one-liners every agent must keep in mind: **components are `const` arrows (never `function`); fetching lives in loaders, not components; no `any`; every Storefront read passes an explicit `cache`; the cart is read with `useCart`, never a loader promise; images through `common/Image`, prices through `common/Price`; Tailwind for all styling — reach for a shadcn/ui primitive (in `components/ui/`) only for behaviorally-hard widgets, hand-build the rest.** ESLint (including `no-restricted-imports` seams, `no-explicit-any` and `array-type` as errors), dependency-cruiser layer rules, knip and `/check` enforce these (`components/ui/` is exempt from the const-arrow/no-`any` rules since it's generated).
 
 ## Brand single-sources (change once, applies everywhere)
 
