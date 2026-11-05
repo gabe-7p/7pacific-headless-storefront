@@ -4,13 +4,13 @@
  */
 import { data } from 'react-router';
 
-export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const INVALID_EMAIL_MESSAGE = 'Please enter a valid email address.';
 export const REQUIRED_NAME_MESSAGE = 'Please enter your name.';
 export const REQUIRED_MESSAGE_MESSAGE = 'Please enter a message.';
 export const UNKNOWN_LIST_MESSAGE = 'Unknown list.';
-export const METHOD_NOT_ALLOWED_MESSAGE = 'Method not allowed';
+const METHOD_NOT_ALLOWED_MESSAGE = 'Method not allowed';
 
 export type FormErrors<Field extends string> = Partial<Record<Field, string>>;
 
@@ -32,7 +32,7 @@ export const validateRequired = (value: string, message: string): string | undef
   value ? undefined : message;
 
 /** Drops the fields that validated, leaving only the messages to render. */
-export const collectErrors = <Field extends string>(
+const collectErrors = <Field extends string>(
   checks: Partial<Record<Field, string | undefined>>
 ): FormErrors<Field> | null => {
   const errors: FormErrors<Field> = {};

@@ -11,7 +11,7 @@ import { MEMBERSHIP_PITCH } from '~/content/membership';
 import { type FilesImage, filesImage } from '~/lib/shopifyFiles';
 
 /** The lists a visitor can join. The API rejects anything else with a 400. */
-export const JOIN_LISTS = ['newsletter', 'waitlist'] as const;
+const JOIN_LISTS = ['newsletter', 'waitlist'] as const;
 
 export type JoinList = (typeof JOIN_LISTS)[number];
 
