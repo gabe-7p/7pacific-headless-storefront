@@ -23,8 +23,68 @@ module.exports = {
       },
     },
     {
+      name: 'components-not-to-server',
+      severity: 'error',
+      comment: 'Components render props; server modules would ship to the browser.',
+      from: { path: '^app/(components|content)/' },
+      to: {
+        path: [
+          '\\.server\\.tsx?$',
+          '^app/lib/(storefront|oxygen|shopifyMiddleware|cart\\.server|csp|sitemap|robots)\\.ts$',
+          'node_modules/posthog-node',
+        ],
+        dependencyTypesNot: ['type-only'],
+      },
+    },
+    {
+      name: 'components-no-gql-documents',
+      severity: 'error',
+      comment: 'Components import *Data types only — a gql() document would ship to the browser.',
+      from: { path: '^app/components/' },
+      to: {
+        path: '^app/lib/(fragments|product/queries|sitemap)\\.ts$',
+        dependencyTypesNot: ['type-only'],
+      },
+    },
+    {
+      name: 'lib-not-to-components',
+      severity: 'error',
+      comment: 'Lib is logic; it never renders or imports components (a type import is erased).',
+      // Tests may mount components against the lib they exercise (posthog.client.test.tsx → Trackers).
+      from: { path: '^app/lib/', pathNot: '\\.test\\.tsx?$' },
+      to: { path: '^app/components/', dependencyTypesNot: ['type-only'] },
+    },
+    {
+      name: 'components-not-to-routes',
+      severity: 'error',
+      comment: 'Components never import from routes.',
+      from: { path: '^app/components/' },
+      to: { path: '^app/routes/' },
+    },
+    {
+      name: 'cart-server-only-from-root',
+      severity: 'error',
+      comment: 'The /api/cart handlers are wired by the root middleware only.',
+      from: { pathNot: ['^app/root\\.tsx$', '^app/lib/shopifyMiddleware\\.ts$'] },
+      to: { path: '^app/lib/cart\\.server\\.ts$', dependencyTypesNot: ['type-only'] },
+    },
+    {
+      name: 'modules-public-entry-only',
+      severity: 'error',
+      comment: 'Import a module through its public index.ts, not its internals.',
+      from: { path: '^app/', pathNot: '^app/modules/([^/]+)/' },
+      to: { path: '^app/modules/([^/]+)/(components|lib|content)/' },
+    },
+    {
+      name: 'modules-no-cross-internals',
+      severity: 'error',
+      comment: "A module never reaches into another module's internals.",
+      from: { path: '^app/modules/([^/]+)/' },
+      to: { path: '^app/modules/(?!$1)[^/]+/(components|lib|content)/' },
+    },
+    {
       name: 'no-orphans',
-      severity: 'warn',
+      severity: 'error',
       comment:
         'Module nobody imports. Allowed for framework entry points (routes, root, entry, server), config, styles, and type declarations.',
       from: {
