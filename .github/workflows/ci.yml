@@ -48,6 +48,9 @@ jobs:
       - name: Dependency rules
         run: pnpm depcruise
 
+      - name: Unused exports and dependencies
+        run: pnpm knip
+
       - name: Unit tests
         run: pnpm test
 

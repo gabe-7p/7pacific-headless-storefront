@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": [
+    "app/routes/**/*.tsx",
+    "app/entry.{client,server}.tsx",
+    "e2e/**/*.spec.ts",
+    "server.ts"
+  ],
+  "project": ["app/**/*.{ts,tsx}", "e2e/**/*.ts"],
+  "ignoreIssues": {
+    "app/components/ui/**": ["exports", "types"]
+  }
+}
