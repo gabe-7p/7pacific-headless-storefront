@@ -756,7 +756,7 @@ Depends on PRs 4, 5 and 7 having cleared the existing hits (each rule names them
 **11.3 Tests that pin single sources.**
 
 - `app/content/links.test.ts` — for each `HANDLES` value, glob `app/**/*.{ts,tsx}` (excluding `links.ts` and tests) and assert zero `'<value>'` / `"<value>"` / `` `<value>` `` and zero `handle: "<value>"` matches — the second regex reaches inside `gql()` template strings, which AST selectors cannot.
-- `app/content/brand-gate.test.ts` — move `BANNED` from `home.test.ts:18-40` to `content/vocabulary.ts` and walk every `export const` in `app/content/**/*.ts` plus `public/llms.txt`, with a per-file allowlist for quoted third-party text. Current failures to resolve first (§4.11): `our-story.ts:132` "intentional", `owen-platt.ts:25` "elevate", `aaron-lee.ts:71` "wellness" (the athlete's own bio), `josh-wyche.ts:24` "intentionally", `llms.txt` "premium" ×4.
+- Dropped: no brand vocabulary test. Copy rules live in Notion, and reviewers judge them. `content/vocabulary.ts`, `brand-gate.test.ts` and `home.test.ts` are removed.
 - `app/lib/cn.test.ts` (PR 6), `Motion.test.ts` (PR 4.6 — `--ease-brand` agrees with `EASE_BRAND`), `app/lib/storefront.test.ts` (PR 3.1), `posthog.client.test.ts` (PR 5.10), `robots.test.ts` (PR 3.6), `urls.test.ts` routeTemplates agreement (PR 3.11).
 - e2e: `button.tsx:78` already stamps `data-variant`; add `expect(page.locator('[data-variant="brand"]')).toHaveCount(1)` on `/`, `/collections/baseline`, `/cart`, `/drops/baseline` in `e2e/meta-pixel.spec.ts` (the PDP mounts the bar twice — §5.3 out-of-scope note; assert `2` there or dedupe first). This is the only enforcement for the "one `brand` button per page" rule that six comments carry.
 
@@ -847,7 +847,7 @@ Executable only after a call; each names the two outcomes.
 8. **Dialog close glyph** — `dialog.tsx:68` lucide `XIcon` vs the traced `CloseIcon` every drawer uses; `ui-components.md:77-79` classifies dialogs under neither bucket.
 9. **`llms.txt` key pages** omit `/journal` and `/drops/baseline` — copy mirrors Notion; update there first.
 10. **Heading `quiet` weight** — every consumer overrides to 600 (`cart.tsx:36`, `NotFound.tsx:53`, `pages.contact-us.tsx:76`) while the variant and the rule say 500; measure live, pick one.
-11. **Banned-vocabulary hits outside the homepage gate** (PR 11.3): "intentional" (`our-story.ts:132`), "intentionally" (`josh-wyche.ts:24`), "elevate" (`owen-platt.ts:25`), "wellness" (`aaron-lee.ts:71`, the athlete's own bio), "premium" ×4 (`llms.txt`). Edit, or allowlist per file.
+11. **Banned-vocabulary hits** — closed. Gabe removed the word list from code (Nov 2026): copy rules live in Notion and reviewers judge them.
 12. **Promote athlete-signing to a module** (PR 12.4).
 13. **Cart error banner** (PR 5.8): new UI, visible only on network/cart-level failure — want it, or document the silent rollback.
 14. **Trackers.tsx** (PR 5.12): split into six files, or exempt effect-only components in `naming-conventions.md`.
