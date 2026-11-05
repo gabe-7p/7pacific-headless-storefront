@@ -14,8 +14,8 @@ import { isShopifyCdnUrl } from '~/lib/shopifyFiles';
  *   classic component did, so the product cards keep their 4:5 portrait.
  * - **Fixed** (`width` is a number): a density `srcset` (1x/2x/3x of the
  *   given size, cropped to the given ratio) and an inline `aspect-ratio`.
- *   Content photos pass their intrinsic size here, which is why they ship at
- *   full resolution.
+ *   `ContentMedia` photos pass their intrinsic size here, which is why they
+ *   ship at full resolution.
  *
  * `Image.test.tsx` pins the contract. The inline style is the documented exception to the no-inline-style rule:
  * a per-image ratio can't be a Tailwind class.

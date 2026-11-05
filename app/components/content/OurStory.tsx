@@ -22,12 +22,26 @@ const BODY_MEASURE = `${BODY} max-w-[60ch]`;
 const STATEMENT = 'text-4xl leading-[0.98] md:text-6xl xl:text-7xl';
 const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl';
 const HAIRLINE = 'border-t border-border-subtle-night';
+/** The mounted photos' painted widths: their grid column from `lg` (capped by
+    --page-max), the Container minus the mount's padding below it, scaled up where
+    `object-cover` paints the source wider than its box. Change with the grids. */
+const STATUS_PHOTO_SIZES = '(min-width: 1024px) min(30vw, 427px), calc((100vw - 3.5rem) * 1.067)';
+const FOUNDER_PHOTO_SIZES =
+  '(min-width: 1024px) min(39.4vw, 570px), (min-width: 640px) calc((100vw - 3.5rem) * 1.125), calc(100vw - 3.5rem)';
 
 /** A photo inside corner brackets — the file's photo mount. */
-const FramedMedia = ({ media, ratio }: { media: MediaSlotSource; ratio: MediaSlotRatio }) => (
+const FramedMedia = ({
+  media,
+  ratio,
+  sizes,
+}: {
+  media: MediaSlotSource;
+  ratio: MediaSlotRatio;
+  sizes: string;
+}) => (
   <div className="relative p-3">
     <CornerBrackets />
-    <GradedMedia media={media} ratio={ratio} grain />
+    <GradedMedia media={media} ratio={ratio} sizes={sizes} grain />
   </div>
 );
 
@@ -89,7 +103,7 @@ const Status = () => {
       <SectionLabel number={status.number} title={status.title} />
       <p className={cn(BODY_MEASURE, 'mt-8')}>{status.open}</p>
       <div className="mt-12 grid gap-10 lg:grid-cols-[4fr_8fr] lg:gap-16">
-        <FramedMedia media={status.media} ratio="portrait" />
+        <FramedMedia media={status.media} ratio="portrait" sizes={STATUS_PHOTO_SIZES} />
         <div className="lg:pt-3">
           <Heading as="h2" size="none" className={SUBSTATEMENT}>
             {status.statement}
@@ -159,11 +173,11 @@ const Kit = () => {
           </div>
         </div>
       </Container>
-      <GradedMedia media={kit.banner} ratio="wide" grain />
+      <GradedMedia media={kit.banner} ratio="wide" sizes={IMAGE_SIZES.full} grain />
       <div className="mt-px grid gap-px bg-border-subtle-night md:grid-cols-3">
         {kit.strip.map((cell) => (
           <figure key={cell.caption} className="bg-field-night">
-            <GradedMedia media={cell.media} ratio="landscape" grain />
+            <GradedMedia media={cell.media} ratio="landscape" sizes={IMAGE_SIZES.third} grain />
             <figcaption className={cn(SPEC_LINE_CLASS, 'px-4 py-3 text-support-night md:px-5')}>
               {cell.caption}
             </figcaption>
@@ -185,7 +199,7 @@ const Roster = () => {
         <SectionLabel number={roster.number} title={roster.title} />
         <div className="mt-10 grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
           <div className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]">
-            <FramedMedia media={roster.card.media} ratio="landscape" />
+            <FramedMedia media={roster.card.media} ratio="landscape" sizes={FOUNDER_PHOTO_SIZES} />
             <dl className="mt-2 border-t border-border-subtle-night">
               {roster.card.fields.map((field) => (
                 <div

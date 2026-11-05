@@ -5,6 +5,7 @@ import { JoinForm } from '~/components/common/JoinForm';
 import { LiveEyebrow } from '~/components/common/LiveDot';
 import { MediaSlot } from '~/components/common/MediaSlot';
 import { FIRST_LIGHT } from '~/content/first-light';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
     the placeholder pseudo-element, so typed values stay as entered). h-9
@@ -53,7 +54,7 @@ const EarlyAccess = () => (
         <p className="mt-3 text-sm text-support">{FIRST_LIGHT.earlyAccess.body}</p>
         <EarlyAccessForm />
       </div>
-      <MediaSlot media={FIRST_LIGHT.earlyAccess.media} ratio="portrait" />
+      <MediaSlot media={FIRST_LIGHT.earlyAccess.media} ratio="portrait" sizes={IMAGE_SIZES.third} />
     </div>
   </Container>
 );
@@ -69,10 +70,10 @@ const Lookbook = () => {
   const [first, second, third, fourth] = FIRST_LIGHT.lookbook;
   return (
     <div className="grid grid-cols-2 gap-px border-y border-ink bg-ink md:grid-cols-4">
-      <MediaSlot media={first} ratio="portrait" />
-      <MediaSlot media={second} ratio="portrait" />
-      <MediaSlot media={third} ratio="portrait" />
-      <MediaSlot media={fourth} ratio="portrait" />
+      <MediaSlot media={first} ratio="portrait" sizes={IMAGE_SIZES.quarter} />
+      <MediaSlot media={second} ratio="portrait" sizes={IMAGE_SIZES.quarter} />
+      <MediaSlot media={third} ratio="portrait" sizes={IMAGE_SIZES.quarter} />
+      <MediaSlot media={fourth} ratio="portrait" sizes={IMAGE_SIZES.quarter} />
     </div>
   );
 };
@@ -89,7 +90,7 @@ const Proving = () => (
 /** Full-bleed backdrop with the countdown overlaid on its upper third. */
 const CountdownSection = () => (
   <section className="relative">
-    <MediaSlot media={FIRST_LIGHT.countdown.media} ratio="backdrop" />
+    <MediaSlot media={FIRST_LIGHT.countdown.media} ratio="backdrop" sizes={IMAGE_SIZES.full} />
     <div className="absolute inset-0 flex justify-center pt-16 md:pt-32">
       <Countdown
         dropIso={FIRST_LIGHT.countdown.dropIso}
@@ -108,7 +109,12 @@ const CountdownSection = () => (
 export const FirstLightTeaser = () => (
   <div>
     <Intro />
-    <MediaSlot media={FIRST_LIGHT.heroMedia} ratio="hero" loading="eager" />
+    <MediaSlot
+      media={FIRST_LIGHT.heroMedia}
+      ratio="hero"
+      sizes={IMAGE_SIZES.full}
+      loading="eager"
+    />
     <EarlyAccess />
     <Lookbook />
     <Proving />

@@ -30,16 +30,9 @@ export const isShopifyCdnUrl = (url: string): boolean => {
 type ImageParams = {
   /** The `v=` cache-buster Files appends to the asset's URL. */
   v?: number;
-  /** Ask the CDN for a copy resized to this width. */
-  width?: number;
 };
 
-const query = (params?: ImageParams) => {
-  const parts = [params?.v && `v=${params.v}`, params?.width && `width=${params.width}`].filter(
-    Boolean
-  );
-  return parts.length ? `?${parts.join('&')}` : '';
-};
+const query = (params?: ImageParams) => (params?.v ? `?v=${params.v}` : '');
 
 /** An image uploaded to Shopify Files, by the filename Files shows. */
 export const shopifyImage = (filename: string, params?: ImageParams) =>
@@ -72,16 +65,10 @@ export type ContentMedia = ({ kind: 'image' } & FilesImage) | ({ kind: 'video' }
 
 /**
  * A `FilesImage` from the filename Files shows. `width`/`height` are the
- * intrinsic size; `resize` asks the CDN for a smaller copy of an oversized
- * source (the `?width=` param) when the intrinsic size is the served size.
+ * intrinsic size, read off the file. `common/Image` picks the served size, so
+ * the URL carries no `width` query.
  */
 export const filesImage = (
   filename: string,
-  {
-    v,
-    resize,
-    width,
-    height,
-    alt,
-  }: { v?: number; resize?: number; width: number; height: number; alt: string }
-): FilesImage => ({ src: shopifyImage(filename, { v, width: resize }), width, height, alt });
+  { v, width, height, alt }: { v?: number; width: number; height: number; alt: string }
+): FilesImage => ({ src: shopifyImage(filename, { v }), width, height, alt });

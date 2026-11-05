@@ -1,4 +1,8 @@
+import { ContentMedia } from '~/components/common/ContentMedia';
+import { Image } from '~/components/common/Image';
 import { cn } from '~/lib/cn';
+import { imageWidths } from '~/lib/imageSizes';
+import type { FilesImage, FilesVideo } from '~/lib/shopifyFiles';
 
 /**
  * Aspect ratio per slot, locked here as a union → static Tailwind classes
@@ -51,44 +55,64 @@ const FOCUS = {
  */
 export type MediaSlotSource =
   | { kind: 'placeholder'; type: 'image' | 'video' }
-  | { kind: 'image'; src: string; alt: string; focus?: keyof typeof FOCUS }
-  | { kind: 'video'; src: string; poster?: string };
+  | ({ kind: 'image'; focus?: keyof typeof FOCUS } & FilesImage)
+  | ({ kind: 'video' } & FilesVideo);
 
 type MediaSlotProps = {
   media: MediaSlotSource;
   ratio: MediaSlotRatio;
+  /** The slot's rendered width (a preset from `lib/imageSizes`); ignored for video. */
+  sizes: string;
   /** Above-the-fold slots pass 'eager'. */
   loading?: 'eager' | 'lazy';
   className?: string;
 };
 
+/** `Image`'s default ladder plus the source's own width, so a file between two
+    steps (a 696px PNG) still serves every pixel it has. */
+const ladderFor = (sourceWidth: number) => [
+  ...new Set([...imageWidths(200, 200, 15), sourceWidth]),
+];
+
 /**
  * A fixed-aspect media box: a quiet panel until the asset is supplied, then
- * the image (object-cover) or an autoplaying muted loop.
+ * the image (object-cover) or a muted loop (`LazyVideo` unless eager).
+ *
+ * The image's box stays on a wrapper. `Image` writes an inline aspect-ratio
+ * that beats an `aspect-*` class, so it can't carry the responsive flips in
+ * `RATIOS`; filling the wrapper leaves that inline ratio inert. The candidates
+ * are deliberately not CDN-cropped: one crop can't serve a box that changes
+ * ratio, and `crop` has no equivalent of `FOCUS.upper`. `object-cover` picks
+ * the window from the whole frame, so `FOCUS` still decides what shows.
  */
-export const MediaSlot = ({ media, ratio, loading = 'lazy', className }: MediaSlotProps) => {
+export const MediaSlot = ({ media, ratio, sizes, loading = 'lazy', className }: MediaSlotProps) => {
   const box = cn('w-full', RATIOS[ratio], className);
 
   if (media.kind === 'image') {
     return (
-      <img
-        src={media.src}
-        alt={media.alt}
-        loading={loading}
-        className={cn(box, 'object-cover', media.focus && FOCUS[media.focus])}
-      />
+      <div className={cn('relative', box)}>
+        {/* `data`, not `src` + numeric `width`: that pair selects fixed mode. */}
+        <Image
+          data={{ url: media.src, width: media.width, height: media.height }}
+          alt={media.alt}
+          sizes={sizes}
+          srcSetWidths={ladderFor(media.width)}
+          loading={loading}
+          className={cn(
+            'absolute inset-0 size-full object-cover',
+            media.focus && FOCUS[media.focus]
+          )}
+        />
+      </div>
     );
   }
 
   if (media.kind === 'video') {
     return (
-      <video
-        src={media.src}
-        poster={media.poster}
-        autoPlay
-        muted
-        loop
-        playsInline
+      <ContentMedia
+        media={media}
+        sizes={sizes}
+        eager={loading === 'eager'}
         className={cn(box, 'object-cover')}
       />
     );

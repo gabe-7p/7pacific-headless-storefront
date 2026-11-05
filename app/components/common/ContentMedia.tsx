@@ -8,8 +8,8 @@ type ContentMediaProps = {
   sizes: string;
   /**
    * Above-the-fold media: a bare `<video autoPlay>` that starts before
-   * hydration. Omitted, the video is a `LazyVideo` that buffers near the
-   * fold and plays only while on screen.
+   * hydration. Omitted, the video is a `LazyVideo`: nothing is fetched
+   * until it first plays, and it plays only while on screen.
    */
   eager?: boolean;
   className?: string;

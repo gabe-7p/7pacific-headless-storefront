@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
+import { Image } from '~/components/common/Image';
 import { SPEC_LINE_CLASS } from '~/components/common/SpecLine';
 import { TEXT_LINK_CLASS } from '~/components/common/TextLink';
 import {
@@ -143,12 +144,12 @@ export const SizeGuide = () => {
             </Heading>
             <p className="mt-3 text-xs leading-relaxed text-support">{howToMeasure.body}</p>
           </div>
-          <img
-            src={image.src}
+          {/* Fixed mode at the panel width; `data` carries the ladder's cap. */}
+          <Image
+            data={{ url: image.src, width: howToMeasure.imageMaxWidth }}
             alt={image.alt}
-            width={image.width}
-            height={image.height}
-            loading="lazy"
+            width={560}
+            height={700}
             className="w-full"
           />
           <dl className="space-y-4">
