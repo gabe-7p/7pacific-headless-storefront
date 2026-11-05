@@ -121,7 +121,7 @@ const ProductPage = () => {
       <ProductViewedTracker product={product} variant={selectedVariant} />
       {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
           of overflowing it under the header and past the fold. */}
-      <section className="overflow-hidden bg-field text-ink min-[769px]:relative min-[769px]:flex min-[769px]:min-h-[50rem] min-[769px]:items-center min-[769px]:py-10 min-[769px]:text-ink-night">
+      <section className="overflow-hidden bg-field text-ink impulse:relative impulse:flex impulse:min-h-[50rem] impulse:items-center impulse:py-10 impulse:text-ink-night">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
@@ -134,7 +134,7 @@ const ProductPage = () => {
             width="75%"
             // eslint-disable-next-line local/restricted-syntax-warn -- one-off 75vw slot, documented in lib/imageSizes.ts
             sizes="75vw"
-            className="mx-auto h-[400px] object-cover min-[769px]:hidden"
+            className="mx-auto h-[400px] object-cover impulse:hidden"
           />
         )}
         {/* Desktop matches live's background-position: center — an off-center
@@ -143,17 +143,18 @@ const ProductPage = () => {
           <Image
             data={heroDesktop}
             sizes={IMAGE_SIZES.full}
-            className="hidden object-cover object-center min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:size-full"
+            className="hidden object-cover object-center impulse:absolute impulse:inset-0 impulse:block impulse:size-full"
           />
         )}
-        <div className="hidden min-[769px]:absolute min-[769px]:inset-0 min-[769px]:block min-[769px]:bg-linear-to-r min-[769px]:from-scrim/20 min-[769px]:via-transparent min-[769px]:to-transparent" />
+        <div className="hidden impulse:absolute impulse:inset-0 impulse:block impulse:bg-linear-to-r impulse:from-scrim/20 impulse:via-transparent impulse:to-transparent" />
         {/* The card carries its own left inset rather than the Container taking
-            horizontal padding: Tailwind emits `md:` after `min-[769px]:`, so a
-            `md:px-0` reset would win over `min-[769px]:px-8` at 769+. */}
-        <Container className="px-0 sm:px-0 md:px-0 min-[769px]:relative min-[769px]:z-10">
+            horizontal padding: `impulse:` is px and `md:` is rem, and Tailwind
+            sorts breakpoints by unit first, so `impulse:` emits before `md:` and
+            `md:px-0` would still win over an `impulse:px-8` at 769+. */}
+        <Container className="px-0 sm:px-0 md:px-0 impulse:relative impulse:z-10">
           {/* Live's card is 500px wide with 20px padding (460px of content) —
               the measure the description was authored against. */}
-          <div className="flex flex-col bg-field text-ink min-[769px]:ml-8 min-[769px]:max-w-[500px]">
+          <div className="flex flex-col bg-field text-ink impulse:ml-8 impulse:max-w-[500px]">
             <div className="p-5">
               {/* Edition device above the name (7PA-246). */}
               <EditionTag

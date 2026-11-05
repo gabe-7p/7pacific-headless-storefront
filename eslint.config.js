@@ -232,8 +232,7 @@ const SYNTAX_RULES = [
     'Raw palette utility. Use a role token; if the specific colour is the point, disable this line with a reason.',
   ],
   [
-    // TODO(PR 12.1): the PDP route keeps arbitrary breakpoints until its chains are re-verified.
-    (f) => f !== 'app/routes/products.$handle.tsx',
+    everywhere,
     String.raw`Literal[value=/\b(?:min|max)-\[\d+(?:\.\d+)?(?:px|rem)\]:/]`,
     'Arbitrary breakpoint. Use impulse:/impulse-lg: or add a --breakpoint-* token.',
   ],
