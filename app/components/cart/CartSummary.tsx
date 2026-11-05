@@ -118,7 +118,7 @@ const CartDiscounts = () => {
   return (
     <div>
       {codes.length > 0 && (
-        <dl className="flex items-center justify-between">
+        <dl className="my-2 flex items-center justify-between">
           <dt className="text-support">{CART_COPY.discountLabel}</dt>
           <dd className="flex items-center gap-3">
             {codes.map((code) => (
@@ -131,7 +131,7 @@ const CartDiscounts = () => {
                 className="flex items-center gap-2"
               >
                 <input type="hidden" {...register('discountCode', { value: code })} />
-                <code>{code}</code>
+                <code className="rounded-[4px] bg-border-subtle p-1 font-mono">{code}</code>
                 <button
                   type="submit"
                   {...register('discount-remove')}
@@ -146,7 +146,7 @@ const CartDiscounts = () => {
         </dl>
       )}
 
-      <form {...formProps({ beforeSubmit: applyCode })} className="mt-2 flex gap-2">
+      <form {...formProps({ beforeSubmit: applyCode })} className="mt-2 flex gap-2 md:max-w-100">
         <label htmlFor="discount-code-input" className="sr-only">
           {CART_COPY.discountPlaceholder}
         </label>
@@ -155,7 +155,7 @@ const CartDiscounts = () => {
           type="text"
           {...register('discountCode', { defaultValue: '' })}
           placeholder={CART_COPY.discountPlaceholder}
-          className="border-border-subtle m-0 flex-1 rounded-none border px-2 py-1.5"
+          className="border-border-subtle flex-1 border px-2 py-1.5 text-[1rem]"
         />
         <Button type="submit" {...register('discount-apply')} variant="outline" size="sm">
           Apply

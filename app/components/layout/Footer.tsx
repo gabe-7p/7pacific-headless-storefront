@@ -144,7 +144,7 @@ const Newsletter = () => (
 const SocialIcons = () => (
   <ul className="flex gap-4">
     {BRAND.social.map((social) => (
-      <li key={social.platform}>
+      <li key={social.platform} className="mb-2">
         <TextLink
           href={social.href}
           title={social.platform}

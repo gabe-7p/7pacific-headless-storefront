@@ -9,11 +9,10 @@ import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
     the placeholder pseudo-element, so typed values stay as entered). h-9
-    matches the Button default height exactly and m-0 clears the base
-    layer's stray input margins (see common-pitfalls.md), so the boxes and
-    the SIGN UP CTA read as one row. */
+    matches the Button default height exactly, so the boxes and the SIGN UP
+    CTA read as one row. */
 const fieldClass =
-  'm-0 block h-9 w-full rounded-none border border-ink bg-transparent px-4 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
+  'block h-9 w-full border border-ink bg-transparent px-4 font-mono text-xs tracking-spec text-ink placeholder:text-ink placeholder:uppercase focus:ring-1 focus:ring-ink focus:outline-none';
 
 /**
  * The Early Access signup — the shared `JoinForm` on the waitlist, inline row.
@@ -24,7 +23,7 @@ const EarlyAccessForm = () => (
     copy={FIRST_LIGHT.earlyAccess}
     withName
     noValidate
-    className="mt-6 grid max-w-none grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+    className="mt-6 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
     tone="day"
     fieldClassName={fieldClass}
     ctaVariant="brand"

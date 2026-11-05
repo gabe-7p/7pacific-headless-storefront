@@ -152,7 +152,7 @@ export const SizeGuide = () => {
             height={700}
             className="w-full"
           />
-          <dl className="space-y-4">
+          <dl className="my-2 space-y-4">
             {howToMeasure.points.map((point) => (
               <div key={point.label}>
                 <Eyebrow as="dt" className="text-ink">

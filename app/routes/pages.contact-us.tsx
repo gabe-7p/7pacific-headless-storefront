@@ -49,7 +49,7 @@ export const action = ({ request }: Route.ActionArgs) =>
   });
 
 const fieldClass =
-  'w-full border border-border-subtle bg-field px-4 py-3 text-sm focus:border-ink focus:outline-none';
+  'w-full rounded-none border border-border-subtle bg-field px-4 py-3 text-sm focus:border-ink focus:outline-none';
 
 const Contact = () => {
   const { page } = useLoaderData<typeof loader>();
@@ -75,7 +75,7 @@ const Contact = () => {
         {actionData?.ok ? (
           <p className="mt-10 text-center text-sm font-medium">{CONTACT.successMessage}</p>
         ) : (
-          <Form method="post" className="mt-10 space-y-4" noValidate>
+          <Form method="post" className="mt-10 space-y-4 md:max-w-sm" noValidate>
             <div>
               <label htmlFor="name" className="sr-only">
                 {CONTACT.fields.name.label}

@@ -43,7 +43,7 @@ const Journal = () => {
 
       <ul className="mt-12 flex max-w-[65ch] flex-col">
         {articles.map((article) => (
-          <li key={article.id} className="border-border-subtle border-t">
+          <li key={article.id} className="border-border-subtle mb-2 border-t">
             <Link
               to={journalUrl(article.handle)}
               prefetch="intent"

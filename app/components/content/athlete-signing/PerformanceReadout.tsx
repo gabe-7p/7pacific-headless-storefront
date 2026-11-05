@@ -69,7 +69,7 @@ export const PerformanceReadout = ({ readout }: { readout: AthleteSigningContent
         </span>
       </div>
 
-      <dl className="mt-8 grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-2">
+      <dl className="mt-8 mb-2 grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-2">
         {readout.fields.map((field) => (
           <div key={field.label}>
             <dt className={cn(SPEC_LINE_CLASS, 'text-support-night text-[0.65rem]')}>
