@@ -26,7 +26,7 @@ export const CreatorPanel = ({ instagram }: { instagram: AthleteSigningContent['
         {instagram.tagline}
       </p>
 
-      <dl className="mt-6 flex flex-col">
+      <dl className="mt-6 mb-2 flex flex-col">
         {instagram.series.map((name, index) => (
           <div
             key={name}

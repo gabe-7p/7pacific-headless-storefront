@@ -34,7 +34,7 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
   const errorMessage = lineError?.userErrors[0]?.message;
 
   return (
-    <li className={cn('py-4 transition-opacity', pending && 'opacity-60')} aria-busy={pending}>
+    <li className={cn('mb-2 py-4 transition-opacity', pending && 'opacity-60')} aria-busy={pending}>
       <div className="flex gap-4">
         {merchandise?.image && (
           <Link prefetch="intent" to={lineItemUrl} onClick={closeIfAside} className="flex-none">
@@ -61,13 +61,16 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
           {selectedOptions.length > 0 && (
             <ul className="mt-1 text-sm text-ink">
               {selectedOptions.map((option) => (
-                <li key={option.name}>
+                <li key={option.name} className="mb-2">
                   <span className="font-semibold text-ink">{option.name}:</span> {option.value}
                 </li>
               ))}
             </ul>
           )}
-          <form {...formProps()} className="mt-3 flex items-center justify-between gap-4">
+          <form
+            {...formProps()}
+            className="mt-3 flex items-center justify-between gap-4 md:max-w-100"
+          >
             <button {...register('set')} />
             <input type="hidden" {...register('lineId', { value: id })} />
             <div className="border-border-subtle inline-flex items-center border">
@@ -80,13 +83,12 @@ export const CartLineItem = ({ layout, line }: { layout: CartLayout; line: CartL
               >
                 <Minus className="size-3.5" />
               </button>
-              {/* The base layer styles every bare input; reset to a plain cell. */}
               <input
                 {...register('quantity', { value: quantity, interactive: true })}
                 aria-label="Quantity"
                 aria-invalid={errorMessage ? true : undefined}
                 disabled={isOptimistic}
-                className="m-0 w-9 rounded-none border-0 bg-transparent p-0 text-center font-mono text-sm tabular-nums [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-9 bg-transparent text-center font-mono text-sm tabular-nums [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <button
                 type="submit"

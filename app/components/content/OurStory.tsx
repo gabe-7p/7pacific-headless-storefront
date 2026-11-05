@@ -200,7 +200,7 @@ const Roster = () => {
         <div className="mt-10 grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
           <div className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]">
             <FramedMedia media={roster.card.media} ratio="landscape" sizes={FOUNDER_PHOTO_SIZES} />
-            <dl className="mt-2 border-t border-border-subtle-night">
+            <dl className="my-2 border-t border-border-subtle-night">
               {roster.card.fields.map((field) => (
                 <div
                   key={field.label}

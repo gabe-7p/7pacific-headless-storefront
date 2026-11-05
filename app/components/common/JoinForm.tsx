@@ -14,7 +14,7 @@ import type { SubscribeResponse } from '~/lib/forms';
  * `fieldClassName` (FIRST LIGHT's boxed mono box).
  */
 const NIGHT_UNDERLINE_FIELD =
-  'w-full rounded-none border-0 border-b border-border-subtle bg-transparent px-0 py-2 text-ink-night placeholder:text-support-night focus:border-ink-night focus:outline-none';
+  'mt-1 mb-2 w-full border-b border-border-subtle bg-transparent py-2 text-ink-night placeholder:text-support-night focus:border-ink-night focus:outline-none';
 
 /** The confirmation line that replaces the form, per ground. */
 const SUCCESS_LINE = {

@@ -74,6 +74,7 @@ export const ColorSwatches = ({
           <li
             key={swatch.handle}
             className={cn(
+              'mb-2',
               cascade && 'group/swatch relative opacity-0 group-hover:animate-cascade-in',
               cascade && CASCADE_DELAYS[Math.min(index, CASCADE_DELAYS.length - 1)]
             )}

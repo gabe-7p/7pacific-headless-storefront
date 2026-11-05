@@ -18,31 +18,24 @@ export const AddToCartBar = ({ product }: { product: ProductPageData }) => {
   const addable = canAddToCart(product, options);
 
   return (
-    // The base layer caps every `form` at 400px from md up; the bar has to span
-    // its card (and the full viewport when sticky), so opt this one out.
-    <div className="[&>form]:max-w-none">
-      <form {...formProps({ afterSubmit: openCart })}>
-        <input type="hidden" {...register('merchandiseId', {})} />
-        <input type="hidden" {...register('quantity', { value: 1 })} />
-        {/* The PDP's one Ember moment. Can't render through <Cta> (it's the
-            product form's submit): see ui-components.md. */}
-        <button
-          {...register('addToCart', {})}
-          disabled={!addable || pending}
-          className={cn(
-            buttonVariants({ variant: 'brand' }),
-            'h-auto min-h-[58px] w-full px-6 py-4'
-          )}
-        >
-          {addable ? (
-            <CtaLabel>Add to cart</CtaLabel>
-          ) : selectedVariant ? (
-            'Sold out'
-          ) : (
-            'Select a size'
-          )}
-        </button>
-      </form>
-    </div>
+    <form {...formProps({ afterSubmit: openCart })}>
+      <input type="hidden" {...register('merchandiseId', {})} />
+      <input type="hidden" {...register('quantity', { value: 1 })} />
+      {/* The PDP's one Ember moment. Can't render through <Cta> (it's the
+          product form's submit): see ui-components.md. */}
+      <button
+        {...register('addToCart', {})}
+        disabled={!addable || pending}
+        className={cn(buttonVariants({ variant: 'brand' }), 'h-auto min-h-[58px] w-full px-6 py-4')}
+      >
+        {addable ? (
+          <CtaLabel>Add to cart</CtaLabel>
+        ) : selectedVariant ? (
+          'Sold out'
+        ) : (
+          'Select a size'
+        )}
+      </button>
+    </form>
   );
 };

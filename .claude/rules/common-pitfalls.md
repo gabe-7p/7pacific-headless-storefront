@@ -123,12 +123,6 @@ Between two `leading-*` the later one wins, and `asChild` makes that easy to mis
 
 **`aspect-*` plus `min-h-*` on an auto-width box widens the box, not just its height.** CSS transfers a min/max constraint through `aspect-ratio` into the other axis whenever that axis is `auto`, so `min-h-[50rem] aspect-[2400/1543]` on a full-bleed section becomes a 1244px _min-width_ and the page scrolls sideways on every narrower viewport. Give the box an explicit width (`w-full`) so there is nothing to transfer; `min-w-0` does not help. Measure `document.documentElement.scrollWidth` against `clientWidth` after any aspect-ratio change.
 
-## The base layer caps every `form` at 400px
-
-`app/styles/tailwind.css` has `form { max-width: 400px }` from `md` up (a Hydrogen skeleton leftover). Any full-width form control — the PDP add-to-cart bar, a sticky bar — needs to opt out (`[&>form]:max-w-none` on a wrapper). Check rendered width, not just the classes on the button.
-
-The same skeleton block also styles every bare `input` (`margin-top: 0.25rem`, `margin-bottom: 0.5rem`, border, radius, padding). Utility classes on the input override the ones you set — but any you _don't_ set leak through: a custom-styled input needs `m-0` (and `rounded-none` if square) or it sits 4px lower than the button beside it. Measure the rendered row, not the classes.
-
 ## Server packages must have a workerd build
 
 Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry imports Node built-ins (`path`, `fs`, `process.cwd()`) fails at load with an opaque `MiniOxygen couldn't load your app's entry point` error. `posthog-node` is the known case, so import it from **`posthog-node/edge`**. The edge build has no AsyncLocalStorage — why and how the visitor is attached: [lib/analytics/posthog.server.ts](../../app/lib/analytics/posthog.server.ts).

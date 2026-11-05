@@ -124,8 +124,7 @@ export const FounderVideo = ({ video }: { video: AthleteSigningContent['founderV
               onChange={(event) => seekTo(Number(event.target.value))}
               aria-label="Video progress"
               // Thumb is the same thin vertical marker as the readout scale.
-              // m-0/border-0/p-0/rounded-none undo the base-layer `input` styles.
-              className="pointer-events-auto m-0 h-3 w-full cursor-pointer appearance-none rounded-none border-0 bg-transparent p-0 bg-[image:linear-gradient(color-mix(in_srgb,var(--color-ink-night)_25%,transparent),color-mix(in_srgb,var(--color-ink-night)_25%,transparent))] bg-[position:0_center] bg-[size:100%_1px] bg-no-repeat [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-ink-night [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-ink-night"
+              className="pointer-events-auto h-3 w-full cursor-pointer appearance-none bg-transparent bg-[image:linear-gradient(color-mix(in_srgb,var(--color-ink-night)_25%,transparent),color-mix(in_srgb,var(--color-ink-night)_25%,transparent))] bg-[position:0_center] bg-[size:100%_1px] bg-no-repeat [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-0.5 [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-ink-night [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-0.5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-ink-night"
             />
           )}
           <div className="flex items-center justify-between">

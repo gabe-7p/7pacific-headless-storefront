@@ -55,7 +55,7 @@ export const Prose = ({ html, variant = 'page', className }: ProseProps) => {
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events -- click delegation for links inside CMS HTML; the links themselves stay keyboard-accessible
     <div
       onClick={handleClick}
-      className={cn(PROSE_VARIANTS[variant], className)}
+      className={cn('[&_li]:mb-2', PROSE_VARIANTS[variant], className)}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
