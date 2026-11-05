@@ -56,16 +56,15 @@ export const SIZE_GUIDE = {
      * into this asset, so nothing draws them in code — swapping the photo for
      * one without them would silently drop the labels.
      *
-     * Capped at width=1200 (2x the 560px panel); the source is a 3975px PNG
-     * and the CDN would otherwise serve all 9MB of it. `width`/`height` match
-     * the served size so the box reserves the right space before it loads.
+     * The source is a 3975px, 9MB PNG. `imageMaxWidth` tops the srcset ladder
+     * at the 2x candidate of the 560px panel, so no candidate approaches it.
      */
     image: filesImage('side-guide-photo.png', {
-      resize: 1200,
-      width: 1200,
-      height: 1500,
+      width: 3975,
+      height: 4968,
       alt: 'The white tee, front on, with the chest, waist and hip measuring points marked',
     }),
+    imageMaxWidth: 1200,
     points: [
       {
         label: 'Chest',

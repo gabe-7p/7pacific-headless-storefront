@@ -50,6 +50,16 @@ describe('Image', () => {
     }
   });
 
+  it('stops a fixed-mode ladder at data.width, which is how a slot caps its largest candidate', () => {
+    const img = renderImg(
+      <Image data={{ url: KNIT.url, width: 1200 }} width={560} height={700} alt="" />
+    );
+    const candidates = parseSrcSet(img.getAttribute('srcset') ?? '');
+
+    expect(candidates.map((c) => c.url.searchParams.get('width'))).toEqual(['560', '1120']);
+    expect(candidates.map((c) => c.descriptor)).toEqual(['1x', '2x']);
+  });
+
   it('never asks the CDN for more pixels than the source has', () => {
     const img = renderImg(<Image data={KNIT} sizes="100vw" />);
     const widths = parseSrcSet(img.getAttribute('srcset') ?? '').map((c) =>
