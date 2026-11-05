@@ -24,16 +24,18 @@ export const GrainVeil = () => (
 export const GradedMedia = ({
   media,
   ratio,
+  sizes,
   grain = false,
   className,
 }: {
   media: MediaSlotSource;
   ratio: MediaSlotRatio;
+  sizes: string;
   grain?: boolean;
   className?: string;
 }) => (
   <div className={cn('relative', grain && 'overflow-hidden', className)}>
-    <MediaSlot media={media} ratio={ratio} className="saturate-[0.85]" />
+    <MediaSlot media={media} ratio={ratio} sizes={sizes} className="saturate-[0.85]" />
     <div
       aria-hidden
       className="pointer-events-none absolute inset-0 bg-field-night/15 mix-blend-multiply"

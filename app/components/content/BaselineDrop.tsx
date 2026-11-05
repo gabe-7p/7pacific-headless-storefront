@@ -7,15 +7,17 @@ import { MediaSlot } from '~/components/common/MediaSlot';
 import { SectionHeader } from '~/components/common/SectionHeader';
 import { BaselineMasthead } from '~/components/content/BaselineMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /**
  * Ember repeats here by sanctioned exception (ui-components.md).
  */
 
-/** The full-bleed 16:9 drop film; the scrim keeps the white full-video label legible. */
+/** The full-bleed 16:9 drop film; the scrim keeps the white full-video label legible.
+    Eager: it sits in the first viewport at every width, so it starts before hydration. */
 const Film = () => (
   <section className="relative">
-    <MediaSlot media={BASELINE_DROP.film} ratio="video" />
+    <MediaSlot media={BASELINE_DROP.film} ratio="video" sizes={IMAGE_SIZES.full} loading="eager" />
     <div
       aria-hidden
       className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-field-night/60 to-transparent"
@@ -93,6 +95,7 @@ const Standard = () => (
     <GradedMedia
       media={BASELINE_DROP.standard.banner}
       ratio="loop"
+      sizes={IMAGE_SIZES.full}
       className="border-t border-border-subtle"
     />
     {/* The three day photos run edge-to-edge under the band, split by 1px
@@ -107,7 +110,7 @@ const Standard = () => (
     <div className="mt-px grid gap-y-5 md:grid-cols-3 md:gap-x-px">
       {BASELINE_DROP.standard.days.map((day) => (
         <div key={day.index} className="group flex flex-col">
-          <GradedMedia media={day.media} ratio="landscape" />
+          <GradedMedia media={day.media} ratio="landscape" sizes={IMAGE_SIZES.third} />
           {/* Hairline frame closes around the caption — the photo caps the
               top, and from md only the first frame keeps its left border so
               adjacent frames share one hairline. flex-1 levels the three
@@ -129,13 +132,15 @@ const Standard = () => (
 /** One product tile: 4:5 photo, mono name + price, Ember Shop link. */
 const PieceCell = ({
   piece,
+  sizes,
   className,
 }: {
   piece: (typeof BASELINE_DROP.pieces.products)[number];
+  sizes: string;
   className?: string;
 }) => (
   <div className={className}>
-    <MediaSlot media={piece.media} ratio="product" />
+    <MediaSlot media={piece.media} ratio="product" sizes={sizes} />
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-3 pt-2.5 pb-4 md:px-4.5 md:pt-3.5 md:pb-5">
       {/* Product names ride the campaign Archivo, not the mono spec strip. */}
       <span className="font-archivo text-2xs tracking-caps text-ink uppercase md:text-xs">
@@ -162,10 +167,11 @@ const Pieces = () => (
     {/* Separate tiles split by the same hairline-thin gaps as the day
         photos; the lead piece goes full-width on mobile. */}
     <div className="grid grid-cols-2 gap-1 md:grid-cols-3 md:gap-1.5">
-      {BASELINE_DROP.pieces.products.map((piece) => (
+      {BASELINE_DROP.pieces.products.map((piece, index) => (
         <PieceCell
           key={piece.name}
           piece={piece}
+          sizes={index === 0 ? IMAGE_SIZES.third : IMAGE_SIZES.card}
           className="first:col-span-2 md:first:col-span-1"
         />
       ))}

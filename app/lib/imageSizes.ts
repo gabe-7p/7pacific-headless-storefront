@@ -7,6 +7,10 @@
 export const IMAGE_SIZES = {
   /** 2-up mobile / 3-up desktop product grid. */
   card: '(min-width: 768px) 33vw, 50vw',
+  /** One of three columns from `md` up, full-bleed below. */
+  third: '(min-width: 768px) 33vw, 100vw',
+  /** One of four columns from `md` up, two up below (the First Light lookbook). */
+  quarter: '(min-width: 768px) 25vw, 50vw',
   /** A half-width panel from `md` up, full-bleed below. */
   half: '(min-width: 768px) 50vw, 100vw',
   /** A half-width cell at every viewport (Roster's side-by-side bakery-run crops). */
