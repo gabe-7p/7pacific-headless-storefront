@@ -71,13 +71,9 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ formMethod, current
   return currentUrl.toString() === nextUrl.toString();
 };
 
-/**
- * The Tailwind stylesheet is linked in Layout, not here — links() insertion
- * breaks dev HMR ("failed to execute 'insertBefore' on 'Node'"):
- * https://github.com/remix-run/remix/issues/9242
- */
 export function links() {
   return [
+    { rel: 'stylesheet', href: tailwindCss },
     { rel: 'preconnect', href: 'https://cdn.shopify.com' },
     { rel: 'preconnect', href: 'https://shop.app' },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
@@ -141,7 +137,6 @@ export const Layout = ({ children }: { children?: ReactNode }) => {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="stylesheet" href={tailwindCss}></link>
         {/* Shopify's runtime; the consent banner shows only where a region
             requires one (nothing in the US). */}
         {rootData && (
