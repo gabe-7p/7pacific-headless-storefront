@@ -22,10 +22,12 @@ const BODY_MEASURE = `${BODY} max-w-[60ch]`;
 const STATEMENT = 'text-4xl leading-[0.98] md:text-6xl xl:text-7xl';
 const SUBSTATEMENT = 'text-3xl leading-[1.05] md:text-5xl';
 const HAIRLINE = 'border-t border-border-subtle-night';
-/** The mounted photos' widths: their grid column from `lg` (capped by --page-max),
-    the Container minus the mount's padding below it. Change with the grids. */
-const STATUS_PHOTO_SIZES = '(min-width: 1024px) min(28vw, 400px), calc(100vw - 3.5rem)';
-const FOUNDER_PHOTO_SIZES = '(min-width: 1024px) min(35vw, 506px), calc(100vw - 3.5rem)';
+/** The mounted photos' painted widths: their grid column from `lg` (capped by
+    --page-max), the Container minus the mount's padding below it, scaled up where
+    `object-cover` paints the source wider than its box. Change with the grids. */
+const STATUS_PHOTO_SIZES = '(min-width: 1024px) min(30vw, 427px), calc((100vw - 3.5rem) * 1.067)';
+const FOUNDER_PHOTO_SIZES =
+  '(min-width: 1024px) min(39.4vw, 570px), (min-width: 640px) calc((100vw - 3.5rem) * 1.125), calc(100vw - 3.5rem)';
 
 /** A photo inside corner brackets — the file's photo mount. */
 const FramedMedia = ({

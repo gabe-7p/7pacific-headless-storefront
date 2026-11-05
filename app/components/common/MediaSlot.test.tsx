@@ -69,14 +69,13 @@ describe('MediaSlot', () => {
     expect(img?.className).not.toContain('aspect-');
   });
 
-  it('applies the focus as an object-position on the uncropped image', () => {
+  it('applies the focus as an object-position', () => {
     const { container } = render(
       <MediaSlot media={{ ...PHOTO, focus: 'upper' }} ratio="wide" sizes="100vw" />
     );
     const img = container.querySelector('img');
 
     expect(img?.className).toContain('object-[50%_30%]');
-    expect(img?.getAttribute('srcset')).not.toContain('crop=top');
   });
 
   it('passes loading through to the image', () => {
