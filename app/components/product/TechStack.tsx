@@ -45,6 +45,7 @@ const Feature = ({ feature }: { feature: TechFeature }) => (
     </div>
     {/* Icon fills its column (live's `width: 100%`), centered, with 20px gutters. */}
     <div className="mx-5 flex justify-center">
+      {/* eslint-disable-next-line react/forbid-elements -- bundled SVG icon, nothing to resize */}
       <img src={ICONS[feature.icon]} alt="" className="w-full max-w-none" />
     </div>
   </div>

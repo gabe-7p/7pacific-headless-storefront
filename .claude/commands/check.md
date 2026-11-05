@@ -7,7 +7,7 @@ Run these checks in sequence — the same gate CI enforces ([.github/workflows/c
 
 1. **Skills** (Hydrogen's agent skills match the installed package): `pnpm exec hydrogen skills check`
 2. **Type check** (includes `hydrogen gql check`, the Storefront API query validation): `pnpm type-check`
-3. **Lint**: `pnpm lint`
+3. **Lint** (includes the single-source selectors and `forbid-elements`; a disable needs a reason): `pnpm lint`
 4. **Format**: `pnpm prettier:check` (on failure, `pnpm prettier` fixes it)
 5. **Dependency rules**: `pnpm depcruise`
 6. **Unused exports and dependencies**: `pnpm knip`

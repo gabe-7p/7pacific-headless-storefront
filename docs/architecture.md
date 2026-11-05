@@ -4,15 +4,15 @@ How the 7Pacific Hydrogen storefront is put together. For day-to-day conventions
 
 ## The stack
 
-| Layer     | Choice                                                                                                                               |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Framework | **React Router 8** (middleware) + **Hydrogen 2026.10** as a library, Vite 8                                                          |
-| Runtime   | Oxygen (Shopify's edge worker hosting)                                                                                               |
-| UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives                                                        |
-| Data      | Shopify **Storefront API** (guest checkout — no customer accounts)                                                                   |
-| Types     | `gql()` documents typed in place by `@shopify/hydrogen/ts-plugin` (gql.tada)                                                         |
-| Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                                                                                      |
-| Tooling   | pnpm, TypeScript (strict), ESLint (flat), Prettier, dependency-cruiser, knip, Vitest, Playwright (pixel funnel), husky + lint-staged |
+| Layer     | Choice                                                                                                                                                                                                  |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework | **React Router 8** (middleware) + **Hydrogen 2026.10** as a library, Vite 8                                                                                                                             |
+| Runtime   | Oxygen (Shopify's edge worker hosting)                                                                                                                                                                  |
+| UI        | React 19 + **Tailwind CSS v4**; **shadcn/ui** (Radix) for headless primitives                                                                                                                           |
+| Data      | Shopify **Storefront API** (guest checkout — no customer accounts)                                                                                                                                      |
+| Types     | `gql()` documents typed in place by `@shopify/hydrogen/ts-plugin` (gql.tada)                                                                                                                            |
+| Language  | TypeScript (strict, `noUncheckedIndexedAccess`)                                                                                                                                                         |
+| Tooling   | pnpm, TypeScript (strict), ESLint (flat; `no-restricted-syntax` + `forbid-elements` pin the single sources), Prettier, dependency-cruiser, knip, Vitest, Playwright (pixel funnel), husky + lint-staged |
 
 ## Request & data flow
 
