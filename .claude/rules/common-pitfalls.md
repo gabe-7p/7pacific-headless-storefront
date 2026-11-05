@@ -110,7 +110,7 @@ These came out of the live-parity work; every one type-checks and lints clean.
 
 Between two `leading-*` the later one wins, and `asChild` makes that easy to miss: a Radix title's classes reach the child as its `className`, after `Heading`'s variant. `DialogTitle`'s `leading-none` would beat the brand `leading-[1.1]`, so `BrandDialogTitle` restates it.
 
-**Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does. The one holdout on arbitrary variants is `routes/products.$handle.tsx` (`min-[769px]:` on purpose — its chains rely on `md:` (rem) emitting after `min-[769px]:` (px), see the next trap, and need visual re-verification to move).
+**Live's Impulse breakpoints have named tokens.** The live theme flips at 769/1025 (one past Tailwind's `md`/`lg`) — use `impulse:` / `impulse-lg:` (defined in tailwind.css `@theme`) for surfaces that must flip exactly where live does.
 
 **Breakpoints sort by unit first, then by width.** This holds for named and arbitrary variants alike: Tailwind emits em, then px, then rem, and orders by width within a unit, so `min-[50rem]:` lands between `md:` and `lg:` and `min-[769px]:` shares `impulse:`'s slot. A px breakpoint therefore emits ahead of every rem one, and it loses only to a narrower rem breakpoint on the same property: `impulse:` to `sm`, `hero-sm` or `md`, and `impulse-lg:` to those plus `banner` and `lg`. `impulse:` with `lg:` is fine, because `lg` is both later and wider. Give a new breakpoint a rem value (`--breakpoint-gutterless: 90rem`, `-hero-sm: 35rem`, `-banner: 53.75rem`) so it sorts by width with `sm`…`2xl`.
 
