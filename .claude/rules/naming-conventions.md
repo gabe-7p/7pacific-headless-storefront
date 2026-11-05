@@ -34,7 +34,7 @@ const page = await queryStorefrontOrThrow(
 );
 ```
 
-Throw with `notFound()` / `unavailable()` from [`lib/http.ts`](../../app/lib/http.ts), never `new Response(…, { status })` inline. For any other single-record helper keep the same split: `getX` returns `null`/`undefined` when missing, `getXOrThrow` throws. Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists`. Collection fetches keep natural plural names (`getProducts`, `listCollections`).
+Throw with `notFound()` / `unavailable()` from [`lib/http.ts`](../../app/lib/http.ts), never `new Response(…, { status })` inline. For any other single-record helper keep the same split: `getX` returns `null`/`undefined` when missing, `getXOrThrow` throws. `no-restricted-syntax` rejects `fetchX`/`loadX` declarations and `gql()` constants not named `*_QUERY`/`*_MUTATION`/`*_FRAGMENT`. Don't use `fetchX`, `loadX`, `getXOrFail`, or `getXIfExists`. Collection fetches keep natural plural names (`getProducts`, `listCollections`).
 
 ## GraphQL
 

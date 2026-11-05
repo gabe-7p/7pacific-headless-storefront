@@ -15,6 +15,8 @@ If a widget isn't on the left list, default to hand-building it with Tailwind.
 
 It is **not a runtime UI kit**. The CLI copies component _source_ into `app/components/ui/`; we own and restyle that source. The only runtime deps are lightweight headless **Radix** primitives plus `class-variance-authority`, `clsx`, `tailwind-merge`, and `lucide-react` (icons). Tailwind v4 remains the **only** styling system — primitives are styled with the same utility classes as everything else, merged via [`cn()`](../../app/lib/cn.ts).
 
+Enforced: `react/forbid-elements` blocks `<h1>`–`<h6>` outside `common/Heading`, `<img>` outside `common/Image`, and `<video>` outside `LazyVideo`/`ContentMedia`/`MediaSlot`/`Hero`/`FounderVideo`; `react/forbid-dom-props` blocks `style`. The "one brand CTA per page" rule is counted by the e2e `data-variant="brand"` assertions.
+
 ## Adding a primitive
 
 ```bash

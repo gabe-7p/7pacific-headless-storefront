@@ -75,6 +75,8 @@ Shopify keeps an unknown code on the cart as `applicable: false` and answers wit
 
 ## Images through `common/Image`, prices through `common/Price`
 
+`react/forbid-elements` rejects `<img>` outside `common/Image` (bundled SVGs carry a disable with a reason).
+
 Render Storefront and Shopify Files images with the repo's `common/Image` (`<Image data sizes />`, `sizes` presets in `lib/imageSizes.ts`) and every money value with `common/Price` (`brand` / `compact` / `cart` formats) — never a bare `<img>`, never hand-formatted currency. `common/Image.test.tsx` pins the rendered `srcset`/`sizes`/inline-style contract. Its inline `width` + `aspect-ratio` **beats any `aspect-*` or `w-*` utility** on the call site (narrow a box with the `width="75%"` prop; `aspect-square` on a 4:5 product image is dead), and the fluid vs fixed modes are documented in `common/Image.tsx`.
 
 The image rule is not just a bandwidth nicety. A bare `<img>` pointing at a full-size CDN file makes every visitor's browser shrink a 20-megapixel photo to a card, and the GPU path browsers use for that aliases fine, regular textures (the knit on the quarter-zip) into visible wave bands. Re-uploading at a different size does not fix it; the only fix is an image delivered at the slot's own pixel size, which `<Image>` with `sizes` (and `aspectRatio` + `crop` for a cropped slot) does. Metafield JSON that carries plain URLs (`product_details`) still goes through `<Image src=...>`, not `<img>`.
@@ -92,6 +94,8 @@ To cap a slot's largest candidate below the source, pass the cap as `data.width`
 Live products are **separate Shopify products per color**, not variants. The color family (names, hexes, sibling links) lives in Shopify product metafields (`custom.color_*`), read via `lib/product/colors.ts`. Don't assume color is a `ProductVariant` selectedOption, and don't hardcode color/handle maps in the app. The same goes for URL shapes, brand facts and display prices: build paths with `lib/urls.ts`, quote `BRAND.*` / `PRODUCT_PRICES` instead of retyping `$200`, `Designed in San Francisco` or `$79`.
 
 ## Tailwind traps that silently lose a style
+
+`no-restricted-syntax` now rejects raw palette utilities, arbitrary `min-[Npx]:`/`max-[Npx]:` breakpoints (the PDP route is exempt until PR 12.1), hex colours in classes and Tailwind's default palette; a raw palette class is allowed with an `eslint-disable-next-line` reason. A literal `sizes="…"` warns toward `IMAGE_SIZES`.
 
 These came out of the live-parity work; every one type-checks and lints clean.
 
@@ -134,6 +138,8 @@ Oxygen and MiniOxygen run on workerd, not Node. A package whose default entry im
 PostHog has a second gate on top of the env: `getPostHogConfig` (`lib/analytics/posthog.ts`) returns `null` for `pnpm dev` and for any `*.myshopify.dev` host (Oxygen previews and the environments' own URLs) unless `PUBLIC_POSTHOG_DEV=true`, so our own testing never lands in the project as sessions — don't bypass it by reading the key somewhere else.
 
 ## Read the location from `url`, not `request.url`
+
+Enforced by `no-restricted-syntax` in `app/routes/**`.
 
 React Router 8 passes requests through untouched (the v7 `future.v8_passThroughRequests` flag, now the only behavior): loaders, actions and middleware receive the **raw** request, so on a client-side navigation or fetcher call `request.url` is `/products/x.data?_routes=…`, not `/products/x`. Every args object also carries `url: URL`, the normalized location with the `.data` suffix and `_routes`/`index` params removed. Routing logic — path checks, `searchParams`, `origin`/`hostname` for sitemaps and PostHog — reads `url`; `request` is for headers, method and body.
 

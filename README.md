@@ -55,7 +55,7 @@ See the Commands table in [CLAUDE.md](CLAUDE.md#commands) (dev, build, type-chec
 
 ## Quality gate
 
-Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): skills check, type-check (incl. `hydrogen gql check`), lint, format check, dependency rules, unit tests, and build. Locally, a commit runs type-check, ESLint and Prettier on staged files via husky + lint-staged; CI runs the full gate (the `/check` command mirrors it).
+Every PR runs CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)): skills check, type-check (incl. `hydrogen gql check`), lint, format check, dependency rules, unit tests, and build. Locally, a commit runs type-check, ESLint and Prettier on staged files via husky + lint-staged (Claude's hooks mirror that: ESLint --fix after each edit of a `.ts/.tsx/.js/.cjs/.mjs` file, Prettier on every changed lint-staged file type when a session stops); CI runs the full gate (the `/check` command mirrors it).
 
 ## Deploy
 
