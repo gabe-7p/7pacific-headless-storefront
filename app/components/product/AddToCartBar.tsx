@@ -25,6 +25,8 @@ export const AddToCartBar = ({ product }: { product: ProductPageData }) => {
           product form's submit): see ui-components.md. */}
       <button
         {...register('addToCart', {})}
+        // Same stamp as ui/button.tsx, so e2e can count brand buttons per page.
+        data-variant="brand"
         disabled={!addable || pending}
         className={cn(buttonVariants({ variant: 'brand' }), 'h-auto min-h-[58px] w-full px-6 py-4')}
       >

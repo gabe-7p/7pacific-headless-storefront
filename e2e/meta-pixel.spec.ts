@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { STORE_LINKS } from '~/content/links';
+import { cartUrl, dropUrl } from '~/lib/urls';
 
 import { installPixelCapture, isStubMode, readEnvVar, SETTLE_MS, TRAFFIC_BLOCKED } from './pixel';
 
@@ -92,6 +93,9 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
     expect(cd['content_type']).toBe('product');
     expect(Number(cd['value'])).toBeGreaterThan(0);
     expect(cd['currency']).toMatch(/^[A-Z]{3}$/);
+
+    // The PDP mounts the add-to-cart bar twice (inline + sticky), so two brand buttons.
+    await expect(page.locator('[data-variant="brand"]')).toHaveCount(2);
   });
 
   const addToCart = page.getByRole('button', { name: /add to cart/i }).first();
@@ -131,3 +135,20 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
     await monorail;
   });
 });
+
+// The "one brand button per page" rule (six comments carry it). Stamped by ui/button.tsx and
+// product/AddToCartBar via data-variant. Collections show none (their CTA is brand-outline) and
+// the guest cart is empty, so its checkout CTA is not mounted; the PDP's two are asserted in
+// the funnel test.
+const BRAND_BUTTONS: Array<[string, number]> = [
+  ['/', 1],
+  [STORE_LINKS.shopAll, 0],
+  [cartUrl(), 0],
+  [dropUrl('baseline'), 1],
+];
+for (const [url, count] of BRAND_BUTTONS) {
+  test(`${count} brand button(s) on ${url}`, async ({ page }) => {
+    await page.goto(url);
+    await expect(page.locator('[data-variant="brand"]')).toHaveCount(count);
+  });
+}

@@ -8,48 +8,8 @@ import {
   HOME_ROSTER,
 } from '~/content/home';
 import { JOIN_COPY } from '~/content/join';
+import { BANNED, bannedWordPattern } from '~/content/vocabulary';
 
-/**
- * The brand vocabulary gate (Brand Guidelines → Voice): binary, not a vibe
- * check. Banned words never ship. (Cautioned words — journey, explore… — are
- * a judgment call Gabe makes per line, so they are not enforced here.)
- * Multi-word phrases are matched as phrases.
- */
-const BANNED = [
-  'vibe',
-  'vibes',
-  'wellness',
-  'mindful',
-  'intentional',
-  'holistic',
-  'grind',
-  'hustle',
-  'no days off',
-  'beast mode',
-  'gains',
-  'level up',
-  'unlock',
-  'unleash',
-  'forge',
-  'warrior',
-  'conquer',
-  'crush',
-  'smash',
-  'elevate',
-  'curate',
-  'premium',
-  'empower',
-  'world-class',
-  'best-in-class',
-  'cutting-edge',
-  'revolutionary',
-  'game-changing',
-  'redefine',
-  'reimagine',
-  'iconic',
-  'legendary',
-  'sustainable',
-];
 /** Collect every string leaf. */
 const collectStrings = (value: unknown, out: Array<string> = []): Array<string> => {
   if (typeof value === 'string') out.push(value);
@@ -70,12 +30,10 @@ const HOMEPAGE_COPY = collectStrings([
   JOIN_COPY.newsletter,
 ]).filter((text) => !isUrl(text));
 
-const wordPattern = (word: string) => new RegExp(`(^|[^a-z])${word}(s|d|ed|ing)?([^a-z]|$)`, 'i');
-
 describe('homepage copy — brand gate', () => {
   it('contains no banned words', () => {
     for (const word of BANNED) {
-      const hits = HOMEPAGE_COPY.filter((text) => wordPattern(word).test(text));
+      const hits = HOMEPAGE_COPY.filter((text) => bannedWordPattern(word).test(text));
       expect(hits, `banned word "${word}"`).toEqual([]);
     }
   });
