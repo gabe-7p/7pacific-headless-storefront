@@ -150,7 +150,7 @@ Hydrogen's `handleShopifyRoutes` / `handleShopifyRedirects` match on `request.ur
 
 ## No `any`
 
-`no-explicit-any` is a warning we treat as a defect — it hides type mismatches. Use `unknown` + narrowing, generics, or the generated types instead.
+`no-explicit-any` is a lint error (off only in generated `components/ui/`) — it hides type mismatches. Use `unknown` + narrowing, generics, or the generated types instead.
 
 ## Don't edit generated files
 

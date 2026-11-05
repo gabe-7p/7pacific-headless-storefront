@@ -50,7 +50,7 @@ export const ProductCard = ({ product }: { product: ProductCardData }) => {
 
 ## Enforcement
 
-`dependency-cruiser` ([.dependency-cruiser.cjs](../../.dependency-cruiser.cjs)) fails the build on circular and (warns on) orphan modules. `pnpm depcruise` runs locally and in CI. As feature modules land, boundary rules (e.g. "components must not import the storefront client") are added there.
+`dependency-cruiser` ([.dependency-cruiser.cjs](../../.dependency-cruiser.cjs)) fails the build on circular and orphan modules and enforces the layer rules above (components → no server modules or `gql()` documents at runtime, lib → no components, `cart.server` root-only, module public entries); type-only imports are exempt. `pnpm depcruise` runs locally and in CI. ESLint `no-restricted-imports` covers the package-level seams (`eslint.config.js`), and `pnpm knip` fails on unused exports and dependencies.
 
 ## Why
 

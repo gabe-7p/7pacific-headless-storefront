@@ -45,7 +45,7 @@ Disallow: /.well-known/shopify/monorail
 Sitemap: ${sitemapUrl}`;
 
 /** The robots.txt body for a site origin; `shopId` adds Shopify's per-shop checkout paths. */
-export const buildRobotsTxt = (origin: string, shopId?: string): string => {
+const buildRobotsTxt = (origin: string, shopId?: string): string => {
   const sitemapUrl = `${origin}/sitemap.xml`;
   const general = generalDisallowRules(shopId, sitemapUrl);
 

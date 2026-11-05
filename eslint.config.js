@@ -22,6 +22,77 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
+// Import seams (.claude/rules). Flat config replaces a rule per block rather than merging it,
+// so each scoped block below spreads the layers beneath it.
+const GLOBAL_PATHS = [
+  {
+    name: 'posthog-node',
+    message:
+      "Import from 'posthog-node/edge' — the default entry needs Node built-ins (common-pitfalls.md).",
+  },
+  { name: 'motion', message: "Import from 'motion/react' (LazyMotion + m)." },
+];
+const MONEY_PATH = {
+  name: '@shopify/hydrogen',
+  importNames: ['formatMoney'],
+  message: 'Format money through lib/money.ts → common/Price.',
+};
+const STORE_PATH = {
+  name: '@shopify/hydrogen/react',
+  importNames: ['createCartComponents', 'createProductComponents', 'useCartAnalytics'],
+  message: 'One store: ~/lib/cart, ~/lib/product/store, analytics/Trackers.',
+};
+const COMPONENT_PATHS = [
+  {
+    name: '@shopify/hydrogen',
+    importNames: ['gql', 'Cache', 'formatMoney'],
+    message:
+      'GraphQL lives in loaders/lib (module-boundaries.md); money goes through common/Price.',
+  },
+  {
+    name: 'lucide-react',
+    importNames: [
+      'Menu',
+      'MenuIcon',
+      'User',
+      'UserIcon',
+      'ShoppingBag',
+      'ShoppingBagIcon',
+      'ShoppingCart',
+      'X',
+      'XIcon',
+    ],
+    message: 'Use the traced glyphs in common/icons.tsx (ui-components.md).',
+  },
+];
+const COMPONENT_PATTERNS = [
+  {
+    group: ['~/lib/fragments', '~/lib/product/queries', '~/lib/sitemap'],
+    allowTypeImports: true,
+    message: 'Import the *Data type only.',
+  },
+  {
+    group: [
+      '~/lib/*.server',
+      '~/lib/storefront',
+      '~/lib/oxygen',
+      '~/lib/shopifyMiddleware',
+      '~/lib/csp',
+    ],
+    message: 'Server-only (module-boundaries.md).',
+  },
+  {
+    group: ['~/lib/shopifyFiles'],
+    allowTypeImports: true,
+    message: 'Files assets are content — reference them from app/content/*.',
+  },
+  {
+    group: ['~/components/ui/button'],
+    message: 'Brand CTAs render through common/Cta (ui-components.md).',
+  },
+];
+const restrict = (paths, patterns = []) => ['error', { paths, patterns }];
+
 export default [
   {
     ignores: [
@@ -40,21 +111,10 @@ export default [
       '**/.claude/worktrees/',
     ],
   },
-  ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      'plugin:eslint-comments/recommended',
-      'plugin:react/recommended',
-      'plugin:react-hooks/recommended',
-      'plugin:jsx-a11y/recommended'
-    )
-  ),
+  ...fixupConfigRules(compat.extends('eslint:recommended', 'plugin:eslint-comments/recommended')),
   {
     plugins: {
       'eslint-comments': fixupPluginRules(eslintComments),
-      react: fixupPluginRules(react),
-      'react-hooks': fixupPluginRules(reactHooks),
-      'jsx-a11y': fixupPluginRules(jsxA11Y),
     },
     languageOptions: {
       globals: {
@@ -67,11 +127,6 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
-      },
-    },
-    settings: {
-      react: {
-        version: 'detect',
       },
     },
     rules: {
@@ -93,8 +148,6 @@ export default [
       ],
       'no-useless-escape': 'off',
       'no-case-declarations': 'off',
-      // Stale-closure bugs are nasty — make missing hook deps an error, not a warning.
-      'react-hooks/exhaustive-deps': 'error',
     },
   },
   ...fixupConfigRules(
@@ -112,6 +165,7 @@ export default [
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {
       react: fixupPluginRules(react),
+      'react-hooks': fixupPluginRules(reactHooks),
       'jsx-a11y': fixupPluginRules(jsxA11Y),
     },
     settings: {
@@ -140,6 +194,9 @@ export default [
       'react/no-array-index-key': 'warn',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
+      // Stale-closure bugs are nasty — missing hook deps are an error. Must sit after the
+      // react-hooks/recommended extends above, which re-apply the plugin's `warn`.
+      'react-hooks/exhaustive-deps': 'error',
       // House rule (.claude/rules/naming-conventions.md): components are `const` arrow functions, never the `function` keyword.
       'react/function-component-definition': [
         'error',
@@ -217,8 +274,10 @@ export default [
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
-      // `any` defeats the type system — flag it (warn: shows in the IDE + lint, doesn't hard-block).
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // `any` defeats the type system — an error, not a warning (the ui/ override below stays off).
+      '@typescript-eslint/no-explicit-any': 'error',
+      // `Array<T>` over `T[]` (.claude/rules/naming-conventions.md).
+      '@typescript-eslint/array-type': ['error', { default: 'generic', readonly: 'generic' }],
       // Enforce `import type {...}` for type-only imports (pairs with verbatimModuleSyntax).
       '@typescript-eslint/consistent-type-imports': [
         'error',
@@ -231,7 +290,6 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/no-misused-promises': 'error',
-      'react/prop-types': 'off',
       'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
     },
   },
@@ -241,6 +299,71 @@ export default [
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': restrict([
+        ...GLOBAL_PATHS,
+        MONEY_PATH,
+        STORE_PATH,
+      ]),
+    },
+  },
+  {
+    // The single seams that own the thing the rule above sends everyone else to.
+    files: ['app/lib/money.ts'],
+    rules: { '@typescript-eslint/no-restricted-imports': restrict([...GLOBAL_PATHS, STORE_PATH]) },
+  },
+  {
+    files: ['app/lib/cart.ts', 'app/lib/product/store.ts', 'app/components/analytics/Trackers.tsx'],
+    rules: { '@typescript-eslint/no-restricted-imports': restrict([...GLOBAL_PATHS, MONEY_PATH]) },
+  },
+  {
+    files: ['app/components/**/*.{ts,tsx}'],
+    ignores: ['app/components/ui/**', 'app/components/analytics/Trackers.tsx'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': restrict(
+        [...GLOBAL_PATHS, STORE_PATH, ...COMPONENT_PATHS],
+        COMPONENT_PATTERNS
+      ),
+    },
+  },
+  {
+    // Brand CTA anatomy composes buttonVariants directly (ui-components.md).
+    files: [
+      'app/components/common/Cta.tsx',
+      'app/components/product/AddToCartBar.tsx',
+      'app/components/collection/LoadMore.tsx',
+      'app/components/cart/CartSummary.tsx',
+    ],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': restrict(
+        [...GLOBAL_PATHS, STORE_PATH, ...COMPONENT_PATHS],
+        COMPONENT_PATTERNS.filter((p) => !p.group.includes('~/components/ui/button'))
+      ),
+    },
+  },
+  {
+    // common/Image is the one image seam: it needs isShopifyCdnUrl to pick fluid vs fixed mode.
+    files: ['app/components/common/Image.tsx'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': restrict(
+        [...GLOBAL_PATHS, STORE_PATH, ...COMPONENT_PATHS],
+        COMPONENT_PATTERNS.filter((p) => !p.group.includes('~/lib/shopifyFiles'))
+      ),
+    },
+  },
+  {
+    // Generated shadcn/ui source — only the global package seams apply.
+    files: ['app/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': restrict([
+        ...GLOBAL_PATHS,
+        MONEY_PATH,
+        STORE_PATH,
+      ]),
     },
   },
   {

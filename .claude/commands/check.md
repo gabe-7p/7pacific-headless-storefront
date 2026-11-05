@@ -10,8 +10,9 @@ Run these checks in sequence — the same gate CI enforces ([.github/workflows/c
 3. **Lint**: `pnpm lint`
 4. **Format**: `pnpm prettier:check` (on failure, `pnpm prettier` fixes it)
 5. **Dependency rules**: `pnpm depcruise`
-6. **Unit tests**: `pnpm test`
-7. **Build**: `pnpm build`
+6. **Unused exports and dependencies**: `pnpm knip`
+7. **Unit tests**: `pnpm test`
+8. **Build**: `pnpm build`
 
 After all checks complete (or one fails), print a summary:
 
@@ -22,6 +23,7 @@ After all checks complete (or one fails), print a summary:
 - Lint:       PASS/FAIL
 - Format:     PASS/FAIL
 - Deps:       PASS/FAIL
+- Knip:       PASS/FAIL
 - Tests:      PASS/FAIL
 - Build:      PASS/FAIL
 ```

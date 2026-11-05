@@ -10,7 +10,7 @@ import { collectionUrl, journalUrl, pageUrl, productUrl } from '~/lib/urls';
  * at a time, so the index advertises one child sitemap per page and each child
  * renders that page.
  */
-export const SITEMAP_TYPES = ['products', 'collections', 'pages', 'journal'] as const;
+const SITEMAP_TYPES = ['products', 'collections', 'pages', 'journal'] as const;
 export type SitemapType = (typeof SITEMAP_TYPES)[number];
 
 const SITEMAP_PAGE_SIZE = 250;

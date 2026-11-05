@@ -22,7 +22,7 @@ import type { AthleteSigningContent, AthleteSigningOverrides } from './types';
 export type { AthleteSigningContent, ScaleMarkerPercent } from './types';
 
 /** The chrome, section titles and labels every signing page shares. */
-export const SIGNING_DEFAULTS = {
+const SIGNING_DEFAULTS = {
   chrome: {
     badge: 'Official // Athlete Signing',
     privacy: 'Private',
@@ -55,7 +55,7 @@ const SITE_DOMAIN = BRAND.siteUrl.replace(/^https?:\/\//, '');
  * overrides. The two URL lines derive from the handle, so they cannot drift
  * from the registry key.
  */
-export const defineSigning = (
+const defineSigning = (
   handle: string,
   overrides: AthleteSigningOverrides
 ): AthleteSigningContent => ({
