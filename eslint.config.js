@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,6 +7,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
+import { builtinRules } from 'eslint/use-at-your-own-risk';
 import eslintComments from 'eslint-plugin-eslint-comments';
 import _import from 'eslint-plugin-import';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
@@ -92,6 +94,236 @@ const COMPONENT_PATTERNS = [
   },
 ];
 const restrict = (paths, patterns = []) => ['error', { paths, patterns }];
+
+// ---------------------------------------------------------------------------------------------
+// Single-source enforcement (.claude/rules/*). `no-restricted-syntax` and `react/forbid-elements`
+// replace per block instead of merging, and ESLint selectors cannot see the filename, so the
+// scoped rules are resolved per file here: every app/e2e source file gets the rules whose scope
+// matches it, grouped into one block per distinct rule set. A new file is picked up the next
+// time the config loads. Tests are exempt throughout.
+// ---------------------------------------------------------------------------------------------
+const PATH_ROOTS = 'collections|products|pages|journal|cart|drops|athletes';
+const PALETTE = 'court|carbon|graphite|zinc|ember';
+const isTest = (f) => /\.(test|fixtures)\.(ts|tsx)$/.test(f);
+const inApp = (f) => f.startsWith('app/');
+const notIn =
+  (...excluded) =>
+  (f) =>
+    !excluded.includes(f);
+const everywhere = () => true;
+
+// Selector rules: [scope, selector, message, severity]
+const SYNTAX_RULES = [
+  [
+    everywhere,
+    "CallExpression[callee.property.name='graphql'][arguments.length<2]",
+    'Pass { cache: Cache.long()/short() } (graphql-fragments.md).',
+  ],
+  [
+    everywhere,
+    "CallExpression[callee.property.name='graphql'] > ObjectExpression:nth-child(2):not(:has(> Property > Identifier.key[name='cache']))",
+    'Pass { cache: Cache.long()/short() } (graphql-fragments.md).',
+  ],
+  [
+    everywhere,
+    String.raw`CallExpression[callee.property.name='graphql'] Property[key.name='variables'] Property[key.name=/^(country|language)$/]`,
+    'country/language are injected from MARKET (lib/i18n.ts) — leave them out of variables.',
+  ],
+  [
+    (f) =>
+      f.startsWith('app/components/') ||
+      f.startsWith('app/content/') ||
+      f === 'app/entry.client.tsx' ||
+      /^app\/lib\/.*\.client\.ts$/.test(f),
+    String.raw`Identifier[name=/^PRIVATE_/]`,
+    'Server-only secret (common-pitfalls.md).',
+  ],
+  [
+    (f) => f.startsWith('app/routes/'),
+    "MemberExpression[object.name='request'][property.name='url']",
+    'Use the `url` arg — request.url carries .data on data requests (common-pitfalls.md).',
+  ],
+  [
+    everywhere,
+    String.raw`MemberExpression[object.object.type='MetaProperty'][object.property.name='env'][property.name=/^VITE_/]`,
+    'Runtime config is PUBLIC_* via context.env (common-pitfalls.md).',
+  ],
+  [
+    (f) =>
+      inApp(f) &&
+      notIn('app/lib/urls.ts', 'app/lib/storefront.ts', 'app/lib/sitemap.ts', 'app/routes.ts')(f),
+    String.raw`Literal[value=/^\/(${PATH_ROOTS})(\/|\?|$)/]`,
+    'Build paths with lib/urls.ts.',
+  ],
+  [
+    (f) =>
+      inApp(f) &&
+      notIn('app/lib/urls.ts', 'app/lib/storefront.ts', 'app/lib/sitemap.ts', 'app/routes.ts')(f),
+    String.raw`TemplateElement[value.raw=/^\/(${PATH_ROOTS})\//]`,
+    'Build paths with lib/urls.ts.',
+  ],
+  [
+    (f) => inApp(f) && notIn('app/lib/shopifyFiles.ts', 'app/lib/csp.ts', 'app/root.tsx')(f),
+    String.raw`Literal[value=/cdn\.shopify\.com/]`,
+    'Build Files URLs with lib/shopifyFiles.',
+  ],
+  [
+    (f) => inApp(f) && notIn('app/lib/shopifyFiles.ts', 'app/lib/csp.ts', 'app/root.tsx')(f),
+    String.raw`TemplateElement[value.raw=/cdn\.shopify\.com/]`,
+    'Build Files URLs with lib/shopifyFiles.',
+  ],
+  [
+    (f) => inApp(f) && f !== 'app/lib/urls.ts',
+    String.raw`Literal[value=/(youtube|instagram)\.com/]`,
+    'Use the builders in lib/urls.',
+  ],
+  [
+    (f) =>
+      (f.startsWith('app/components/') || f.startsWith('app/routes/')) &&
+      f !== 'app/lib/product/store.ts',
+    "MemberExpression[property.name='selectedOrFirstAvailableVariant']",
+    'Read the PDP variant through resolveSelectedVariant (common-pitfalls.md).',
+  ],
+  [
+    (f) => f.startsWith('app/components/') || f.startsWith('app/routes/'),
+    "MemberExpression[object.name='window'][property.name='Shopify']",
+    'Reach window.Shopify through the lib/shopifyRuntime.ts selectors.',
+  ],
+  [
+    (f) => inApp(f) && f.endsWith('.tsx'),
+    "CallExpression[callee.property.name='capture'] > Literal:first-child",
+    'PostHog event names come from ANALYTICS_EVENT (lib/analytics/posthog.events.ts).',
+  ],
+  [
+    (f) =>
+      (f.startsWith('app/routes/') || f === 'app/root.tsx' || f.startsWith('app/lib/')) &&
+      f !== 'app/lib/http.ts',
+    "ThrowStatement > NewExpression[callee.name='Response']",
+    'Throw notFound()/unavailable() from ~/lib/http.',
+  ],
+  [
+    (f) => f.startsWith('app/routes/'),
+    "ExportNamedDeclaration > VariableDeclaration > VariableDeclarator[id.name='meta'] ArrowFunctionExpression > ArrayExpression",
+    'Return buildMeta(...) (lib/seo.ts).',
+  ],
+  [
+    everywhere,
+    String.raw`VariableDeclarator[id.name=/^(fetch|load)[A-Z]/]`,
+    'Single-record helpers are getX / getXOrThrow (naming-conventions.md).',
+  ],
+  [
+    everywhere,
+    String.raw`VariableDeclarator[init.callee.name='gql'][id.name!=/^[A-Z0-9]+(_[A-Z0-9]+)*_(QUERY|MUTATION|FRAGMENT)$/]`,
+    'gql() documents are SCREAMING_SNAKE_CASE ending _QUERY/_MUTATION/_FRAGMENT (naming-conventions.md).',
+  ],
+  [
+    (f) => !f.startsWith('app/components/ui/'),
+    "TSQualifiedName[left.name='React']",
+    "Import the type from 'react'.",
+  ],
+  [
+    everywhere,
+    String.raw`Literal[value=/(^|[\s:!'"\[])(?:[a-z]+-)*(?:bg|text|border|from|to|via|ring|fill|stroke|outline|divide|decoration|placeholder|shadow|accent|caret)-(?:${PALETTE})(?:\/\d+)?(?![a-z-])/]`,
+    'Raw palette utility. Use a role token; if the specific colour is the point, disable this line with a reason — that comment is the justification CLAUDE.md requires.',
+  ],
+  [
+    everywhere,
+    String.raw`TemplateElement[value.raw=/(^|[\s:!'"\[])(?:[a-z]+-)*(?:bg|text|border|from|to|via|ring|fill|stroke|outline|divide|decoration|placeholder|shadow|accent|caret)-(?:${PALETTE})(?:\/\d+)?(?![a-z-])/]`,
+    'Raw palette utility. Use a role token; if the specific colour is the point, disable this line with a reason.',
+  ],
+  [
+    // TODO(PR 12.1): the PDP route keeps arbitrary breakpoints until its chains are re-verified.
+    (f) => f !== 'app/routes/products.$handle.tsx',
+    String.raw`Literal[value=/\b(?:min|max)-\[\d+(?:\.\d+)?(?:px|rem)\]:/]`,
+    'Arbitrary breakpoint. Use impulse:/impulse-lg: or add a --breakpoint-* token.',
+  ],
+  [
+    everywhere,
+    String.raw`Literal[value=/\[#[0-9a-fA-F]{3,8}\]/]`,
+    'Hex colour in a class. Add a token.',
+  ],
+  [
+    everywhere,
+    String.raw`Literal[value=/\b(?:bg|text|border|ring|from|to|via)-(?:red|gray|neutral|slate|stone|blue|green|orange|amber|yellow)-\d{2,3}\b/]`,
+    'Tailwind default palette. Use a brand role token.',
+  ],
+  [
+    everywhere,
+    "JSXAttribute[name.name='sizes'] > Literal",
+    'Prefer an IMAGE_SIZES preset (lib/imageSizes.ts); one-offs belong there too.',
+  ],
+];
+// Core rules report at one severity per config entry, so the warn-level selector runs through a
+// second instance of the same rule exposed by a local plugin.
+const WARN_SELECTORS = [SYNTAX_RULES.pop()];
+const LOCAL_PLUGIN = {
+  rules: { 'restricted-syntax-warn': builtinRules.get('no-restricted-syntax') },
+};
+
+const HEADINGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+// Element rules: [scope, element, message]
+const ELEMENT_RULES = [
+  [
+    (f) => f !== 'app/components/common/Image.tsx',
+    'img',
+    'Use common/Image (sizes presets, srcset).',
+  ],
+  ...HEADINGS.map((h) => [
+    (f) => f !== 'app/components/common/Heading.tsx',
+    h,
+    'Render through common/Heading.',
+  ]),
+  [
+    (f) =>
+      !(
+        f.startsWith('app/components/ui/') ||
+        [
+          'app/components/common/LazyVideo.tsx',
+          'app/components/common/ContentMedia.tsx',
+          'app/components/common/MediaSlot.tsx',
+          'app/components/home/Hero.tsx',
+          'app/components/content/athlete-signing/FounderVideo.tsx',
+        ].includes(f)
+      ),
+    'video',
+    'Use LazyVideo / ContentMedia.',
+  ],
+];
+
+const listSources = (dir) =>
+  fs
+    .readdirSync(path.join(__dirname, dir), { recursive: true })
+    .map((f) => `${dir}/${String(f).split(path.sep).join('/')}`)
+    .filter((f) => /\.(ts|tsx)$/.test(f) && !f.endsWith('.d.ts') && !isTest(f));
+
+const buildEnforcement = () => {
+  const groups = new Map();
+  for (const file of [...listSources('app'), ...listSources('e2e')]) {
+    const syntax = SYNTAX_RULES.filter(([scope]) => scope(file));
+    const elements = ELEMENT_RULES.filter(([scope]) => scope(file));
+    const key = JSON.stringify([syntax.map((r) => r[1]), elements.map((r) => r[1])]);
+    if (!groups.has(key)) groups.set(key, { syntax, elements, files: [] });
+    groups.get(key).files.push(file);
+  }
+  return [...groups.values()].map(({ syntax, elements, files }) => ({
+    files,
+    plugins: { local: LOCAL_PLUGIN },
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...syntax.map(([, selector, message]) => ({ selector, message })),
+      ],
+      'local/restricted-syntax-warn': [
+        'warn',
+        ...WARN_SELECTORS.map(([, selector, message]) => ({ selector, message })),
+      ],
+      'react/forbid-elements': [
+        'error',
+        { forbid: elements.map(([, element, message]) => ({ element, message })) },
+      ],
+    },
+  }));
+};
 
 export default [
   {
@@ -372,6 +604,32 @@ export default [
     rules: {
       'react/function-component-definition': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  // Single-source enforcement: per-file selector and element rules (see buildEnforcement).
+  {
+    files: ['**/*.{ts,tsx}'],
+    plugins: { local: LOCAL_PLUGIN },
+    rules: { 'eslint-comments/require-description': ['error', { ignore: [] }] },
+  },
+  ...buildEnforcement(),
+  {
+    // Tailwind only (module-boundaries.md). The two documented data-driven exceptions are off below.
+    files: ['app/**/*.tsx'],
+    ignores: [
+      'app/**/*.test.tsx',
+      'app/components/common/Image.tsx',
+      'app/components/product/ColorSwatches.tsx',
+    ],
+    rules: {
+      'react/forbid-dom-props': [
+        'error',
+        { forbid: [{ propName: 'style', message: 'Tailwind only (module-boundaries.md).' }] },
+      ],
+      'react/forbid-component-props': [
+        'error',
+        { forbid: [{ propName: 'style', message: 'Tailwind only (module-boundaries.md).' }] },
+      ],
     },
   },
 ];

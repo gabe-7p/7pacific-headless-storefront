@@ -132,6 +132,7 @@ const ProductPage = () => {
           <Image
             data={heroMobile}
             width="75%"
+            // eslint-disable-next-line local/restricted-syntax-warn -- one-off 75vw slot, documented in lib/imageSizes.ts
             sizes="75vw"
             className="mx-auto h-[400px] object-cover min-[769px]:hidden"
           />

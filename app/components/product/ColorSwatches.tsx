@@ -86,6 +86,7 @@ export const ColorSwatches = ({
               // border-zinc/border-white swatch frames and the ring-black
               // selection ring below.
               <span
+                // eslint-disable-next-line no-restricted-syntax -- the tooltip is a Graphite chip by design (see the comment above)
                 className="bg-graphite after:border-t-graphite pointer-events-none invisible absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 rounded-brand px-2 py-1 text-xs whitespace-nowrap text-ink-night opacity-0 transition-opacity duration-200 group-hover/swatch:visible group-hover/swatch:opacity-100 after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:content-['']"
                 aria-hidden
               >
@@ -105,6 +106,7 @@ export const ColorSwatches = ({
                     // hover/active (border-zinc keeps a light swatch visible).
                     cn(
                       'size-6 border transition-shadow duration-200 hover:shadow-[0_0_0_1px_rgba(0,0,0,1)]',
+                      // eslint-disable-next-line no-restricted-syntax -- functional frame: zinc keeps a light swatch visible
                       isLightSwatch(swatch.hex) ? 'border-zinc' : 'border-white',
                       isActive && 'shadow-[0_0_0_1px_rgba(0,0,0,1)]'
                     )

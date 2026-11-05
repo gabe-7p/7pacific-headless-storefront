@@ -15,6 +15,7 @@ export const Logo = ({
   tone?: 'dark' | 'light';
   className?: string;
 }) => (
+  // eslint-disable-next-line react/forbid-elements -- bundled SVG wordmark, nothing to resize
   <img
     src={tone === 'light' ? logoDarkBg : logoLightBg}
     alt={BRAND.name}
