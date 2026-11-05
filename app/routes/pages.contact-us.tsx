@@ -75,7 +75,7 @@ const Contact = () => {
         {actionData?.ok ? (
           <p className="mt-10 text-center text-sm font-medium">{CONTACT.successMessage}</p>
         ) : (
-          <Form method="post" className="mt-10 space-y-4 md:max-w-sm" noValidate>
+          <Form method="post" className="mt-10 space-y-4 md:max-w-100" noValidate>
             <div>
               <label htmlFor="name" className="sr-only">
                 {CONTACT.fields.name.label}
