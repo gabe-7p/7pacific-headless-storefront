@@ -10,9 +10,10 @@ type LazyVideoProps = {
 
 /**
  * Below-the-fold background loop: renders poster-only, attaches `src` once
- * within half a viewport of the fold (so it buffers before it's needed), and
- * plays only while it's actually on screen — paused again off screen. Above
- * the fold use a plain `<video autoPlay>`; it must start before hydration.
+ * within half a viewport of the fold, and plays only while it's actually on
+ * screen — paused again off screen. `preload="none"` means the file is first
+ * requested at that first play, not when `src` lands. Above the fold use a
+ * plain `<video autoPlay>`; it must start before hydration.
  */
 export const LazyVideo = ({ src, poster, label, className }: LazyVideoProps) => {
   const ref = useRef<HTMLVideoElement>(null);
@@ -21,10 +22,17 @@ export const LazyVideo = ({ src, poster, label, className }: LazyVideoProps) => 
     const el = ref.current;
     if (!el) return;
 
+    // Both observers fire in one frame for a clip that starts in view, in no
+    // guaranteed order, and setting `src` aborts a pending play(). So either
+    // may attach it, and the player always does so before playing.
+    const attach = () => {
+      if (el.getAttribute('src') !== src) el.src = src;
+    };
+
     const loader = new IntersectionObserver(
       ([entry]) => {
         if (!entry?.isIntersecting) return;
-        el.src = src;
+        attach();
         loader.disconnect();
       },
       { rootMargin: '50% 0px' }
@@ -32,6 +40,7 @@ export const LazyVideo = ({ src, poster, label, className }: LazyVideoProps) => 
 
     const player = new IntersectionObserver(([entry]) => {
       if (entry?.isIntersecting) {
+        attach();
         // Rejects if autoplay is blocked; the poster stays up.
         el.play().catch(() => undefined);
       } else {
