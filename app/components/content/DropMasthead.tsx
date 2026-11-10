@@ -26,10 +26,13 @@ export type DropMastheadContent = {
 export const DropMasthead = ({
   drop,
   withDropLink = false,
+  withStatus = true,
   className,
 }: {
   drop: DropMastheadContent;
   withDropLink?: boolean;
+  /** The LIVE NOW status after the headline (under it on mobile); the collection pages drop it. */
+  withStatus?: boolean;
   className?: string;
 }) => (
   <Container className={cn('pt-8 pb-6 md:pt-14 md:pb-10', className)}>
@@ -43,9 +46,9 @@ export const DropMasthead = ({
       className="mt-3 text-[2.5rem] leading-none tracking-hero md:mt-4 md:text-5xl"
     >
       {drop.headline}
-      <span className="hidden md:inline">{`\u2002·\u2002${drop.status}`}</span>
+      {withStatus && <span className="hidden md:inline">{`\u2002·\u2002${drop.status}`}</span>}
     </Heading>
-    <SpecLine className="mt-2 text-base text-ink md:hidden">{drop.status}</SpecLine>
+    {withStatus && <SpecLine className="mt-2 text-base text-ink md:hidden">{drop.status}</SpecLine>}
     <p className="mt-4 max-w-2xl text-sm leading-relaxed text-support md:mt-5">{drop.intro}</p>
     {withDropLink && (
       // Outline tier, not `brand`: buying is the collection page's primary
