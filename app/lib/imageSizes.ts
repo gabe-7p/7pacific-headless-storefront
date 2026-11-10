@@ -30,3 +30,13 @@ export const IMAGE_SIZES = {
 /** An explicit srcset ladder: `imageWidths(400, 100, 16)` → 400, 500, … 1900. */
 export const imageWidths = (start: number, step: number, count: number): Array<number> =>
   Array.from({ length: count }, (_, index) => start + index * step);
+
+/**
+ * The fluid ladder for a content file: the default 200px steps (to 3000px)
+ * plus the source's own width, never past it, so a file between two steps
+ * (a 696px PNG) still serves every pixel it has. Pair with `Image`'s `data`
+ * (fluid mode) and a `sizes` preset.
+ */
+export const sourceLadder = (sourceWidth: number): Array<number> => [
+  ...new Set([...imageWidths(200, 200, 15), sourceWidth]),
+];

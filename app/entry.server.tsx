@@ -3,6 +3,7 @@ import { renderToReadableStream } from 'react-dom/server';
 import { type EntryContext, type RouterContextProvider, ServerRouter } from 'react-router';
 
 import { createCsp, createNonce } from '~/lib/csp';
+import { withRevalidate } from '~/lib/http';
 import { NonceProvider } from '~/lib/nonce';
 import { oxygenContext } from '~/lib/oxygen';
 
@@ -38,9 +39,17 @@ export default async function handleRequest(
 
   responseHeaders.set('Content-Type', 'text/html');
   responseHeaders.set('Content-Security-Policy', csp);
+  // Pages revalidate on every load, so a deploy shows up without a hard refresh.
+  withRevalidate(responseHeaders);
 
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,
   });
+}
+
+/** Client-side navigations fetch `.data`: same policy as the page itself. */
+export function handleDataRequest(response: Response) {
+  withRevalidate(response.headers);
+  return response;
 }

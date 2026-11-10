@@ -1,7 +1,7 @@
 import { ContentMedia } from '~/components/common/ContentMedia';
 import { Image } from '~/components/common/Image';
 import { cn } from '~/lib/cn';
-import { imageWidths } from '~/lib/imageSizes';
+import { sourceLadder } from '~/lib/imageSizes';
 import type { FilesImage, FilesVideo } from '~/lib/shopifyFiles';
 
 /**
@@ -76,12 +76,6 @@ type MediaSlotProps = {
   className?: string;
 };
 
-/** `Image`'s default ladder plus the source's own width, so a file between two
-    steps (a 696px PNG) still serves every pixel it has. */
-const ladderFor = (sourceWidth: number) => [
-  ...new Set([...imageWidths(200, 200, 15), sourceWidth]),
-];
-
 /**
  * A fixed-aspect media box: a quiet panel until the asset is supplied, then
  * the image (object-cover) or a muted loop (`LazyVideo` unless eager).
@@ -104,7 +98,7 @@ export const MediaSlot = ({ media, ratio, sizes, loading = 'lazy', className }: 
           data={{ url: media.src, width: media.width, height: media.height }}
           alt={media.alt}
           sizes={sizes}
-          srcSetWidths={ladderFor(media.width)}
+          srcSetWidths={sourceLadder(media.width)}
           loading={loading}
           className={cn(
             'absolute inset-0 size-full object-cover',

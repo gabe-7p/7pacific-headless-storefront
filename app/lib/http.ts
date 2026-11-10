@@ -45,6 +45,20 @@ export const unavailable = (message = 'Service unavailable') =>
 export const CACHE_ONE_DAY = `max-age=${60 * 60 * 24}`;
 
 /**
+ * `Cache-Control` for pages and their navigation data: a browser may keep a
+ * copy but must check with the server before reusing it. Without a header,
+ * browsers fall back to their own guess and can show a page from before the
+ * last deploy until a hard refresh. Hashed /assets/ files stay long-cached.
+ */
+const CACHE_REVALIDATE = 'no-cache';
+
+/** Sets CACHE_REVALIDATE unless the response already chose its own policy. */
+export const withRevalidate = (headers: Headers) => {
+  if (!headers.has('Cache-Control')) headers.set('Cache-Control', CACHE_REVALIDATE);
+  return headers;
+};
+
+/**
  * Wraps a deferred (below-the-fold) query: log and resolve to null instead of
  * rejecting. See common-pitfalls.md → "Defer below-the-fold data".
  */
