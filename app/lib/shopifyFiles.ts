@@ -38,6 +38,38 @@ const query = (params?: ImageParams) => (params?.v ? `?v=${params.v}` : '');
 export const shopifyImage = (filename: string, params?: ImageParams) =>
   `${FILES_CDN}/${filename}${query(params)}`;
 
+/**
+ * A Files image cut to a fixed-size card on the CDN: `region` is the window,
+ * in source pixels, scaled to `width`×`height` (keep the two ratios equal).
+ * For share images (og:image), where scrapers crop a tall photo blindly;
+ * on-page images go through `common/Image` instead.
+ */
+export const shopifyImageCard = (
+  filename: string,
+  {
+    v,
+    region,
+    width,
+    height,
+  }: ImageParams & {
+    region: { left: number; top: number; width: number; height: number };
+    width: number;
+    height: number;
+  }
+) => {
+  const params = new URLSearchParams({
+    ...(v ? { v: String(v) } : {}),
+    crop: 'region',
+    crop_left: String(region.left),
+    crop_top: String(region.top),
+    crop_width: String(region.width),
+    crop_height: String(region.height),
+    width: String(width),
+    height: String(height),
+  });
+  return `${FILES_CDN}/${filename}?${params}`;
+};
+
 /** A transcoded rendition of a Files video. */
 export const shopifyVideo = (id: string, rendition: string) =>
   `${VIDEO_CDN}/vp/${id}/${id}.${rendition}.mp4`;

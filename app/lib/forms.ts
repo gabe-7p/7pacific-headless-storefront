@@ -10,6 +10,7 @@ export const INVALID_EMAIL_MESSAGE = 'Please enter a valid email address.';
 export const REQUIRED_NAME_MESSAGE = 'Please enter your name.';
 export const REQUIRED_MESSAGE_MESSAGE = 'Please enter a message.';
 export const UNKNOWN_LIST_MESSAGE = 'Unknown list.';
+export const SIGNUP_FAILED_MESSAGE = 'We couldn’t save your signup. Try again in a moment.';
 const METHOD_NOT_ALLOWED_MESSAGE = 'Method not allowed';
 
 export type FormErrors<Field extends string> = Partial<Record<Field, string>>;
@@ -47,7 +48,8 @@ const collectErrors = <Field extends string>(
  * The shared action contract for form POSTs: a non-POST is a 405 (reported on
  * `methodField`), failed checks are a 400 with one message per field, and
  * success is `{ ok: true }`. `check` maps the form to per-field messages
- * (undefined = valid); `onValid` runs only after every check passes.
+ * (undefined = valid); `onValid` runs only after every check passes, and may
+ * return messages of its own when the work behind the form fails (a 502).
  */
 export const handleFormAction = async <Field extends string>(
   request: Request,
@@ -58,7 +60,7 @@ export const handleFormAction = async <Field extends string>(
   }: {
     methodField: Field;
     check: (form: FormData) => Partial<Record<Field, string | undefined>>;
-    onValid?: (form: FormData) => void;
+    onValid?: (form: FormData) => void | Promise<FormErrors<Field> | undefined>;
   }
 ) => {
   if (request.method !== 'POST') {
@@ -72,6 +74,7 @@ export const handleFormAction = async <Field extends string>(
   const errors = collectErrors(check(form));
   if (errors) return data<FormResult<Field>>({ ok: false, errors }, { status: 400 });
 
-  onValid?.(form);
+  const failure = await onValid?.(form);
+  if (failure) return data<FormResult<Field>>({ ok: false, errors: failure }, { status: 502 });
   return data<FormResult<Field>>({ ok: true });
 };

@@ -43,6 +43,14 @@ const FOCUS = {
   top: 'object-top',
   /** Bias the window toward the upper third (heads in a wide cinematic crop). */
   upper: 'object-[50%_30%]',
+  /** Bias the window just below centre (full-length runners in a portrait
+      source, wide box: heads to knees in the FIRST LIGHT 8:3 hero). */
+  lower: 'object-[50%_58%]',
+  /** Near the top, stepping down as the box widens: just enough headroom for
+      an overlay above the subject (the FIRST LIGHT countdown over a standing
+      portrait in a 16:9 box — head to hips). The countdown is a fixed height,
+      so narrower boxes need a higher window; re-check 768–1920 if it moves. */
+  nearTop: 'object-[50%_16%] lg:object-[50%_20%] 2xl:object-[50%_22%]',
   /** Keep the right half (a subject framed right in a landscape source, portrait box). */
   right: 'object-right',
 } as const;

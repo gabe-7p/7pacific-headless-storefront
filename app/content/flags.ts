@@ -9,6 +9,15 @@ export const FEATURE_FLAGS: {
       the waitlist dialog; the /api/subscribe endpoint (and the FIRST LIGHT
       page's own waitlist form) stay live either way. */
   dropTwoTeaser: boolean;
+  /** The homepage "Baseline V01" intro (The First Kit + Behind the Build
+      cards), in the same slot below the Name/Spec banner. `false` hides it;
+      its copy stays in HOME_BASELINE_INTRO (content/home.ts). */
+  baselineIntro: boolean;
+  /** The 4-up lookbook strip on /drops/first-light (the only page that has
+      one). `false` hides it; its slots stay in FIRST_LIGHT.lookbook. */
+  firstLightLookbook: boolean;
 } = {
-  dropTwoTeaser: false,
+  dropTwoTeaser: true,
+  baselineIntro: false,
+  firstLightLookbook: false,
 };

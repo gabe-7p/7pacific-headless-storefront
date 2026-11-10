@@ -100,38 +100,36 @@ export const HOME_NAME_SPEC_BANNER = {
  * picked by Gabe (2026-08-03).
  */
 export const HOME_DROP_TWO = {
-  heading: 'Drop 02: FW26',
+  heading: 'First Light: FW26/27',
   dropIso: DROP_TWO_LAUNCH.dropIso,
   countdownLabels: DROP_TWO_LAUNCH.countdownLabels,
   cards: {
     fallGear: {
       // Same date as the timer (aligned from the mock's 09.10.26 per Gabe).
-      eyebrow: 'Drops 09.13.26',
-      title: 'Fall Gear',
-      cta: { label: 'Discover', href: STORE_LINKS.firstLight },
+      eyebrow: 'Drops before sunrise on 11.13.26',
+      title: 'Gear Built for Cold Starts',
+      cta: { label: 'Browse Collection', href: STORE_LINKS.firstLight },
       media: {
         kind: 'image',
-        ...filesImage('face-on-shot-zach.jpg', {
-          v: 1785783370,
-          width: 2048,
-          height: 1638,
+        ...filesImage('zak_against_wall_in_dusty_rose_qz.jpg', {
+          v: 1794266813,
+          width: 3968,
+          height: 4960,
           alt: '',
         }),
       },
     },
     comingSoon: {
-      eyebrow: 'DAYBREAK™ & FRONTRUNNER™',
+      eyebrow: 'DAYBREAK™ Quarter-Zip · FRONTRUNNER™ Jogger',
       title: 'Coming Soon',
       /** No href — the card CTA opens the waitlist dialog instead. */
-      cta: { label: 'Get on the List' },
+      cta: { label: 'Join the First Light List' },
+      /** Portrait clip: the 1080p rendition (606px wide) — 720p is only 404px. */
       media: {
-        kind: 'image',
-        ...filesImage('chirstian-on-stairs.jpg', {
-          v: 1785783387,
-          width: 1638,
-          height: 2048,
-          alt: '',
-        }),
+        kind: 'video',
+        src: shopifyVideo('dbcd7431ea074fc69bdb8a744744000c', 'HD-1080p-7.2Mbps-100622493'),
+        poster: shopifyVideoThumbnail('dbcd7431ea074fc69bdb8a744744000c', { v: 1794266842 }),
+        label: 'Athlete getting ready in a car before a session',
       },
     },
   },

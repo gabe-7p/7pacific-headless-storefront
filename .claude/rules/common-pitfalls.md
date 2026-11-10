@@ -26,7 +26,7 @@ const first = collection.products.nodes[0]?.title;
 
 ## Don't expose private tokens to the browser
 
-`PUBLIC_*` env vars are safe client-side; `PRIVATE_STOREFRONT_API_TOKEN` is **server-only**. Never reference it in component code or pass it through loader return data.
+`PUBLIC_*` env vars are safe client-side; every `PRIVATE_*` var (the Storefront token, the Admin app's client ID and secret) is **server-only**, read only in `*.server.ts` and the request wiring. Never reference it in component code or pass it through loader return data.
 
 ## Avoid request waterfalls
 
