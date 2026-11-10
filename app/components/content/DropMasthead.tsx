@@ -33,11 +33,14 @@ export const DropMasthead = ({
   className?: string;
 }) => (
   <Container className={cn('pt-8 pb-6 md:pt-14 md:pb-10', className)}>
-    <LiveEyebrow>{drop.eyebrow}</LiveEyebrow>
+    {/* Tighter than the spec strip's 0.1em. `!` because `cn` doesn't merge the
+        brand tracking tokens and `tracking-spec` emits last, so a plain
+        `tracking-product` would lose (common-pitfalls.md, Tailwind traps). */}
+    <LiveEyebrow className="tracking-product!">{drop.eyebrow}</LiveEyebrow>
     <Heading
       as="h1"
       size="none"
-      className="mt-3 text-[2.5rem] leading-none tracking-hero md:mt-4 md:text-6xl"
+      className="mt-3 text-[2.5rem] leading-none tracking-hero md:mt-4 md:text-5xl"
     >
       {drop.headline}
       <span className="hidden md:inline">{`\u2002·\u2002${drop.status}`}</span>
