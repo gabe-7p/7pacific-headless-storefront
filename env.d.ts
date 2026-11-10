@@ -20,6 +20,10 @@ declare global {
     PUBLIC_STORE_DOMAIN: string;
     PUBLIC_STOREFRONT_ID?: string;
     PRIVATE_STOREFRONT_API_TOKEN?: string;
+    /** [secret] Dev Dashboard app client id — Admin API access for saving signups (lib/adminApi.server.ts). */
+    PRIVATE_SHOPIFY_ADMIN_CLIENT_ID?: string;
+    /** [secret] Dev Dashboard app client secret, paired with the client id above. */
+    PRIVATE_SHOPIFY_ADMIN_CLIENT_SECRET?: string;
     PUBLIC_CHECKOUT_DOMAIN?: string;
     /** [public] PostHog project API key (`phc_…`) — unset = PostHog off. See lib/analytics/posthog.ts. */
     PUBLIC_POSTHOG_KEY?: string;

@@ -5,7 +5,11 @@ import { buildMeta } from '~/lib/seo';
 import type { Route } from './+types/drops.first-light';
 
 export const meta: Route.MetaFunction = () =>
-  buildMeta({ title: FIRST_LIGHT.seoTitle, description: FIRST_LIGHT.intro });
+  buildMeta({
+    title: FIRST_LIGHT.seoTitle,
+    description: FIRST_LIGHT.seoDescription,
+    image: FIRST_LIGHT.ogImage,
+  });
 
 const FirstLightPage = () => <FirstLightTeaser />;
 

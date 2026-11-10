@@ -65,7 +65,7 @@ export const JOIN_COPY: Record<JoinList, JoinDialogCopy> = {
   /** The Drop 02 waitlist (name + email), opened by the Coming Soon card. */
   waitlist: {
     heading: 'Get on the List',
-    body: 'DAYBREAK™ and FRONTRUNNER™ land 09.13.26. Leave your name and we’ll tell you the moment they do.',
+    body: 'DAYBREAK™ and FRONTRUNNER™ land 11.13.26. Leave your name and we’ll tell you the moment they do.',
     namePlaceholder: 'Name',
     emailPlaceholder: 'Email address',
     submitLabel: 'Get on the List',

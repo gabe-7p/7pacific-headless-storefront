@@ -5,6 +5,7 @@ import { JoinForm } from '~/components/common/JoinForm';
 import { LiveEyebrow } from '~/components/common/LiveDot';
 import { MediaSlot } from '~/components/common/MediaSlot';
 import { FIRST_LIGHT } from '~/content/first-light';
+import { FEATURE_FLAGS } from '~/content/flags';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
 /** Boxed mono field — the mock's bordered NAME/EMAIL inputs (caps live in
@@ -86,15 +87,18 @@ const Proving = () => (
   </Container>
 );
 
-/** Full-bleed backdrop with the countdown overlaid on its upper third. */
+/** Full-bleed backdrop with the countdown overlaid near its top, in night
+    type over the (dark) photo. From md the top pad is a share of the width
+    (so it scales with the 16:9 box), keeping the athlete's head clear. */
 const CountdownSection = () => (
   <section className="relative">
     <MediaSlot media={FIRST_LIGHT.countdown.media} ratio="backdrop" sizes={IMAGE_SIZES.full} />
-    <div className="absolute inset-0 flex justify-center pt-16 md:pt-32">
+    <div className="absolute inset-0 flex justify-center pt-16 md:pt-[4%]">
       <Countdown
         dropIso={FIRST_LIGHT.countdown.dropIso}
         labels={FIRST_LIGHT.countdown.labels}
         size="xl"
+        tone="night"
       />
     </div>
   </section>
@@ -103,7 +107,8 @@ const CountdownSection = () => (
 /**
  * The Drop 02 "FIRST LIGHT" teaser page (/drops/first-light), mock order:
  * intro → full-bleed hero → Early Access signup → lookbook strip → Proving
- * the Performance → countdown backdrop.
+ * the Performance → countdown backdrop. The lookbook is toggled by
+ * FEATURE_FLAGS.firstLightLookbook.
  */
 export const FirstLightTeaser = () => (
   <div>
@@ -115,7 +120,7 @@ export const FirstLightTeaser = () => (
       loading="eager"
     />
     <EarlyAccess />
-    <Lookbook />
+    {FEATURE_FLAGS.firstLightLookbook && <Lookbook />}
     <Proving />
     <CountdownSection />
   </div>

@@ -7,36 +7,61 @@
 import type { MediaSlotSource } from '~/components/common/MediaSlot';
 import { DROP_TWO_LAUNCH } from '~/content/drop-two';
 import { WAITLIST_SUCCESS_MESSAGE } from '~/content/join';
+import { filesImage, shopifyImageCard } from '~/lib/shopifyFiles';
 
 const PLACEHOLDER_IMAGE = { kind: 'placeholder', type: 'image' } satisfies MediaSlotSource;
 
 export const FIRST_LIGHT = {
   /** Mono eyebrow above the headline; its leading dot is the mock's Ember accent. */
-  eyebrow: 'ED. 02 · FW 26',
+  eyebrow: 'ED. 02 · FW26/27 · Before Sunrise',
   /** ALL CAPS via CSS (Heading brand variant), per the display-face rule. */
-  headline: 'First Light · 09.13.26',
+  headline: 'First Light · 11.13.26',
   /** The `<title>` — `buildMeta` adds the brand prefix. */
-  seoTitle: 'First Light · 09.13.26',
+  seoTitle: 'First Light · 11.13.26',
+  /** The meta description (search + share previews). */
+  seoDescription:
+    'A quarter-zip and jogger for athletes who train before sunrise. Warm at the start, cool when the pace picks up. Releases 11.13.26. Early access open.',
+  /** The share image (og:image): the countdown backdrop below Proving the
+      Performance, cut to a 1200×630 card head to hips (the 4:5 source would
+      lose his head to a scraper's centre crop). */
+  ogImage: shopifyImageCard('chris_in_qz_at_gym.jpg', {
+    v: 1794266813,
+    region: { left: 0, top: 750, width: 3968, height: 2083 },
+    width: 1200,
+    height: 630,
+  }),
   intro:
-    'Our first fall and winter clothing selection in our history and we’re excited to share it. \
-We kept our vision clear of always putting the athletes first and creating products that you will \
-use in any training session you have coming up during the fall and winter. It follows our principle \
-of being lightweight and breathable and ready to keep you warm at the start, and cool when the \
-intensity picks up.',
-  /** Full-bleed hero band directly under the intro. */
-  heroMedia: PLACEHOLDER_IMAGE,
+    'Every team has the athletes who are there before the lights come on. First Light is their kit. Warm when you step out of the car, lightweight and breathable by the second rep.',
+  /** Full-bleed hero band directly under the intro. 4:5 on mobile shows the
+      whole frame; the 8:3 desktop band crops heads to knees (`focus: 'lower'`). */
+  heroMedia: {
+    kind: 'image',
+    ...filesImage('running_up_california_street.jpg', {
+      v: 1794266813,
+      width: 3968,
+      height: 4960,
+      alt: 'Two runners in quarter-zips running up California Street, San Francisco',
+    }),
+    focus: 'lower',
+  } satisfies MediaSlotSource,
   earlyAccess: {
-    // "the the" is verbatim from the mock — flagged to Gabe (2026-08-10) as a
-    // likely typo; fix here once confirmed.
-    heading: 'For the the Early Ones',
-    body: 'We know you’re the kind of person who’s always on top of things, so sign up now for Early Access',
-    namePlaceholder: 'Name',
+    heading: 'For the Early Ones',
+    body: 'You’re at the track before the sun. You should get First Light before everyone else. Sign up for early access',
+    namePlaceholder: 'Athlete Name',
     emailPlaceholder: 'Email',
     submitLabel: 'Sign Up',
     /** Not in the mock — the homepage waitlist confirmation, same list. */
     successMessage: WAITLIST_SUCCESS_MESSAGE,
     /** Tall portrait panel beside the signup form. */
-    media: PLACEHOLDER_IMAGE,
+    media: {
+      kind: 'image',
+      ...filesImage('3_people_stretching.jpg', {
+        v: 1794266814,
+        width: 3968,
+        height: 4960,
+        alt: 'Three athletes stretching against a trackside rail at dusk',
+      }),
+    } satisfies MediaSlotSource,
   },
   /** The full-bleed 4-up lookbook strip, left to right. */
   lookbook: [PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE, PLACEHOLDER_IMAGE],
@@ -49,7 +74,18 @@ products once it’s live so it’s fresh in your mind when you come back.',
     /** The shared Drop 02 target and unit labels (content/drop-two.ts) — one source. */
     dropIso: DROP_TWO_LAUNCH.dropIso,
     labels: DROP_TWO_LAUNCH.countdownLabels,
-    /** Full-bleed backdrop the countdown overlays. */
-    media: PLACEHOLDER_IMAGE,
+    /** Full-bleed backdrop the countdown overlays. 4:5 on mobile shows the
+        whole frame; the 16:9 desktop box keeps head to hips, with the
+        countdown over the dark ceiling (`focus: 'nearTop'`). */
+    media: {
+      kind: 'image',
+      ...filesImage('chris_in_qz_at_gym.jpg', {
+        v: 1794266813,
+        width: 3968,
+        height: 4960,
+        alt: 'Athlete in a quarter-zip standing hands on hips in a dark gym',
+      }),
+      focus: 'nearTop',
+    } satisfies MediaSlotSource,
   },
 } as const;

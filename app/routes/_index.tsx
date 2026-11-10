@@ -54,9 +54,10 @@ const Homepage = () => {
     <MotionProvider>
       <Hero />
       {/* Fold group: painted on load (no scroll-reveal gate) so nothing pops in
-          or shifts. DropTwo is toggled by FEATURE_FLAGS.dropTwoTeaser. */}
+          or shifts. BaselineIntro and DropTwo are toggled by FEATURE_FLAGS
+          (content/flags.ts). */}
       <NameSpecBanner />
-      <BaselineIntro />
+      {FEATURE_FLAGS.baselineIntro && <BaselineIntro />}
       {FEATURE_FLAGS.dropTwoTeaser && <DropTwo />}
       <FirstDrop products={products} />
       {/* The lower sections keep the scroll-triggered fade. */}

@@ -27,6 +27,12 @@ const SIZES = {
   },
 } as const;
 
+/** Type colour — `night` sits over dark photography (the FIRST LIGHT backdrop). */
+const TONES = {
+  day: 'text-ink',
+  night: 'text-ink-night',
+} as const;
+
 type CountdownProps = {
   /** ISO datetime with an explicit offset, so Date.parse is deterministic
       on server and client (e.g. HOME_DROP_TWO.dropIso). */
@@ -34,6 +40,7 @@ type CountdownProps = {
   /** Unit labels in display order: days, hours, minutes, seconds. */
   labels: ReadonlyArray<string>;
   size?: keyof typeof SIZES;
+  tone?: keyof typeof TONES;
   className?: string;
 };
 
@@ -43,7 +50,13 @@ type CountdownProps = {
  * land on mount and tick every second. `getTimeLeft` clamps at zero, so past
  * the target the timer holds at 00 · 00 · 00 · 00.
  */
-export const Countdown = ({ dropIso, labels, size = 'md', className }: CountdownProps) => {
+export const Countdown = ({
+  dropIso,
+  labels,
+  size = 'md',
+  tone = 'day',
+  className,
+}: CountdownProps) => {
   const [state, setState] = useState<{ timeLeft: TimeLeft | null; caretIndex: number }>({
     timeLeft: null,
     caretIndex: 0,
@@ -72,6 +85,7 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
     ? TIME_LEFT_UNITS.map((unit) => pad2(timeLeft[unit]))
     : labels.map(() => '--');
   const tier = SIZES[size];
+  const color = TONES[tone];
 
   return (
     <div
@@ -81,12 +95,12 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
       {labels.map((label, index) => (
         <div key={label} className={cn('flex items-start', tier.group)}>
           {index > 0 && (
-            <span aria-hidden className={cn('font-mono text-ink', tier.separator)}>
+            <span aria-hidden className={cn('font-mono', color, tier.separator)}>
               ·
             </span>
           )}
           <div className="flex flex-col gap-1">
-            <span className={cn('relative font-mono text-ink tabular-nums', tier.digits)}>
+            <span className={cn('relative font-mono tabular-nums', color, tier.digits)}>
               {/* The single insertion caret, keyed on position + value so a
                   change re-mounts it and replays one flick, then it rests
                   hidden. Absolutely positioned so it never shifts the digits.
@@ -99,7 +113,7 @@ export const Countdown = ({ dropIso, labels, size = 'md', className }: Countdown
               )}
               {values[index]}
             </span>
-            <SpecLine as="span" className={cn('text-ink', tier.label)}>
+            <SpecLine as="span" className={cn(color, tier.label)}>
               {label}
             </SpecLine>
           </div>
