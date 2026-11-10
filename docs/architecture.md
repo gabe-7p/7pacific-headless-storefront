@@ -63,7 +63,7 @@ app/
     product/     PDP components (ProductForm, SegmentedCell, ColorSwatches, TechStack, …)
     collection/  ProductCard, LoadMore
     home/        homepage sections
-    content/     static-page compositions (OurStory, FirstLightTeaser, BaselineDrop, BaselineMasthead, ContactForm, NotFound, ErrorShell, athlete-signing/ — the signing page as a root + one file per section)
+    content/     static-page compositions (OurStory, FirstLightTeaser, BaselineDrop, DropMasthead, ContactForm, NotFound, ErrorShell, athlete-signing/ — the signing page as a root + one file per section)
     common/      shared primitives (Container, Heading, Cta, Prose, ContentMedia, FieldError, Scrim, GradedMedia, HeroShell, JoinForm + JoinDialog/useJoinDialog, …)
   content/       typed marketing copy + brand content: links.ts (HANDLES — the one place a Shopify handle lives — and STORE_LINKS), brand.ts (name, siteUrl, provenance, shipping, seo, announcement, footer labels, social, fallback nav), media.ts (external media ids), cart.ts (CART_COPY); athlete-signing/ = types + one file per athlete (only what differs) + `SIGNING_DEFAULTS`/`defineSigning` and the handle registry
   lib/           (+ colocated *.test.ts)

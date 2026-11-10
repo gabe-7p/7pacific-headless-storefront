@@ -5,10 +5,13 @@ import { CollectionViewedTracker } from '~/components/analytics/Trackers';
 import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
-import { BaselineMasthead } from '~/components/content/BaselineMasthead';
+import { DropMasthead, type DropMastheadContent } from '~/components/content/DropMasthead';
+import { BASELINE_DROP } from '~/content/baseline-drop';
+import { FIRST_LIGHT_MASTHEAD } from '~/content/first-light';
 import { HANDLES } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
+import { IMAGE_SIZES } from '~/lib/imageSizes';
 import { buildMeta } from '~/lib/seo';
 import { queryStorefrontOrThrow, storefrontClientContext } from '~/lib/storefront';
 import { collectionUrl } from '~/lib/urls';
@@ -52,17 +55,23 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
   };
 }
 
+/** Drop collections open on their drop's masthead instead of the plain title. */
+const DROP_MASTHEADS: Partial<Record<string, DropMastheadContent>> = {
+  [HANDLES.shopAllCollection]: BASELINE_DROP,
+  [HANDLES.firstLightCollection]: FIRST_LIGHT_MASTHEAD,
+};
+
 const Collection = () => {
   const loaderData = useLoaderData<typeof loader>();
   const { collection } = loaderData;
   const { nodes, pageInfo, isLoading, loadMore } = useLoadMore(loaderData);
-  const isShopAll = collection.handle === HANDLES.shopAllCollection;
+  const masthead = DROP_MASTHEADS[collection.handle];
 
   return (
     <div>
       <CollectionViewedTracker id={collection.id} handle={collection.handle} />
-      {isShopAll ? (
-        <BaselineMasthead withDropLink />
+      {masthead ? (
+        <DropMasthead drop={masthead} withDropLink />
       ) : (
         <header className="w-full px-5 pt-10 pb-8">
           <Heading as="h1" size="lg">
@@ -76,11 +85,19 @@ const Collection = () => {
 
       {/* Near full-bleed with ~20px outer margins so product imagery dominates
           the viewport (matches live) — intentionally not wrapped in the
-          max-width Container the rest of the site uses. */}
+          max-width Container the rest of the site uses. One card per row on
+          mobile; three from `md` with a 4px gutter between columns. The row
+          gap stays wider because each card's name and spec strip sit under
+          its image. */}
       <div className="w-full px-5 pb-10">
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-x-1 md:gap-y-6">
           {nodes.map((product) => (
-            <ProductCard key={product.id} product={product} label={product.label?.value} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              label={product.label?.value}
+              sizes={IMAGE_SIZES.third}
+            />
           ))}
         </div>
         <LoadMore

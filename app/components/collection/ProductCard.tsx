@@ -21,6 +21,8 @@ type ProductCardProps = {
   label?: string | null;
   /** Eager-load the featured image (for above-the-fold cards). Default lazy. */
   priority?: boolean;
+  /** The grid's slot width for the image candidates. Default: 2-up mobile / 3-up desktop. */
+  sizes?: string;
 };
 
 /**
@@ -30,7 +32,12 @@ type ProductCardProps = {
  * each with a color-name tooltip and linking to its sibling color product.
  * Renders the typed `ProductCardData` it's given.
  */
-export const ProductCard = ({ product, label, priority = false }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+  label,
+  priority = false,
+  sizes = IMAGE_SIZES.card,
+}: ProductCardProps) => {
   const { handle, title, featuredImage, priceRange } = product;
   // Second Shopify image crossfades in on hover (live's product-image-hover).
   const hoverImage = product.images.nodes[1];
@@ -62,7 +69,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
           {featuredImage && (
             <Image
               data={featuredImage}
-              sizes={IMAGE_SIZES.card}
+              sizes={sizes}
               aspectRatio={CARD_ASPECT_RATIO}
               crop="center"
               loading={priority ? 'eager' : 'lazy'}
@@ -74,7 +81,7 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
             // on first hover, which reads as flicker instead of a crossfade.
             <Image
               data={hoverImage}
-              sizes={IMAGE_SIZES.card}
+              sizes={sizes}
               aspectRatio={CARD_ASPECT_RATIO}
               crop="center"
               loading="eager"
