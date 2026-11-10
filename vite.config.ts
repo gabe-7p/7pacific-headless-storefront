@@ -62,6 +62,11 @@ export default defineConfig({
         'react-dom',
         'react-dom/server',
         'react-router',
+        // root.tsx pulls these into SSR. posthog-js ships a sourcemap whose
+        // sources aren't in the package, so served unbundled, Vite logs ~70
+        // "Sourcemap … points to …" warnings on the first page render.
+        '@posthog/react',
+        'posthog-js',
       ],
     },
   },
