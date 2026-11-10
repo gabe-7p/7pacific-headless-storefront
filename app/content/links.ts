@@ -20,9 +20,6 @@ export const HANDLES = {
   journalBlog: 'journal',
   /** The Shopify navigation menus the root loader reads for the chrome. */
   headerMenu: 'main-menu',
-  /** A copy of `main-menu` for previewing nav changes; the root loader reads it
-      instead when `HEADER_MENU_TEST=true` (never set on Production). */
-  headerMenuTest: 'main-menu-test',
   footerMenu: 'footer',
   /** The Shopify page whose body renders above the contact form. */
   contactPage: 'contact-us',
