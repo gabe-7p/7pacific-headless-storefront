@@ -1,5 +1,6 @@
 import { Image } from '~/components/common/Image';
 import { LazyVideo } from '~/components/common/LazyVideo';
+import { sourceLadder } from '~/lib/imageSizes';
 import type { ContentMedia as ContentMediaSource } from '~/lib/shopifyFiles';
 
 type ContentMediaProps = {
@@ -17,16 +18,18 @@ type ContentMediaProps = {
 
 /**
  * Renders one Files image or video slot — the `kind` switch every content
- * section would otherwise write itself. Images are `common/Image` (lazy
- * unless `eager`); videos are `LazyVideo` unless `eager`.
+ * section would otherwise write itself. Images are `common/Image` in fluid
+ * mode (lazy unless `eager`); videos are `LazyVideo` unless `eager`.
  */
 export const ContentMedia = ({ media, sizes, eager = false, className }: ContentMediaProps) => {
   if (media.kind === 'image') {
     return (
+      // `data`, not `src` + numeric `width`: that pair selects fixed mode, which
+      // offered the full-size file at 1x/2x/3x (a 3968px photo in a half-width
+      // card). Fluid mode lets `sizes` pick from the ladder.
       <Image
-        src={media.src}
-        width={media.width}
-        height={media.height}
+        data={{ url: media.src, width: media.width, height: media.height }}
+        srcSetWidths={sourceLadder(media.width)}
         alt={media.alt}
         loading={eager ? 'eager' : 'lazy'}
         sizes={sizes}

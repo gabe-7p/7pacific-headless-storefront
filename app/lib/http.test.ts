@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { describeRouteError, notFound, unavailable } from '~/lib/http';
+import { describeRouteError, notFound, unavailable, withRevalidate } from '~/lib/http';
 
 // What React Router hands the boundary for a thrown Response / data().
 const routeError = (status: number, body: unknown) => ({
@@ -53,5 +53,16 @@ describe('describeRouteError', () => {
       message: 'Unknown error',
       isNotFound: false,
     });
+  });
+});
+
+describe('withRevalidate', () => {
+  it('makes a page revalidate before reuse', () => {
+    expect(withRevalidate(new Headers()).get('Cache-Control')).toBe('no-cache');
+  });
+
+  it('keeps a policy the response already set', () => {
+    const headers = new Headers({ 'Cache-Control': 'max-age=86400' });
+    expect(withRevalidate(headers).get('Cache-Control')).toBe('max-age=86400');
   });
 });
