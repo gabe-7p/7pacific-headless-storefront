@@ -8,7 +8,7 @@ import { STORE_LINKS } from '~/content/links';
 import { instagramProfileUrl, pageUrl } from '~/lib/urls';
 
 /** Free shipping starts here (USD) — the announcement and the default meta description both quote it. */
-const FREE_SHIPPING_THRESHOLD = 200;
+const FREE_SHIPPING_THRESHOLD = 150;
 
 type SocialPlatform = 'Instagram';
 type SocialLink = { platform: SocialPlatform; handle: string; href: string };

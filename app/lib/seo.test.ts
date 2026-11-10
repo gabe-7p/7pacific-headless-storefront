@@ -17,7 +17,7 @@ describe('pageTitle', () => {
 describe('DEFAULT_DESCRIPTION', () => {
   it('quotes the free-shipping threshold from the brand', () => {
     expect(DEFAULT_DESCRIPTION).toBe(
-      'Lightweight, breathable training gear built for performance. Free shipping on orders over $200.'
+      'Lightweight, breathable training gear built for performance. Free shipping on orders over $150.'
     );
   });
 });
