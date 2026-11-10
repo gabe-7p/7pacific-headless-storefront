@@ -119,31 +119,33 @@ const ProductPage = () => {
   return (
     <>
       <ProductViewedTracker product={product} variant={selectedVariant} />
-      {/* `min-h` (not a fixed height) so a tall buy card grows the hero instead
-          of overflowing it under the header and past the fold. */}
-      <section className="overflow-hidden bg-field text-ink impulse:relative impulse:flex impulse:min-h-[50rem] impulse:items-center impulse:py-10 impulse:text-ink-night">
+      {/* Desktop stacks the photo and the buy card in one grid cell, so the
+          hero is as tall as the taller of the two: the photo at its own
+          aspect ratio (it never zooms past what the card needs, so the wide
+          end shows the whole shot), or the card. `min-h` keeps live's 800px
+          floor; below ~1213px that floor crops the photo's sides instead. */}
+      <section className="overflow-hidden bg-field text-ink impulse:relative impulse:grid impulse:min-h-[50rem] impulse:text-ink-night">
         {/* Mobile: in-flow hero shot. Desktop: full-bleed cover hero behind the
             buy card — two images because live uses a distinct desktop vs mobile
             source (matches its .desktop-image / .mobile-image divs). */}
-        {/* Mobile: 75% wide, 400px tall, cover-center (measured on live). Width
-            goes through the `width` prop — `Image`'s inline width beats any
-            width utility. */}
+        {/* Mobile: full-bleed at the photo's own aspect ratio (Image's inline
+            ratio), so the whole shot shows edge to edge with no side gutters. */}
         {heroMobile && (
-          <Image
-            data={heroMobile}
-            width="75%"
-            // eslint-disable-next-line local/restricted-syntax-warn -- one-off 75vw slot, documented in lib/imageSizes.ts
-            sizes="75vw"
-            className="mx-auto h-[400px] object-cover impulse:hidden"
-          />
+          <Image data={heroMobile} sizes={IMAGE_SIZES.full} className="impulse:hidden" />
         )}
-        {/* Desktop matches live's background-position: center — an off-center
-            anchor cropped the top of the shot out of the frame. */}
+        {/* Desktop: stretched to the grid cell. Anchored right of centre
+            horizontally, because the hero photos leave the left side clear for
+            the buy card and put the subject on the right, which is the side a
+            narrow (tablet) cell crops. Anchored to the top vertically, so the
+            wide-screen zoom trims from the feet up and keeps the face. `max-h` caps the
+            hero at its 1440px height (950px), so wider screens zoom in rather
+            than grow the section; `min-h-full` still fills a taller cell
+            (a long buy card), because min-height beats max-height. */}
         {heroDesktop && (
           <Image
             data={heroDesktop}
             sizes={IMAGE_SIZES.full}
-            className="hidden object-cover object-center impulse:absolute impulse:inset-0 impulse:block impulse:size-full"
+            className="hidden object-cover object-[75%_0%] impulse:col-start-1 impulse:row-start-1 impulse:block impulse:h-full impulse:max-h-[59.375rem] impulse:min-h-full impulse:self-stretch"
           />
         )}
         <div className="hidden impulse:absolute impulse:inset-0 impulse:block impulse:bg-linear-to-r impulse:from-scrim/20 impulse:via-transparent impulse:to-transparent" />
@@ -151,7 +153,7 @@ const ProductPage = () => {
             horizontal padding: `impulse:` is px and `md:` is rem, and Tailwind
             sorts breakpoints by unit first, so `impulse:` emits before `md:` and
             `md:px-0` would still win over an `impulse:px-8` at 769+. */}
-        <Container className="px-0 sm:px-0 md:px-0 impulse:relative impulse:z-10">
+        <Container className="px-0 sm:px-0 md:px-0 impulse:relative impulse:z-10 impulse:col-start-1 impulse:row-start-1 impulse:self-center impulse:py-10">
           {/* Live's card is 500px wide with 20px padding (460px of content) —
               the measure the description was authored against. */}
           <div className="flex flex-col bg-field text-ink impulse:ml-8 impulse:max-w-[500px]">

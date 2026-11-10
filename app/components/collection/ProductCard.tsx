@@ -12,6 +12,9 @@ import { getColorSwatches } from '~/lib/product/colors';
 import { getShortTitle } from '~/lib/product/display';
 import { productUrl } from '~/lib/urls';
 
+/** The one card shape: a 4:5 portrait. */
+const CARD_ASPECT_RATIO = '4/5';
+
 type ProductCardProps = {
   product: ProductCardData;
   /** Optional badge text (e.g. the `theme.label` metafield, "Sold out"). */
@@ -52,12 +55,18 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
               {label}
             </span>
           )}
+          {/* Every card is a 4:5 portrait whatever the source photo's shape,
+              so a grid row lines up. The ratio goes through `aspectRatio`, not
+              an `aspect-*` class: Image's inline ratio beats any utility, and
+              this way the CDN crops each candidate to 4:5 as well. */}
           {featuredImage && (
             <Image
               data={featuredImage}
               sizes={IMAGE_SIZES.card}
+              aspectRatio={CARD_ASPECT_RATIO}
+              crop="center"
               loading={priority ? 'eager' : 'lazy'}
-              className="aspect-square w-full object-cover"
+              className="w-full object-cover"
             />
           )}
           {hoverImage && (
@@ -66,6 +75,8 @@ export const ProductCard = ({ product, label, priority = false }: ProductCardPro
             <Image
               data={hoverImage}
               sizes={IMAGE_SIZES.card}
+              aspectRatio={CARD_ASPECT_RATIO}
+              crop="center"
               loading="eager"
               className="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             />
