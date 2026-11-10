@@ -18,6 +18,8 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from '~/components/ui/navigation-menu';
+import { FEATURE_FLAGS } from '~/content/flags';
+import { HANDLES } from '~/content/links';
 import { COLLECTIONS_MENU } from '~/content/navigation';
 import { cn } from '~/lib/cn';
 import type { FilesImage } from '~/lib/shopifyFiles';
@@ -25,9 +27,16 @@ import { collectionHandleFromPath, dropUrl } from '~/lib/urls';
 
 type CollectionEntry = { id: string; title: string; path: string; handle: string };
 
+/** Collections the menu lists in Shopify but the header holds back until launch. */
+const isUnlaunched = (handle: string) =>
+  handle === HANDLES.firstLightCollection && !FEATURE_FLAGS.firstLightCollection;
+
 /**
  * The item's children as collections, or null when any linked child isn't a
- * collection link (then the item keeps the plain `HeaderDropdown`).
+ * collection link (then the item keeps the plain `HeaderDropdown`). Unlaunched
+ * collections are dropped after that check, so hiding one never demotes the
+ * item to the plain dropdown (which would list it); an empty result means the
+ * item renders nothing.
  */
 export const getCollectionEntries = (
   item: HeaderMenuItem,
@@ -39,7 +48,8 @@ export const getCollectionEntries = (
     return [{ id: child.id, title: child.title, path, handle: collectionHandleFromPath(path) }];
   });
   if (entries.length === 0) return null;
-  return entries.every((entry): entry is CollectionEntry => entry.handle !== null) ? entries : null;
+  if (!entries.every((entry): entry is CollectionEntry => entry.handle !== null)) return null;
+  return entries.filter((entry) => !isUnlaunched(entry.handle));
 };
 
 const MEDIA: Partial<Record<string, FilesImage>> = COLLECTIONS_MENU.media;

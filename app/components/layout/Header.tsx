@@ -167,6 +167,7 @@ export const HeaderMenu = ({
               );
             }
             const collections = getCollectionEntries(item, resolveUrl);
+            if (collections?.length === 0) return null;
             return collections ? (
               <CollectionsMegaMenu key={item.id} item={item} entries={collections} />
             ) : (
@@ -203,6 +204,7 @@ export const HeaderMenu = ({
           );
         }
         const collections = getCollectionEntries(item, resolveUrl);
+        if (collections?.length === 0) return null;
         return collections ? (
           <CollectionsMobileGroup
             key={item.id}
