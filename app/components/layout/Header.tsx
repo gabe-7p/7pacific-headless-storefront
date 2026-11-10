@@ -8,8 +8,14 @@ import { Logo } from '~/components/common/Logo';
 import { TextLink } from '~/components/common/TextLink';
 import { useAside } from '~/components/layout/Aside';
 import {
+  CollectionsMegaMenu,
+  CollectionsMobileGroup,
+  getCollectionEntries,
+} from '~/components/layout/CollectionsMegaMenu';
+import {
   HeaderDropdown,
   type HeaderMenuItem,
+  MOBILE_ROW_CLASS,
   NAV_DESKTOP_CLASS,
   NAV_LABEL_CLASS,
 } from '~/components/layout/HeaderDropdown';
@@ -52,19 +58,27 @@ export const Header = ({ header, publicStoreDomain }: HeaderProps) => {
   const { shop, menu } = header;
   const { pathname } = useLocation();
   const scrolled = useScrolledPast(STICKY_THRESHOLD);
+  const [hovered, setHovered] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Transparent over the hero on the homepage until scrolled; solid elsewhere.
+  // Transparent over the hero on the homepage until scrolled, hovered or a
+  // nav panel is open (keyboard too); solid elsewhere.
   const isHome = pathname === '/';
-  const overlay = isHome && !scrolled;
+  const overlay = isHome && !scrolled && !hovered && !menuOpen;
 
   return (
     <header
+      // `relative`: the containing block the full-width mega panel hangs from.
       className={cn(
-        'transition-colors duration-300 ease-(--ease-brand)',
+        'relative transition-colors duration-300 ease-(--ease-brand)',
         overlay
           ? 'bg-linear-to-b from-scrim/30 to-transparent text-ink-night'
-          : 'bg-nav text-nav-text shadow-sm'
+          : 'bg-nav text-nav-text',
+        // The open panel carries the shadow, so the header doesn't cast one onto it.
+        !overlay && !menuOpen && 'shadow-sm'
       )}
+      onPointerEnter={(event) => event.pointerType === 'mouse' && setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
     >
       <Container className="grid h-(--header-h) grid-cols-[1fr_auto_1fr] items-center">
         <div className="flex items-center gap-6">
@@ -74,6 +88,7 @@ export const Header = ({ header, publicStoreDomain }: HeaderProps) => {
             viewport="desktop"
             primaryDomainUrl={shop.primaryDomain.url}
             publicStoreDomain={publicStoreDomain}
+            onOpenChange={setMenuOpen}
           />
         </div>
 
@@ -101,13 +116,22 @@ export const HeaderMenu = ({
   primaryDomainUrl,
   viewport,
   publicStoreDomain,
+  onOpenChange,
 }: {
   menu: HeaderProps['header']['menu'];
   primaryDomainUrl: HeaderProps['header']['shop']['primaryDomain']['url'];
   viewport: Viewport;
   publicStoreDomain: HeaderProps['publicStoreDomain'];
+  /** Desktop: whether a dropdown panel is open (the header stays solid while one is). */
+  onOpenChange?: (open: boolean) => void;
 }) => {
   const { close } = useAside();
+  const { key: locationKey } = useLocation();
+  // Controlled so a navigation closes the open panel: a Cta inside one is a
+  // plain link, which Radix doesn't treat as a menu selection.
+  const [openItem, setOpenItem] = useState('');
+  useEffect(() => setOpenItem(''), [locationKey]);
+  useEffect(() => onOpenChange?.(openItem !== ''), [openItem, onOpenChange]);
   const items = (menu || FALLBACK_HEADER_MENU).items;
   const resolveUrl = (url: string) => toInternalPath(url, { publicStoreDomain, primaryDomainUrl });
 
@@ -116,26 +140,39 @@ export const HeaderMenu = ({
     return (
       // Radix renders the <nav>. Collapses at live's Impulse breakpoint
       // (769px), not Tailwind's lg — the 12px nav fits well before 1024.
-      <NavigationMenu viewport={false} className="hidden flex-none impulse:flex">
+      // `static` (and `static!` on the list wrapper Radix positions with an
+      // inline style) so CollectionsMegaMenu's panel spans the <header>.
+      <NavigationMenu
+        viewport={false}
+        value={openItem}
+        onValueChange={setOpenItem}
+        className="static hidden flex-none impulse:flex [&>div]:static!"
+      >
         <NavigationMenuList className="gap-5">
-          {items.map((item) =>
-            item.items.length > 0 ? (
-              <HeaderDropdown key={item.id} item={item} resolveUrl={resolveUrl} />
+          {items.map((item) => {
+            if (item.items.length === 0) {
+              return (
+                item.url && (
+                  <NavigationMenuItem key={item.id}>
+                    <NavLink
+                      end
+                      prefetch="intent"
+                      to={resolveUrl(item.url)}
+                      className={NAV_DESKTOP_CLASS}
+                    >
+                      {item.title}
+                    </NavLink>
+                  </NavigationMenuItem>
+                )
+              );
+            }
+            const collections = getCollectionEntries(item, resolveUrl);
+            return collections ? (
+              <CollectionsMegaMenu key={item.id} item={item} entries={collections} />
             ) : (
-              item.url && (
-                <NavigationMenuItem key={item.id}>
-                  <NavLink
-                    end
-                    prefetch="intent"
-                    to={resolveUrl(item.url)}
-                    className={NAV_DESKTOP_CLASS}
-                  >
-                    {item.title}
-                  </NavLink>
-                </NavigationMenuItem>
-              )
-            )
-          )}
+              <HeaderDropdown key={item.id} item={item} resolveUrl={resolveUrl} />
+            );
+          })}
         </NavigationMenuList>
       </NavigationMenu>
     );
@@ -148,24 +185,35 @@ export const HeaderMenu = ({
       className="border-border-subtle mt-[68px] flex flex-col border-t"
       role="navigation"
     >
-      {items.map((item) =>
-        item.items.length > 0 ? (
-          <MobileMenuGroup key={item.id} item={item} resolveUrl={resolveUrl} onNavigate={close} />
+      {items.map((item) => {
+        if (item.items.length === 0) {
+          return (
+            item.url && (
+              <NavLink
+                key={item.id}
+                end
+                onClick={close}
+                prefetch="intent"
+                to={resolveUrl(item.url)}
+                className={MOBILE_ROW_CLASS}
+              >
+                {item.title}
+              </NavLink>
+            )
+          );
+        }
+        const collections = getCollectionEntries(item, resolveUrl);
+        return collections ? (
+          <CollectionsMobileGroup
+            key={item.id}
+            item={item}
+            entries={collections}
+            onNavigate={close}
+          />
         ) : (
-          item.url && (
-            <NavLink
-              key={item.id}
-              end
-              onClick={close}
-              prefetch="intent"
-              to={resolveUrl(item.url)}
-              className={MOBILE_ROW_CLASS}
-            >
-              {item.title}
-            </NavLink>
-          )
-        )
-      )}
+          <MobileMenuGroup key={item.id} item={item} resolveUrl={resolveUrl} onNavigate={close} />
+        );
+      })}
       {BRAND.social
         .filter((social) => social.platform === 'Instagram')
         .map((social) => (
@@ -182,11 +230,6 @@ export const HeaderMenu = ({
     </nav>
   );
 };
-
-const MOBILE_ROW_CLASS = cn(
-  NAV_LABEL_CLASS,
-  'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
-);
 
 /**
  * A nested item in the drawer: its title as a plain label row, then its

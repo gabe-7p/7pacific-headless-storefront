@@ -28,6 +28,12 @@ export const NAV_DESKTOP_CLASS = cn(
   'relative inline-flex items-center py-1 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:content-[""] hover:after:scale-x-100 data-[state=open]:after:scale-x-100 motion-reduce:after:transition-none'
 );
 
+/** A row in the mobile drawer: caps label, full-width hairline under it. */
+export const MOBILE_ROW_CLASS = cn(
+  NAV_LABEL_CLASS,
+  'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
+);
+
 /**
  * A desktop nav item with children: a caps trigger that opens a panel of its
  * child links (hover, click or keyboard — Radix NavigationMenu). The parent's

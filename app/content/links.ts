@@ -8,6 +8,8 @@ export const HANDLES = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue
       shopping", and the one collection page that opens on the BASELINE masthead. */
   shopAllCollection: 'baseline',
+  /** The FW26 First Light collection — the Collections mega-menu's second entry. */
+  firstLightCollection: 'first-light',
   /**
    * Manual collection whose product order drives the homepage BASELINE grid —
    * reorder it in the Shopify admin to reorder the homepage. Not linked in
@@ -18,6 +20,9 @@ export const HANDLES = {
   journalBlog: 'journal',
   /** The Shopify navigation menus the root loader reads for the chrome. */
   headerMenu: 'main-menu',
+  /** A copy of `main-menu` for previewing nav changes; the root loader reads it
+      instead when `HEADER_MENU_TEST=true` (never set on Production). */
+  headerMenuTest: 'main-menu-test',
   footerMenu: 'footer',
   /** The Shopify page whose body renders above the contact form. */
   contactPage: 'contact-us',

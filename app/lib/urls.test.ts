@@ -5,6 +5,7 @@ import {
   accountUrl,
   athleteUrl,
   cartUrl,
+  collectionHandleFromPath,
   collectionUrl,
   dropUrl,
   instagramPostUrl,
@@ -60,6 +61,19 @@ describe('resource URL builders', () => {
   it('builds the journal index without a handle and an article with one', () => {
     expect(journalUrl()).toBe('/journal');
     expect(journalUrl('founder-letter-ed-01')).toBe('/journal/founder-letter-ed-01');
+  });
+});
+
+describe('collectionHandleFromPath', () => {
+  it('reads the handle back out of a collection path', () => {
+    expect(collectionHandleFromPath(collectionUrl('first-light'))).toBe('first-light');
+    expect(collectionHandleFromPath('/collections/baseline/')).toBe('baseline');
+  });
+
+  it('returns null for anything else', () => {
+    expect(collectionHandleFromPath('/drops/baseline')).toBeNull();
+    expect(collectionHandleFromPath('/collections')).toBeNull();
+    expect(collectionHandleFromPath('/collections/baseline/products/x')).toBeNull();
   });
 });
 
