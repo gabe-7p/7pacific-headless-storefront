@@ -54,18 +54,18 @@ export const getCollectionEntries = (
 
 const MEDIA: Partial<Record<string, FilesImage>> = COLLECTIONS_MENU.media;
 
-/** Desktop: 2-up in a column capped at 30rem, from impulse-lg. */
-const DESKTOP_CARD_SIZES = '(min-width: 1025px) 15rem, 0px';
+/** Desktop: 2-up in a column capped at 30rem, from impulse (the drawer below). */
+const DESKTOP_CARD_SIZES = '(min-width: 769px) 15rem, 0px';
 /** Drawer: 2-up across the 350px (450px from sm) drawer, mobile only. */
 const MOBILE_CARD_SIZES = '(min-width: 769px) 0px, (min-width: 640px) 13rem, 10rem';
 
 /**
  * Each column slides in from the left a beat after the one before it, on top
  * of the panel's own slide. `fill-mode-both` holds the start frame through
- * the delay.
+ * the delay. Timings are 0.9× the originals (300/500ms, 75ms steps).
  */
 const COLUMN_ENTER =
-  'animate-in fade-in-0 slide-in-from-left-4 duration-500 ease-(--ease-brand) fill-mode-both motion-reduce:animate-none';
+  'animate-in fade-in-0 slide-in-from-left-4 duration-450 ease-(--ease-brand) fill-mode-both motion-reduce:animate-none';
 
 /**
  * How a link joins its surface. Desktop wraps it in `NavigationMenuLink` (so
@@ -174,31 +174,32 @@ export const CollectionsMegaMenu = ({
 }) => (
   <NavigationMenuItem className="static">
     <NavigationMenuTrigger className={NAV_DESKTOP_CLASS}>{item.title}</NavigationMenuTrigger>
-    <NavigationMenuPrimitive.Content className="bg-nav text-nav-text border-border-subtle data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-left-8 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-left-8 absolute top-full left-0 w-full border-b shadow-sm duration-300 ease-(--ease-brand) motion-reduce:animate-none">
-      <Container className="grid grid-cols-[auto_auto_1fr] gap-x-16 py-8 impulse-lg:gap-x-24">
-        <LinkList
-          title={COLLECTIONS_MENU.exploreTitle}
-          to={(entry) => dropUrl(entry.handle)}
-          entries={entries}
-          wrap={wrapDesktop}
-          className={cn(COLUMN_ENTER, 'delay-75')}
-        />
-        <LinkList
-          title={COLLECTIONS_MENU.shopTitle}
-          to={(entry) => entry.path}
-          entries={entries}
-          wrap={wrapDesktop}
-          className={cn(COLUMN_ENTER, 'delay-150')}
-        />
-        {/* The photo cards need the width; below impulse-lg the lists are enough. */}
+    <NavigationMenuPrimitive.Content className="bg-nav text-nav-text border-border-subtle data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-left-8 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-left-8 absolute top-full left-0 w-full border-b shadow-sm duration-270 ease-(--ease-brand) motion-reduce:animate-none">
+      {/* From impulse to impulse-lg the two lists stack in one column so the
+          photos keep a usable width; from impulse-lg the wrapper is `contents`
+          and each list takes its own column. */}
+      <Container className="grid grid-cols-[auto_1fr] gap-x-12 py-8 impulse-lg:grid-cols-[auto_auto_1fr] impulse-lg:gap-x-24">
+        <div className="flex flex-col gap-8 impulse-lg:contents">
+          <LinkList
+            title={COLLECTIONS_MENU.exploreTitle}
+            to={(entry) => dropUrl(entry.handle)}
+            entries={entries}
+            wrap={wrapDesktop}
+            className={cn(COLUMN_ENTER, 'delay-70')}
+          />
+          <LinkList
+            title={COLLECTIONS_MENU.shopTitle}
+            to={(entry) => entry.path}
+            entries={entries}
+            wrap={wrapDesktop}
+            className={cn(COLUMN_ENTER, 'delay-135')}
+          />
+        </div>
         <PhotoCards
           entries={entries}
           wrap={wrapDesktop}
           sizes={DESKTOP_CARD_SIZES}
-          className={cn(
-            COLUMN_ENTER,
-            'hidden w-full max-w-120 justify-self-end delay-225 impulse-lg:grid'
-          )}
+          className={cn(COLUMN_ENTER, 'w-full max-w-120 justify-self-end delay-200')}
         />
       </Container>
     </NavigationMenuPrimitive.Content>
