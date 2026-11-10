@@ -5,7 +5,7 @@ import { GradedMedia } from '~/components/common/GradedMedia';
 import { Heading } from '~/components/common/Heading';
 import { MediaSlot } from '~/components/common/MediaSlot';
 import { SectionHeader } from '~/components/common/SectionHeader';
-import { BaselineMasthead } from '~/components/content/BaselineMasthead';
+import { DropMasthead } from '~/components/content/DropMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
 
@@ -213,7 +213,7 @@ const Closer = () => (
  */
 export const BaselineDrop = () => (
   <div>
-    <BaselineMasthead />
+    <DropMasthead drop={BASELINE_DROP} />
     <Film />
     <Receipts />
     <Standard />
