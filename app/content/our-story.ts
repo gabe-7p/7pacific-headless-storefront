@@ -79,38 +79,43 @@ export const OUR_STORY = {
       }),
       'upper'
     ),
-    // Captions are the chapter's own words: running, weight training,
-    // strength training.
+    // The photos are 4:5 portraits in a landscape cell, so each names the
+    // window that keeps the heads in frame.
     strip: [
       {
-        caption: 'Running',
+        caption: 'Explosive training',
         media: image(
-          filesImage('our_story_hero_image.jpg', {
-            width: 4000,
-            height: 2667,
-            alt: 'Athletes climbing a coastal stair',
-          })
+          filesImage('mo_lunging_with_sandbag.jpg', {
+            v: 1794339448,
+            width: 3968,
+            height: 4960,
+            alt: 'Athlete lunging with a sandbag on his shoulder, another pushing a sled behind him',
+          }),
+          'upper'
         ),
       },
       {
-        caption: 'Weight training',
+        caption: 'Conditioning',
         media: image(
-          filesImage('our_mission2.jpg', {
-            width: 1639,
-            height: 1365,
-            alt: 'Group carrying weights through fog',
-          })
-        ),
-      },
-      {
-        caption: 'Strength training',
-        media: image(
-          filesImage('two_walking_to_workout_cropped.png', {
-            width: 696,
-            height: 728,
-            alt: 'Two athletes walking to a workout',
+          filesImage('mo_on_ski_erg.jpg', {
+            v: 1794339449,
+            width: 3968,
+            height: 4960,
+            alt: 'Athlete pulling down on a ski erg',
           }),
           'top'
+        ),
+      },
+      {
+        caption: 'Whatever training you have next',
+        media: image(
+          filesImage('chris_and_zak_from_back_at_gym.jpg', {
+            v: 1794339449,
+            width: 3968,
+            height: 4960,
+            alt: 'Two athletes standing at a squat rack, hands on hips, seen from behind',
+          }),
+          'upper'
         ),
       },
     ],
