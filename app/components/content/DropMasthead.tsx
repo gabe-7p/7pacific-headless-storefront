@@ -3,6 +3,7 @@ import { Cta } from '~/components/common/Cta';
 import { Heading } from '~/components/common/Heading';
 import { LiveEyebrow } from '~/components/common/LiveDot';
 import { SpecLine } from '~/components/common/SpecLine';
+import { cn } from '~/lib/cn';
 
 /** The copy a drop's masthead renders (`BASELINE_DROP`, `FIRST_LIGHT_MASTHEAD`). */
 export type DropMastheadContent = {
@@ -19,16 +20,19 @@ export type DropMastheadContent = {
  * /drops/baseline page and the drop collection pages (/collections/baseline,
  * /collections/first-light) so every entry point opens on the same block.
  * `withDropLink` adds the CTA — set on the collection pages, left off on a
- * drop page (it would link to itself).
+ * drop page (it would link to itself). `className` merges over the padding
+ * (a collection banner above it takes a tighter top).
  */
 export const DropMasthead = ({
   drop,
   withDropLink = false,
+  className,
 }: {
   drop: DropMastheadContent;
   withDropLink?: boolean;
+  className?: string;
 }) => (
-  <Container className="pt-8 pb-6 md:pt-14 md:pb-10">
+  <Container className={cn('pt-8 pb-6 md:pt-14 md:pb-10', className)}>
     <LiveEyebrow>{drop.eyebrow}</LiveEyebrow>
     <Heading
       as="h1"
