@@ -16,8 +16,14 @@ export const FEATURE_FLAGS: {
   /** The 4-up lookbook strip on /drops/first-light (the only page that has
       one). `false` hides it; its slots stay in FIRST_LIGHT.lookbook. */
   firstLightLookbook: boolean;
+  /** The First Light collection in the header's Collections menu (Explore,
+      Shop and its photo card, desktop and drawer). `false` until launch
+      (11.13.26, DROP_TWO_LAUNCH): Shopify's Main Menu already lists it, so
+      this is what keeps shoppers from reaching the collection from the nav. */
+  firstLightCollection: boolean;
 } = {
   dropTwoTeaser: true,
   baselineIntro: false,
   firstLightLookbook: false,
+  firstLightCollection: false,
 };

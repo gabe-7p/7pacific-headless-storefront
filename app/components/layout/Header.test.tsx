@@ -1,12 +1,23 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Aside } from '~/components/layout/Aside';
 import { HeaderMenu } from '~/components/layout/Header';
 import type { HeaderMenuItem } from '~/components/layout/HeaderDropdown';
+import type * as FlagsModule from '~/content/flags';
 import type { HeaderData } from '~/lib/fragments';
+
+// The real flags, with First Light launched unless a test turns it off. The
+// mock hands out this one object, so tests flip it in place.
+const flags = vi.hoisted(() => ({ firstLightCollection: true }));
+vi.mock('~/content/flags', async (importOriginal) => {
+  const actual = await importOriginal<typeof FlagsModule>();
+  return {
+    FEATURE_FLAGS: Object.assign(flags, actual.FEATURE_FLAGS, { firstLightCollection: true }),
+  };
+});
 
 const DOMAIN = 'https://7pacificapparel.com';
 
@@ -54,7 +65,10 @@ const renderMenu = (viewport: 'desktop' | 'mobile', menu = MENU) =>
     </MemoryRouter>
   );
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  flags.firstLightCollection = true;
+});
 
 describe('HeaderMenu (desktop)', () => {
   it('renders an item with children as a trigger, not a link', () => {
@@ -167,5 +181,44 @@ describe('HeaderMenu (mobile) — collections disclosure', () => {
     expect(
       screen.getAllByRole('link', { name: 'Baseline' }).map((link) => link.getAttribute('href'))
     ).toEqual(['/drops/baseline', '/collections/baseline', '/collections/baseline']);
+  });
+});
+
+describe('HeaderMenu — First Light before launch', () => {
+  const setUnlaunched = () => {
+    flags.firstLightCollection = false;
+  };
+
+  it('keeps First Light out of the desktop panel, and Baseline in it', () => {
+    setUnlaunched();
+    renderMenu('desktop', COLLECTIONS_MENU_DATA);
+    fireEvent.click(screen.getByRole('button', { name: /collections/i }));
+    expect(screen.getByText('Explore The Collection')).toBeTruthy();
+    expect(screen.queryAllByRole('link', { name: 'First Light' })).toEqual([]);
+    expect(document.querySelector('a[href*="first-light"]')).toBeNull();
+    expect(screen.getAllByRole('link', { name: 'Baseline' })).toHaveLength(3);
+  });
+
+  it('keeps First Light out of the drawer', () => {
+    setUnlaunched();
+    renderMenu('mobile', COLLECTIONS_MENU_DATA);
+    fireEvent.click(screen.getByRole('button', { name: 'Collections' }));
+    expect(document.querySelector('a[href*="first-light"]')).toBeNull();
+    expect(screen.getAllByRole('link', { name: 'Baseline' })).toHaveLength(3);
+  });
+
+  it('renders nothing for a Collections item that holds only unlaunched collections', () => {
+    setUnlaunched();
+    const menu = {
+      ...MENU,
+      items: [
+        parent('Collections', '/drops/first-light', [
+          leaf('First Light', '/collections/first-light'),
+        ]),
+      ],
+    };
+    renderMenu('desktop', menu);
+    expect(screen.queryByRole('button', { name: /collections/i })).toBeNull();
+    expect(document.querySelector('a[href*="first-light"]')).toBeNull();
   });
 });
