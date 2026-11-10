@@ -94,13 +94,12 @@ products once it’s live so it’s fresh in your mind when you come back.',
 
 /**
  * /collections/first-light's masthead — the same block as BASELINE's
- * (components/content/DropMasthead): edition eyebrow, LIVE NOW status, the
+ * (components/content/DropMasthead): edition eyebrow, headline, the
  * approved intro and the outline CTA out to the drop page.
  */
 export const FIRST_LIGHT_MASTHEAD = {
   eyebrow: 'ED. 02 · FW26/27',
   headline: 'First Light',
-  status: 'LIVE NOW',
   intro: FIRST_LIGHT.intro,
   dropLink: { label: 'How We Built It', href: STORE_LINKS.firstLight },
 } satisfies DropMastheadContent;
