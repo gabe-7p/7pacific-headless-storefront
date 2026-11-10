@@ -1,5 +1,5 @@
 import { HANDLES } from '~/content/links';
-import type { FilesImage } from '~/lib/shopifyFiles';
+import { type FilesImage, filesImage } from '~/lib/shopifyFiles';
 
 /**
  * The Collections mega-menu (`layout/CollectionsMegaMenu`). The links come from
@@ -12,24 +12,19 @@ import type { FilesImage } from '~/lib/shopifyFiles';
 export const COLLECTIONS_MENU = {
   exploreTitle: 'Explore The Collection',
   shopTitle: 'Shop The Collection',
-  /**
-   * TODO(before merge): upload both photos to Shopify Files and build them
-   * with `filesImage()`. These are local, downsized preview copies in
-   * public/nav-preview/ (originals on Gabe's desktop); they bypass the CDN
-   * size ladder, which the media rule in CLAUDE.md doesn't allow on main.
-   */
+  /** Shopify Files uploads (2026-11-09), keyed by collection handle. */
   media: {
-    [HANDLES.shopAllCollection]: {
-      src: '/nav-preview/baseline.jpg',
-      width: 1120,
-      height: 1400,
-      alt: 'Athlete in Baseline gear leaning against a fence',
-    },
-    [HANDLES.firstLightCollection]: {
-      src: '/nav-preview/first-light.jpg',
-      width: 1120,
-      height: 1400,
+    [HANDLES.shopAllCollection]: filesImage('leaning_against_fence.jpg', {
+      v: 1794287949,
+      width: 3967,
+      height: 4960,
+      alt: 'Two athletes in Baseline gear leaning against a chain-link fence',
+    }),
+    [HANDLES.firstLightCollection]: filesImage('chris_in_qz_at_gym.jpg', {
+      v: 1794266813,
+      width: 3968,
+      height: 4960,
       alt: 'Athlete in a First Light quarter-zip at the gym',
-    },
+    }),
   } satisfies Record<string, FilesImage>,
 } as const;
