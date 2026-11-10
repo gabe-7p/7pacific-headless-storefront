@@ -89,7 +89,7 @@ const Collection = () => {
           drop={masthead}
           withDropLink
           // Under a banner the photo already separates it from the header.
-          className={banner ? 'pt-6 md:pt-8' : undefined}
+          className={banner ? 'pt-4 md:pt-5' : undefined}
         />
       ) : (
         <header className="w-full px-5 pt-10 pb-8">
