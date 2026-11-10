@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { SpecLine } from '~/components/common/SpecLine';
+import { cn } from '~/lib/cn';
 
 /**
  * Ember live-signal dot with the radar ping ("signal live") — the drop-page
@@ -16,8 +17,14 @@ export const LiveDot = () => (
 );
 
 /** The drop-page eyebrow: the live dot leading a mono spec line. */
-export const LiveEyebrow = ({ children }: { children: ReactNode }) => (
-  <SpecLine className="flex items-center gap-3 text-sm text-ink">
+export const LiveEyebrow = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) => (
+  <SpecLine className={cn('flex items-center gap-3 text-sm text-ink', className)}>
     <LiveDot />
     {children}
   </SpecLine>

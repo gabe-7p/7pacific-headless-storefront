@@ -25,6 +25,7 @@ import {
   NavigationMenuList,
 } from '~/components/ui/navigation-menu';
 import { BRAND } from '~/content/brand';
+import { BANNER_PATHS } from '~/content/collection-banners';
 import { useCart } from '~/lib/cart';
 import { cn } from '~/lib/cn';
 import { isPlainActivation } from '~/lib/events';
@@ -61,10 +62,10 @@ export const Header = ({ header, publicStoreDomain }: HeaderProps) => {
   const [hovered, setHovered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Transparent over the hero on the homepage until scrolled, hovered or a
-  // nav panel is open (keyboard too); solid elsewhere.
-  const isHome = pathname === '/';
-  const overlay = isHome && !scrolled && !hovered && !menuOpen;
+  // Transparent over the homepage hero and the drop collections' banners until
+  // scrolled, hovered or a nav panel is open (keyboard too); solid elsewhere.
+  const hasHero = pathname === '/' || BANNER_PATHS.has(pathname);
+  const overlay = hasHero && !scrolled && !hovered && !menuOpen;
 
   return (
     <header

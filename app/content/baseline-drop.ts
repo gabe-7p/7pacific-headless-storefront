@@ -16,8 +16,6 @@ export const BASELINE_DROP = {
   /** Mono eyebrow above the headline; its leading dot is the mock's live signal. */
   eyebrow: 'ED. 01 · H2-26',
   headline: 'Baseline',
-  /** Status line paired with the headline (was the drop date pre-launch). */
-  status: 'LIVE NOW',
   /** Browser-tab / og title (buildMeta adds the brand suffix). */
   seoTitle: 'Baseline · ED. 01',
   intro:

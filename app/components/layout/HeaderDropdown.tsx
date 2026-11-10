@@ -49,7 +49,7 @@ export const HeaderDropdown = ({
 }) => (
   <NavigationMenuItem>
     <NavigationMenuTrigger className={NAV_DESKTOP_CLASS}>{item.title}</NavigationMenuTrigger>
-    {/* Always the solid chrome, even over the transparent homepage hero. */}
+    {/* Always the solid chrome, even over a transparent header (homepage hero, drop collection banners). */}
     <NavigationMenuContent className="mt-3 min-w-44 p-1">
       <ul className="flex flex-col">
         {item.items.map(
