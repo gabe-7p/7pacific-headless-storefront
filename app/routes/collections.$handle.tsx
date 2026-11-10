@@ -5,8 +5,10 @@ import { CollectionViewedTracker } from '~/components/analytics/Trackers';
 import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
+import { MediaSlot } from '~/components/common/MediaSlot';
 import { DropMasthead, type DropMastheadContent } from '~/components/content/DropMasthead';
 import { BASELINE_DROP } from '~/content/baseline-drop';
+import { COLLECTION_BANNERS } from '~/content/collection-banners';
 import { FIRST_LIGHT_MASTHEAD } from '~/content/first-light';
 import { HANDLES } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
@@ -66,10 +68,22 @@ const Collection = () => {
   const { collection } = loaderData;
   const { nodes, pageInfo, isLoading, loadMore } = useLoadMore(loaderData);
   const masthead = DROP_MASTHEADS[collection.handle];
+  const banner = COLLECTION_BANNERS[collection.handle];
 
   return (
     <div>
       <CollectionViewedTracker id={collection.id} handle={collection.handle} />
+      {banner && (
+        // Pulled up under the sticky header, which stays transparent over it
+        // until the page scrolls (`layout/Header`).
+        <MediaSlot
+          media={banner}
+          ratio="banner"
+          sizes={IMAGE_SIZES.full}
+          loading="eager"
+          className="-mt-(--header-h)"
+        />
+      )}
       {masthead ? (
         <DropMasthead drop={masthead} withDropLink />
       ) : (
