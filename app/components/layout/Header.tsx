@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
 
 import { useCartDrawer } from '~/components/cart/useCartDrawer';
@@ -7,6 +7,17 @@ import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/co
 import { Logo } from '~/components/common/Logo';
 import { TextLink } from '~/components/common/TextLink';
 import { useAside } from '~/components/layout/Aside';
+import {
+  HeaderDropdown,
+  type HeaderMenuItem,
+  NAV_DESKTOP_CLASS,
+  NAV_LABEL_CLASS,
+} from '~/components/layout/HeaderDropdown';
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+} from '~/components/ui/navigation-menu';
 import { BRAND } from '~/content/brand';
 import { useCart } from '~/lib/cart';
 import { cn } from '~/lib/cn';
@@ -97,61 +108,128 @@ export const HeaderMenu = ({
   publicStoreDomain: HeaderProps['publicStoreDomain'];
 }) => {
   const { close } = useAside();
-  const isMobile = viewport === 'mobile';
+  const items = (menu || FALLBACK_HEADER_MENU).items;
+  const resolveUrl = (url: string) => toInternalPath(url, { publicStoreDomain, primaryDomainUrl });
+
+  // Live never marks the current page in the nav, so no active state.
+  if (viewport === 'desktop') {
+    return (
+      // Radix renders the <nav>. Collapses at live's Impulse breakpoint
+      // (769px), not Tailwind's lg — the 12px nav fits well before 1024.
+      <NavigationMenu viewport={false} className="hidden flex-none impulse:flex">
+        <NavigationMenuList className="gap-5">
+          {items.map((item) =>
+            item.items.length > 0 ? (
+              <HeaderDropdown key={item.id} item={item} resolveUrl={resolveUrl} />
+            ) : (
+              item.url && (
+                <NavigationMenuItem key={item.id}>
+                  <NavLink
+                    end
+                    prefetch="intent"
+                    to={resolveUrl(item.url)}
+                    className={NAV_DESKTOP_CLASS}
+                  >
+                    {item.title}
+                  </NavLink>
+                </NavigationMenuItem>
+              )
+            )
+          )}
+        </NavigationMenuList>
+      </NavigationMenu>
+    );
+  }
 
   return (
     <nav
       // Live's mobile drawer clears the close button before the first link and
       // rules a hairline above it.
-      className={cn(
-        isMobile
-          ? 'border-border-subtle mt-[68px] flex flex-col border-t'
-          : // Collapses at live's Impulse breakpoint (769px), not Tailwind's
-            // lg — the 12px nav fits well before 1024.
-            'hidden items-center gap-5 impulse:flex'
-      )}
+      className="border-border-subtle mt-[68px] flex flex-col border-t"
       role="navigation"
     >
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
-        if (!item.url) return null;
-        return (
-          <NavLink
-            key={item.id}
-            end
-            onClick={close}
-            prefetch="intent"
-            to={toInternalPath(item.url, { publicStoreDomain, primaryDomainUrl })}
-            // Live never marks the current page in the nav, so no active state.
-            // Caps-UI tier: Archivo Condensed Medium (Gabe's override of the
-            // Inter caps-UI rule), ALL CAPS, +0.08em tracking.
-            className={cn(
-              'font-display font-medium tracking-caps uppercase',
-              isMobile
-                ? 'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
-                : // Live's underline wipe (.site-nav__link--underline:after):
-                  // a 2px rule that grows left-to-right over 500ms on hover.
-                  'relative py-1 text-xs after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 after:content-[""] hover:after:scale-x-100 motion-reduce:after:transition-none'
-            )}
-          >
-            {item.title}
-          </NavLink>
-        );
-      })}
-      {isMobile &&
-        BRAND.social
-          .filter((social) => social.platform === 'Instagram')
-          .map((social) => (
-            <TextLink
-              key={social.platform}
-              href={social.href}
-              aria-label={social.platform}
-              variant="bare"
-              className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
+      {items.map((item) =>
+        item.items.length > 0 ? (
+          <MobileMenuGroup key={item.id} item={item} resolveUrl={resolveUrl} onNavigate={close} />
+        ) : (
+          item.url && (
+            <NavLink
+              key={item.id}
+              end
+              onClick={close}
+              prefetch="intent"
+              to={resolveUrl(item.url)}
+              className={MOBILE_ROW_CLASS}
             >
-              <InstagramIcon className="size-5" />
-            </TextLink>
-          ))}
+              {item.title}
+            </NavLink>
+          )
+        )
+      )}
+      {BRAND.social
+        .filter((social) => social.platform === 'Instagram')
+        .map((social) => (
+          <TextLink
+            key={social.platform}
+            href={social.href}
+            aria-label={social.platform}
+            variant="bare"
+            className="border-border-subtle mx-5 mt-4 inline-flex size-11 items-center justify-center border transition-opacity hover:opacity-70"
+          >
+            <InstagramIcon className="size-5" />
+          </TextLink>
+        ))}
     </nav>
+  );
+};
+
+const MOBILE_ROW_CLASS = cn(
+  NAV_LABEL_CLASS,
+  'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
+);
+
+/**
+ * A nested item in the drawer: its title as a plain label row, then its
+ * children indented beneath. Always expanded — with a handful of children a
+ * disclosure would only hide them.
+ */
+const MobileMenuGroup = ({
+  item,
+  resolveUrl,
+  onNavigate,
+}: {
+  item: HeaderMenuItem;
+  resolveUrl: (url: string) => string;
+  onNavigate: () => void;
+}) => {
+  const labelId = useId();
+  return (
+    <div role="group" aria-labelledby={labelId} className="flex flex-col">
+      <span
+        id={labelId}
+        className={cn(
+          NAV_LABEL_CLASS,
+          'border-border-subtle text-support border-b px-5 py-4 text-sm'
+        )}
+      >
+        {item.title}
+      </span>
+      {item.items.map(
+        (child) =>
+          child.url && (
+            <NavLink
+              key={child.id}
+              end
+              onClick={onNavigate}
+              prefetch="intent"
+              to={resolveUrl(child.url)}
+              className={cn(MOBILE_ROW_CLASS, 'pl-8')}
+            >
+              {child.title}
+            </NavLink>
+          )
+      )}
+    </div>
   );
 };
 
@@ -226,7 +304,7 @@ const FALLBACK_HEADER_MENU = {
     resourceId: null,
     tags: [],
     title: link.title,
-    type: 'HTTP',
+    type: 'HTTP' as const,
     url: link.url,
     items: [],
   })),

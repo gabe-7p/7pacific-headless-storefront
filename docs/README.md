@@ -6,7 +6,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 
 - [architecture.md](architecture.md) — stack, request/data flow, code organization, the module pattern, env model, deployment.
 - [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) — how to verify the Meta Pixel (DevTools, Pixel Helper, `pnpm test:pixel`, Events Manager) in 15 minutes.
-- [runbooks/add-a-product.md](runbooks/add-a-product.md) — add or swap a product or color in Shopify (no deploy).
+- [runbooks/add-a-product.md](runbooks/add-a-product.md) — add or swap a product or color in Shopify, or add a header dropdown item (no deploy).
 - [migration-playbook.md](migration-playbook.md) — **historical**: the process used to port the Liquid theme to Hydrogen (the port is complete).
 - [decisions/](decisions/README.md) — Architecture Decision Records (the _why_ behind settled choices).
 - [tech-debt-plan.md](tech-debt-plan.md) — the ranked cleanup backlog from the 2026-11-03 audit: twelve stacked PRs (dead code → docs → helpers → tokens → enforcement → structural), evidence per item, decisions pending, and what was deliberately left out.

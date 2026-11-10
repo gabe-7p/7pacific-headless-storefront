@@ -7,3 +7,7 @@
    - ⚠️ **`custom.product_details` is per-color, not per-product-type.** Its `imageUrl`s are absolute CDN URLs, so copying a sibling's JSON verbatim (the captions ARE shared) silently ships another color's photos on the PDP. Swap every `imageUrl` to that color's own shot; keep `caption`/`subcaption`. Nothing in code can catch this — product images carry no alt text, so there's no way to map a photo to a caption automatically.
 5. **Add it to collections**: `baseline` (the shop-all collection page, titled BASELINE) and `homepage-first-drop` (drag into position — its order IS the homepage grid order).
 6. Only if a CTA should target it: update [app/content/links.ts](../../app/content/links.ts) — the one place product/collection handles appear in code.
+
+## Header dropdowns (Shopify-only, no deploy)
+
+The header renders any `main-menu` item that has children (Admin → Online Store → Navigation → Main Menu, drag an item under another) as a dropdown on desktop and as a labelled group in the mobile drawer (`layout/HeaderDropdown.tsx`). To add a collection or drop to **Collections**, nest a new item under it. Only one level of nesting is read. The parent's own link is never rendered, but Shopify requires one, so point it at a real page (it is `/drops/first-light` today).
