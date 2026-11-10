@@ -1,4 +1,6 @@
+import { ChevronDownIcon } from 'lucide-react';
 import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui';
+import { type ReactElement, useId, useState } from 'react';
 import { NavLink } from 'react-router';
 
 import { Container } from '~/components/common/Container';
@@ -7,6 +9,7 @@ import { Image } from '~/components/common/Image';
 import { SpecLine } from '~/components/common/SpecLine';
 import {
   type HeaderMenuItem,
+  MOBILE_ROW_CLASS,
   NAV_DESKTOP_CLASS,
   NAV_LABEL_CLASS,
 } from '~/components/layout/HeaderDropdown';
@@ -41,8 +44,10 @@ export const getCollectionEntries = (
 
 const MEDIA: Partial<Record<string, FilesImage>> = COLLECTIONS_MENU.media;
 
-/** The photo cards are 2-up in a column capped at 30rem, desktop only. */
-const CARD_SIZES = '(min-width: 1025px) 15rem, 0px';
+/** Desktop: 2-up in a column capped at 30rem, from impulse-lg. */
+const DESKTOP_CARD_SIZES = '(min-width: 1025px) 15rem, 0px';
+/** Drawer: 2-up across the 350px (450px from sm) drawer, mobile only. */
+const MOBILE_CARD_SIZES = '(min-width: 769px) 0px, (min-width: 640px) 13rem, 10rem';
 
 /**
  * Each column slides in from the left a beat after the one before it, on top
@@ -52,37 +57,91 @@ const CARD_SIZES = '(min-width: 1025px) 15rem, 0px';
 const COLUMN_ENTER =
   'animate-in fade-in-0 slide-in-from-left-4 duration-500 ease-(--ease-brand) fill-mode-both motion-reduce:animate-none';
 
+/**
+ * How a link joins its surface. Desktop wraps it in `NavigationMenuLink` (so
+ * a click counts as a menu selection and closes the panel); the drawer leaves
+ * it bare and closes itself through `onNavigate`.
+ */
+type SectionProps = {
+  entries: Array<CollectionEntry>;
+  wrap: (link: ReactElement) => ReactElement;
+  onNavigate?: () => void;
+  className?: string;
+};
+
 const LinkList = ({
   title,
-  entries,
   to,
-  delayClass,
-}: {
-  title: string;
-  entries: Array<CollectionEntry>;
-  to: (entry: CollectionEntry) => string;
-  delayClass: string;
-}) => (
-  <div className={cn(COLUMN_ENTER, delayClass)}>
+  entries,
+  wrap,
+  onNavigate,
+  className,
+}: SectionProps & { title: string; to: (entry: CollectionEntry) => string }) => (
+  <div className={className}>
     <SpecLine className="text-support">{title}</SpecLine>
     <ul className="mt-4 flex flex-col gap-1">
       {entries.map((entry) => (
         <li key={entry.id}>
-          <NavigationMenuLink asChild>
+          {wrap(
             <NavLink
               end
               prefetch="intent"
               to={to(entry)}
+              onClick={onNavigate}
               className={cn(NAV_LABEL_CLASS, 'px-0 py-1.5 text-base whitespace-nowrap')}
             >
               {entry.title}
             </NavLink>
-          </NavigationMenuLink>
+          )}
         </li>
       ))}
     </ul>
   </div>
 );
+
+/** One photo per collection (those with a `media` entry), a Cta to the grid under each. */
+const PhotoCards = ({
+  entries,
+  wrap,
+  onNavigate,
+  className,
+  sizes,
+}: SectionProps & { sizes: string }) => (
+  <ul className={cn('grid grid-cols-2 gap-5', className)}>
+    {entries.map((entry) => {
+      const media = MEDIA[entry.handle];
+      if (!media) return null;
+      return (
+        <li key={entry.id} className="flex flex-col items-center">
+          {/* The Cta below is the accessible link; the photo is a pointer-only twin. */}
+          {wrap(
+            <NavLink
+              to={entry.path}
+              prefetch="intent"
+              tabIndex={-1}
+              aria-hidden
+              onClick={onNavigate}
+              className="w-full p-0"
+            >
+              <Image
+                data={{ url: media.src, width: media.width, height: media.height }}
+                alt={media.alt}
+                sizes={sizes}
+                className="w-full object-cover"
+              />
+            </NavLink>
+          )}
+          <Cta to={entry.path} prefetch="intent" size="xs" className="mt-4" onClick={onNavigate}>
+            {entry.title}
+          </Cta>
+        </li>
+      );
+    })}
+  </ul>
+);
+
+const wrapDesktop = (link: ReactElement) => <NavigationMenuLink asChild>{link}</NavigationMenuLink>;
+const wrapBare = (link: ReactElement) => link;
 
 /**
  * The Collections mega-menu: a full-width panel under the header in the
@@ -109,46 +168,106 @@ export const CollectionsMegaMenu = ({
       <Container className="grid grid-cols-[auto_auto_1fr] gap-x-16 py-8 impulse-lg:gap-x-24">
         <LinkList
           title={COLLECTIONS_MENU.exploreTitle}
-          entries={entries}
           to={(entry) => dropUrl(entry.handle)}
-          delayClass="delay-75"
+          entries={entries}
+          wrap={wrapDesktop}
+          className={cn(COLUMN_ENTER, 'delay-75')}
         />
         <LinkList
           title={COLLECTIONS_MENU.shopTitle}
-          entries={entries}
           to={(entry) => entry.path}
-          delayClass="delay-150"
+          entries={entries}
+          wrap={wrapDesktop}
+          className={cn(COLUMN_ENTER, 'delay-150')}
         />
         {/* The photo cards need the width; below impulse-lg the lists are enough. */}
-        <ul
+        <PhotoCards
+          entries={entries}
+          wrap={wrapDesktop}
+          sizes={DESKTOP_CARD_SIZES}
           className={cn(
             COLUMN_ENTER,
-            'hidden w-full max-w-120 grid-cols-2 gap-5 justify-self-end delay-225 impulse-lg:grid'
+            'hidden w-full max-w-120 justify-self-end delay-225 impulse-lg:grid'
           )}
-        >
-          {entries.map((entry) => {
-            const media = MEDIA[entry.handle];
-            if (!media) return null;
-            return (
-              <li key={entry.id} className="flex flex-col items-center">
-                <NavigationMenuLink asChild className="w-full p-0">
-                  <NavLink to={entry.path} prefetch="intent" tabIndex={-1} aria-hidden>
-                    <Image
-                      data={{ url: media.src, width: media.width, height: media.height }}
-                      alt={media.alt}
-                      sizes={CARD_SIZES}
-                      className="w-full object-cover"
-                    />
-                  </NavLink>
-                </NavigationMenuLink>
-                <Cta to={entry.path} prefetch="intent" size="xs" className="mt-4">
-                  {entry.title}
-                </Cta>
-              </li>
-            );
-          })}
-        </ul>
+        />
       </Container>
     </NavigationMenuPrimitive.Content>
   </NavigationMenuItem>
 );
+
+/**
+ * The same three sections in the mobile drawer, stacked: the item's title is a
+ * disclosure row (chevron, `aria-expanded`) that opens Explore, Shop and the
+ * photo cards beneath it. Hand-built rather than an accordion primitive: one
+ * button toggling one region needs no roving focus or keyboard model. The
+ * height animates through `grid-rows` 0fr → 1fr, and `inert` keeps the closed
+ * region's links out of the tab order.
+ */
+export const CollectionsMobileGroup = ({
+  item,
+  entries,
+  onNavigate,
+}: {
+  item: HeaderMenuItem;
+  entries: Array<CollectionEntry>;
+  onNavigate: () => void;
+}) => {
+  const [open, setOpen] = useState(false);
+  const regionId = useId();
+  return (
+    <div className="flex flex-col">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={regionId}
+        onClick={() => setOpen((value) => !value)}
+        className={cn(
+          MOBILE_ROW_CLASS,
+          'flex cursor-pointer items-center justify-between text-left'
+        )}
+      >
+        {item.title}
+        <ChevronDownIcon
+          aria-hidden
+          className={cn(
+            'size-4 transition-transform duration-300 ease-(--ease-brand) motion-reduce:transition-none',
+            open && 'rotate-180'
+          )}
+        />
+      </button>
+      <div
+        id={regionId}
+        inert={!open}
+        className={cn(
+          'grid transition-[grid-template-rows] duration-300 ease-(--ease-brand) motion-reduce:transition-none',
+          open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="border-border-subtle flex flex-col gap-8 border-b px-5 py-6">
+            <LinkList
+              title={COLLECTIONS_MENU.exploreTitle}
+              to={(entry) => dropUrl(entry.handle)}
+              entries={entries}
+              wrap={wrapBare}
+              onNavigate={onNavigate}
+            />
+            <LinkList
+              title={COLLECTIONS_MENU.shopTitle}
+              to={(entry) => entry.path}
+              entries={entries}
+              wrap={wrapBare}
+              onNavigate={onNavigate}
+            />
+            <PhotoCards
+              entries={entries}
+              wrap={wrapBare}
+              onNavigate={onNavigate}
+              sizes={MOBILE_CARD_SIZES}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

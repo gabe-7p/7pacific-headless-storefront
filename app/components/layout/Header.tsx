@@ -7,10 +7,15 @@ import { BagIcon, HamburgerIcon, InstagramIcon, UserIcon } from '~/components/co
 import { Logo } from '~/components/common/Logo';
 import { TextLink } from '~/components/common/TextLink';
 import { useAside } from '~/components/layout/Aside';
-import { CollectionsMegaMenu, getCollectionEntries } from '~/components/layout/CollectionsMegaMenu';
+import {
+  CollectionsMegaMenu,
+  CollectionsMobileGroup,
+  getCollectionEntries,
+} from '~/components/layout/CollectionsMegaMenu';
 import {
   HeaderDropdown,
   type HeaderMenuItem,
+  MOBILE_ROW_CLASS,
   NAV_DESKTOP_CLASS,
   NAV_LABEL_CLASS,
 } from '~/components/layout/HeaderDropdown';
@@ -180,24 +185,35 @@ export const HeaderMenu = ({
       className="border-border-subtle mt-[68px] flex flex-col border-t"
       role="navigation"
     >
-      {items.map((item) =>
-        item.items.length > 0 ? (
-          <MobileMenuGroup key={item.id} item={item} resolveUrl={resolveUrl} onNavigate={close} />
+      {items.map((item) => {
+        if (item.items.length === 0) {
+          return (
+            item.url && (
+              <NavLink
+                key={item.id}
+                end
+                onClick={close}
+                prefetch="intent"
+                to={resolveUrl(item.url)}
+                className={MOBILE_ROW_CLASS}
+              >
+                {item.title}
+              </NavLink>
+            )
+          );
+        }
+        const collections = getCollectionEntries(item, resolveUrl);
+        return collections ? (
+          <CollectionsMobileGroup
+            key={item.id}
+            item={item}
+            entries={collections}
+            onNavigate={close}
+          />
         ) : (
-          item.url && (
-            <NavLink
-              key={item.id}
-              end
-              onClick={close}
-              prefetch="intent"
-              to={resolveUrl(item.url)}
-              className={MOBILE_ROW_CLASS}
-            >
-              {item.title}
-            </NavLink>
-          )
-        )
-      )}
+          <MobileMenuGroup key={item.id} item={item} resolveUrl={resolveUrl} onNavigate={close} />
+        );
+      })}
       {BRAND.social
         .filter((social) => social.platform === 'Instagram')
         .map((social) => (
@@ -214,11 +230,6 @@ export const HeaderMenu = ({
     </nav>
   );
 };
-
-const MOBILE_ROW_CLASS = cn(
-  NAV_LABEL_CLASS,
-  'border-border-subtle border-b px-5 py-4 text-sm transition-opacity hover:opacity-70'
-);
 
 /**
  * A nested item in the drawer: its title as a plain label row, then its
