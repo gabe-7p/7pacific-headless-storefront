@@ -20,11 +20,16 @@ export const COLLECTIONS_MENU = {
       height: 4960,
       alt: 'Two athletes in Baseline gear leaning against a chain-link fence',
     }),
-    [HANDLES.firstLightCollection]: filesImage('chris_gym_dusty_rose_qz_waist_up.jpg', {
-      v: 1794288061,
-      width: 4259,
-      height: 5511,
-      alt: 'Athlete in a dusty rose First Light quarter-zip, hands on hips, in a dark gym',
-    }),
+    // A 4:5 top crop of chris_gym_dusty_rose_qz_waist_up.jpg, so both cards share
+    // a shape (Files appended the id to the name).
+    [HANDLES.firstLightCollection]: filesImage(
+      'chris_gym_dusty_rose_qz_waist_up_4x5_350d1703-343e-44e6-94b4-44665d12405b.jpg',
+      {
+        v: 1794288243,
+        width: 3968,
+        height: 4960,
+        alt: 'Athlete in a dusty rose First Light quarter-zip, hands on hips, in a dark gym',
+      }
+    ),
   } satisfies Record<string, FilesImage>,
 } as const;

@@ -127,10 +127,6 @@ const PhotoCards = ({
                 data={{ url: media.src, width: media.width, height: media.height }}
                 alt={media.alt}
                 sizes={sizes}
-                // One card shape whatever the file's ratio (the First Light
-                // photo is 4259×5511); top-anchored so heads stay in frame.
-                aspectRatio="4/5"
-                crop="top"
                 className="w-full object-cover"
               />
             </NavLink>
