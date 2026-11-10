@@ -98,6 +98,45 @@ describe('HeaderMenu (desktop)', () => {
   });
 });
 
+describe('HeaderMenu (desktop) — collections mega-menu', () => {
+  const COLLECTIONS_MENU_DATA = {
+    ...MENU,
+    items: [
+      parent('Collections', '/drops/first-light', [
+        leaf('Baseline', `${DOMAIN}/collections/baseline`),
+        leaf('First Light', '/collections/first-light'),
+      ]),
+    ],
+  };
+
+  it('renders explore (drop page) and shop (collection) links, plus a Cta per photo', () => {
+    renderMenu('desktop', COLLECTIONS_MENU_DATA);
+    fireEvent.click(screen.getByRole('button', { name: /collections/i }));
+
+    expect(screen.getByText('Explore The Collection')).toBeTruthy();
+    expect(screen.getByText('Shop The Collection')).toBeTruthy();
+    const hrefs = (name: string) =>
+      screen.getAllByRole('link', { name }).map((link) => link.getAttribute('href'));
+    // Explore → drop page; Shop list → collection; photo Cta → collection.
+    expect(hrefs('Baseline')).toEqual([
+      '/drops/baseline',
+      '/collections/baseline',
+      '/collections/baseline',
+    ]);
+    expect(hrefs('First Light')).toEqual([
+      '/drops/first-light',
+      '/collections/first-light',
+      '/collections/first-light',
+    ]);
+  });
+
+  it('keeps the plain dropdown when a child is not a collection link', () => {
+    renderMenu('desktop');
+    fireEvent.click(screen.getByRole('button', { name: /collections/i }));
+    expect(screen.queryByText('Explore The Collection')).toBeNull();
+  });
+});
+
 describe('HeaderMenu (mobile)', () => {
   it('renders a nested item as a labelled group of its child links', () => {
     renderMenu('mobile');

@@ -30,6 +30,10 @@ export const productUrl = (
 /** `/collections/<handle>` — a collection page. */
 export const collectionUrl = (handle: string): string => `/collections/${handle}`;
 
+/** The handle of a `collectionUrl` path (`/collections/<handle>`, nothing after), else null. */
+export const collectionHandleFromPath = (path: string): string | null =>
+  /^\/collections\/([^/?#]+)\/?$/.exec(path)?.[1] ?? null;
+
 /** `/pages/<handle>` — a Shopify page (or a route that shadows one, like our-story). */
 export const pageUrl = (handle: string): string => `/pages/${handle}`;
 

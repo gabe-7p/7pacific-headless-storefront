@@ -35,5 +35,7 @@ declare global {
     PUBLIC_META_PIXEL_ID?: string;
     /** [public] Meta domain-verification token — renders the `facebook-domain-verification` meta tag when set. */
     PUBLIC_META_DOMAIN_VERIFICATION?: string;
+    /** [server] `true` reads the header from the `main-menu-test` Shopify menu instead of `main-menu` (local preview of nav changes). Never set on Production. */
+    HEADER_MENU_TEST?: string;
   }
 }

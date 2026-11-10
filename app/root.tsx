@@ -99,7 +99,10 @@ export async function loader({ context, request, url }: Route.LoaderArgs) {
   // The cart is awaited so the first paint has it (no empty-then-filled flicker).
   const [header, cartResult] = await Promise.all([
     queryStorefront(storefront, HEADER_QUERY, {
-      variables: { headerMenuHandle: HANDLES.headerMenu },
+      variables: {
+        headerMenuHandle:
+          env.HEADER_MENU_TEST === 'true' ? HANDLES.headerMenuTest : HANDLES.headerMenu,
+      },
       cache: Cache.long(),
     }),
     cartHandlers.get({ storefrontClient: storefront, request }),
