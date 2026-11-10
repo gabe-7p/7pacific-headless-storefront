@@ -30,9 +30,9 @@ const RATIOS = {
   landscape: 'aspect-[16/10] sm:aspect-[4/3]',
   /** Drop-page product tile (the PLP card itself crops square). */
   product: 'aspect-[4/5]',
-  /** Full-bleed strip with a fixed height, capped at 400px (the drop
-      collection banners): a height, not a ratio, so it never grows past the cap. */
-  banner: 'h-72 md:h-100',
+  /** Full-bleed strip with a fixed height, 256px / 352px from md (the drop
+      collection banners): a height, not a ratio, so it never grows past it. */
+  banner: 'h-64 md:h-88',
 } as const;
 
 export type MediaSlotRatio = keyof typeof RATIOS;
