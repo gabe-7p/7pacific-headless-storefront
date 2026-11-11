@@ -25,5 +25,5 @@ export const FEATURE_FLAGS: {
   dropTwoTeaser: true,
   baselineIntro: false,
   firstLightLookbook: false,
-  firstLightCollection: true,
+  firstLightCollection: false,
 };
