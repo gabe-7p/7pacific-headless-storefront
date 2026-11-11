@@ -72,10 +72,18 @@ describe('saveSignup', () => {
     });
   });
 
-  it('tags and subscribes a known customer without touching the name', async () => {
+  it('tags and subscribes a known customer without touching its name', async () => {
     const fetchMock = stubFetch(
       token(),
-      json({ data: { customerByIdentifier: { id: 'gid://shopify/Customer/7' } } }),
+      json({
+        data: {
+          customerByIdentifier: {
+            id: 'gid://shopify/Customer/7',
+            firstName: 'Mason',
+            lastName: 'Reyes',
+          },
+        },
+      }),
       json({
         data: {
           tagsAdd: { userErrors: [] },
@@ -84,7 +92,11 @@ describe('saveSignup', () => {
       })
     );
 
-    const result = await saveSignup(env, { list: 'newsletter', email: 'mason@example.com' });
+    const result = await saveSignup(env, {
+      list: 'newsletter',
+      email: 'mason@example.com',
+      name: 'M',
+    });
 
     expect(result).toEqual({ ok: true });
     expect(variablesOf(fetchMock, 2)).toEqual({
@@ -97,6 +109,38 @@ describe('saveSignup', () => {
           marketingOptInLevel: 'SINGLE_OPT_IN',
         },
       },
+      profile: { id: 'gid://shopify/Customer/7', firstName: 'M' },
+      fillName: false,
+    });
+  });
+
+  it('gives a known customer with no name the signup name', async () => {
+    const fetchMock = stubFetch(
+      token(),
+      json({
+        data: {
+          customerByIdentifier: { id: 'gid://shopify/Customer/7', firstName: null, lastName: null },
+        },
+      }),
+      json({
+        data: {
+          tagsAdd: { userErrors: [] },
+          customerEmailMarketingConsentUpdate: { userErrors: [] },
+          customerUpdate: { userErrors: [] },
+        },
+      })
+    );
+
+    const result = await saveSignup(env, {
+      list: 'waitlist',
+      email: 'mason@example.com',
+      name: 'Mason Reyes',
+    });
+
+    expect(result).toEqual({ ok: true });
+    expect(variablesOf(fetchMock, 2)).toMatchObject({
+      profile: { id: 'gid://shopify/Customer/7', firstName: 'Mason', lastName: 'Reyes' },
+      fillName: true,
     });
   });
 
@@ -119,7 +163,7 @@ describe('saveSignup', () => {
       })
     );
 
-    await saveSignup(env, { list: 'newsletter', email: 'mason@example.com' });
+    await saveSignup(env, { list: 'newsletter', email: 'mason@example.com', name: 'Mason' });
     await saveSignup(env, { list: 'waitlist', email: 'mason@example.com', name: 'Mason' });
 
     const tokenCalls = fetchMock.mock.calls.filter(([url]) =>
@@ -142,7 +186,11 @@ describe('saveSignup', () => {
       })
     );
 
-    const result = await saveSignup(env, { list: 'newsletter', email: 'mason@example.c' });
+    const result = await saveSignup(env, {
+      list: 'newsletter',
+      email: 'mason@example.c',
+      name: 'Mason',
+    });
     expect(result).toEqual({ ok: false, reason: 'invalid-email' });
   });
 
@@ -151,6 +199,7 @@ describe('saveSignup', () => {
     const result = await saveSignup({ PUBLIC_STORE_DOMAIN: 'test.myshopify.com' } as Env, {
       list: 'newsletter',
       email: 'mason@example.com',
+      name: 'Mason',
     });
     expect(result).toEqual({ ok: false, reason: 'failed' });
     expect(fetchMock).not.toHaveBeenCalled();
@@ -158,13 +207,13 @@ describe('saveSignup', () => {
 
   it('fails on a rejected token exchange or GraphQL errors', async () => {
     stubFetch(json({ error: 'shop_not_permitted' }, 400));
-    expect(await saveSignup(env, { list: 'newsletter', email: 'a@b.co' })).toEqual({
+    expect(await saveSignup(env, { list: 'newsletter', email: 'a@b.co', name: 'A' })).toEqual({
       ok: false,
       reason: 'failed',
     });
 
     stubFetch(token(), json({ errors: [{ message: 'Access denied for customerByIdentifier' }] }));
-    expect(await saveSignup(env, { list: 'newsletter', email: 'a@b.co' })).toEqual({
+    expect(await saveSignup(env, { list: 'newsletter', email: 'a@b.co', name: 'A' })).toEqual({
       ok: false,
       reason: 'failed',
     });

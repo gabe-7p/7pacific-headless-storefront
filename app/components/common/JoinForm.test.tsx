@@ -34,7 +34,7 @@ afterEach(() => {
 });
 
 describe('JoinForm — newsletter', () => {
-  it('posts the email and the list to /api/subscribe', () => {
+  it('posts the name, email and list to /api/subscribe', () => {
     renderForm();
     const form = document.querySelector('form');
     expect(form).toHaveProperty('method', 'post');
@@ -44,7 +44,9 @@ describe('JoinForm — newsletter', () => {
       'name',
       'email'
     );
-    expect(screen.queryByLabelText('Name')).toBeNull();
+    const name = screen.getByLabelText(JOIN_COPY.newsletter.namePlaceholder);
+    expect(name).toHaveProperty('name', 'name');
+    expect(name).toHaveProperty('required', true);
     // Browser validation stays on unless the surface opts out.
     expect(form?.noValidate).toBe(false);
   });
@@ -83,12 +85,12 @@ describe('JoinForm — newsletter', () => {
 });
 
 describe('JoinForm — waitlist', () => {
-  const waitlist = { list: 'waitlist', copy: JOIN_COPY.waitlist, withName: true } as const;
+  const waitlist = { list: 'waitlist', copy: JOIN_COPY.waitlist } as const;
 
-  it('adds the name field, sends the waitlist list and skips browser validation', () => {
+  it('renders the name field, sends the waitlist list and skips browser validation', () => {
     renderForm({ ...waitlist, noValidate: true });
     expect(hidden('list')?.value).toBe('waitlist');
-    expect(screen.getByLabelText(JOIN_COPY.waitlist.namePlaceholder ?? '')).toHaveProperty(
+    expect(screen.getByLabelText(JOIN_COPY.waitlist.namePlaceholder)).toHaveProperty(
       'name',
       'name'
     );

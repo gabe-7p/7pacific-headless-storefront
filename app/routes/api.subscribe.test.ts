@@ -41,14 +41,16 @@ beforeEach(() => {
 
 describe('POST /api/subscribe', () => {
   it('confirms a valid newsletter signup and captures the event', async () => {
-    const result = await call(post({ list: 'newsletter', email: 'mason@example.com' }));
+    const result = await call(
+      post({ list: 'newsletter', name: 'Mason', email: 'mason@example.com' })
+    );
     expect(result.data).toEqual({ ok: true });
     expect(result.init?.status).toBeUndefined();
     expect(capture).toHaveBeenCalledWith({ event: ANALYTICS_EVENT.newsletterSubscribed });
     expect(save).toHaveBeenCalledWith(env, {
       list: 'newsletter',
       email: 'mason@example.com',
-      name: undefined,
+      name: 'Mason',
     });
   });
 
@@ -77,25 +79,28 @@ describe('POST /api/subscribe', () => {
 
   it('shows an email Shopify rejects as an email error', async () => {
     save.mockResolvedValue({ ok: false, reason: 'invalid-email' });
-    const result = await call(post({ list: 'newsletter', email: 'mason@example.c' }));
+    const result = await call(
+      post({ list: 'newsletter', name: 'Mason', email: 'mason@example.c' })
+    );
     expect(result.data).toEqual({ ok: false, errors: { email: INVALID_EMAIL_MESSAGE } });
   });
 
   it('rejects an invalid email with the email message', async () => {
-    const result = await call(post({ list: 'newsletter', email: 'nope' }));
+    const result = await call(post({ list: 'newsletter', name: 'Mason', email: 'nope' }));
     expect(result.init?.status).toBe(400);
     expect(result.data).toEqual({ ok: false, errors: { email: INVALID_EMAIL_MESSAGE } });
     expect(capture).not.toHaveBeenCalled();
     expect(save).not.toHaveBeenCalled();
   });
 
-  it('requires a name on the waitlist only', async () => {
-    const result = await call(post({ list: 'waitlist', name: '  ', email: 'a@b.co' }));
-    expect(result.init?.status).toBe(400);
-    expect(result.data).toEqual({ ok: false, errors: { name: REQUIRED_NAME_MESSAGE } });
+  it.each(['waitlist', 'newsletter'])('requires a name on the %s', async (list) => {
+    const blank = await call(post({ list, name: '  ', email: 'a@b.co' }));
+    expect(blank.init?.status).toBe(400);
+    expect(blank.data).toEqual({ ok: false, errors: { name: REQUIRED_NAME_MESSAGE } });
 
-    const newsletter = await call(post({ list: 'newsletter', email: 'a@b.co' }));
-    expect(newsletter.data).toEqual({ ok: true });
+    const missing = await call(post({ list, email: 'a@b.co' }));
+    expect(missing.data).toEqual({ ok: false, errors: { name: REQUIRED_NAME_MESSAGE } });
+    expect(save).not.toHaveBeenCalled();
   });
 
   it('rejects an unknown list', async () => {

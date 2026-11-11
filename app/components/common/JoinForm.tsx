@@ -26,8 +26,6 @@ type JoinFormProps = {
   /** Which list the signup lands on — sent as the `list` field. */
   list: JoinList;
   copy: JoinFormCopy;
-  /** Adds the name field above the email (the waitlist contract). */
-  withName?: boolean;
   /**
    * The submit device: a `Cta` below the fields (default) or the mail glyph
    * sitting inside the email field's right edge — the footer treatment.
@@ -46,14 +44,13 @@ type JoinFormProps = {
 };
 
 /**
- * The one signup form — owns the /api/subscribe fetcher, the submitting and
+ * The one signup form (name + email on every list) — owns the /api/subscribe fetcher, the submitting and
  * succeeded states, and per-field errors for whichever list it's pointed at.
  * On success the form is replaced by the confirmation line.
  */
 export const JoinForm = ({
   list,
   copy,
-  withName = false,
   submit = 'cta',
   noValidate = false,
   className,
@@ -104,23 +101,22 @@ export const JoinForm = ({
       className={className}
     >
       <input type="hidden" name="list" value={list} />
-      {withName && (
-        <div>
-          <label htmlFor={nameId} className="sr-only">
-            {copy.namePlaceholder}
-          </label>
-          <input
-            id={nameId}
-            type="text"
-            name="name"
-            required
-            autoComplete="name"
-            placeholder={copy.namePlaceholder}
-            className={fieldClassName}
-          />
-          {fieldError(errors?.name)}
-        </div>
-      )}
+      {/* Every list collects a name; the API rejects a signup without one. */}
+      <div className={cn(submit === 'mail' && 'max-w-sm')}>
+        <label htmlFor={nameId} className="sr-only">
+          {copy.namePlaceholder}
+        </label>
+        <input
+          id={nameId}
+          type="text"
+          name="name"
+          required
+          autoComplete="name"
+          placeholder={copy.namePlaceholder}
+          className={fieldClassName}
+        />
+        {fieldError(errors?.name)}
+      </div>
       <div>
         <label htmlFor={emailId} className="sr-only">
           {copy.emailPlaceholder}

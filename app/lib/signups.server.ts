@@ -22,7 +22,7 @@ const SUBSCRIBED = { marketingState: 'SUBSCRIBED', marketingOptInLevel: 'SINGLE_
 
 const CUSTOMER_BY_EMAIL_QUERY = `
   query SignupCustomer($email: String!) {
-    customerByIdentifier(identifier: { emailAddress: $email }) { id }
+    customerByIdentifier(identifier: { emailAddress: $email }) { id firstName lastName }
   }
 `;
 
@@ -37,13 +37,18 @@ const CUSTOMER_UPDATE_MUTATION = `
     $id: ID!
     $tags: [String!]!
     $consent: CustomerEmailMarketingConsentUpdateInput!
+    $profile: CustomerInput!
+    $fillName: Boolean!
   ) {
     tagsAdd(id: $id, tags: $tags) { userErrors { field message } }
     customerEmailMarketingConsentUpdate(input: $consent) { userErrors { field message } }
+    customerUpdate(input: $profile) @include(if: $fillName) { userErrors { field message } }
   }
 `;
 
 type UserErrors = Array<{ field: Array<string> | null; message: string }>;
+
+type ExistingCustomer = { id: string; firstName: string | null; lastName: string | null };
 
 export type SignupResult = { ok: true } | { ok: false; reason: 'invalid-email' | 'failed' };
 
@@ -60,33 +65,39 @@ const failed = (errors: UserErrors): SignupResult => {
 };
 
 /**
- * Save a signup to Shopify. A new email creates the customer (name included
- * when the list collects one, tagged `prospect` too); a known email keeps its
- * name and gains the list's tag and a subscribed marketing state. Never throws: an Admin API
+ * Save a signup to Shopify. A new email creates the customer with its name
+ * (tagged `prospect` too); a known email gains the list's tag and a subscribed
+ * marketing state, and takes the signup's name only if it has none — an
+ * email-only newsletter signup from before names were required, say. A name
+ * already on the customer (from an order) is kept. Never throws: an Admin API
  * failure is logged and reported as `failed`.
  */
 export const saveSignup = async (
   env: Env,
-  { list, email, name }: { list: JoinList; email: string; name?: string }
+  { list, email, name }: { list: JoinList; email: string; name: string }
 ): Promise<SignupResult> => {
   const tags = [SIGNUP_TAGS[list]];
   try {
     const { customerByIdentifier: existing } = await adminGraphql<{
-      customerByIdentifier: { id: string } | null;
+      customerByIdentifier: ExistingCustomer | null;
     }>(env, CUSTOMER_BY_EMAIL_QUERY, { email });
 
     if (existing) {
       const result = await adminGraphql<{
         tagsAdd: { userErrors: UserErrors };
         customerEmailMarketingConsentUpdate: { userErrors: UserErrors };
+        customerUpdate?: { userErrors: UserErrors };
       }>(env, CUSTOMER_UPDATE_MUTATION, {
         id: existing.id,
         tags,
         consent: { customerId: existing.id, emailMarketingConsent: SUBSCRIBED },
+        profile: { id: existing.id, ...splitName(name) },
+        fillName: !existing.firstName && !existing.lastName,
       });
       const errors = [
         ...result.tagsAdd.userErrors,
         ...result.customerEmailMarketingConsentUpdate.userErrors,
+        ...(result.customerUpdate?.userErrors ?? []),
       ];
       return errors.length > 0 ? failed(errors) : { ok: true };
     }
@@ -96,7 +107,7 @@ export const saveSignup = async (
     }>(env, CUSTOMER_CREATE_MUTATION, {
       input: {
         email,
-        ...(name ? splitName(name) : {}),
+        ...splitName(name),
         tags: [...tags, NEW_CUSTOMER_TAG],
         emailMarketingConsent: SUBSCRIBED,
       },
