@@ -81,7 +81,6 @@ const WaitlistPanel = () => {
       <JoinForm
         list="waitlist"
         copy={copy}
-        withName
         noValidate
         className="mt-5 space-y-4"
         ctaClassName="mt-2"

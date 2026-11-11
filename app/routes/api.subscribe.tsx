@@ -27,8 +27,8 @@ const EVENT_BY_LIST: Record<JoinList, string> = {
 /**
  * The one signup endpoint (POST /api/subscribe) behind `JoinForm`.
  *
- * Request: `list` (`newsletter` | `waitlist`), `email`, and — for the
- * waitlist — `name`. Each valid signup is saved as a Shopify customer tagged
+ * Request: `list` (`newsletter` | `waitlist`), `name` and `email` — both
+ * required on every list. Each valid signup is saved as a Shopify customer tagged
  * with its list (lib/signups.server.ts). Response: `{ ok: true }`, or
  * `{ ok: false, errors }` with a message per failed field (400), `list` for
  * an unknown list (400) or a save that failed (502), or a non-POST (405).
@@ -39,10 +39,7 @@ export const action = ({ request, context }: Route.ActionArgs) =>
     check: (form) => {
       if (!isJoinList(readField(form, 'list'))) return { list: UNKNOWN_LIST_MESSAGE };
       return {
-        name:
-          readField(form, 'list') === 'waitlist'
-            ? validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE)
-            : undefined,
+        name: validateRequired(readField(form, 'name'), REQUIRED_NAME_MESSAGE),
         email: validateEmail(readField(form, 'email')),
       };
     },
@@ -53,7 +50,7 @@ export const action = ({ request, context }: Route.ActionArgs) =>
       const result = await saveSignup(context.get(oxygenContext).env, {
         list,
         email: readField(form, 'email'),
-        name: list === 'waitlist' ? readField(form, 'name') : undefined,
+        name: readField(form, 'name'),
       });
       if (!result.ok) {
         return result.reason === 'invalid-email'

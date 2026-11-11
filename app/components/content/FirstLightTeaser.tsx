@@ -22,7 +22,6 @@ const EarlyAccessForm = () => (
   <JoinForm
     list="waitlist"
     copy={FIRST_LIGHT.earlyAccess}
-    withName
     noValidate
     className="mt-6 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
     tone="day"

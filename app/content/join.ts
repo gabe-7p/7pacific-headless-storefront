@@ -20,8 +20,8 @@ export const isJoinList = (value: string): value is JoinList =>
 
 /** What `JoinForm` needs to render one list's fields and outcome. */
 export type JoinFormCopy = {
-  /** Only read when the form renders a name field (`withName`). */
-  namePlaceholder?: string;
+  /** Every list collects a name — the API rejects a signup without one. */
+  namePlaceholder: string;
   emailPlaceholder: string;
   submitLabel: string;
   successMessage: string;
@@ -43,14 +43,15 @@ export const WAITLIST_SUCCESS_MESSAGE = 'You’re on it. See you at first light.
 
 export const JOIN_COPY: Record<JoinList, JoinDialogCopy> = {
   /**
-   * The roster (email only). One set of lines shared by the footer signup and
+   * The roster (name + email). One set of lines shared by the footer signup and
    * the click-triggered "Join the roster" dialog, so the
    * dialog continues the CTA that opened it — the body opens with the same
    * pitch paragraph the homepage Roster section and PDP banner show.
    */
   newsletter: {
     heading: 'Join the roster',
-    body: `${MEMBERSHIP_PITCH.body} Leave your email and we add your name to the book.`,
+    body: `${MEMBERSHIP_PITCH.body} Leave your name and email and we add you to the book.`,
+    namePlaceholder: 'Name',
     emailPlaceholder: 'your@email.com',
     submitLabel: 'Add my name',
     successMessage: 'You’re in the book. See you at the next session.',
