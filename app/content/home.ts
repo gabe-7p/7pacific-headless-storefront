@@ -23,16 +23,24 @@ import { instagramPostUrl, youtubeWatchUrl } from '~/lib/urls';
  * plays `ogVideo` inline; apps that only show a still (SMS/RCS, Slack, …)
  * get `ogImage`. Both are the hero clip with the white lockup over the hero
  * headline burned in (Archivo Condensed 500, court, bottom-left over a
- * bottom wash), rendered
- * from the clip's 720p rendition: public/og-home.mp4 (1280×720, 8.8s, ~6 MB)
- * and its first frame at 1200×630, public/og-home.jpg. Re-render both if
- * the hero clip or headline changes. Absolute: scrapers don't resolve
+ * bottom wash), rendered from the clip's 720p rendition. Re-render both if
+ * the hero clip or headline changes.
+ *
+ * The video lives on Shopify Files, not in public/: Apple's player needs
+ * byte-range (206) responses to play an mp4, and Oxygen answers a `Range`
+ * request for a public/ file with the whole body (200), so iMessage fell
+ * back to the still. Files' video CDN serves ranges. The still stays in
+ * public/ (1200×630, public/og-home.jpg). Absolute: scrapers don't resolve
  * relative paths.
  */
 export const HOME_META = {
   title: '7Pacific · Lightweight and Breathable Training Gear',
   ogImage: `${BRAND.siteUrl}/og-home.jpg`,
-  ogVideo: { url: `${BRAND.siteUrl}/og-home.mp4`, width: 1280, height: 720 },
+  ogVideo: {
+    url: shopifyVideo('1da4bf6ce17c4ffebaf60bdf2a39f8b3', 'HD-720p-4.5Mbps-100946395'),
+    width: 1280,
+    height: 720,
+  },
 } as const;
 
 export const HOME_HERO = {
