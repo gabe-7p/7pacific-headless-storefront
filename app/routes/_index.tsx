@@ -21,10 +21,9 @@ import type { Route } from './+types/_index';
 export const meta: Route.MetaFunction = () => {
   return buildMeta({
     absoluteTitle: HOME_META.title,
-    // Share previews (iMessage, Slack, …) show a dedicated 1200×630 card:
-    // the hero shot with the black wordmark overlaid (public/og-home.jpg).
-    // Absolute: scrapers don't resolve relative paths.
+    // Share previews: the hero clip with its headline (see HOME_META).
     image: HOME_META.ogImage,
+    video: HOME_META.ogVideo,
   });
 };
 

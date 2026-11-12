@@ -18,11 +18,21 @@ import {
 } from '~/lib/shopifyFiles';
 import { instagramPostUrl, youtubeWatchUrl } from '~/lib/urls';
 
-/** The homepage's `<title>` (used verbatim) and its 1200×630 share card. */
+/**
+ * The homepage's `<title>` (used verbatim) and its share preview. iMessage
+ * plays `ogVideo` inline; apps that only show a still (SMS/RCS, Slack, …)
+ * get `ogImage`. Both are the hero clip with the white lockup over the hero
+ * headline burned in (Archivo Condensed 500, court, bottom-left over a
+ * bottom wash), rendered
+ * from the clip's 720p rendition: public/og-home.mp4 (1280×720, 8.8s, ~6 MB)
+ * and its first frame at 1200×630, public/og-home.jpg. Re-render both if
+ * the hero clip or headline changes. Absolute: scrapers don't resolve
+ * relative paths.
+ */
 export const HOME_META = {
   title: '7Pacific · Lightweight and Breathable Training Gear',
-  // The hero shot with the black wordmark overlaid (public/og-home.jpg).
   ogImage: `${BRAND.siteUrl}/og-home.jpg`,
+  ogVideo: { url: `${BRAND.siteUrl}/og-home.mp4`, width: 1280, height: 720 },
 } as const;
 
 export const HOME_HERO = {
