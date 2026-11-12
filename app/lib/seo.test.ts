@@ -51,6 +51,21 @@ describe('buildMeta', () => {
     });
   });
 
+  it('emits og:video tags only when a video is given', () => {
+    expect(
+      buildMeta({ title: 'X' }).some((tag) => 'property' in tag && tag.property === 'og:video')
+    ).toBe(false);
+    const meta = buildMeta({
+      title: 'X',
+      video: { url: 'https://cdn/x.mp4', width: 1280, height: 720 },
+    });
+    expect(meta).toContainEqual({ property: 'og:video', content: 'https://cdn/x.mp4' });
+    expect(meta).toContainEqual({ property: 'og:video:secure_url', content: 'https://cdn/x.mp4' });
+    expect(meta).toContainEqual({ property: 'og:video:type', content: 'video/mp4' });
+    expect(meta).toContainEqual({ property: 'og:video:width', content: '1280' });
+    expect(meta).toContainEqual({ property: 'og:video:height', content: '720' });
+  });
+
   it('emits an absolute <link rel=canonical> on the brand origin only when given a path', () => {
     expect(buildMeta({ title: 'X' }).some((tag) => 'rel' in tag)).toBe(false);
     expect(buildMeta({ title: 'X', canonical: '/products/slate' })).toContainEqual({

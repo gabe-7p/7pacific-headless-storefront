@@ -42,7 +42,7 @@ app/
   lib/           request wiring (`shopifyMiddleware.ts`, `storefront.ts`, `oxygen.ts`, `csp.ts`), data (`fragments.ts`, `product/` incl. `product/page.ts`, `cart*.ts`; `cart.fixtures.ts` is test-only), `analytics/`, and cross-cutting helpers (`urls.ts`, `i18n.ts`, `money.ts`, `events.ts`, …) + colocated *.test.ts — file-by-file in [docs/architecture.md](docs/architecture.md#code-organization)
   assets/        bundled static assets imported by components (logo/tech-stack SVGs, favicon)
   styles/        tailwind.css — the single stylesheet (tokens + base layer; no other globals)
-public/          static files served at the web root as-is (favicon.ico, og-home.jpg, topography.jpg, llms.txt — the GEO brand summary, copy mirrors Notion)
+public/          static files served at the web root as-is (favicon.ico, og-home.jpg + og-home.mp4 — the homepage share preview, topography.jpg, llms.txt — the GEO brand summary, copy mirrors Notion)
 *-graphql-env.d.ts Storefront API schema environments written by the Hydrogen ts-plugin (gitignored, never edit)
 .claude/skills/  hydrogen-* + migrate-to-hydrogen-2026-10 are synced from the package (`hydrogen skills sync`) — never hand-edit; `logs-*` and `replay-vision-*` are PostHog wizard output; `.agents/skills/` is a tracked twin written by the same sync
 .codex/ .cursor/ .husky/ .vscode/  per-tool config (Codex/Cursor read CLAUDE.md; husky runs lint-staged on commit)
