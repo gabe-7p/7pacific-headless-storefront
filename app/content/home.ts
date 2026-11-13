@@ -199,7 +199,7 @@ export const HOME_BASELINE_INTRO = {
 /** The homepage product grid — First Light first, then the Baseline kit,
     capped at three rows (HOME_GRID_LIMIT in the _index loader). */
 export const HOME_FIRST_DROP = {
-  heading: 'The Fall System',
+  heading: 'The Fall Training System',
   subtitle:
     'Quarter-zip, jogger, tee, short and hat. One system we built and tested for training through fall: cold starts, shorter days and sessions that finish in the dark.',
 } as const;
