@@ -26,9 +26,8 @@ type ProductCardProps = {
 };
 
 /**
- * Grid product card, matching the live card's hover ensemble: the card lifts
- * with a shadow, the product's second image crossfades in, and the color
- * swatches rise from the bottom edge of the image one-by-one (left to right),
+ * Grid product card. On hover the product's second image crossfades in and
+ * the color swatches rise from the bottom edge of the image one-by-one (left to right),
  * each with a color-name tooltip and linking to its sibling color product.
  * Renders the typed `ProductCardData` it's given.
  */
@@ -50,10 +49,9 @@ export const ProductCard = ({
   const shortTitle = getShortTitle(title, colorName);
 
   return (
-    // transition-[translate,…], NOT transform: Tailwind v4's -translate-y-*
-    // sets the native `translate` property, which a `transform` transition
-    // list won't animate (the lift would snap).
-    <div className="group flex flex-col transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]">
+    // The card itself stays put on hover (no lift, shadow or scale): only the
+    // photo swap and the swatch rise move.
+    <div className="group flex flex-col">
       <div className="relative overflow-hidden bg-field">
         <Link to={to} prefetch="intent" className="block" aria-label={title}>
           {label && (

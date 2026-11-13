@@ -121,20 +121,11 @@ describe('ProductCard hover ensemble', () => {
     expect(container.querySelectorAll('ul li')).toHaveLength(1);
   });
 
-  it('lifts the card on hover instead of scaling the image', () => {
+  it('keeps the card still on hover: no lift, shadow or scale', () => {
     const { container } = renderCard(TEE);
     const root = container.firstElementChild;
-    expect(root?.className).toContain('hover:-translate-y-1');
-    expect(root?.className).toContain('hover:shadow-[0_4px_8px_rgba(0,0,0,0.3)]');
-    expect(container.innerHTML).not.toContain('group-hover:scale-105');
-  });
-
-  it('transitions the translate property so the lift animates instead of snapping', () => {
-    const { container } = renderCard(TEE);
-    const root = container.firstElementChild;
-    // -translate-y-* sets the native `translate` property in Tailwind v4; a
-    // `transform`-only transition list would make the 4px lift jump.
-    expect(root?.className).toContain('transition-[translate,box-shadow]');
+    expect(root?.className).not.toMatch(/hover:(-?translate|shadow|scale)/);
+    expect(container.innerHTML).not.toContain('group-hover:scale');
   });
 });
 
