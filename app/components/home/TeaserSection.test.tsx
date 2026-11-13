@@ -46,6 +46,7 @@ const CARDS = [
 const renderSection = (props?: {
   subtitle?: string;
   countdown?: { dropIso: string; labels: ReadonlyArray<string> };
+  tagline?: string;
 }) =>
   render(
     <MemoryRouter>
@@ -122,6 +123,18 @@ describe('TeaserSection', () => {
     expect(
       withCountdown.container.querySelector('[aria-label="Countdown to the drop"]')
     ).not.toBeNull();
+  });
+
+  it('renders the tagline in place of the countdown, and drops it when a countdown is set', () => {
+    const withTagline = renderSection({ tagline: 'Up before the sun' });
+    expect(withTagline.container.textContent).toContain('Up before the sun');
+    cleanup();
+    const both = renderSection({
+      tagline: 'Up before the sun',
+      countdown: { dropIso: '2026-09-13T09:00:00-07:00', labels: ['DAYS', 'HRS', 'MIN', 'SEC'] },
+    });
+    expect(both.container.textContent).not.toContain('Up before the sun');
+    expect(both.container.querySelector('[aria-label="Countdown to the drop"]')).not.toBeNull();
   });
 
   it('passes image alt text and video labels through to the media', () => {

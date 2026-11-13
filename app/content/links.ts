@@ -25,6 +25,16 @@ export const HANDLES = {
   contactPage: 'contact-us',
 } as const;
 
+/**
+ * Homepage grid overrides on top of the collection order (First Light, then
+ * HANDLES.homepageCollection): `hidden` products never show, `last` is
+ * pinned to the final slot. Product handles, so they live here.
+ */
+export const HOME_GRID_PRODUCTS = {
+  hidden: ['airrail-6-performance-shorts-mint'],
+  last: 'motionframe-running-hat-white',
+} as const;
+
 export const STORE_LINKS = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue shopping". */
   shopAll: collectionUrl(HANDLES.shopAllCollection),
@@ -35,9 +45,16 @@ export const STORE_LINKS = {
   shopShortsMidnight: productUrl('airrail-6-performance-shorts-midnight'),
   shopShirtsMidnight: productUrl('tracefiber-performance-tech-tee-midnight'),
   shopHat: productUrl('motionframe-running-hat-white'),
-  /** Drop 02 teaser card target — the FW26 FIRST LIGHT teaser page. Point it
-      at the /collections/first-light collection once the drop is live. */
+  /** The FW26 FIRST LIGHT editorial drop page — the collection masthead's
+      "How We Built It" link. */
   firstLight: dropUrl('first-light'),
+  /** The First Light collection grid — every "shop First Light" CTA (the
+      homepage teaser cards, the drop page closer). */
+  firstLightCollection: collectionUrl(HANDLES.firstLightCollection),
+  /** The /drops/first-light pieces grid. */
+  shopQuarterzipBattleshipGray: productUrl('daybreak-quarterzip-battleship-gray'),
+  shopQuarterzipDustyRose: productUrl('daybreak-quarterzip-dusty-rose'),
+  shopJoggerMidnight: productUrl('frontrunner-jogger-midnight'),
   /** Homepage BASELINE intro card target — the Baseline editorial drop page. */
   baselineDrop: dropUrl('baseline'),
   /** The journal index (fallback nav). */
@@ -51,7 +68,7 @@ export const STORE_LINKS = {
 /**
  * Display prices for the products the marketing surfaces name, keyed by the
  * `STORE_LINKS` entry that targets them (every color of a family shares one
- * price). Hand-typed copy that mirrors the live Shopify products (2026-08-25)
+ * price). Hand-typed copy that mirrors the live Shopify products (2026-08-25; First Light 2026-11-12)
  * — update here if pricing changes; the PDP and cart read Shopify directly.
  */
 export const PRODUCT_PRICES = {
@@ -60,6 +77,9 @@ export const PRODUCT_PRICES = {
   shopShorts: '$79',
   shopShortsMidnight: '$79',
   shopHat: '$42',
+  shopQuarterzipBattleshipGray: '$117',
+  shopQuarterzipDustyRose: '$117',
+  shopJoggerMidnight: '$127',
 } as const satisfies Partial<Record<keyof typeof STORE_LINKS, string>>;
 
 /**

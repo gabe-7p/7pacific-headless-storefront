@@ -70,7 +70,7 @@ and the body copy fails. Re-measure the composite (not the token) before touchin
 
 ## Ember is once per page — with one sanctioned exception
 
-The accent appears once per page, and form errors don't claim it: they render through `common/FieldError` in `--color-error`, which sits on the support tier. The BASELINE drop page (`components/content/BaselineDrop.tsx`) deliberately repeats it (live dot, stat glyphs, per-piece Shop links) because the approved mock does; its one `brand` button is still the closer's SHOP THE DROP. Don't copy that onto other pages.
+The accent appears once per page, and form errors don't claim it: they render through `common/FieldError` in `--color-error`, which sits on the support tier. The drop pages deliberately repeat it (live dot, stat glyphs, per-piece Shop links) because the approved BASELINE mock does: `/drops/baseline` (`components/content/BaselineDrop.tsx`) and `/drops/first-light` (`FirstLightTeaser.tsx`), which share those sections through `components/content/DropSections.tsx`. Each page's one `brand` button is still its closer CTA. Don't copy that onto other pages.
 
 ## File/HUD devices stay on night editorial surfaces
 

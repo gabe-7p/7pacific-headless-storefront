@@ -1,22 +1,19 @@
 import { Cta } from '~/components/common/Cta';
-import { useJoinDialog } from '~/components/common/useJoinDialog';
 import { TeaserSection } from '~/components/home/TeaserSection';
 import { HOME_DROP_TWO } from '~/content/home';
 
 /**
- * "Drop 02: FW26" — the First Light teaser directly below the Name/Spec
- * banner: section title, live countdown to the drop, and the two teaser
- * cards (Fall Gear → collection page, Coming Soon → the waitlist in the
- * shared `JoinDialog`).
+ * The First Light section directly below the Name/Spec banner: section title,
+ * the launch tagline (in the slot the pre-launch countdown used), and the two
+ * cards, both into the collection grid.
  */
 export const DropTwo = () => {
-  const join = useJoinDialog();
-  const { fallGear, comingSoon } = HOME_DROP_TWO.cards;
+  const { fallGear, liveNow } = HOME_DROP_TWO.cards;
 
   return (
     <TeaserSection
       heading={HOME_DROP_TWO.heading}
-      countdown={{ dropIso: HOME_DROP_TWO.dropIso, labels: HOME_DROP_TWO.countdownLabels }}
+      tagline={HOME_DROP_TWO.tagline}
       cards={[
         {
           content: fallGear,
@@ -27,10 +24,10 @@ export const DropTwo = () => {
           ),
         },
         {
-          content: comingSoon,
+          content: liveNow,
           cta: (
-            <Cta onClick={() => join?.open('waitlist')} size="xs" className="mt-4">
-              {comingSoon.cta.label}
+            <Cta to={liveNow.cta.href} prefetch="intent" size="xs" className="mt-4">
+              {liveNow.cta.label}
             </Cta>
           ),
         },

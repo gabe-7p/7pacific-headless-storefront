@@ -1,8 +1,8 @@
 /**
- * Drop 02 (FW26) launch facts, shared by the flag-gated homepage teaser
- * (HOME_DROP_TWO, FEATURE_FLAGS.dropTwoTeaser) and the FIRST LIGHT teaser
- * page — hoisted here so the page never depends on content a feature flag
- * can turn dark.
+ * Drop 02 (FW26) launch facts, shared by the homepage First Light section
+ * (HOME_DROP_TWO) and the FIRST LIGHT drop page. Nothing renders a countdown
+ * since launch; the components (common/Countdown, FirstLightTeaser's
+ * CountdownSection) are kept for the next drop.
  */
 export const DROP_TWO_LAUNCH = {
   /**

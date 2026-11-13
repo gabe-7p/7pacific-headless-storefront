@@ -19,11 +19,12 @@ export const FEATURE_FLAGS: {
   /** The First Light collection in the header's Collections menu (Explore,
       Shop and its photo card, desktop and drawer). `false` hides it while
       Shopify's Main Menu still lists it, so a collection can sit in the menu
-      ahead of launch (11.13.26, DROP_TWO_LAUNCH) without shoppers reaching it. */
+      ahead of launch without shoppers reaching it. On since First Light went
+      live (2026-11-12). */
   firstLightCollection: boolean;
 } = {
   dropTwoTeaser: true,
   baselineIntro: false,
   firstLightLookbook: false,
-  firstLightCollection: false,
+  firstLightCollection: true,
 };

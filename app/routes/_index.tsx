@@ -11,7 +11,7 @@ import { NameSpecBanner } from '~/components/home/NameSpecBanner';
 import { Roster } from '~/components/home/Roster';
 import { FEATURE_FLAGS } from '~/content/flags';
 import { HOME_META } from '~/content/home';
-import { HANDLES } from '~/content/links';
+import { HANDLES, HOME_GRID_PRODUCTS } from '~/content/links';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { buildMeta } from '~/lib/seo';
 import { queryStorefront, storefrontClientContext } from '~/lib/storefront';
@@ -30,21 +30,44 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   const storefront = context.get(storefrontClientContext);
 
-  const data = await queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
-    variables: { handle: HANDLES.homepageCollection },
-    cache: Cache.long(),
+  // First Light leads the grid, then the manual homepage collection in its
+  // admin order; a product in both appears once, in its First Light slot.
+  const [firstLight, homepage] = await Promise.all([
+    queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
+      variables: { handle: HANDLES.firstLightCollection },
+      cache: Cache.long(),
+    }),
+    queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
+      variables: { handle: HANDLES.homepageCollection },
+      cache: Cache.long(),
+    }),
+  ]);
+  // Three rows of three on desktop. HOME_GRID_PRODUCTS (content/links.ts)
+  // drops its hidden products and pins `last` to the final slot.
+  const HOME_GRID_LIMIT = 9;
+  const hidden: ReadonlyArray<string> = HOME_GRID_PRODUCTS.hidden;
+  const seen = new Set<string>();
+  const merged = [
+    ...(firstLight?.collection?.products.nodes ?? []),
+    ...(homepage?.collection?.products.nodes ?? []),
+  ].filter((product) => {
+    if (seen.has(product.id) || hidden.includes(product.handle)) return false;
+    seen.add(product.id);
+    return true;
   });
+  const last = merged.find((product) => product.handle === HOME_GRID_PRODUCTS.last);
+  const products = last
+    ? [...merged.filter((product) => product !== last).slice(0, HOME_GRID_LIMIT - 1), last]
+    : merged.slice(0, HOME_GRID_LIMIT);
 
-  if (data?.collection?.products.nodes.length) {
-    return { products: data.collection.products.nodes };
-  }
+  if (products.length) return { products };
 
-  // Fall back to all products only if the collection is missing/empty, so a
-  // misconfigured collection never blanks the homepage.
+  // Fall back to all products only if both collections are missing/empty, so
+  // a misconfigured collection never blanks the homepage.
   const fallback = await queryStorefront(storefront, HOME_PRODUCTS_FALLBACK_QUERY, {
     cache: Cache.long(),
   });
-  return { products: fallback?.products.nodes ?? [] };
+  return { products: (fallback?.products.nodes ?? []).slice(0, HOME_GRID_LIMIT) };
 }
 
 const Homepage = () => {

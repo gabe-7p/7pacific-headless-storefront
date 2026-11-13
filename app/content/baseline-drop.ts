@@ -139,6 +139,7 @@ would be easy on Saturday. We got you.',
     subtitle:
       'The TRACEFIBER™ tee. The AIRRAIL™ short. The MOTIONFRAME™ hat. These are the \
 only three pieces you need to get to work.',
+    shopLabel: 'Shop',
     /** Names mirror the live Shopify products (2026-08-25); prices come from
         `PRODUCT_PRICES` (content/links.ts) — update there if pricing changes. */
     products: [

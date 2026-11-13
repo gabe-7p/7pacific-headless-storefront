@@ -7,6 +7,7 @@
 import { BASELINE_DROP } from '~/content/baseline-drop';
 import { BRAND } from '~/content/brand';
 import { DROP_TWO_LAUNCH } from '~/content/drop-two';
+import { FIRST_LIGHT } from '~/content/first-light';
 import { PRODUCT_PRICES, STORE_LINKS } from '~/content/links';
 import { BAKERY_RUN_RECAP_POST_ID, BEHIND_THE_BUILD_VIDEO_ID } from '~/content/media';
 import { MEMBERSHIP_PITCH } from '~/content/membership';
@@ -111,22 +112,22 @@ export const HOME_NAME_SPEC_BANNER = {
 } as const;
 
 /**
- * "Drop 02: FW26" teaser — the First Light collection (DAYBREAK™ quarterzips +
- * FRONTRUNNER™ joggers), directly below the Name/Spec banner. A live countdown
- * to the drop plus two teaser cards: Fall Gear (links to the collection) and
- * Coming Soon (opens the waitlist dialog). Photos are Shopify Files uploads
- * picked by Gabe (2026-08-03).
+ * The First Light section — the FW26 collection (DAYBREAK™ quarterzips +
+ * FRONTRUNNER™ joggers), directly below the Name/Spec banner. The launch
+ * tagline (shared with /drops/first-light) plus two cards into the collection
+ * grid. The countdown fields are unused since launch, kept for the next drop.
+ * Photos are Shopify Files uploads picked by Gabe (2026-08-03).
  */
 export const HOME_DROP_TWO = {
   heading: 'First Light: FW26/27',
+  tagline: FIRST_LIGHT.tagline,
   dropIso: DROP_TWO_LAUNCH.dropIso,
   countdownLabels: DROP_TWO_LAUNCH.countdownLabels,
   cards: {
     fallGear: {
-      // Same date as the timer (aligned from the mock's 09.10.26 per Gabe).
-      eyebrow: 'Drops before sunrise on 11.13.26',
+      eyebrow: 'Out now · FW26/27',
       title: 'Gear Built for Cold Starts',
-      cta: { label: 'Browse Collection', href: STORE_LINKS.firstLight },
+      cta: { label: 'Browse Collection', href: STORE_LINKS.firstLightCollection },
       media: {
         kind: 'image',
         ...filesImage('zak_against_wall_in_dusty_rose_qz.jpg', {
@@ -137,11 +138,10 @@ export const HOME_DROP_TWO = {
         }),
       },
     },
-    comingSoon: {
+    liveNow: {
       eyebrow: 'DAYBREAK™ Quarter-Zip · FRONTRUNNER™ Jogger',
-      title: 'Coming Soon',
-      /** No href — the card CTA opens the waitlist dialog instead. */
-      cta: { label: 'Join the First Light List' },
+      title: 'Live Now and Up Early',
+      cta: { label: 'Shop First Light', href: STORE_LINKS.firstLightCollection },
       /** Portrait clip: the 1080p rendition (606px wide) — 720p is only 404px. */
       media: {
         kind: 'video',
@@ -151,8 +151,6 @@ export const HOME_DROP_TWO = {
       },
     },
   },
-  // The waitlist dialog the Coming Soon card opens reads JOIN_COPY.waitlist
-  // (content/join.ts) — it's the list's copy, not the homepage's.
 } as const;
 
 /**
@@ -198,9 +196,12 @@ export const HOME_BASELINE_INTRO = {
   },
 } as const;
 
+/** The homepage product grid — First Light first, then the Baseline kit,
+    capped at three rows (HOME_GRID_LIMIT in the _index loader). */
 export const HOME_FIRST_DROP = {
-  heading: 'The Starting Lineup',
-  subtitle: 'Purpose-built essentials engineered for the way athletes move.',
+  heading: 'The Fall Training System',
+  subtitle:
+    'Quarter-zip, jogger, tee, short and hat. One system we built and tested for training through fall: cold starts, shorter days and sessions that finish in the dark.',
 } as const;
 
 export type CoreValue = {
