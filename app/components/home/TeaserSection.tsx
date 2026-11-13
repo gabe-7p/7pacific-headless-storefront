@@ -31,6 +31,9 @@ type TeaserSectionProps = {
   /** Omit to render the section without a countdown (e.g. the BASELINE intro —
       the collection is live, there's nothing to count down to). */
   countdown?: { dropIso: string; labels: ReadonlyArray<string> };
+  /** A one-line display tagline in the countdown's slot (First Light after
+      launch). Renders only when there is no `countdown`. */
+  tagline?: string;
   /** Exactly two cards, rendered left/right in the md two-column grid. */
   cards: readonly [TeaserSectionCard, TeaserSectionCard];
 };
@@ -64,13 +67,21 @@ const Card = ({ content, children }: { content: TeaserCardContent; children: Rea
 
 /**
  * The shared two-card teaser section (DropTwo, BaselineIntro): section title
- * (+ optional subtitle and countdown) over two photo-overlay cards.
+ * (+ optional subtitle and countdown or tagline) over two photo-overlay cards.
  */
-export const TeaserSection = ({ heading, subtitle, countdown, cards }: TeaserSectionProps) => (
+export const TeaserSection = ({
+  heading,
+  subtitle,
+  countdown,
+  tagline,
+  cards,
+}: TeaserSectionProps) => (
   <Container className="py-9 md:py-12">
     <SectionHeader heading={heading} subtitle={subtitle} scale="section" />
     {countdown ? (
       <Countdown dropIso={countdown.dropIso} labels={countdown.labels} className="mt-3" />
+    ) : tagline ? (
+      <SpecLine className="mt-3 text-ink md:text-sm">{tagline}</SpecLine>
     ) : null}
     <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
       {cards.map(({ content, cta }) => (

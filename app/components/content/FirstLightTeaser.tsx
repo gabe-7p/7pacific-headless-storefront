@@ -4,6 +4,12 @@ import { Heading } from '~/components/common/Heading';
 import { JoinForm } from '~/components/common/JoinForm';
 import { LiveEyebrow } from '~/components/common/LiveDot';
 import { MediaSlot } from '~/components/common/MediaSlot';
+import {
+  DropCloser,
+  DropPieces,
+  DropReceipts,
+  DropStandard,
+} from '~/components/content/DropSections';
 import { FIRST_LIGHT } from '~/content/first-light';
 import { FEATURE_FLAGS } from '~/content/flags';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
@@ -33,7 +39,7 @@ const EarlyAccessForm = () => (
 /** Ember eyebrow dot + edition line, then the page headline and intro. */
 const Intro = () => (
   <Container className="pt-10 pb-8 md:pt-14 md:pb-10">
-    {/* The mock pairs the Ember live signal with the SIGN UP CTA below. */}
+    {/* Ember repeats on the drop pages by sanctioned exception (ui-components.md). */}
     <LiveEyebrow>{FIRST_LIGHT.eyebrow}</LiveEyebrow>
     <Heading as="h1" size="none" className="mt-4 text-5xl md:text-6xl">
       {FIRST_LIGHT.headline}
@@ -42,8 +48,10 @@ const Intro = () => (
   </Container>
 );
 
-/** Heading + signup on the left, tall portrait panel on the right. */
-const EarlyAccess = () => (
+/** "For the Early Ones": heading + signup on the left, tall portrait panel on
+    the right. Not on the page since launch; kept for a future drop.
+    @public */
+export const EarlyAccess = () => (
   <Container className="py-10 md:py-14">
     <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)] md:gap-12">
       <div>
@@ -77,19 +85,12 @@ const Lookbook = () => {
   );
 };
 
-const Proving = () => (
-  <Container className="py-10 md:py-16">
-    <Heading as="h2" size="none" className="text-4xl md:text-6xl">
-      {FIRST_LIGHT.proving.heading}
-    </Heading>
-    <p className="mt-3 max-w-[80ch] text-sm text-support">{FIRST_LIGHT.proving.body}</p>
-  </Container>
-);
-
 /** Full-bleed backdrop with the countdown overlaid near its top, in night
     type over the (dark) photo. From md the top pad is a share of the width
-    (so it scales with the 16:9 box), keeping the athlete's head clear. */
-const CountdownSection = () => (
+    (so it scales with the 16:9 box), keeping the athlete's head clear. Not on
+    the page since launch; kept for the next drop.
+    @public */
+export const CountdownSection = () => (
   <section className="relative">
     <MediaSlot media={FIRST_LIGHT.countdown.media} ratio="backdrop" sizes={IMAGE_SIZES.full} />
     <div className="absolute inset-0 flex justify-center pt-16 md:pt-[4%]">
@@ -104,10 +105,11 @@ const CountdownSection = () => (
 );
 
 /**
- * The Drop 02 "FIRST LIGHT" teaser page (/drops/first-light), mock order:
- * intro → full-bleed hero → Early Access signup → lookbook strip → Proving
- * the Performance → countdown backdrop. The lookbook is toggled by
- * FEATURE_FLAGS.firstLightLookbook.
+ * The Drop 02 "FIRST LIGHT" drop page (/drops/first-light): intro →
+ * full-bleed hero → proving the performance → built for the athletes up
+ * before the sun → the pieces → closer. The lookbook strip
+ * is toggled by FEATURE_FLAGS.firstLightLookbook; EarlyAccess and
+ * CountdownSection are kept above but not rendered.
  */
 export const FirstLightTeaser = () => (
   <div>
@@ -118,9 +120,10 @@ export const FirstLightTeaser = () => (
       sizes={IMAGE_SIZES.full}
       loading="eager"
     />
-    <EarlyAccess />
+    <DropReceipts content={FIRST_LIGHT.receipts} />
+    <DropStandard content={FIRST_LIGHT.standard} />
     {FEATURE_FLAGS.firstLightLookbook && <Lookbook />}
-    <Proving />
-    <CountdownSection />
+    <DropPieces content={FIRST_LIGHT.pieces} />
+    <DropCloser content={FIRST_LIGHT.closer} />
   </div>
 );

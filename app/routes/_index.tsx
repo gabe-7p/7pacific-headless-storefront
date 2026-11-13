@@ -30,21 +30,38 @@ export const meta: Route.MetaFunction = () => {
 export async function loader({ context }: Route.LoaderArgs) {
   const storefront = context.get(storefrontClientContext);
 
-  const data = await queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
-    variables: { handle: HANDLES.homepageCollection },
-    cache: Cache.long(),
+  // First Light leads the grid, then the manual homepage collection in its
+  // admin order; a product in both appears once, in its First Light slot.
+  const [firstLight, homepage] = await Promise.all([
+    queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
+      variables: { handle: HANDLES.firstLightCollection },
+      cache: Cache.long(),
+    }),
+    queryStorefront(storefront, HOME_PRODUCTS_QUERY, {
+      variables: { handle: HANDLES.homepageCollection },
+      cache: Cache.long(),
+    }),
+  ]);
+  // Three rows of three on desktop.
+  const HOME_GRID_LIMIT = 9;
+  const seen = new Set<string>();
+  const products = [
+    ...(firstLight?.collection?.products.nodes ?? []),
+    ...(homepage?.collection?.products.nodes ?? []),
+  ].filter((product) => {
+    if (seen.has(product.id)) return false;
+    seen.add(product.id);
+    return true;
   });
 
-  if (data?.collection?.products.nodes.length) {
-    return { products: data.collection.products.nodes };
-  }
+  if (products.length) return { products: products.slice(0, HOME_GRID_LIMIT) };
 
-  // Fall back to all products only if the collection is missing/empty, so a
-  // misconfigured collection never blanks the homepage.
+  // Fall back to all products only if both collections are missing/empty, so
+  // a misconfigured collection never blanks the homepage.
   const fallback = await queryStorefront(storefront, HOME_PRODUCTS_FALLBACK_QUERY, {
     cache: Cache.long(),
   });
-  return { products: fallback?.products.nodes ?? [] };
+  return { products: (fallback?.products.nodes ?? []).slice(0, HOME_GRID_LIMIT) };
 }
 
 const Homepage = () => {
