@@ -114,8 +114,8 @@ export const HOME_NAME_SPEC_BANNER = {
 /**
  * The First Light section — the FW26 collection (DAYBREAK™ quarterzips +
  * FRONTRUNNER™ joggers), directly below the Name/Spec banner. The launch
- * tagline (shared with /drops/first-light) plus two cards into the collection
- * grid. The countdown fields are unused since launch, kept for the next drop.
+ * tagline (shared with /drops/first-light) plus two cards: Explore Collection
+ * opens the drop page, Shop First Light the collection grid. The countdown fields are unused since launch, kept for the next drop.
  * Photos are Shopify Files uploads picked by Gabe (2026-08-03).
  */
 export const HOME_DROP_TWO = {
@@ -127,7 +127,7 @@ export const HOME_DROP_TWO = {
     fallGear: {
       eyebrow: 'Out now · FW26/27',
       title: 'Gear Built for Cold Starts',
-      cta: { label: 'Browse Collection', href: STORE_LINKS.firstLightCollection },
+      cta: { label: 'Explore Collection', href: STORE_LINKS.firstLight },
       media: {
         kind: 'image',
         ...filesImage('zak_against_wall_in_dusty_rose_qz.jpg', {

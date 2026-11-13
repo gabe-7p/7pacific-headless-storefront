@@ -66,7 +66,7 @@ export const BRAND = {
    * the header's log-in glyph already points at Shopify's hosted portal.
    */
   headerLinks: [
-    { title: 'Shop', url: STORE_LINKS.shopAll },
+    { title: 'Shop', url: STORE_LINKS.firstLightCollection },
     { title: 'Journal', url: STORE_LINKS.journal },
     { title: 'About', url: STORE_LINKS.ourStory },
   ] satisfies Array<NavLink>,
