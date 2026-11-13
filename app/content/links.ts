@@ -25,6 +25,16 @@ export const HANDLES = {
   contactPage: 'contact-us',
 } as const;
 
+/**
+ * Homepage grid overrides on top of the collection order (First Light, then
+ * HANDLES.homepageCollection): `hidden` products never show, `last` is
+ * pinned to the final slot. Product handles, so they live here.
+ */
+export const HOME_GRID_PRODUCTS = {
+  hidden: ['airrail-6-performance-shorts-mint'],
+  last: 'motionframe-running-hat-white',
+} as const;
+
 export const STORE_LINKS = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue shopping". */
   shopAll: collectionUrl(HANDLES.shopAllCollection),
