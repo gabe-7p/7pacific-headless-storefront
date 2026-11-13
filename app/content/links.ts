@@ -46,10 +46,10 @@ export const STORE_LINKS = {
   shopShirtsMidnight: productUrl('tracefiber-performance-tech-tee-midnight'),
   shopHat: productUrl('motionframe-running-hat-white'),
   /** The FW26 FIRST LIGHT editorial drop page — the collection masthead's
-      "How We Built It" link. */
+      "How We Built It" link and the homepage "Explore Collection" card. */
   firstLight: dropUrl('first-light'),
   /** The First Light collection grid — every "shop First Light" CTA (the
-      homepage teaser cards, the drop page closer). */
+      homepage teaser card, the drop page closer) and the fallback header Shop. */
   firstLightCollection: collectionUrl(HANDLES.firstLightCollection),
   /** The /drops/first-light pieces grid. */
   shopQuarterzipBattleshipGray: productUrl('daybreak-quarterzip-battleship-gray'),
