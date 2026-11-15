@@ -44,7 +44,7 @@ declare module 'react' {
   namespace JSX {
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- declaration merging must be an interface
     interface IntrinsicElements {
-      /** The app's one `<body>` element — see app/components/layout/BodyRoot.tsx. */
+      /** The app's one `<body>` element. See app/components/layout/BodyRoot.tsx. */
       'storefront-root': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
     }
   }
