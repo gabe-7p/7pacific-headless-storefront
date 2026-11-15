@@ -57,7 +57,7 @@ Today the code is organized by **domain folders**:
 app/
   routes/        one file per route (React Router flat convention)
   components/
-    layout/      Header, Footer, PageLayout, Aside, Announcement
+    layout/      Header, Footer, PageLayout, Aside, Announcement, BodyRoot
     analytics/   Trackers (route-driven publishers to the Shopify analytics bus, `useCartViewed`, and the PostHog and Meta Pixel destination registrations)
     cart/        CartDrawer (the Aside drawer, the openCart target), useCartDrawer.ts (the drawer's open/close hook), CartMain / CartLineItem / CartSummary
     product/     PDP components (ProductForm, SegmentedCell, ColorSwatches, TechStack, …)

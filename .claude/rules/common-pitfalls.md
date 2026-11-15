@@ -69,6 +69,10 @@ Two bus mechanics bite when touching the trackers (`components/analytics/Tracker
 
 Read `window.Shopify` through the selectors in `lib/shopifyRuntime.ts` (`getAnalyticsBus`, `getOpenCartAction`, `getUpdateCartAction`, `getCustomerPrivacy`, `getActiveCurrency`), never at the call site: its pieces arrive at different times, and those selectors are what `whenShopifyReady` polls.
 
+## Everything in `<body>` renders inside `BodyRoot`
+
+React 19 hydrates `<body>` with some tolerance: it skips a node it doesn't expect, but only when that node's tag differs from the tag React expects next. Instagram's iOS in-app browser can add a `<div>` to `<body>` before hydration. When the page's first element was also a `<div>`, React claimed the foreign node, failed hydration (minified error #418, all from Instagram on iOS), re-rendered the page and deleted the node. root.tsx `Layout` therefore wraps its children in `layout/BodyRoot`, a `<storefront-root>` custom element (`display: block`) that no other script makes. Keep new body-level content inside it. `ScrollRestoration` and `Scripts` stay outside, after it. `BodyRoot.test.tsx` pins the behavior.
+
 ## A rejected discount code stays on the cart
 
 Shopify keeps an unknown code on the cart as `applicable: false` and answers with a `DISCOUNT_NOT_FOUND` **warning**, not a user error, on every later response. The store's discount forms resend every code on the cart, so a typo would raise the alert again on the next apply or remove. `CartDiscounts` therefore sends `nextDiscountCodes(...)` through `updateCart` from `beforeSubmit`, which drops the rejected code at the next discount change. Until then it sits on the cart unseen.
