@@ -5,14 +5,13 @@ import { collectionUrl, dropUrl, journalUrl, pageUrl, productUrl } from '~/lib/u
  * changes in Shopify, update it here and every query and CTA follows.
  */
 export const HANDLES = {
-  /** The BASELINE collection — cart "Continue shopping", the homepage "Shop
-      Baseline V01" card, and the one collection page that opens on the
-      BASELINE masthead. */
-  shopAllCollection: 'baseline',
   /** Every live product in one grid — the header's Shop. A manual collection:
       drag to reorder it in the Shopify admin (shorts, tees, quarter-zips,
       joggers, hat, then the Tangerine and Mint tees). */
-  shopCollection: 'shop',
+  shopAllCollection: 'shop',
+  /** The H2-26 BASELINE collection — the Collections mega-menu's first entry;
+      its page opens on the BASELINE masthead. */
+  baselineCollection: 'baseline',
   /** The FW26 First Light collection — the Collections mega-menu's second entry. */
   firstLightCollection: 'first-light',
   /**
@@ -41,12 +40,10 @@ export const HOME_GRID_PRODUCTS = {
 } as const;
 
 export const STORE_LINKS = {
-  /** The BASELINE collection — cart "Continue shopping", "Shop Baseline V01". */
-  shopAll: collectionUrl(HANDLES.shopAllCollection),
   /** Every product, in merchandised order — the header's (fallback) Shop and
       the homepage's general shop CTAs (hero "Shop the kit", the Name/Spec
       banner's "Shop All //", the Chase the Numbers card). */
-  shop: collectionUrl(HANDLES.shopCollection),
+  shopAll: collectionUrl(HANDLES.shopAllCollection),
   /** Core Values card CTAs ("Shop tees" / "Shop shorts"). */
   shopShirts: productUrl('tracefiber-performance-tech-tee-mountain-mist'),
   shopShorts: productUrl('airrail-6-performance-shorts-mountain-mist'),
@@ -60,6 +57,9 @@ export const STORE_LINKS = {
   /** The First Light collection grid — every "shop First Light" CTA (the
       homepage teaser card, the drop page closer). */
   firstLightCollection: collectionUrl(HANDLES.firstLightCollection),
+  /** The BASELINE collection grid — the homepage "Shop Baseline V01" card, the
+      Baseline drop page closer, and the cart's "Continue shopping". */
+  baselineCollection: collectionUrl(HANDLES.baselineCollection),
   /** The /drops/first-light pieces grid. */
   shopQuarterzipBattleshipGray: productUrl('daybreak-quarterzip-battleship-gray'),
   shopQuarterzipDustyRose: productUrl('daybreak-quarterzip-dusty-rose'),

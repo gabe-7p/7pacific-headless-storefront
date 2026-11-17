@@ -14,7 +14,7 @@ export const COLLECTIONS_MENU = {
   shopTitle: 'Shop The Collection',
   /** Shopify Files uploads (2026-11-09), keyed by collection handle. */
   media: {
-    [HANDLES.shopAllCollection]: filesImage('leaning_against_fence.jpg', {
+    [HANDLES.baselineCollection]: filesImage('leaning_against_fence.jpg', {
       v: 1794287949,
       width: 3967,
       height: 4960,
