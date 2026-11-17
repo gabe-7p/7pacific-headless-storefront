@@ -55,7 +55,7 @@ export const HOME_HERO = {
   /** Inter, sentence case. */
   subhead: 'Performance apparel engineered for athletes who never stop competing.',
   /** Primary CTA, mono caps (the page's single Ember moment). */
-  cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
+  cta: { label: 'Shop the kit', href: STORE_LINKS.shop },
   /**
    * Text-treatment secondary CTA (renders in chalk, so the one-Ember-moment
    * rule still holds). TODO: point at the Shoot #2 founder video once it is
@@ -108,7 +108,7 @@ export const HOME_NAME_SPEC_BANNER = {
       href: STORE_LINKS.shopHat,
     },
   ] satisfies ReadonlyArray<NameSpecCell>,
-  cta: { label: 'Shop All //', href: STORE_LINKS.shopAll },
+  cta: { label: 'Shop All //', href: STORE_LINKS.shop },
 } as const;
 
 /**
@@ -229,7 +229,7 @@ export const HOME_CORE_VALUES = {
       title: 'Chase the Numbers',
       tone: 'dark',
       body: "Another plate on the bar, a faster split, a few more inches on your vertical. There's always something worth working toward.",
-      cta: { label: 'Shop the kit', href: STORE_LINKS.shopAll },
+      cta: { label: 'Shop the kit', href: STORE_LINKS.shop },
       media: {
         kind: 'video',
         // 720p rendition — the slot never renders wider than ~800px.

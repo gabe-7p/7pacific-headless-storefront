@@ -5,8 +5,9 @@ import { collectionUrl, dropUrl, journalUrl, pageUrl, productUrl } from '~/lib/u
  * changes in Shopify, update it here and every query and CTA follows.
  */
 export const HANDLES = {
-  /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue
-      shopping", and the one collection page that opens on the BASELINE masthead. */
+  /** The BASELINE collection — cart "Continue shopping", the homepage "Shop
+      Baseline V01" card, and the one collection page that opens on the
+      BASELINE masthead. */
   shopAllCollection: 'baseline',
   /** Every live product in one grid — the header's Shop. A manual collection:
       drag to reorder it in the Shopify admin (shorts, tees, quarter-zips,
@@ -40,9 +41,11 @@ export const HOME_GRID_PRODUCTS = {
 } as const;
 
 export const STORE_LINKS = {
-  /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue shopping". */
+  /** The BASELINE collection — cart "Continue shopping", "Shop Baseline V01". */
   shopAll: collectionUrl(HANDLES.shopAllCollection),
-  /** Every product, in merchandised order — the header's (fallback) Shop. */
+  /** Every product, in merchandised order — the header's (fallback) Shop and
+      the homepage's general shop CTAs (hero "Shop the kit", the Name/Spec
+      banner's "Shop All //", the Chase the Numbers card). */
   shop: collectionUrl(HANDLES.shopCollection),
   /** Core Values card CTAs ("Shop tees" / "Shop shorts"). */
   shopShirts: productUrl('tracefiber-performance-tech-tee-mountain-mist'),
