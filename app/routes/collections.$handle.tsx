@@ -2,6 +2,10 @@ import { Cache, gql } from '@shopify/hydrogen';
 import { useLoaderData } from 'react-router';
 
 import { CollectionViewedTracker } from '~/components/analytics/Trackers';
+import {
+  CollectionOverlayBanner,
+  type CollectionOverlayContent,
+} from '~/components/collection/CollectionOverlayBanner';
 import { LoadMore, useLoadMore } from '~/components/collection/LoadMore';
 import { ProductCard } from '~/components/collection/ProductCard';
 import { Heading } from '~/components/common/Heading';
@@ -11,6 +15,7 @@ import { BASELINE_DROP } from '~/content/baseline-drop';
 import { COLLECTION_BANNERS } from '~/content/collection-banners';
 import { FIRST_LIGHT_MASTHEAD } from '~/content/first-light';
 import { HANDLES } from '~/content/links';
+import { SHOP_INTRO } from '~/content/shop';
 import { PRODUCT_CARD_FRAGMENT } from '~/lib/fragments';
 import { notFound } from '~/lib/http';
 import { IMAGE_SIZES } from '~/lib/imageSizes';
@@ -63,12 +68,60 @@ const DROP_MASTHEADS: Partial<Record<string, DropMastheadContent>> = {
   [HANDLES.firstLightCollection]: FIRST_LIGHT_MASTHEAD,
 };
 
+/** Collections whose title sits over their banner, with an intro line under it. */
+const OVERLAY_INTROS: Partial<Record<string, CollectionOverlayContent>> = {
+  [HANDLES.shopCollection]: SHOP_INTRO,
+};
+
 const Collection = () => {
   const loaderData = useLoaderData<typeof loader>();
   const { collection } = loaderData;
   const { nodes, pageInfo, isLoading, loadMore } = useLoadMore(loaderData);
   const masthead = DROP_MASTHEADS[collection.handle];
   const banner = COLLECTION_BANNERS[collection.handle];
+  const overlay = OVERLAY_INTROS[collection.handle];
+
+  const grid = (
+    <>
+      {/* Near full-bleed with ~20px outer margins so product imagery dominates
+          the viewport (matches live) — intentionally not wrapped in the
+          max-width Container the rest of the site uses. One card per row on
+          mobile; three from `md` with a 4px gutter between columns. The row
+          gap stays wider because each card's name and spec strip sit under
+          its image. */}
+      <div className="w-full px-5 pb-10">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-x-1 md:gap-y-6">
+          {nodes.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              label={product.label?.value}
+              sizes={IMAGE_SIZES.third}
+            />
+          ))}
+        </div>
+        <LoadMore
+          pathname={collectionUrl(collection.handle)}
+          pageInfo={pageInfo}
+          isLoading={isLoading}
+          onLoad={loadMore}
+        />
+      </div>
+    </>
+  );
+
+  if (banner && overlay) {
+    return (
+      <div>
+        <CollectionViewedTracker id={collection.id} handle={collection.handle} />
+        <CollectionOverlayBanner media={banner} copy={overlay} />
+        <p className="max-w-4xl px-5 pt-6 pb-8 text-xs leading-relaxed text-support md:pt-8 md:pb-10">
+          {overlay.intro}
+        </p>
+        {grid}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -102,30 +155,7 @@ const Collection = () => {
         </header>
       )}
 
-      {/* Near full-bleed with ~20px outer margins so product imagery dominates
-          the viewport (matches live) — intentionally not wrapped in the
-          max-width Container the rest of the site uses. One card per row on
-          mobile; three from `md` with a 4px gutter between columns. The row
-          gap stays wider because each card's name and spec strip sit under
-          its image. */}
-      <div className="w-full px-5 pb-10">
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-x-1 md:gap-y-6">
-          {nodes.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              label={product.label?.value}
-              sizes={IMAGE_SIZES.third}
-            />
-          ))}
-        </div>
-        <LoadMore
-          pathname={collectionUrl(collection.handle)}
-          pageInfo={pageInfo}
-          isLoading={isLoading}
-          onLoad={loadMore}
-        />
-      </div>
+      {grid}
     </div>
   );
 };

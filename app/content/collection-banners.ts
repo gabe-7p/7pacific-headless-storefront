@@ -10,6 +10,18 @@ import { filesImage } from '~/lib/shopifyFiles';
 import { collectionUrl } from '~/lib/urls';
 
 export const COLLECTION_BANNERS: Partial<Record<string, MediaSlotSource>> = {
+  // The shop-all page's photo, under its overlay copy (`content/shop.ts`).
+  [HANDLES.shopCollection]: {
+    kind: 'image',
+    ...filesImage('zak-sitting-down-white-shirt-sweating.jpg', {
+      v: 1794950827,
+      width: 4472,
+      height: 5590,
+      alt: 'An athlete in a white training tee and sunglasses, seated on the track after a session',
+    }),
+    // No `focus`: the centred window of this portrait is the tee, with only
+    // the lower half of his face above it.
+  },
   [HANDLES.shopAllCollection]: {
     kind: 'image',
     ...filesImage('roster_at_kezar_cropped.jpg', {
