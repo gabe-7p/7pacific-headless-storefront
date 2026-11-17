@@ -1,6 +1,6 @@
 /**
  * /collections/shop — every live product in one grid, the header's Shop. The
- * banner photo is `COLLECTION_BANNERS[HANDLES.shopCollection]`; the product
+ * banner photo is `COLLECTION_BANNERS[HANDLES.shopAllCollection]`; the product
  * order is the Shopify collection's manual order. Display strings are
  * sentence case here and uppercased by CSS.
  */

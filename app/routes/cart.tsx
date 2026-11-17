@@ -29,7 +29,11 @@ const Cart = () => {
           {CART_COPY.title}
         </Heading>
         {hasItems && (
-          <TextLink to={STORE_LINKS.shopAll} prefetch="intent" className="mt-2 inline-block">
+          <TextLink
+            to={STORE_LINKS.baselineCollection}
+            prefetch="intent"
+            className="mt-2 inline-block"
+          >
             {CART_COPY.continueShopping}
           </TextLink>
         )}
