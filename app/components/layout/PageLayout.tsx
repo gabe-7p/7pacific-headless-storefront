@@ -26,9 +26,9 @@ export const PageLayout = ({
       <JoinDialogProvider>
         <CartDrawer />
         <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-        {/* Sticky topbar offset by the announcement height: the announcement
-            scrolls away with the page while the header pins — mirrors live. */}
-        <div className="sticky -top-(--announcement-h) z-40">
+        {/* The announcement and the header pin together, so the shipping and
+            returns line stays in view at every scroll position. */}
+        <div className="sticky top-0 z-40">
           <Announcement />
           <Header header={header} publicStoreDomain={publicStoreDomain} />
         </div>

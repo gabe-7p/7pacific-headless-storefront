@@ -272,9 +272,9 @@
 
 /**
  * Brand layout & motion constants (page width, top-bar heights, easing), used
- * as `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`. The sticky
- * topbar offsets itself by `-top-(--announcement-h)` so the announcement
- * scrolls away while the header pins.
+ * as `max-w-(--page-max)`, `h-(--header-h)`, `ease-(--ease-brand)`. The
+ * announcement and the header pin together at the top, so anything sticky
+ * beneath them clears `--topbar-h`.
  */
 :root {
   --page-max: 1400px;
@@ -282,6 +282,7 @@
   --page-cart: 1100px;
   --header-h: 3.375rem; /* 54px */
   --announcement-h: 1.75rem; /* 28px */
+  --topbar-h: calc(var(--header-h) + var(--announcement-h)); /* pinned announcement + header */
   --hero-min-h: 34rem; /* common/HeroShell */
   --hero-min-h-md: 44rem;
   --ease-brand: cubic-bezier(0.165, 0.84, 0.44, 1);
