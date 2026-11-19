@@ -198,7 +198,7 @@ const Roster = () => {
       <Container className="py-12 md:py-18">
         <SectionLabel number={roster.number} title={roster.title} />
         <div className="mt-10 grid gap-12 lg:grid-cols-[5fr_7fr] lg:items-start lg:gap-16">
-          <div className="lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]">
+          <div className="lg:sticky lg:top-[calc(var(--topbar-h)+1.5rem)]">
             <FramedMedia media={roster.card.media} ratio="landscape" sizes={FOUNDER_PHOTO_SIZES} />
             <dl className="my-2 border-t border-border-subtle-night">
               {roster.card.fields.map((field) => (

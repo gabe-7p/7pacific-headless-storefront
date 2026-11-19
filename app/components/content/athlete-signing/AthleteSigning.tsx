@@ -1,4 +1,5 @@
 import { Container } from '~/components/common/Container';
+import { Announcement } from '~/components/layout/Announcement';
 import type { AthleteSigningContent } from '~/content/athlete-signing';
 
 import { CreatorPanel } from './CreatorPanel';
@@ -13,10 +14,12 @@ import { SigningTopBar } from './SigningTopBar';
  * Purely presentational — all copy/assets come from an `AthleteSigningContent`
  * object, so a second signing is a new content object, not new components.
  * The route opts out of PageLayout (`handle: { chrome: false }`), so this
- * renders its own top/bottom bars and `main` landmark.
+ * renders its own top/bottom bars and `main` landmark. The site-wide
+ * announcement still sits above the top bar, as it does on every page.
  */
 export const AthleteSigning = ({ content }: { content: AthleteSigningContent }) => (
   <div className="bg-field-night text-ink-night flex min-h-svh flex-col bg-[image:var(--file-grid)]">
+    <Announcement />
     <SigningTopBar chrome={content.chrome} />
     <main className="flex-1">
       <SigningHero content={content} />
