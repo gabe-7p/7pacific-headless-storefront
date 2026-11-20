@@ -24,6 +24,8 @@ import { getCustomerPrivacy, whenShopifyReady } from '~/lib/shopifyRuntime';
  *    *destination*, so product/collection/cart views and the cart deltas
  *    (`product_added_to_cart`, …) arrive consent-gated and already normalised.
  *    Page views stay with the SDK's own history-change capture.
+ * 3. The view events wait for the page to be on screen, as the SDK's initial
+ *    `$pageview` does (see `whenVisible`).
  */
 export const initPostHog = ({ key, host }: PostHogConfig) => {
   posthog.init(key, {
@@ -82,6 +84,25 @@ const followConsent = () =>
   });
 
 /**
+ * Runs `capture` once the document is visible. posthog-js holds the initial
+ * `$pageview` until then, and Meta's in-app browsers load ad landing pages
+ * hidden, before the tap. Sent at once, the hydration `product_viewed` of a
+ * preload nobody opens landed in a session with no `$pageview`.
+ */
+const whenVisible = (capture: () => void) => {
+  if (document.visibilityState === 'visible') {
+    capture();
+    return;
+  }
+  const onVisibilityChange = () => {
+    if (document.visibilityState !== 'visible') return;
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    capture();
+  };
+  document.addEventListener('visibilitychange', onVisibilityChange);
+};
+
+/**
  * Registers PostHog as a destination on the bus and follows consent (client
  * only). A no-op when PostHog is off (never initialised). Returns a cancel
  * function for the bus poll.
@@ -92,11 +113,17 @@ export const connectPostHogToShopify = (): (() => void) => {
     'posthog',
     {
       [AnalyticsEvent.PRODUCT_VIEWED]: (payload) =>
-        posthog.capture(ANALYTICS_EVENT.productViewed, productViewedProperties(payload)),
+        whenVisible(() =>
+          posthog.capture(ANALYTICS_EVENT.productViewed, productViewedProperties(payload))
+        ),
       [AnalyticsEvent.COLLECTION_VIEWED]: (payload) =>
-        posthog.capture(ANALYTICS_EVENT.collectionViewed, collectionViewedProperties(payload)),
+        whenVisible(() =>
+          posthog.capture(ANALYTICS_EVENT.collectionViewed, collectionViewedProperties(payload))
+        ),
       [AnalyticsEvent.CART_VIEWED]: (payload) =>
-        posthog.capture(ANALYTICS_EVENT.cartViewed, cartViewedProperties(payload)),
+        whenVisible(() =>
+          posthog.capture(ANALYTICS_EVENT.cartViewed, cartViewedProperties(payload))
+        ),
       [AnalyticsEvent.PRODUCT_ADD_TO_CART]: (payload) =>
         posthog.capture(ANALYTICS_EVENT.productAddedToCart, cartLineChangeProperties(payload)),
       [AnalyticsEvent.PRODUCT_REMOVED_FROM_CART]: (payload) =>
