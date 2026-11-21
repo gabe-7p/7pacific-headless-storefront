@@ -32,7 +32,9 @@ import { instagramPostUrl, youtubeWatchUrl } from '~/lib/urls';
  * request for a public/ file with the whole body (200), so iMessage fell
  * back to the still. Files' video CDN serves ranges. The still stays in
  * public/ (1200×630, public/og-home.jpg). Absolute: scrapers don't resolve
- * relative paths.
+ * relative paths. The checkout subdomain's redirect theme and Shopify's
+ * Online Store preferences hold copies of both: change all three together
+ * (the `share-preview` skill, .claude/skills/share-preview/SKILL.md).
  */
 export const HOME_META = {
   title: '7Pacific · Lightweight and Breathable Training Gear',
