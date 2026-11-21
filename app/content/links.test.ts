@@ -36,6 +36,8 @@ const NOT_THE_HANDLE: Partial<Record<keyof typeof HANDLES, Array<string>>> = {
     'routes/sitemap.$type.$page[.xml].tsx',
     'routes/journal.$handle.tsx',
   ],
+  // The chrome query's `shop` field, read as an indexed-access type key.
+  shopCollection: ['components/layout/Footer.tsx', 'components/layout/Header.tsx'],
 };
 
 const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

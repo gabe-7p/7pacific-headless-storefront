@@ -8,6 +8,10 @@ export const HANDLES = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue
       shopping", and the one collection page that opens on the BASELINE masthead. */
   shopAllCollection: 'baseline',
+  /** Every live product in one grid — the header's Shop. A manual collection:
+      drag to reorder it in the Shopify admin (shorts, tees, quarter-zips,
+      joggers, hat, then the Tangerine and Mint tees). */
+  shopCollection: 'shop',
   /** The FW26 First Light collection — the Collections mega-menu's second entry. */
   firstLightCollection: 'first-light',
   /**
@@ -38,6 +42,8 @@ export const HOME_GRID_PRODUCTS = {
 export const STORE_LINKS = {
   /** The shop-all collection (titled BASELINE) — hero CTA, cart "Continue shopping". */
   shopAll: collectionUrl(HANDLES.shopAllCollection),
+  /** Every product, in merchandised order — the header's (fallback) Shop. */
+  shop: collectionUrl(HANDLES.shopCollection),
   /** Core Values card CTAs ("Shop tees" / "Shop shorts"). */
   shopShirts: productUrl('tracefiber-performance-tech-tee-mountain-mist'),
   shopShorts: productUrl('airrail-6-performance-shorts-mountain-mist'),
@@ -49,7 +55,7 @@ export const STORE_LINKS = {
       "How We Built It" link and the homepage "Explore Collection" card. */
   firstLight: dropUrl('first-light'),
   /** The First Light collection grid — every "shop First Light" CTA (the
-      homepage teaser card, the drop page closer) and the fallback header Shop. */
+      homepage teaser card, the drop page closer). */
   firstLightCollection: collectionUrl(HANDLES.firstLightCollection),
   /** The /drops/first-light pieces grid. */
   shopQuarterzipBattleshipGray: productUrl('daybreak-quarterzip-battleship-gray'),

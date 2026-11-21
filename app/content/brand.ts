@@ -33,10 +33,11 @@ export const BRAND = {
   shipping: { threshold: FREE_SHIPPING_THRESHOLD },
 
   /**
-   * Announcement spec strip: mono caps. The one shipping fact, nothing else.
+   * Announcement spec strip: mono caps. Shipping and returns, nothing else; kept
+   * short enough to hold one line at 375px.
    */
   announcement: {
-    message: `FREE SHIPPING ON ORDERS $${FREE_SHIPPING_THRESHOLD}+`,
+    message: `FREE SHIPPING $${FREE_SHIPPING_THRESHOLD}+ · FREE RETURNS`,
   },
 
   /** Fallback meta description for any page without its own (see lib/seo.ts). */
@@ -66,7 +67,7 @@ export const BRAND = {
    * the header's log-in glyph already points at Shopify's hosted portal.
    */
   headerLinks: [
-    { title: 'Shop', url: STORE_LINKS.firstLightCollection },
+    { title: 'Shop', url: STORE_LINKS.shop },
     { title: 'Journal', url: STORE_LINKS.journal },
     { title: 'About', url: STORE_LINKS.ourStory },
   ] satisfies Array<NavLink>,

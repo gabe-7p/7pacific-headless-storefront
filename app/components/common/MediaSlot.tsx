@@ -33,6 +33,9 @@ const RATIOS = {
   /** Full-bleed strip with a fixed height, 256px / 352px from md (the drop
       collection banners): a height, not a ratio, so it never grows past it. */
   banner: 'h-64 md:h-88',
+  /** The banner a step taller, 288px / 416px from md: the shop-all page's,
+      whose title sits over the photo (`collection/CollectionOverlayBanner`). */
+  bannerTall: 'h-72 md:h-104',
 } as const;
 
 export type MediaSlotRatio = keyof typeof RATIOS;
