@@ -8,6 +8,8 @@ import {
   cartUpdatedProperties,
   cartViewedProperties,
   collectionViewedProperties,
+  CREATOR_CODE_PROPERTY,
+  creatorLinkProperties,
   productViewedProperties,
 } from '~/lib/analytics/posthog.events';
 import { AnalyticsEvent, connectDestination } from '~/lib/analytics/shopify';
@@ -81,6 +83,22 @@ const followConsent = () =>
     );
   });
 
+/** Once per page load: Strict Mode and a re-mounted bridge connect twice. */
+let creatorLandingRecorded = false;
+
+/**
+ * A creator link's landing (`?creator_code=`, lib/discountLinks.ts): tags the
+ * visitor with the code and captures `creator_link_opened`. The URL is read
+ * when the bridge connects (the landing page), but nothing is sent until
+ * consent allows it, by which point the visitor may have navigated on.
+ */
+const recordCreatorLanding = (landing: ReturnType<typeof creatorLinkProperties>) => {
+  if (!landing || creatorLandingRecorded || posthog.has_opted_out_capturing()) return;
+  creatorLandingRecorded = true;
+  posthog.register({ [CREATOR_CODE_PROPERTY]: landing[CREATOR_CODE_PROPERTY] });
+  posthog.capture(ANALYTICS_EVENT.creatorLinkOpened, landing);
+};
+
 /**
  * Registers PostHog as a destination on the bus and follows consent (client
  * only). A no-op when PostHog is off (never initialised). Returns a cancel
@@ -88,6 +106,7 @@ const followConsent = () =>
  */
 export const connectPostHogToShopify = (): (() => void) => {
   if (!posthog.__loaded) return () => {};
+  const landing = creatorLinkProperties(window.location);
   return connectDestination(
     'posthog',
     {
@@ -104,6 +123,6 @@ export const connectPostHogToShopify = (): (() => void) => {
       [AnalyticsEvent.CART_UPDATED]: (payload) =>
         posthog.capture(ANALYTICS_EVENT.cartUpdated, cartUpdatedProperties(payload)),
     },
-    { ready: followConsent }
+    { ready: () => followConsent().then(() => recordCreatorLanding(landing)) }
   );
 };

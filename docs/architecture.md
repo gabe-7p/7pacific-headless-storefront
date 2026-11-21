@@ -73,6 +73,7 @@ app/
     cart.server.ts  the `/api/cart` handlers · cart.ts the client store (`CartProvider`, `useCart`, `useCartForm`, `isOptimisticLine`, `nextDiscountCodes`) · cart.fixtures.ts test-only builders + `createCartStoreMock`
     fragments.ts    shared gql fragments + chrome queries · http.ts `notFound`, `unavailable`, `describeRouteError`, `deferQuery`
     i18n.ts         MARKET, MONEY_LOCALE, DATE_LOCALE · money.ts price formats (`brand` / `compact` / `cart`)
+    discountLinks.ts creator discount links (`/discount/:code` landing URL, the `?discount=` hand-off) · discountLinks.server.ts puts the code on the cart (runbooks/creator-links.md)
     urls.ts         every URL shape · shopifyFiles.ts Shopify Files CDN helpers + the `FilesImage`/`ContentMedia` content types · imageSizes.ts `sizes` presets for common/Image
     seo.ts          page-title format, `buildMeta()` · sitemap.ts the sitemaps · robots.ts `/robots.txt` · gid.ts `gidNumericId` · csp.ts + nonce.tsx the CSP header and nonce
     shopifyRuntime.ts  the one wait-for-`window.Shopify` poll + its selectors (`getAnalyticsBus`, `getOpenCartAction`, `getUpdateCartAction`, `getCustomerPrivacy`, `getActiveCurrency`)

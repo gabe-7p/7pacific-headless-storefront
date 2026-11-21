@@ -18,6 +18,7 @@ const sdk = vi.hoisted(() => ({
   has_opted_out_capturing: vi.fn(() => true),
   opt_in_capturing: vi.fn(),
   opt_out_capturing: vi.fn(),
+  register: vi.fn(),
   startSessionRecording: vi.fn(),
 }));
 
@@ -164,6 +165,43 @@ describe('connectPostHogToShopify', () => {
     expect(sdk.capture).toHaveBeenCalledWith('collection_viewed', {
       collection_id: 'gid://c/1',
       collection_handle: 'baseline',
+    });
+  });
+
+  describe('a creator link landing', () => {
+    beforeEach(() => {
+      window.history.replaceState(null, '', '/?utm_source=ig&creator_code=DAKOTAH15');
+    });
+    afterEach(() => {
+      window.history.replaceState(null, '', '/');
+    });
+
+    it('tags the visitor and captures the landing once consent allows', async () => {
+      connect();
+      // The visitor navigates on before the banner is answered.
+      window.history.replaceState(null, '', '/collections/shop');
+      runSetup();
+      await vi.advanceTimersByTimeAsync(500);
+      expect(sdk.capture).not.toHaveBeenCalled();
+
+      allowAnalytics();
+      sdk.has_opted_out_capturing.mockReturnValue(false);
+      await vi.advanceTimersByTimeAsync(250);
+      expect(sdk.register).toHaveBeenCalledWith({ creator_code: 'DAKOTAH15' });
+      expect(sdk.capture).toHaveBeenCalledWith('creator_link_opened', {
+        creator_code: 'DAKOTAH15',
+        landing_path: '/',
+        utm_source: 'ig',
+      });
+    });
+
+    it('sends nothing when analytics are refused', async () => {
+      allowAnalytics(false);
+      connect();
+      runSetup();
+      await vi.advanceTimersByTimeAsync(0);
+      expect(sdk.register).not.toHaveBeenCalled();
+      expect(sdk.capture).not.toHaveBeenCalled();
     });
   });
 

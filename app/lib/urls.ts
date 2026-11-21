@@ -47,6 +47,12 @@ export const cartUrl = (): string => '/cart';
 /** `/drops/<handle>` — a campaign drop page (an app route, not a Shopify resource). */
 export const dropUrl = (handle: string): string => `/drops/${handle}`;
 
+/**
+ * `/discount/<code>` — a creator discount link (lib/discountLinks.ts). The
+ * empty code gives the `/discount/` prefix.
+ */
+export const discountUrl = (code: string): string => `/discount/${encodeURIComponent(code)}`;
+
 /** `/athletes/<handle>` — an athlete-signing page. */
 export const athleteUrl = (handle: string): string => `/athletes/${handle}`;
 
