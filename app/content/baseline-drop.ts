@@ -193,6 +193,6 @@ only three pieces you need to get to work.',
     eyebrow: 'ED. 01 · Live now',
     headingLines: ['Set your baseline.', 'Then beat it.'],
     body: 'Height, pace, load, rounds. Whatever number you’re chasing, chase it in gear that was tested chasing the same thing.',
-    cta: { label: CART_COPY.shopCta, href: STORE_LINKS.shopAll },
+    cta: { label: CART_COPY.shopCta, href: STORE_LINKS.baselineCollection },
   },
 } as const;

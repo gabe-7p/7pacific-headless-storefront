@@ -11,7 +11,7 @@ import { collectionUrl } from '~/lib/urls';
 
 export const COLLECTION_BANNERS: Partial<Record<string, MediaSlotSource>> = {
   // The shop-all page's photo, under its overlay copy (`content/shop.ts`).
-  [HANDLES.shopCollection]: {
+  [HANDLES.shopAllCollection]: {
     kind: 'image',
     ...filesImage('zak-sitting-down-white-shirt-sweating.jpg', {
       v: 1794950827,
@@ -22,7 +22,7 @@ export const COLLECTION_BANNERS: Partial<Record<string, MediaSlotSource>> = {
     // No `focus`: the centred window of this portrait is the tee, with only
     // the lower half of his face above it.
   },
-  [HANDLES.shopAllCollection]: {
+  [HANDLES.baselineCollection]: {
     kind: 'image',
     ...filesImage('roster_at_kezar_cropped.jpg', {
       v: 1793245653,

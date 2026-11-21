@@ -64,13 +64,13 @@ export async function loader({ context, params, url }: Route.LoaderArgs) {
 
 /** Drop collections open on their drop's masthead instead of the plain title. */
 const DROP_MASTHEADS: Partial<Record<string, DropMastheadContent>> = {
-  [HANDLES.shopAllCollection]: BASELINE_DROP,
+  [HANDLES.baselineCollection]: BASELINE_DROP,
   [HANDLES.firstLightCollection]: FIRST_LIGHT_MASTHEAD,
 };
 
 /** Collections whose title sits over their banner, with an intro line under it. */
 const OVERLAY_INTROS: Partial<Record<string, CollectionOverlayContent>> = {
-  [HANDLES.shopCollection]: SHOP_INTRO,
+  [HANDLES.shopAllCollection]: SHOP_INTRO,
 };
 
 const Collection = () => {

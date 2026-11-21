@@ -49,7 +49,13 @@ const CartEmpty = ({ layout }: { layout: CartLayout }) => {
   return (
     <div className={layout === 'aside' ? 'px-5 py-10' : 'py-16 text-center'}>
       <p className="text-sm text-support">{MICROCOPY.emptyCart}</p>
-      <Cta to={STORE_LINKS.shopAll} onClick={close} prefetch="viewport" size="sm" className="mt-4">
+      <Cta
+        to={STORE_LINKS.baselineCollection}
+        onClick={close}
+        prefetch="viewport"
+        size="sm"
+        className="mt-4"
+      >
         {CART_COPY.shopCta}
       </Cta>
     </div>
