@@ -167,6 +167,44 @@ describe('connectPostHogToShopify', () => {
     });
   });
 
+  describe('on a page loaded hidden (an in-app browser preload)', () => {
+    const setVisibility = (state: DocumentVisibilityState) => {
+      Object.defineProperty(document, 'visibilityState', { configurable: true, value: state });
+      document.dispatchEvent(new Event('visibilitychange'));
+    };
+
+    afterEach(() => {
+      delete (document as { visibilityState?: unknown }).visibilityState;
+    });
+
+    it('holds a view event until the page is shown, then sends it once', () => {
+      setVisibility('hidden');
+      connect();
+      runSetup();
+      callbacks.product_viewed?.({ products: [{ id: 'gid://p/1', title: 'Tee' }] });
+      expect(sdk.capture).not.toHaveBeenCalled();
+
+      setVisibility('visible');
+      setVisibility('hidden');
+      setVisibility('visible');
+      expect(sdk.capture).toHaveBeenCalledTimes(1);
+      expect(sdk.capture).toHaveBeenCalledWith(
+        'product_viewed',
+        expect.objectContaining({ product_id: 'gid://p/1' })
+      );
+    });
+
+    it('sends nothing for a preload that is never shown', () => {
+      setVisibility('hidden');
+      connect();
+      runSetup();
+      callbacks.product_viewed?.({ products: [{ id: 'gid://p/1' }] });
+      callbacks.collection_viewed?.({ collection: { id: 'gid://c/1', handle: 'baseline' } });
+      callbacks.cart_viewed?.({ cart: null });
+      expect(sdk.capture).not.toHaveBeenCalled();
+    });
+  });
+
   it('registers once under Strict Mode', () => {
     render(
       <StrictMode>
