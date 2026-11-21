@@ -11,7 +11,7 @@ import { installPixelCapture, isStubMode, readEnvVar, SETTLE_MS, TRAFFIC_BLOCKED
  * violations. Run with `pnpm test:pixel` (see playwright.config.ts).
  *
  * Env: PUBLIC_META_PIXEL_ID (from .env), TEST_PRODUCT_HANDLE (optional; the
- * default is the first product in the shop-all collection grid).
+ * default is the first product in the BASELINE collection grid).
  *
  * Stub vs live mode and the Traffic Permissions caveat: e2e/pixel.ts and
  * docs/META_PIXEL_TESTING.md §0.
@@ -75,7 +75,7 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
   await test.step('2. client-side navigation to a product fires one PageView and one ViewContent', async () => {
     // The homepage's product links scroll in a marquee (never "stable" for a
     // click), so the collection grid is the navigation source.
-    await page.goto(STORE_LINKS.shopAll);
+    await page.goto(STORE_LINKS.baselineCollection);
     await expectExactly('PageView', 2);
     const link = page
       .locator(`a[href^="/products/${productHandle ?? ''}"]`)
@@ -142,7 +142,7 @@ test(`Meta Pixel pre-checkout funnel (${MODE})`, async ({ page }) => {
 // the funnel test.
 const BRAND_BUTTONS: Array<[string, number]> = [
   ['/', 1],
-  [STORE_LINKS.shopAll, 0],
+  [STORE_LINKS.baselineCollection, 0],
   [cartUrl(), 0],
   [dropUrl('baseline'), 1],
 ];

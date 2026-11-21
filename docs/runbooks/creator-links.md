@@ -43,7 +43,9 @@ Slack) follow the redirect and show the landing page's share image and video.
 **PostHog** (the browsing funnel; consent-gated, so EU/UK visitors who decline don't appear):
 
 - `creator_link_opened` fires once per landing, with `creator_code`, `landing_path` and
-  the `utm_*` tags. Break down by `creator_code` for visits per creator.
+  the `utm_*` tags. Break down by `creator_code` for visits per creator. It waits until
+  the page is on screen: Instagram and Facebook preload links hidden before the tap, and a
+  preload nobody opens isn't counted (Shopify's sessions report may still count it).
 - After that, every event from that visitor carries the `creator_code` super property
   (the newest creator link wins). A funnel of `creator_link_opened` →
   `product_added_to_cart` → `checkout_started`, broken down by `creator_code`, shows how

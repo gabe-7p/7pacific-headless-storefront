@@ -168,6 +168,44 @@ describe('connectPostHogToShopify', () => {
     });
   });
 
+  describe('on a page loaded hidden (an in-app browser preload)', () => {
+    const setVisibility = (state: DocumentVisibilityState) => {
+      Object.defineProperty(document, 'visibilityState', { configurable: true, value: state });
+      document.dispatchEvent(new Event('visibilitychange'));
+    };
+
+    afterEach(() => {
+      delete (document as { visibilityState?: unknown }).visibilityState;
+    });
+
+    it('holds a view event until the page is shown, then sends it once', () => {
+      setVisibility('hidden');
+      connect();
+      runSetup();
+      callbacks.product_viewed?.({ products: [{ id: 'gid://p/1', title: 'Tee' }] });
+      expect(sdk.capture).not.toHaveBeenCalled();
+
+      setVisibility('visible');
+      setVisibility('hidden');
+      setVisibility('visible');
+      expect(sdk.capture).toHaveBeenCalledTimes(1);
+      expect(sdk.capture).toHaveBeenCalledWith(
+        'product_viewed',
+        expect.objectContaining({ product_id: 'gid://p/1' })
+      );
+    });
+
+    it('sends nothing for a preload that is never shown', () => {
+      setVisibility('hidden');
+      connect();
+      runSetup();
+      callbacks.product_viewed?.({ products: [{ id: 'gid://p/1' }] });
+      callbacks.collection_viewed?.({ collection: { id: 'gid://c/1', handle: 'baseline' } });
+      callbacks.cart_viewed?.({ cart: null });
+      expect(sdk.capture).not.toHaveBeenCalled();
+    });
+  });
+
   describe('a creator link landing', () => {
     beforeEach(() => {
       window.history.replaceState(null, '', '/?utm_source=ig&creator_code=DAKOTAH15');
@@ -193,6 +231,26 @@ describe('connectPostHogToShopify', () => {
         landing_path: '/',
         utm_source: 'ig',
       });
+    });
+
+    it('waits for a hidden preload to be shown, and sends nothing if it never is', async () => {
+      Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'hidden' });
+      allowAnalytics();
+      sdk.has_opted_out_capturing.mockReturnValue(false);
+      connect();
+      runSetup();
+      await vi.advanceTimersByTimeAsync(0);
+      expect(sdk.register).not.toHaveBeenCalled();
+      expect(sdk.capture).not.toHaveBeenCalled();
+
+      Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'visible' });
+      document.dispatchEvent(new Event('visibilitychange'));
+      delete (document as { visibilityState?: unknown }).visibilityState;
+      expect(sdk.register).toHaveBeenCalledWith({ creator_code: 'DAKOTAH15' });
+      expect(sdk.capture).toHaveBeenCalledWith(
+        'creator_link_opened',
+        expect.objectContaining({ creator_code: 'DAKOTAH15' })
+      );
     });
 
     it('sends nothing when analytics are refused', async () => {

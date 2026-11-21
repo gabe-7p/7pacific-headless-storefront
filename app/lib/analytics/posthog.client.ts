@@ -26,6 +26,8 @@ import { getCustomerPrivacy, whenShopifyReady } from '~/lib/shopifyRuntime';
  *    *destination*, so product/collection/cart views and the cart deltas
  *    (`product_added_to_cart`, …) arrive consent-gated and already normalised.
  *    Page views stay with the SDK's own history-change capture.
+ * 3. The view events wait for the page to be on screen, as the SDK's initial
+ *    `$pageview` does (see `whenVisible`).
  */
 export const initPostHog = ({ key, host }: PostHogConfig) => {
   posthog.init(key, {
@@ -83,6 +85,25 @@ const followConsent = () =>
     );
   });
 
+/**
+ * Runs `capture` once the document is visible. posthog-js holds the initial
+ * `$pageview` until then, and Meta's in-app browsers load ad landing pages
+ * hidden, before the tap. Sent at once, the hydration `product_viewed` of a
+ * preload nobody opens landed in a session with no `$pageview`.
+ */
+const whenVisible = (capture: () => void) => {
+  if (document.visibilityState === 'visible') {
+    capture();
+    return;
+  }
+  const onVisibilityChange = () => {
+    if (document.visibilityState !== 'visible') return;
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    capture();
+  };
+  document.addEventListener('visibilitychange', onVisibilityChange);
+};
+
 /** Once per page load: Strict Mode and a re-mounted bridge connect twice. */
 let creatorLandingRecorded = false;
 
@@ -90,13 +111,18 @@ let creatorLandingRecorded = false;
  * A creator link's landing (`?creator_code=`, lib/discountLinks.ts): tags the
  * visitor with the code and captures `creator_link_opened`. The URL is read
  * when the bridge connects (the landing page), but nothing is sent until
- * consent allows it, by which point the visitor may have navigated on.
+ * consent allows it, by which point the visitor may have navigated on. Like
+ * the view events, it waits for a visible page: creator links are opened from
+ * Meta's in-app browsers, which preload pages hidden, and a preload nobody
+ * opens must not count as a creator visit.
  */
 const recordCreatorLanding = (landing: ReturnType<typeof creatorLinkProperties>) => {
   if (!landing || creatorLandingRecorded || posthog.has_opted_out_capturing()) return;
   creatorLandingRecorded = true;
-  posthog.register({ [CREATOR_CODE_PROPERTY]: landing[CREATOR_CODE_PROPERTY] });
-  posthog.capture(ANALYTICS_EVENT.creatorLinkOpened, landing);
+  whenVisible(() => {
+    posthog.register({ [CREATOR_CODE_PROPERTY]: landing[CREATOR_CODE_PROPERTY] });
+    posthog.capture(ANALYTICS_EVENT.creatorLinkOpened, landing);
+  });
 };
 
 /**
@@ -111,11 +137,17 @@ export const connectPostHogToShopify = (): (() => void) => {
     'posthog',
     {
       [AnalyticsEvent.PRODUCT_VIEWED]: (payload) =>
-        posthog.capture(ANALYTICS_EVENT.productViewed, productViewedProperties(payload)),
+        whenVisible(() =>
+          posthog.capture(ANALYTICS_EVENT.productViewed, productViewedProperties(payload))
+        ),
       [AnalyticsEvent.COLLECTION_VIEWED]: (payload) =>
-        posthog.capture(ANALYTICS_EVENT.collectionViewed, collectionViewedProperties(payload)),
+        whenVisible(() =>
+          posthog.capture(ANALYTICS_EVENT.collectionViewed, collectionViewedProperties(payload))
+        ),
       [AnalyticsEvent.CART_VIEWED]: (payload) =>
-        posthog.capture(ANALYTICS_EVENT.cartViewed, cartViewedProperties(payload)),
+        whenVisible(() =>
+          posthog.capture(ANALYTICS_EVENT.cartViewed, cartViewedProperties(payload))
+        ),
       [AnalyticsEvent.PRODUCT_ADD_TO_CART]: (payload) =>
         posthog.capture(ANALYTICS_EVENT.productAddedToCart, cartLineChangeProperties(payload)),
       [AnalyticsEvent.PRODUCT_REMOVED_FROM_CART]: (payload) =>

@@ -29,6 +29,7 @@ import { Eyebrow } from '~/components/common/Eyebrow';
 import { Heading } from '~/components/common/Heading';
 import { ErrorShell } from '~/components/content/ErrorShell';
 import { NotFound } from '~/components/content/NotFound';
+import { BodyRoot } from '~/components/layout/BodyRoot';
 import { HANDLES } from '~/content/links';
 import { MICROCOPY } from '~/content/microcopy';
 import {
@@ -163,7 +164,7 @@ export const Layout = ({ children }: { children?: ReactNode }) => {
       </head>
       {/* bg-field: the brand's Court field — the page ground per Meridian on Carbon. */}
       <body className="bg-field font-sans text-nav-text antialiased">
-        {children}
+        <BodyRoot>{children}</BodyRoot>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>

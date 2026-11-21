@@ -168,7 +168,7 @@ export const HOME_BASELINE_INTRO = {
     collection: {
       eyebrow: 'Baseline V01 · Available now',
       title: 'The First Kit',
-      cta: { label: 'Shop Baseline V01', href: STORE_LINKS.shopAll },
+      cta: { label: 'Shop Baseline V01', href: STORE_LINKS.baselineCollection },
       media: {
         kind: 'image',
         ...filesImage('zach_taking_off_shirt_kezar.jpg', {
