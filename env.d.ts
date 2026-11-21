@@ -5,6 +5,8 @@
 // Enhance TypeScript's built-in typings.
 import '@total-typescript/ts-reset';
 
+import type { DetailedHTMLProps, HTMLAttributes } from 'react';
+
 // The worker bindings (env, cache, waitUntil) travel on the router context
 // under the typed `oxygenContext` key — see app/lib/oxygen.ts.
 
@@ -35,5 +37,15 @@ declare global {
     PUBLIC_META_PIXEL_ID?: string;
     /** [public] Meta domain-verification token — renders the `facebook-domain-verification` meta tag when set. */
     PUBLIC_META_DOMAIN_VERIFICATION?: string;
+  }
+}
+
+declare module 'react' {
+  namespace JSX {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-definitions -- declaration merging must be an interface
+    interface IntrinsicElements {
+      /** The app's one `<body>` element. See app/components/layout/BodyRoot.tsx. */
+      'storefront-root': DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>;
+    }
   }
 }
