@@ -1,6 +1,7 @@
 import type { AnalyticsEventMap } from '@shopify/hydrogen';
 
 import type { CartData } from '~/lib/cart';
+import { CREATOR_CODE_PARAM } from '~/lib/discountLinks';
 
 /**
  * PostHog event names and payload builders in one place, so every capture
@@ -21,7 +22,34 @@ export const ANALYTICS_EVENT = {
   checkoutStarted: 'checkout_started',
   newsletterSubscribed: 'newsletter_subscribed',
   waitlistJoined: 'waitlist_joined',
+  creatorLinkOpened: 'creator_link_opened',
 } as const;
+
+/**
+ * The super property every later event carries once a visitor arrives
+ * through a creator link (`posthog.register`), so creator reports can filter
+ * adds to cart and checkouts by code. The newest creator link wins.
+ */
+export const CREATOR_CODE_PROPERTY = 'creator_code';
+
+const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+
+/**
+ * `creator_link_opened`: the landing page of a `/discount/:code` link
+ * (lib/discountLinks.ts), read off its URL. Null on any other page.
+ */
+export const creatorLinkProperties = (location: Pick<Location, 'pathname' | 'search'>) => {
+  const params = new URLSearchParams(location.search);
+  const code = params.get(CREATOR_CODE_PARAM);
+  if (!code) return null;
+  return {
+    [CREATOR_CODE_PROPERTY]: code,
+    landing_path: location.pathname,
+    ...Object.fromEntries(
+      UTM_KEYS.flatMap((key) => (params.get(key) ? [[key, params.get(key)]] : []))
+    ),
+  };
+};
 
 export const productViewedProperties = (payload: AnalyticsEventMap['product_viewed']) => {
   const product = payload.products[0];

@@ -1,6 +1,8 @@
 import { handleShopifyRedirects, handleShopifyRoutes } from '@shopify/hydrogen';
+import { redirect } from 'react-router';
 
 import { cartHandlers } from '~/lib/cart.server';
+import { discountLinkFromQuery } from '~/lib/discountLinks';
 import { oxygenContext } from '~/lib/oxygen';
 import {
   createRequestStorefrontClient,
@@ -44,6 +46,15 @@ export const shopifyMiddleware: Route.MiddlewareFunction = async (
     handlers: [cartHandlers],
   });
   if (shopifyRoute) return await shopifyRoute;
+
+  // A creator link handed off by the Online Store redirect theme arrives as
+  // `/any/path?discount=<CODE>`: send it through `/discount/:code`, which
+  // applies the code and lands back here (lib/discountLinks.ts). Document GETs
+  // only; a `.data` request never carries the theme's param.
+  if (request.method === 'GET' && request.url === url.href) {
+    const discountLink = discountLinkFromQuery(url);
+    if (discountLink) return redirect(discountLink, 302);
+  }
 
   context.set(storefrontClientContext, storefrontClient);
 

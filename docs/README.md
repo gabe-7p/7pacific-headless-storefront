@@ -7,6 +7,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 - [architecture.md](architecture.md) — stack, request/data flow, code organization, the module pattern, env model, deployment.
 - [META_PIXEL_TESTING.md](META_PIXEL_TESTING.md) — how to verify the Meta Pixel (DevTools, Pixel Helper, `pnpm test:pixel`, Events Manager) in 15 minutes.
 - [runbooks/add-a-product.md](runbooks/add-a-product.md) — add or swap a product or color in Shopify, or add a header dropdown item (no deploy).
+- [runbooks/creator-links.md](runbooks/creator-links.md) — creator discount links on 7pacificapparel.com and how to report visits and sales per creator (no deploy).
 - [migration-playbook.md](migration-playbook.md) — **historical**: the process used to port the Liquid theme to Hydrogen (the port is complete).
 - [decisions/](decisions/README.md) — Architecture Decision Records (the _why_ behind settled choices).
 - [tech-debt-plan.md](tech-debt-plan.md) — the ranked cleanup backlog from the 2026-11-03 audit: twelve stacked PRs (dead code → docs → helpers → tokens → enforcement → structural), evidence per item, decisions pending, and what was deliberately left out.
@@ -25,6 +26,7 @@ Documentation for the 7Pacific Hydrogen storefront. Start with the root [CLAUDE.
 | Building a new feature / module                          | [architecture.md](architecture.md#the-module-pattern-how-features-grow)                                                                                                          |
 | Adding or swapping a product/color in Shopify            | [runbooks/add-a-product.md](runbooks/add-a-product.md)                                                                                                                           |
 | Changing the link-preview (share) image or video         | [.claude/skills/share-preview/SKILL.md](../.claude/skills/share-preview/SKILL.md) (also `/share-preview` in Claude Code)                                                         |
+| Making a creator discount link or a creator report       | [runbooks/creator-links.md](runbooks/creator-links.md)                                                                                                                           |
 | Changing marketing copy / adding an athlete page         | [CLAUDE.md → Brand single-sources](../CLAUDE.md#brand-single-sources-change-once-applies-everywhere) · `app/content/athlete-signing/index.ts` header                             |
 | Reading how the Liquid port was done (historical)        | [migration-playbook.md](migration-playbook.md)                                                                                                                                   |
 | Touching products or color swatches                      | [decisions/0005-color-as-separate-product.md](decisions/0005-color-as-separate-product.md) · [.claude/rules/common-pitfalls.md](../.claude/rules/common-pitfalls.md)             |

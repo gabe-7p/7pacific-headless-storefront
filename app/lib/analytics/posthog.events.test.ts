@@ -8,6 +8,7 @@ import {
   cartViewedProperties,
   checkoutStartedProperties,
   collectionViewedProperties,
+  creatorLinkProperties,
   productViewedProperties,
 } from '~/lib/analytics/posthog.events';
 import { buildCartCost } from '~/lib/cart.fixtures';
@@ -50,6 +51,7 @@ describe('ANALYTICS_EVENT', () => {
       checkoutStarted: 'checkout_started',
       newsletterSubscribed: 'newsletter_subscribed',
       waitlistJoined: 'waitlist_joined',
+      creatorLinkOpened: 'creator_link_opened',
     });
   });
 });
@@ -189,5 +191,26 @@ describe('checkoutStartedProperties', () => {
     expect(
       checkoutStartedProperties({ totalQuantity: 3, cost: buildCartCost('222.0') }, 'aside')
     ).toEqual({ cart_layout: 'aside', total_quantity: 3, subtotal: '222.0', currency: 'USD' });
+  });
+});
+
+describe('creatorLinkProperties', () => {
+  it('reads the code, landing path and UTMs off a creator landing URL', () => {
+    expect(
+      creatorLinkProperties({
+        pathname: '/',
+        search:
+          '?utm_source=discount_shareable_link&utm_content=dakotah-riemer&Size=M&creator_code=DAKOTAH15',
+      })
+    ).toEqual({
+      creator_code: 'DAKOTAH15',
+      landing_path: '/',
+      utm_source: 'discount_shareable_link',
+      utm_content: 'dakotah-riemer',
+    });
+  });
+
+  it('is null on any other page', () => {
+    expect(creatorLinkProperties({ pathname: '/', search: '?utm_source=ig' })).toBeNull();
   });
 });

@@ -8,6 +8,8 @@ import {
   cartUpdatedProperties,
   cartViewedProperties,
   collectionViewedProperties,
+  CREATOR_CODE_PROPERTY,
+  creatorLinkProperties,
   productViewedProperties,
 } from '~/lib/analytics/posthog.events';
 import { AnalyticsEvent, connectDestination } from '~/lib/analytics/shopify';
@@ -102,6 +104,27 @@ const whenVisible = (capture: () => void) => {
   document.addEventListener('visibilitychange', onVisibilityChange);
 };
 
+/** Once per page load: Strict Mode and a re-mounted bridge connect twice. */
+let creatorLandingRecorded = false;
+
+/**
+ * A creator link's landing (`?creator_code=`, lib/discountLinks.ts): tags the
+ * visitor with the code and captures `creator_link_opened`. The URL is read
+ * when the bridge connects (the landing page), but nothing is sent until
+ * consent allows it, by which point the visitor may have navigated on. Like
+ * the view events, it waits for a visible page: creator links are opened from
+ * Meta's in-app browsers, which preload pages hidden, and a preload nobody
+ * opens must not count as a creator visit.
+ */
+const recordCreatorLanding = (landing: ReturnType<typeof creatorLinkProperties>) => {
+  if (!landing || creatorLandingRecorded || posthog.has_opted_out_capturing()) return;
+  creatorLandingRecorded = true;
+  whenVisible(() => {
+    posthog.register({ [CREATOR_CODE_PROPERTY]: landing[CREATOR_CODE_PROPERTY] });
+    posthog.capture(ANALYTICS_EVENT.creatorLinkOpened, landing);
+  });
+};
+
 /**
  * Registers PostHog as a destination on the bus and follows consent (client
  * only). A no-op when PostHog is off (never initialised). Returns a cancel
@@ -109,6 +132,7 @@ const whenVisible = (capture: () => void) => {
  */
 export const connectPostHogToShopify = (): (() => void) => {
   if (!posthog.__loaded) return () => {};
+  const landing = creatorLinkProperties(window.location);
   return connectDestination(
     'posthog',
     {
@@ -131,6 +155,6 @@ export const connectPostHogToShopify = (): (() => void) => {
       [AnalyticsEvent.CART_UPDATED]: (payload) =>
         posthog.capture(ANALYTICS_EVENT.cartUpdated, cartUpdatedProperties(payload)),
     },
-    { ready: followConsent }
+    { ready: () => followConsent().then(() => recordCreatorLanding(landing)) }
   );
 };
