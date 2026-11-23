@@ -5,7 +5,7 @@ import { hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 
 import { POSTHOG_HOST_META, POSTHOG_KEY_META } from '~/lib/analytics/posthog';
-import { initPostHog } from '~/lib/analytics/posthog.client';
+import { captureRecoverableError, initPostHog } from '~/lib/analytics/posthog.client';
 import { NonceProvider } from '~/lib/nonce';
 
 // Runtime config rendered into <head> by root.tsx `Layout` (see lib/analytics/posthog.ts).
@@ -31,6 +31,7 @@ startTransition(() => {
           <HydratedRouter />
         </PostHogProvider>
       </NonceProvider>
-    </StrictMode>
+    </StrictMode>,
+    { onRecoverableError: captureRecoverableError }
   );
 });
