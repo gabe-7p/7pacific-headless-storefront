@@ -8,13 +8,17 @@ import { StrictMode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 
 import type { PostHogBridge as PostHogBridgeComponent } from '~/components/analytics/Trackers';
-import type { connectPostHogToShopify as ConnectPostHogToShopify } from '~/lib/analytics/posthog.client';
+import type {
+  captureRecoverableError as CaptureRecoverableError,
+  connectPostHogToShopify as ConnectPostHogToShopify,
+} from '~/lib/analytics/posthog.client';
 
 type Callback = (payload: unknown) => void;
 
 const sdk = vi.hoisted(() => ({
   __loaded: true,
   capture: vi.fn(),
+  captureException: vi.fn(),
   has_opted_out_capturing: vi.fn(() => true),
   opt_in_capturing: vi.fn(),
   opt_out_capturing: vi.fn(),
@@ -22,7 +26,8 @@ const sdk = vi.hoisted(() => ({
   startSessionRecording: vi.fn(),
 }));
 
-vi.mock('posthog-js', () => ({ posthog: sdk }));
+// @posthog/react reads the default export.
+vi.mock('posthog-js', () => ({ posthog: sdk, default: sdk }));
 
 // The poll's budget: whenShopifyReady's default 40 attempts at 250ms.
 const CONSENT_POLL_MS = 40 * 250;
@@ -38,6 +43,7 @@ describe('connectPostHogToShopify', () => {
   let destination: StorefrontAnalyticsDestination | undefined;
   let callbacks: Record<string, Callback>;
   let connect: typeof ConnectPostHogToShopify;
+  let captureRecoverableError: typeof CaptureRecoverableError;
   let PostHogBridge: typeof PostHogBridgeComponent;
   let consentListeners: MockInstance<typeof document.addEventListener>;
 
@@ -79,7 +85,8 @@ describe('connectPostHogToShopify', () => {
     window.Shopify = {
       analytics: { addDestination, publish: vi.fn(), getConfig: vi.fn() },
     } as never;
-    ({ connectPostHogToShopify: connect } = await import('~/lib/analytics/posthog.client'));
+    ({ connectPostHogToShopify: connect, captureRecoverableError } =
+      await import('~/lib/analytics/posthog.client'));
     ({ PostHogBridge } = await import('~/components/analytics/Trackers'));
   });
 
@@ -203,6 +210,53 @@ describe('connectPostHogToShopify', () => {
       callbacks.collection_viewed?.({ collection: { id: 'gid://c/1', handle: 'baseline' } });
       callbacks.cart_viewed?.({ cart: null });
       expect(sdk.capture).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('a recoverable error (hydration #418)', () => {
+    const hydrationError = new Error('Minified React error #418');
+    const errorInfo = {
+      componentStack: '\n    at Footer (https://example.com/assets/Footer.js:1:2)',
+    };
+
+    beforeEach(() => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    it('sends the error with its component stack as the cause', () => {
+      sdk.has_opted_out_capturing.mockReturnValue(false);
+      captureRecoverableError(hydrationError, errorInfo);
+      expect(sdk.captureException).toHaveBeenCalledOnce();
+      const [sent] = sdk.captureException.mock.calls[0] as [Error];
+      expect(sent).toBe(hydrationError);
+      expect((sent.cause as Error).stack).toBe(errorInfo.componentStack);
+    });
+
+    it('holds an error raised before consent until the SDK is opted in', async () => {
+      captureRecoverableError(hydrationError, errorInfo);
+      connect();
+      runSetup();
+      await vi.advanceTimersByTimeAsync(0);
+      expect(sdk.captureException).not.toHaveBeenCalled();
+
+      allowAnalytics();
+      sdk.opt_in_capturing.mockImplementation(() => {
+        sdk.has_opted_out_capturing.mockReturnValue(false);
+      });
+      await vi.advanceTimersByTimeAsync(250);
+      expect(sdk.captureException).toHaveBeenCalledOnce();
+
+      document.dispatchEvent(new Event('visitorConsentCollected'));
+      expect(sdk.captureException).toHaveBeenCalledOnce();
+    });
+
+    it('drops the error when analytics are refused', async () => {
+      captureRecoverableError(hydrationError, errorInfo);
+      allowAnalytics(false);
+      connect();
+      runSetup();
+      await vi.advanceTimersByTimeAsync(250);
+      expect(sdk.captureException).not.toHaveBeenCalled();
     });
   });
 

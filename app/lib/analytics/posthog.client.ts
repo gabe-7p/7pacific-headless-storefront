@@ -1,5 +1,7 @@
+import { setupReactErrorHandler } from '@posthog/react';
 import type { ShopifyGlobal } from '@shopify/hydrogen';
 import { posthog } from 'posthog-js';
+import type { ErrorInfo } from 'react';
 
 import type { PostHogConfig } from '~/lib/analytics/posthog';
 import {
@@ -47,11 +49,15 @@ export const initPostHog = ({ key, host }: PostHogConfig) => {
   });
 };
 
+/** Error reports raised while the SDK is opted out, sent once consent allows. */
+const heldErrorReports: Array<() => void> = [];
+
 /** Mirrors Shopify's consent decision onto the PostHog SDK. */
 const applyConsent = (customerPrivacy: ShopifyGlobal['customerPrivacy']) => {
   if (customerPrivacy.analyticsProcessingAllowed()) {
     if (posthog.has_opted_out_capturing()) posthog.opt_in_capturing({ captureEventName: null });
     posthog.startSessionRecording();
+    for (const report of heldErrorReports.splice(0)) report();
   } else if (!posthog.has_opted_out_capturing()) {
     posthog.opt_out_capturing();
   }
@@ -102,6 +108,23 @@ const whenVisible = (capture: () => void) => {
     capture();
   };
   document.addEventListener('visibilitychange', onVisibilityChange);
+};
+
+const reportReactError = setupReactErrorHandler(posthog);
+
+/**
+ * `hydrateRoot`'s `onRecoverableError` (entry.client). A production hydration
+ * error (#418) has no component names, so the report carries React's component
+ * stack: it names the chunk and position of the component that mismatched.
+ * Hydration ends before Customer Privacy opts the SDK in, and an opted-out SDK
+ * drops what it gets, so a report raised before consent waits for it.
+ */
+export const captureRecoverableError = (error: unknown, errorInfo: ErrorInfo) => {
+  console.error(error);
+  if (!posthog.__loaded) return;
+  const report = () => reportReactError(error, errorInfo);
+  if (posthog.has_opted_out_capturing()) heldErrorReports.push(report);
+  else report();
 };
 
 /** Once per page load: Strict Mode and a re-mounted bridge connect twice. */
